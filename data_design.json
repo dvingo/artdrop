@@ -1,0 +1,81 @@
+{
+  "users": [{
+    "id": "userid",
+    "name": "sample name",
+    "email": "sample@sample.com",
+    "shippingAddress": "addressId1",
+    "billingAddress": "addressId2",
+    "stripeToken": "token123",
+    "purchasedDesigns": ["designId1", "designId2", "designId3"],
+    "createdAt": "2015-05-21T12:11:35",
+    "updatedAt": "2015-05-21T14:02:17",
+    "isAdmin": false
+  }],
+  "designGroups": [{
+    "id": "98sdijzcsdio",
+    "name": "Design group one"
+    "designs": ["designId1", "designId2", "designId3"],
+  }],
+  "designs": [{
+    "id": "123jslfei21",
+    "title": "sample",
+    "imageUrl": "combinedImage.jpg",
+    "layers": ["layerId1", "layerId2", "layerId3"],
+    "surface": "surfaceId",
+    "price": 2000,
+    "designer": "userId",
+    "createdAt": "2015-05-21T12:11:35",
+    "updatedAt": "2015-05-21T14:02:17"
+  }],
+  "layerGroups": [{
+    "id": "238qasdfj98j",
+    "name": "theme1",
+    "layers": ["layerId1","layerId2","layerId3","layerId4"]
+  }],
+  "layers": [{
+    "id": "238j98j",
+    "selectedLayerImage": "layerImageId",
+    "colorPalette": "colorPaletteId",
+    "layerImages": ["layerImageId1", "layerImageId2", "layerImageId3", "layerImageId4"],
+    "design": "designId",
+    "order": 1,
+    "createdAt": "2015-05-21T12:11:35",
+    "updatedAt": "2015-05-21T14:02:17"
+  }],
+  "layerImages": [{
+    "id": "238j98j",
+    "imageUrl": "https://image.s3.amazon.com",
+    "validOrders": [1, 2 ,3],
+    "tags": ["tagId1", "tagId2"],
+    "createdAt": "2015-05-21T12:11:35",
+    "updatedAt": "2015-05-21T14:02:17"
+  }],
+  "surfaces": [{
+    "id": "poposf238j98j",
+    "type": "maplewood",
+    "imageUrl": "https://image.s3.amazon.com",
+    "createdAt": "2015-05-21T12:11:35",
+    "updatedAt": "2015-05-21T14:02:17"
+  }],
+  "tags": [{
+    "id": "238j9asdflk8j",
+    "name": "tag1"
+  }],
+  "colorPalettes": [{
+    "id": "238j98j",
+    "colorOne": "ee11aa",
+    "colorTwo": "8711aa",
+    "colorThree": "e011aa",
+    "colorFour": "ee11ef",
+    "createdAt": "2015-05-21T12:11:35",
+    "updatedAt": "2015-05-21T14:02:17"
+  }],
+  "addresses": [{
+    "id": "238j9xxxx8j",
+    "line1": "123 Fake street",
+    "zipcode": "12345",
+    "city": "Fake City",
+    "state": "Fake State",
+    "country": "UXA"
+  }]
+}
