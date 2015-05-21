@@ -13,8 +13,8 @@
   }],
   "designGroups": [{
     "id": "98sdijzcsdio",
-    "name": "Design group one"
-    "designs": ["designId1", "designId2", "designId3"],
+    "name": "Design group one",
+    "designs": ["designId1", "designId2", "designId3"]
   }],
   "designs": [{
     "id": "123jslfei21",
