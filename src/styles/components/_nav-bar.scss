@@ -1,0 +1,10 @@
+.nav-bar {
+  @include display(flex);
+  @include flex-direction(row);
+  @include justify-content(center);
+  background: black;
+  z-index: 100;
+  width: 100%;
+  height: 7%;
+  color: white;
+}

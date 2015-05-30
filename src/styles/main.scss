@@ -1,0 +1,9 @@
+@import "mixins/prefixer.scss";
+@import "mixins/flex.scss";
+
+@import "components/nav-bar.scss";
+@import "components/designs/index.scss";
+
+body {
+  background: yellow;
+}
