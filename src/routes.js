@@ -7,10 +7,7 @@ var Route = Router.Route;
 
 export default (
   <Route handler={App}>
-
-    <Route handler={Designs} path="designs">
-      <Route handler={Design} path=":id" />
-    </Route>
-
+    <Route name="design"  handler={Design} path="designs/:designId"/>
+    <Route name="designs" handler={Designs} path="designs"/>
   </Route>
 );

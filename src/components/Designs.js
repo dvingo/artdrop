@@ -7,11 +7,10 @@ var getDesigns = () => AppState.getDesigns();
 
 export default class Designs extends React.Component {
   render() {
-    let designs = getDesigns().map(d => <Design design={d} />);
+    let designs = getDesigns().map(d => <li className="design"><Design design={d}/></li>);
     return (
       <ul className="designs">
         {designs}
-        <Router.RouteHandler/>
       </ul>
     );
   }

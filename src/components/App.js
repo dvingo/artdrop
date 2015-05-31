@@ -1,7 +1,7 @@
 import React from 'react';
 import Router from 'react-router';
 import s from '../styles/main.scss';
-export default class App extends React.Component {
+export default React.createClass({
   render() {
     return (
       <div>
@@ -14,4 +14,4 @@ export default class App extends React.Component {
       </div>
     );
   }
-}
+})
