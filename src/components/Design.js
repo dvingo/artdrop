@@ -4,15 +4,16 @@ import AppState from '../state';
 import Modal from './Modal';
 var Link = Router.Link;
 
+
 export default React.createClass({
   render() {
     console.log('props in Design: ', this.props.design);
 
     let layerImages = this.props.design.get('layers')
-      .map(layerImageId => {
-        var imageUrl = AppState.imageForLayer(layerImageId);
+      .map(layer => {
+        var imageUrl = layer.selectedLayerImage.imageUrl.replace('/assets/images/new/', '/src/images/');
         return (
-          <div className="layer" key={layerImageId}>
+          <div className="layer" key={layer.id}>
             <img src={imageUrl} width={100} height={100} />
           </div>
         );
