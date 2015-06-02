@@ -6,6 +6,8 @@ var Link = Router.Link;
 
 export default React.createClass({
   render() {
+    console.log('props in Design: ', this.props.design);
+
     let layerImages = this.props.design.get('layers')
       .map(layerImageId => {
         var imageUrl = AppState.imageForLayer(layerImageId);
