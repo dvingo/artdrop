@@ -6,11 +6,9 @@ var Nuclear = require('nuclear-js');
 //designsRef.once('value', function(designs) { window.designs = designs.val(); });
 
 
-var idsToObjs = (propName, obj) => {
-  var nestedObj = obj[propName];
-  var keys = Object.keys(nestedObj);
-  return keys.map(k => {
-    var o = nestedObj[k];
+var idsToObjs = (ids, dataSrc) => {
+  return ids.map(k => {
+    var o = dataSrc[k];
     o.id = k;
     return o;
   });
@@ -19,8 +17,15 @@ var idsToObjs = (propName, obj) => {
 var firebaseRef = new Firebase("https://glaring-fire-8101.firebaseio.com");
 firebaseRef.once('value', data => {
   var data = data.val();
+  
+  var designs = idsToObjs(Object.keys(data.designs), data.designs);
+  designs.map( d => {
+    var layers = idsToObjs(Object.keys(d.layers), data.layers);
+    d.layers = layers;
+    return d;
+  }).map(d => reactor.dispatch('addDesign', d));
+
   var designs = idsToObjs('designs', data);
-  designs.map(d => reactor.dispatch('addDesign', d));
 });
 
 var designsStore = new Nuclear.Store({
