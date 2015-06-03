@@ -2,6 +2,7 @@ import React from 'react';
 import Modal from './Modal';
 import reactor from '../state/reactor';
 import State from '../state/main';
+import {Link} from 'react-router';
 var appElement = document.getElementById('app');
 Modal.setAppElement(appElement);
 Modal.injectCSS();
@@ -33,6 +34,7 @@ export default React.createClass({
 
     return (
       <Modal isOpen={true}>
+        <Link to="test">
         <section className="show-design">
           <div className="show-canvas">
             <div className="canvas">
@@ -40,6 +42,7 @@ export default React.createClass({
             </div>
           </div>
         </section>
+        </Link>
       </Modal>
     );
   }
