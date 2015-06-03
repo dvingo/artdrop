@@ -15,11 +15,11 @@ export default React.createClass({
   render() {
     var i = 0;
     let designs = this.state.designs.map(d => {
-      i++;
       return (
-        <li className="design" key={i}>
+        <li className="design" key={i++}>
           <Design design={d}/>
-        </li>)});
+        </li>);
+    });
     return (
       <div>
         <ul className="designs" key="ul">

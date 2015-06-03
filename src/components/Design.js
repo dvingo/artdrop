@@ -1,14 +1,15 @@
 import React from 'react';
 import Router from 'react-router';
-import AppState from '../state';
 import Modal from './Modal';
-var Link = Router.Link;
-
+import State from '../state/main';
+import router from '../router';
 
 export default React.createClass({
+  selectDesign() {
+    State.actions.selectDesignId(this.props.design.get('id'));
+    router.transitionTo('designDetail', {designId: this.props.design.get('id')});
+  },
   render() {
-    console.log('props in Design: ', this.props.design);
-
     let layerImages = this.props.design.get('layers')
       .map(layer => {
         var imageUrl = layer.selectedLayerImage.imageUrl.replace('/assets/images/new/', '/src/images/');
@@ -18,14 +19,15 @@ export default React.createClass({
           </div>
         );
       });
+
     return (
       <section className="show-design">
         <div className="show-canvas">
-          <Link to="designDetail" params={{ designId: this.props.design.get('id') }}>
+          <a href="#" onClick={this.selectDesign}>
             <div className="canvas">
               {layerImages}
             </div>
-          </Link>
+          </a>
         </div>
       </section>
     );
