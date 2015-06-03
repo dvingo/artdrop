@@ -12,10 +12,9 @@ export default React.createClass({
   },
 
   render() {
-    var i = 0;
     let designs = this.state.designs.map(d => {
       return (
-        <li className="design" key={i++}>
+        <li className="design" key={d.get('id')}>
           <Design design={d}/>
         </li>);
     });

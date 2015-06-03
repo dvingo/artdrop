@@ -24,6 +24,15 @@
     }
   }
 
+  .edit {
+    width: 25%;
+    margin: 0 auto;
+    text-align: center;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
   .button-container {
     @include display(flex);
     @include flex-direction(row);

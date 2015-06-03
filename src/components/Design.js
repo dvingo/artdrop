@@ -1,6 +1,7 @@
 import React from 'react';
 import {Navigation} from 'react-router';
 import State from '../state/main';
+import {imageUrlForLayer} from '../state/utils';
 
 export default React.createClass({
   mixins: [Navigation],
@@ -14,10 +15,9 @@ export default React.createClass({
   render() {
     let layerImages = this.props.design.get('layers')
       .map(layer => {
-        var imageUrl = layer.selectedLayerImage.imageUrl.replace('/assets/images/new/', '/src/images/');
         return (
-          <div className="layer" key={layer.id}>
-            <img src={imageUrl} width={100} height={100} />
+          <div className="layer" key={layer.get('id')}>
+            <img src={imageUrlForLayer(layer)} width={100} height={100} />
           </div>
         );
       });

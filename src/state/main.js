@@ -1,6 +1,5 @@
 import fixtures from '../fixtures';
 import reactor from './reactor';
-var Map = require('immutable').Map
 var Nuclear = require('nuclear-js');
 var allData = null;
 
@@ -10,7 +9,6 @@ var idsToObjs = (ids, dataSrc) => {
     o.id = k;
     return o;
   }
-
   return Array.isArray(ids) ? ids.map(setupObj)
                             : setupObj(ids);
 }
@@ -30,7 +28,7 @@ firebaseRef.once('value', data => {
   allData = data.val();
   var designIds = Object.keys(allData.designs);
   designIds.map(hydrateDesignById)
-           .map(d => reactor.dispatch('addDesign', d));
+           .forEach(d => reactor.dispatch('addDesign', d));
 });
 
 var designsStore = new Nuclear.Store({
@@ -39,7 +37,7 @@ var designsStore = new Nuclear.Store({
   },
   initialize() {
    this.on('addDesign', function(state, design) {
-     return state.set(design.id, Map(design));
+     return state.set(design.id, Nuclear.Immutable.fromJS(design));
    });
  }
 });
@@ -61,15 +59,16 @@ reactor.registerStores({
 });
 
 module.exports = {
+
   getters: {
     designs: [['designs'], designsMap => designsMap.toList()],
-    currentDesignId: ['currentDesignId'],
     currentDesign: [
       ['currentDesignId'],
       ['designs'],
       (currentDesignId, designsMap) => designsMap.get(currentDesignId)
     ]
   },
+
   actions: {
     selectDesignId(id) { reactor.dispatch('selectDesignId', id); }
   }

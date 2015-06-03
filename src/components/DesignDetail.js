@@ -2,6 +2,7 @@ import React from 'react';
 import Modal from './Modal';
 import reactor from '../state/reactor';
 import State from '../state/main';
+import {imageUrlForLayer} from '../state/utils';
 import {Link} from 'react-router';
 var appElement = document.getElementById('app');
 Modal.setAppElement(appElement);
@@ -18,31 +19,32 @@ export default React.createClass({
     State.actions.selectDesignId(this.props.params.designId);
   },
 
-  render: function() {
-    if (this.state.design == null) {
-      return null;
-    }
+  render() {
+    if (this.state.design == null) { return null; }
+
     let layerImages = this.state.design.get('layers').map(
       layer => {
-        var imageUrl = layer.selectedLayerImage.imageUrl.replace('/assets/images/new/', '/src/images/');
         return (
           <div className="layer" key={layer.id}>
-            <img src={imageUrl} width={100} height={100} />
+            <img src={imageUrlForLayer(layer)} width={100} height={100} />
           </div>
         );
       });
 
     return (
       <Modal isOpen={true}>
-        <Link to="test">
         <section className="show-design">
           <div className="show-canvas">
             <div className="canvas">
               {layerImages}
             </div>
           </div>
+          <div className="edit">
+            <Link to="designEdit" params={{designId:this.state.design.get('id')}}>
+              <img src="src/images/icons/edit-pencil.svg" width={40} height={40}/>
+            </Link>
+          </div>
         </section>
-        </Link>
       </Modal>
     );
   }
