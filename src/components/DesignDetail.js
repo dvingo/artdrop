@@ -10,9 +10,7 @@ export default React.createClass({
   mixins: [reactor.ReactMixin],
 
   getDataBindings() {
-    return {
-      design: State.getters.currentDesign
-    };
+    return { design: State.getters.currentDesign };
   },
 
   componentWillMount() {

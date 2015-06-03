@@ -1,14 +1,16 @@
 import React from 'react';
-import Router from 'react-router';
-import Modal from './Modal';
+import {Navigation} from 'react-router';
 import State from '../state/main';
-import router from '../router';
 
 export default React.createClass({
-  selectDesign() {
+  mixins: [Navigation],
+
+  selectDesign(e) {
+    e.preventDefault();
     State.actions.selectDesignId(this.props.design.get('id'));
-    router.transitionTo('designDetail', {designId: this.props.design.get('id')});
+    this.transitionTo('designDetail', {designId: this.props.design.get('id')});
   },
+
   render() {
     let layerImages = this.props.design.get('layers')
       .map(layer => {

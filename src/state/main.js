@@ -5,17 +5,14 @@ var Nuclear = require('nuclear-js');
 var allData = null;
 
 var idsToObjs = (ids, dataSrc) => {
-  if (Array.isArray(ids)) {
-    return ids.map(k => {
-      var o = dataSrc[k];
-      o.id = k;
-      return o;
-    });
-  } else {
-    var o = dataSrc[ids];
-    o.id = ids;
+  var setupObj = (k) => {
+    var o = dataSrc[k];
+    o.id = k;
     return o;
   }
+
+  return Array.isArray(ids) ? ids.map(setupObj)
+                            : setupObj(ids);
 }
 
 var hydrateDesignById = (designId) => {
