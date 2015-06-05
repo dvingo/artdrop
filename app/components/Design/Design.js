@@ -1,7 +1,7 @@
 import React from 'react';
 import {Navigation} from 'react-router';
-import State from '../state/main';
-import {imageUrlForLayer} from '../state/utils';
+import State from '../../state/main';
+import {imageUrlForLayer} from '../../state/utils';
 
 export default React.createClass({
   mixins: [Navigation],
@@ -25,11 +25,9 @@ export default React.createClass({
     return (
       <section className="show-design">
         <div className="show-canvas">
-          <a href="#" onClick={this.selectDesign}>
-            <div className="canvas">
-              {layerImages}
-            </div>
-          </a>
+          <div className="canvas" onClick={this.selectDesign}>
+            {layerImages}
+          </div>
         </div>
       </section>
     );

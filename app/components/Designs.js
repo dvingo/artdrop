@@ -1,6 +1,6 @@
 import React from 'react';
 import Router from 'react-router';
-import Design from './Design';
+import Design from './Design/Design';
 import reactor from '../state/reactor';
 import State from '../state/main';
 

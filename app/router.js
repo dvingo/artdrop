@@ -3,5 +3,5 @@ import routes from './routes';
 
 export default Router.create({
   routes: routes,
-  location: Router.HashLocation
+  location: Router.HistoryLocation
 });

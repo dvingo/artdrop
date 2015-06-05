@@ -1,6 +1,6 @@
-var path = require('path');
-var webpack = require('webpack');
-var srcDir = 'src';
+var path = require('path')
+var webpack = require('webpack')
+var srcDir = require('./config').srcDir
 
 module.exports = {
   devtool: 'eval',
@@ -31,4 +31,4 @@ module.exports = {
       loader: "style!css!sass"
     }]
   }
-};
+}
