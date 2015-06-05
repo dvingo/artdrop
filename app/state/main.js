@@ -88,6 +88,7 @@ module.exports = {
 var idsToObjs = (ids, dataSrc) => {
   var setupObj = (k) => {
     var o = dataSrc[k];
+    if (o == null) return null
     o.id = k;
     return o;
   }
@@ -99,6 +100,8 @@ var hydrateDesignById = (dataSrc, designId) => {
   var design = idsToObjs(designId, dataSrc.designs);
   var layers = idsToObjs(Object.keys(design.layers), dataSrc.layers).map(l => {
     l.selectedLayerImage = idsToObjs(l.selectedLayerImage, dataSrc.layerImages);
+    console.log('setting color palette: ', dataSrc.colorPalettes[l.colorPalette])
+    l.colorPalette = idsToObjs(l.colorPalette, dataSrc.colorPalettes)
     return l;
   });
   design.layers = layers;

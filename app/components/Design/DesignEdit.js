@@ -1,6 +1,7 @@
-import React from 'react';
+import React from 'react'
 import reactor from '../../state/reactor'
 import State from '../../state/main'
+import SVGInline  from '../SVGInline'
 import {imageUrlForLayer} from '../../state/utils'
 import {iconPath} from '../../utils'
 
@@ -8,11 +9,15 @@ export default React.createClass({
   mixins: [reactor.ReactMixin],
 
   getDataBindings() {
-    return { design: State.getters.currentDesign };
+    return { design: State.getters.currentDesign }
   },
 
   componentWillMount() {
     State.actions.selectDesignId(this.props.params.designId);
+  },
+
+  componentDidMount() {
+
   },
 
   nextColor() {
@@ -26,7 +31,7 @@ export default React.createClass({
       layer => {
         return (
           <div className="layer" key={layer.id}>
-            <img src={imageUrlForLayer(layer)} width={100} height={100} />
+            <SVGInline src={imageUrlForLayer(layer)} width={100} height={100} />
           </div>
         )
       })
