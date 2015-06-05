@@ -4,6 +4,7 @@ import reactor from '../../state/reactor'
 import State from '../../state/main'
 import {imageUrlForLayer} from '../../state/utils'
 import {Link} from 'react-router'
+import {iconPath} from '../../utils'
 var srcDir = require('../../../config').srcDir
 var appElement = document.getElementById('app')
 Modal.setAppElement(appElement)
@@ -21,8 +22,6 @@ export default React.createClass({
   },
 
   render() {
-    console.log('RENDERING detail');
-    console.log('state: ', this.state)
     if (this.state.design == null) { return null; }
 
     let layerImages = this.state.design.get('layers').map(

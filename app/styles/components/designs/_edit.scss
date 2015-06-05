@@ -1,0 +1,17 @@
+.design-edit {
+  @include display(flex);
+  @include flex-direction(column);
+  position: relative;
+  width: 100%;
+  height: 100%;
+  .canvas {
+    @include flex(1 0 0);
+    height: 50%;
+  }
+
+  .edit-ui {
+    @include display(flex);
+    @include flex-direction(column);
+    @include flex(1 0 0);
+  }
+}

@@ -1,0 +1,69 @@
+.start.visible .new-colors-button {
+  height: auto;
+}
+.new-colors-button {
+  @include display(flex);
+  @include flex-direction(column);
+  @include align-items(center);
+  width: 100px;
+  height: 70px;
+  &.off { display: none; }
+
+  .container {
+    @include display(flex);
+    @include flex-direction(row);
+    @include align-items(center);
+    @include justify-content(center);
+    width: 100px;
+    height: 50px;
+  }
+
+  .left {
+    width: 25px;
+    height: 25px;
+    img {
+      width: 21px;
+      height: 21px;
+      margin-top: 2px;
+      margin-left: -2px;
+    }
+  }
+  .color-wheel {
+    width: 50px;
+    height: 50px;
+    &:hover { cursor: pointer; }
+  }
+  .right {
+    width: 25px;
+    height: 25px;
+    img {
+      width: 21px;
+      height: 21px;
+      margin-top: 2px;
+      margin-left: 5px;
+    }
+  }
+
+  &.small {
+    @include flex-direction(row);
+    width: 70px;
+    height: 35px;
+
+    .left img {
+      margin-top: 5px;
+      width: 15px;
+      height: 15px;
+    }
+    .color-wheel {
+      width: 35px;
+      height: 35px;
+      img { margin-top: 3px; }
+     }
+    .right img {
+      margin-top: 5px;
+      margin-left: 7px;
+      width: 15px;
+      height: 15px;
+    }
+  }
+}

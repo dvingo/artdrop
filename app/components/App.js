@@ -9,8 +9,6 @@ export default React.createClass({
         <div className="nav-bar">
           Nav bar here
         </div>
-
-        <h1>Hello, app HERE.</h1>
         <Router.RouteHandler/>
       </div>
     );
