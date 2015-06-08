@@ -1,0 +1,28 @@
+.detail {
+  @include flex(0 0 0);
+  &.visible { @include flex-grow(1); }
+
+  .palette-art-container {
+    @include display(flex);
+    @include flex(0 0 0);
+    @include flex-direction(column);
+    visibility: hidden;
+    position: relative;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    &.visible {
+      @include flex-grow(1);
+      visibility: visible;
+    }
+  }
+
+  .options-button-container {
+    @include display(flex);
+    @include flex-direction(row);
+    @include justify-content(center);
+    @include align-items(center);
+    width: 100%;
+    height: 50px;
+  }
+}

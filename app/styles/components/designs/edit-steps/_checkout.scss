@@ -1,0 +1,5 @@
+.checkout {
+  @include flex(0 0 0);
+  &.visible { @include flex(1 0 0); }
+}
+

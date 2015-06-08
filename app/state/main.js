@@ -47,6 +47,7 @@ var currentDesignIdStore = new Nuclear.Store({
       designsRef.child(designId).on('value', (design) => {
         design = design.val()
         design.id = designId
+        console.log('selecting design: ', design);
         hydrateDesign(design)
       })
       return designId;
@@ -77,7 +78,8 @@ module.exports = {
   },
 
   actions: {
-    selectDesignId(id) { reactor.dispatch('selectDesignId', id); }
+    selectDesignId(id) { reactor.dispatch('selectDesignId', id); },
+    nextColor() { reactor.dispatch('nextColor'); }
   }
 }
 
@@ -100,7 +102,6 @@ var hydrateDesignById = (dataSrc, designId) => {
   var design = idsToObjs(designId, dataSrc.designs);
   var layers = idsToObjs(Object.keys(design.layers), dataSrc.layers).map(l => {
     l.selectedLayerImage = idsToObjs(l.selectedLayerImage, dataSrc.layerImages);
-    console.log('setting color palette: ', dataSrc.colorPalettes[l.colorPalette])
     l.colorPalette = idsToObjs(l.colorPalette, dataSrc.colorPalettes)
     return l;
   });
@@ -110,19 +111,20 @@ var hydrateDesignById = (dataSrc, designId) => {
 
 var hydrateDesign = (design) => {
   var layers = Object.keys(design.layers).map(layerId => {
-    return hydrateObj(layersRef, layerId)
-  })
-  RSVP.all(layers).then(layers => {
-    var layers = layers.map(layer => {
+    return hydrateLayer(layerId).then(layer => {
       return hydrateLayerImage(layer.selectedLayerImage).then(layerImage => {
         layer.selectedLayerImage = layerImage
-        return layer
+        return hydrateColorPalette(layer.colorPalette).then(colorPalette => {
+          layer.colorPalette = colorPalette
+          return layer
+        })
       })
     })
-    RSVP.all(layers).then(layers => {
-      design.layers = layers;
-      reactor.dispatch('addDesign', design)
-    })
+  })
+  RSVP.all(layers).then(layers => {
+    console.log('hydrating layers: ', layers)
+    design.layers = layers;
+    reactor.dispatch('addDesign', design)
   })
 }
 
@@ -131,4 +133,7 @@ var hydrateObj = (ref, id) => {
     ref.child(id).on('value', o => resolve(o.val()))
   })
 }
+
+var hydrateLayer = hydrateObj.bind(null, layersRef)
 var hydrateLayerImage = hydrateObj.bind(null, layerImagesRef)
+var hydrateColorPalette = hydrateObj.bind(null, colorPalettesRef)

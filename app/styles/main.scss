@@ -1,10 +1,22 @@
 @import "mixins/prefixer.scss";
 @import "mixins/flex.scss";
 
+@import "colors.scss";
 @import "components/nav-bar.scss";
 @import "components/designs/index.scss";
+@import "components/designs/edit-steps/index.scss";
 @import "components/new-colors-button.scss";
 
+html {
+  height: 100%;
+}
 body {
   background: white;
+  height: 100%;
+}
+#app {
+  height: 100%;
+  > div {
+    height: 100%;
+  }
 }

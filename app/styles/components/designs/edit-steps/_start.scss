@@ -1,0 +1,39 @@
+.start {
+  @include display(flex);
+  @include flex(0 0 0);
+  @include justify-content(space-around);
+  @include align-items(center);
+  @include flex-direction(column);
+  width: 100%;
+  overflow: hidden;
+  &.visible { @include flex(1 0 0); }
+  &.small {
+    min-height: 50px;
+    .actions {
+      div:first-child {
+        height: 35px;
+        width: 70px;
+      }
+    }
+  }
+
+  .actions {
+    @include display(flex);
+    @include flex-direction(row);
+    @include justify-content(space-around);
+    width: 100%;
+  }
+
+  .more-options {
+    @include display(flex);
+    @include flex-direction(row);
+    @include justify-content(space-around);
+    width: 100%;
+    button {
+      padding: 7px 5px 5px 5px;
+      background: gray;
+      color: white;
+      cursor: pointer;
+    }
+  }
+}

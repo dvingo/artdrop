@@ -4,13 +4,13 @@ var SVGInjector = require('svg-injector')
 export default React.createClass({
 
   componentDidMount() {
+    var self = this;
     var img = React.findDOMNode(this.refs.imgRef)
     SVGInjector(img, {"each": function(svgEl) {
-      svgEl.style.cssText = [
-      'height: 100%',
-      'width: 100%',
-      'margin: 0 auto',
-      'display: block'].join(" ")
+      svgEl.style.height = '100%';
+      svgEl.style.width = '100%';
+      svgEl.style.margin = '0 auto';
+      svgEl.style.display = 'block';
     }});
   },
 

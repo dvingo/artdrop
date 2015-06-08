@@ -1,0 +1,20 @@
+.edit-steps {
+  @include display(flex);
+  @include flex(1 0 0);
+  @include flex-direction(column);
+  width: 100%;
+  overflow: hidden;
+
+  .visible {
+    @include display(flex);
+    height: auto;
+  }
+
+  @import "./checkout.scss";
+  @import "./choose-art.scss";
+  @import "./choose-layer.scss";
+  @import "./choose-palette.scss";
+  @import "./choose-surface.scss";
+  @import "./detail.scss";
+  @import "./start.scss";
+}
