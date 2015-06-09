@@ -11,7 +11,6 @@ export default (
   <Route handler={App}>
     <Router.DefaultRoute handler={Designs}/>
     <Route name="designs" handler={Designs} path="designs/?">
-      <Route name="test" handler={Test} path="test/?"/>
       <Route name="designDetail" handler={DesignDetail} path=":designId/?"/>
     </Route>
     <Route name="designEdit" handler={DesignEdit} path="/designs/:designId/edit/?"/>

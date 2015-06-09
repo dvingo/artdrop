@@ -11,21 +11,6 @@ var surfacesRef      = new Firebase(fireBaseUri + "/surfaces");
 var colorPalettesRef = new Firebase(fireBaseUri + "/colorPalettes");
 
 ////////////////////////////////////////////////////////////////////////////////
-// Init from Firebase.
-////////////////////////////////////////////////////////////////////////////////
-
-firebaseRef.once('value', data => {
-  var allData = data.val();
-  var designIds = Object.keys(allData.designs);
-  designIds.map(hydrateDesignById.bind(null, allData))
-           .forEach(d => reactor.dispatch('addDesign', d));
-
-  var paletteIds = Object.keys(allData.colorPalettes);
-  paletteIds.map(id => idsToObjs(id, allData.colorPalettes))
-            .forEach(c => reactor.dispatch('addColorPalette', c));
-});
-
-////////////////////////////////////////////////////////////////////////////////
 // Stores.
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -37,12 +22,15 @@ var designsStore = new Nuclear.Store({
 
   initialize() {
    this.on('addDesign', function(state, design) {
-     return state.set(design.id, Nuclear.Immutable.fromJS(design));
+     if (!state.has(design.id)) {
+       return state.set(design.id, Nuclear.Immutable.fromJS(design));
+     }
+     return state
    });
 
    this.on('nextDesignColors', (state) => {
-     var allPalettes = reactor.evaluate(module.exports.getters.colorPalettes)
-     var currentDesign = reactor.evaluate(module.exports.getters.currentDesign)
+     var allPalettes = reactor.evaluate(getters.colorPalettes)
+     var currentDesign = reactor.evaluate(getters.currentDesign)
      var layers = currentDesign.get('layers').map(layer => {
        var index = allPalettes.findIndex(c => c.get('id') === layer.getIn(['colorPalette', 'id']))
        var newPalette = allPalettes.get((index + 1) % allPalettes.count())
@@ -52,7 +40,7 @@ var designsStore = new Nuclear.Store({
      return state.set(newDesign.get('id'), newDesign)
    })
  }
-});
+})
 
 var currentDesignIdStore = new Nuclear.Store({
 
@@ -62,11 +50,14 @@ var currentDesignIdStore = new Nuclear.Store({
 
   initialize() {
     this.on('selectDesignId', (state, designId) => {
-      designsRef.child(designId).on('value', (design) => {
-        design = design.val()
-        design.id = designId
-        hydrateDesign(design)
-      })
+      var designs = reactor.evaluate(getters.designs)
+      if (!designs.has(designId)) {
+        designsRef.child(designId).on('value', (design) => {
+          design = design.val()
+          design.id = designId
+          hydrateDesign(design)
+        })
+      }
       return designId
     })
   }
@@ -88,24 +79,23 @@ reactor.registerStores({
   designs: designsStore,
   currentDesignId: currentDesignIdStore,
   colorPalettes: colorPalettesStore
-});
+})
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports.
 ////////////////////////////////////////////////////////////////////////////////
 
+var getters = {}
+getters.designs = [['designs'], designsMap => designsMap.toList()]
+getters.currentDesign = [
+  ['currentDesignId'],
+  ['designs'],
+  (currentDesignId, designsMap) => designsMap.get(currentDesignId)
+]
+getters.colorPalettes = [['colorPalettes'], palettes => palettes.toList()]
+
 module.exports = {
-
-  getters: {
-    designs: [['designs'], designsMap => designsMap.toList()],
-    currentDesign: [
-      ['currentDesignId'],
-      ['designs'],
-      (currentDesignId, designsMap) => designsMap.get(currentDesignId)
-    ],
-    colorPalettes: [['colorPalettes'], palettes => palettes.toList()]
-  },
-
+  getters: getters,
   actions: {
     selectDesignId(id) { reactor.dispatch('selectDesignId', id); },
     nextDesignColors() { reactor.dispatch('nextDesignColors'); }
@@ -170,3 +160,18 @@ var hydrateObj = (ref, id) => {
 var hydrateLayer = hydrateObj.bind(null, layersRef)
 var hydrateLayerImage = hydrateObj.bind(null, layerImagesRef)
 var hydrateColorPalette = hydrateObj.bind(null, colorPalettesRef)
+
+////////////////////////////////////////////////////////////////////////////////
+// Init from Firebase.
+////////////////////////////////////////////////////////////////////////////////
+
+firebaseRef.once('value', data => {
+  var allData = data.val();
+  var designIds = Object.keys(allData.designs);
+  designIds.map(hydrateDesignById.bind(null, allData))
+           .forEach(d => reactor.dispatch('addDesign', d))
+
+  var paletteIds = Object.keys(allData.colorPalettes);
+  paletteIds.map(id => idsToObjs(id, allData.colorPalettes))
+            .forEach(c => reactor.dispatch('addColorPalette', c))
+})

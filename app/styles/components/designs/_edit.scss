@@ -10,14 +10,6 @@
     height: 50%;
   }
 
-  .layer, .layer-container {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    top: 0;
-    left: 0;
-  }
-
   .edit-ui {
     @include display(flex);
     @include flex-direction(column);

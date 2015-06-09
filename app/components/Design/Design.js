@@ -1,15 +1,19 @@
 import React from 'react';
 import {Navigation} from 'react-router';
 import State from '../../state/main';
+import SVGInlineLayer  from '../SVGInlineLayer'
 import {imageUrlForLayer} from '../../state/utils';
 
 export default React.createClass({
   mixins: [Navigation],
 
   selectDesign(e) {
-    e.preventDefault();
-    State.actions.selectDesignId(this.props.design.get('id'));
-    this.transitionTo('designDetail', {designId: this.props.design.get('id')});
+    State.actions.selectDesignId(this.props.design.get('id'))
+    this.transitionTo('designDetail', {designId: this.props.design.get('id')})
+  },
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props.design !== nextProps.design
   },
 
   render() {
@@ -17,10 +21,10 @@ export default React.createClass({
       .map(layer => {
         return (
           <div className="layer" key={layer.get('id')}>
-            <img src={imageUrlForLayer(layer)} width={100} height={100} />
+            <SVGInlineLayer layer={layer} width={100} height={100} />
           </div>
-        );
-      });
+        )
+      })
 
     return (
       <section className="show-design">
@@ -30,6 +34,6 @@ export default React.createClass({
           </div>
         </div>
       </section>
-    );
+    )
   }
 })
