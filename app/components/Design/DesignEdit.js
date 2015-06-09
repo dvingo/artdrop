@@ -3,7 +3,6 @@ import reactor from '../../state/reactor'
 import State from '../../state/main'
 import SVGInlineLayer  from '../SVGInlineLayer'
 import Start from './EditSteps/Start'
-import {iconPath} from '../../utils'
 
 export default React.createClass({
   mixins: [reactor.ReactMixin],

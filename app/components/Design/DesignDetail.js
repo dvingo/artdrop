@@ -43,7 +43,7 @@ export default React.createClass({
           </div>
           <div className="edit">
             <Link to="designEdit" params={{designId: this.state.design.get('id')}}>
-              <img src={'/' + srcDir + "/images/icons/edit-pencil.svg"}
+              <img src={iconPath('edit-pencil.svg')}
                    width={40} height={40}/>
             </Link>
           </div>

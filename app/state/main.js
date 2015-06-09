@@ -36,29 +36,21 @@ var designsStore = new Nuclear.Store({
   },
 
   initialize() {
-
    this.on('addDesign', function(state, design) {
      return state.set(design.id, Nuclear.Immutable.fromJS(design));
    });
 
    this.on('nextDesignColors', (state) => {
-     var index = reactor.evaluate([module.exports.getters.currentDesignColorPaletteIndex]) || 0
-     var allPalettesOne = reactor.evaluate([module.exports.getters.colorPalettes])
-     var allPalettes = reactor.evaluate([['colorPalettes'], palettes => palettes.toList()])
-     var currentDesign = reactor.evaluate([['currentDesignId'], ['designs'], (currentDesignId, designsMap) => {
-        var currentDesign = designsMap.get(currentDesignId)
-        console.log('ucrrent DESING XXX: ', currentDesign);
-         return  currentDesign ;
-     }])
-
-     console.log('allPalettes: ', allPalettes)
-     console.log('allPalettesONE: ', allPalettesOne)
-     console.log('CURRENT DESIGN IN next colors: ', currentDesign)
-     console.log('PALETTE INDEX in nextDesignColors: ', index)
-     var newDesign = currentDesign.set('colorPalette', allPalettes.get(index + 1))
+     var allPalettes = reactor.evaluate(module.exports.getters.colorPalettes)
+     var currentDesign = reactor.evaluate(module.exports.getters.currentDesign)
+     var layers = currentDesign.get('layers').map(layer => {
+       var index = allPalettes.findIndex(c => c.get('id') === layer.getIn(['colorPalette', 'id']))
+       var newPalette = allPalettes.get((index + 1) % allPalettes.count())
+       return layer.set('colorPalette', newPalette)
+     })
+     var newDesign = currentDesign.set('layers', layers)
      return state.set(newDesign.get('id'), newDesign)
    })
-
  }
 });
 
@@ -69,7 +61,6 @@ var currentDesignIdStore = new Nuclear.Store({
   },
 
   initialize() {
-
     this.on('selectDesignId', (state, designId) => {
       designsRef.child(designId).on('value', (design) => {
         design = design.val()
@@ -105,26 +96,14 @@ reactor.registerStores({
 
 module.exports = {
 
-  // TODO try moving getters into their own object above.
   getters: {
     designs: [['designs'], designsMap => designsMap.toList()],
     currentDesign: [
       ['currentDesignId'],
       ['designs'],
-      (currentDesignId, designsMap) => {
-        var currentDesign = designsMap.get(currentDesignId)
-        console.log('CURRENT DESIGN IN GETTEr: ', currentDesign)
-        return currentDesign
-      }
+      (currentDesignId, designsMap) => designsMap.get(currentDesignId)
     ],
-    colorPalettes: [['colorPalettes'], palettes => palettes.toList()],
-    currentDesignColorPaletteIndex: [
-      module.exports.currentDesign,
-      module.exports.colorPalettes,
-      (currentDesign, palettes) => {
-        return palettes.indexOf(currentDesign.getIn(['colorPalette', 'id']))
-      }
-    ]
+    colorPalettes: [['colorPalettes'], palettes => palettes.toList()]
   },
 
   actions: {
@@ -140,7 +119,6 @@ module.exports = {
 var idsToObjs = (ids, dataSrc) => {
   var setupObj = (k) => {
     var o = dataSrc[k];
-    if (o == null) return null
     o.id = k;
     return o;
   }
@@ -150,9 +128,15 @@ var idsToObjs = (ids, dataSrc) => {
 
 var hydrateDesignById = (dataSrc, designId) => {
   var design = idsToObjs(designId, dataSrc.designs);
+  var colorPaletteIds = Object.keys(dataSrc.colorPalettes)
   var layers = idsToObjs(Object.keys(design.layers), dataSrc.layers).map(l => {
     l.selectedLayerImage = idsToObjs(l.selectedLayerImage, dataSrc.layerImages);
-    l.colorPalette = idsToObjs(l.colorPalette, dataSrc.colorPalettes)
+    if (l.colorPalette == null) {
+      var i = Math.floor(Math.random() * Object.keys(dataSrc.colorPalettes).length)
+      l.colorPalette = idsToObjs(colorPaletteIds[i], dataSrc.colorPalettes)
+    } else {
+      l.colorPalette = idsToObjs(l.colorPalette, dataSrc.colorPalettes)
+    }
     return l;
   });
   design.layers = layers;

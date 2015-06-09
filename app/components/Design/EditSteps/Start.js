@@ -5,18 +5,12 @@ import {iconPath} from '../../../utils'
 
 export default React.createClass({
 
-  nextDesignColors() {
-    var currentDesign = reactor.evaluate([State.getters.currentDesign])
-    console.log('CURRENT DESIGN in nextDesignColors: ', currentDesign)
-    State.actions.nextDesignColors()
-  },
-
   render() {
     return (
       <div className="start visible">
         <div className="actions">
           <div className="new-colors-button">
-            <div className="container" onClick={this.nextDesignColors}>
+            <div className="container" onClick={State.actions.nextDesignColors}>
               <span className="left">
                 <img src={iconPath('triangle-left.svg')}/>
               </span>

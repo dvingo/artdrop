@@ -8,44 +8,51 @@ var layersToColors = {
   'Layer_3': 'colorThree',
   'Layer_4': 'colorFour'}
 var svgLayerIds = Object.keys(layersToColors)
-
 var toA = (list) => Array.prototype.slice.call(list, 0)
+
 export default React.createClass({
 
   replaceImageWithText() {
     var self = this;
+    var container = React.findDOMNode(this.refs.container)
     var img = React.findDOMNode(this.refs.imgRef)
-    SVGInjector(img, {"each": function(svgEl) {
+    var imgClone = img.cloneNode()
+    imgClone.removeAttribute('data-reactid')
+    var currentSvg = container.querySelector('svg')
+    if (currentSvg != null) {
+      container.removeChild(currentSvg)
+    }
+    container.appendChild(imgClone)
+    SVGInjector(imgClone, {"each": function(svgEl) {
       svgEl.style.height = '100%';
       svgEl.style.width = '100%';
       svgEl.style.margin = '0 auto';
       svgEl.style.display = 'block';
       svgLayerIds.forEach(id => {
-        if (self.props.layer.get('colorPalette') != null) {
-          var color = self.props.layer.get('colorPalette').get(layersToColors[id])
-          toA(svgEl.querySelectorAll(`#${id} *`)).forEach(el => { el.style.fill = color })
-        }
+        var color = self.props.layer.get('colorPalette').get(layersToColors[id])
+        toA(svgEl.querySelectorAll(`#${id} *`)).forEach(el => el.style.fill = color)
       })
       return svgEl
     }});
   },
 
   componentDidMount() {
-    // TODO - HERE INsert the image so React render doesn't conflict with replacement when
-    // data changes.
     this.replaceImageWithText()
   },
 
-  componentWillReceiveProps() {
+  componentDidUpdate() {
     this.replaceImageWithText()
   },
 
   render() {
     return (
-      <img src={imageUrlForLayer(this.props.layer)}
-           width={this.props.width}
-           height={this.props.height}
-           ref="imgRef"/>
+      <div ref="container" className="layer-container">
+        <img src={imageUrlForLayer(this.props.layer)}
+             width={this.props.width}
+             height={this.props.height}
+             style={{display:'none'}}
+             ref="imgRef"/>
+      </div>
     )
   }
 })
