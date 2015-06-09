@@ -1,12 +1,14 @@
 import React from 'react'
+import reactor from '../../../state/reactor'
 import State from '../../../state/main'
 import {iconPath} from '../../../utils'
 
 export default React.createClass({
 
-  nextColor() {
-    State.actions.nextColor()
-    console.log('handle that color change')
+  nextDesignColors() {
+    var currentDesign = reactor.evaluate([State.getters.currentDesign])
+    console.log('CURRENT DESIGN in nextDesignColors: ', currentDesign)
+    State.actions.nextDesignColors()
   },
 
   render() {
@@ -14,7 +16,7 @@ export default React.createClass({
       <div className="start visible">
         <div className="actions">
           <div className="new-colors-button">
-            <div className="container" onClick={this.nextColor}>
+            <div className="container" onClick={this.nextDesignColors}>
               <span className="left">
                 <img src={iconPath('triangle-left.svg')}/>
               </span>

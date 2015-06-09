@@ -2,25 +2,27 @@ import fixtures from '../fixtures';
 import reactor from './reactor';
 var Nuclear = require('nuclear-js');
 var RSVP = require('RSVP');
-var allData = null;
-
 var fireBaseUri = "https://glaring-fire-8101.firebaseio.com";
-var firebaseRef = new Firebase(fireBaseUri);
-var designsRef = new Firebase(fireBaseUri+"/designs");
-var layersRef = new Firebase(fireBaseUri+"/layers");
-var layerImagesRef = new Firebase(fireBaseUri+"/layerImages");
-var surfacesRef = new Firebase(fireBaseUri+"/surfaces");
-var colorPalettesRef = new Firebase(fireBaseUri+"/colorPalettes");
+var firebaseRef      = new Firebase(fireBaseUri);
+var designsRef       = new Firebase(fireBaseUri + "/designs");
+var layersRef        = new Firebase(fireBaseUri + "/layers");
+var layerImagesRef   = new Firebase(fireBaseUri + "/layerImages");
+var surfacesRef      = new Firebase(fireBaseUri + "/surfaces");
+var colorPalettesRef = new Firebase(fireBaseUri + "/colorPalettes");
 
 ////////////////////////////////////////////////////////////////////////////////
 // Init from Firebase.
 ////////////////////////////////////////////////////////////////////////////////
 
 firebaseRef.once('value', data => {
-  allData = data.val();
+  var allData = data.val();
   var designIds = Object.keys(allData.designs);
   designIds.map(hydrateDesignById.bind(null, allData))
            .forEach(d => reactor.dispatch('addDesign', d));
+
+  var paletteIds = Object.keys(allData.colorPalettes);
+  paletteIds.map(id => idsToObjs(id, allData.colorPalettes))
+            .forEach(c => reactor.dispatch('addColorPalette', c));
 });
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -28,36 +30,73 @@ firebaseRef.once('value', data => {
 ////////////////////////////////////////////////////////////////////////////////
 
 var designsStore = new Nuclear.Store({
+
   getInitialState() {
     return Nuclear.toImmutable({});
   },
+
   initialize() {
+
    this.on('addDesign', function(state, design) {
      return state.set(design.id, Nuclear.Immutable.fromJS(design));
    });
+
+   this.on('nextDesignColors', (state) => {
+     var index = reactor.evaluate([module.exports.getters.currentDesignColorPaletteIndex]) || 0
+     var allPalettesOne = reactor.evaluate([module.exports.getters.colorPalettes])
+     var allPalettes = reactor.evaluate([['colorPalettes'], palettes => palettes.toList()])
+     var currentDesign = reactor.evaluate([['currentDesignId'], ['designs'], (currentDesignId, designsMap) => {
+        var currentDesign = designsMap.get(currentDesignId)
+        console.log('ucrrent DESING XXX: ', currentDesign);
+         return  currentDesign ;
+     }])
+
+     console.log('allPalettes: ', allPalettes)
+     console.log('allPalettesONE: ', allPalettesOne)
+     console.log('CURRENT DESIGN IN next colors: ', currentDesign)
+     console.log('PALETTE INDEX in nextDesignColors: ', index)
+     var newDesign = currentDesign.set('colorPalette', allPalettes.get(index + 1))
+     return state.set(newDesign.get('id'), newDesign)
+   })
+
  }
 });
 
 var currentDesignIdStore = new Nuclear.Store({
+
   getInitialState() {
-    return '';
+    return ''
   },
+
   initialize() {
-    this.on('selectDesignId', function(state, designId) {
+
+    this.on('selectDesignId', (state, designId) => {
       designsRef.child(designId).on('value', (design) => {
         design = design.val()
         design.id = designId
-        console.log('selecting design: ', design);
         hydrateDesign(design)
       })
-      return designId;
-    });
+      return designId
+    })
   }
-});
+})
+
+var colorPalettesStore = new Nuclear.Store({
+  getInitialState() {
+    return Nuclear.toImmutable({});
+  },
+
+  initialize() {
+   this.on('addColorPalette', function(state, colorPalette) {
+     return state.set(colorPalette.id, Nuclear.Immutable.fromJS(colorPalette));
+   })
+ }
+})
 
 reactor.registerStores({
   designs: designsStore,
-  currentDesignId: currentDesignIdStore
+  currentDesignId: currentDesignIdStore,
+  colorPalettes: colorPalettesStore
 });
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -66,20 +105,31 @@ reactor.registerStores({
 
 module.exports = {
 
+  // TODO try moving getters into their own object above.
   getters: {
     designs: [['designs'], designsMap => designsMap.toList()],
     currentDesign: [
       ['currentDesignId'],
       ['designs'],
       (currentDesignId, designsMap) => {
-        return designsMap.get(currentDesignId)
+        var currentDesign = designsMap.get(currentDesignId)
+        console.log('CURRENT DESIGN IN GETTEr: ', currentDesign)
+        return currentDesign
+      }
+    ],
+    colorPalettes: [['colorPalettes'], palettes => palettes.toList()],
+    currentDesignColorPaletteIndex: [
+      module.exports.currentDesign,
+      module.exports.colorPalettes,
+      (currentDesign, palettes) => {
+        return palettes.indexOf(currentDesign.getIn(['colorPalette', 'id']))
       }
     ]
   },
 
   actions: {
     selectDesignId(id) { reactor.dispatch('selectDesignId', id); },
-    nextColor() { reactor.dispatch('nextColor'); }
+    nextDesignColors() { reactor.dispatch('nextDesignColors'); }
   }
 }
 
@@ -122,7 +172,6 @@ var hydrateDesign = (design) => {
     })
   })
   RSVP.all(layers).then(layers => {
-    console.log('hydrating layers: ', layers)
     design.layers = layers;
     reactor.dispatch('addDesign', design)
   })

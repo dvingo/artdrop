@@ -23,7 +23,6 @@ export default React.createClass({
       svgLayerIds.forEach(id => {
         if (self.props.layer.get('colorPalette') != null) {
           var color = self.props.layer.get('colorPalette').get(layersToColors[id])
-          console.log('FILLING COLOR: ', color);
           toA(svgEl.querySelectorAll(`#${id} *`)).forEach(el => { el.style.fill = color })
         }
       })
@@ -32,6 +31,8 @@ export default React.createClass({
   },
 
   componentDidMount() {
+    // TODO - HERE INsert the image so React render doesn't conflict with replacement when
+    // data changes.
     this.replaceImageWithText()
   },
 
