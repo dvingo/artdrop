@@ -18,7 +18,7 @@ export default React.createClass({
 
   render() {
     return (
-      <section className={classNames('detail', {visible: this.props.isActive})}>
+      <section className={classNames('detail', {visible: this.props.currentStep !== 'start'})}>
         <article className="layer-selector-wrapper small">
           <div className="container">
             {this.props.design.get('layers').map(layer => {
@@ -29,7 +29,7 @@ export default React.createClass({
           </div>
         </article>
 
-        <ChooseLayer design={this.props.design} isActive={false}/>
+        <ChooseLayer design={this.props.design} isActive={true}/>
         <article className={classNames('palette-art-container', {visible: false})}>
           <ChoosePalette />
           <section className="options-button-container">

@@ -43,10 +43,7 @@ var designsStore = new Nuclear.Store({
 })
 
 var currentDesignIdStore = new Nuclear.Store({
-
-  getInitialState() {
-    return ''
-  },
+  getInitialState() { return '' },
 
   initialize() {
     this.on('selectDesignId', (state, designId) => {
@@ -60,6 +57,13 @@ var currentDesignIdStore = new Nuclear.Store({
       }
       return designId
     })
+  }
+})
+
+var currentEditStepStore = new Nuclear.Store({
+  getInitialState() { return '' },
+  initialize() {
+    this.on('selectEditStep', (state, editStep) => { return editStep })
   }
 })
 
@@ -78,7 +82,8 @@ var colorPalettesStore = new Nuclear.Store({
 reactor.registerStores({
   designs: designsStore,
   currentDesignId: currentDesignIdStore,
-  colorPalettes: colorPalettesStore
+  colorPalettes: colorPalettesStore,
+  currentEditStep: currentEditStepStore
 })
 
 ////////////////////////////////////////////////////////////////////////////////

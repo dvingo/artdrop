@@ -1,4 +1,14 @@
 .edit-steps {
+  * { transition: flex-grow 0.5s ease-in-out 0s; }
+  @import "./checkout.scss";
+  @import "./choose-art.scss";
+  @import "./choose-layer.scss";
+  @import "./choose-palette.scss";
+  @import "./choose-surface.scss";
+  @import "./detail.scss";
+  @import "./start.scss";
+  @import "./layer-selector.scss";
+
   @include display(flex);
   @include flex(1 0 0);
   @include flex-direction(column);
@@ -10,11 +20,4 @@
     height: auto;
   }
 
-  @import "./checkout.scss";
-  @import "./choose-art.scss";
-  @import "./choose-layer.scss";
-  @import "./choose-palette.scss";
-  @import "./choose-surface.scss";
-  @import "./detail.scss";
-  @import "./start.scss";
 }

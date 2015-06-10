@@ -1,11 +1,13 @@
 .choose-art {
-  @include flex(0 0 0);
+  @include flex-grow(0);
+  @include flex-shrink(0);
+  @include flex-basis(0);
   height: 0;
   overflow: hidden;
 
   &.visible {
     @include display(flex);
-    @include flex(1 0 0);
+    @include flex-grow(1);
     height: auto;
   }
 

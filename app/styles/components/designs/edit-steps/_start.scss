@@ -1,12 +1,14 @@
 .start {
   @include display(flex);
-  @include flex(0 0 0);
+  @include flex-grow(0.00001);
+  @include flex-shrink(0);
+  @include flex-basis(0);
   @include justify-content(space-around);
   @include align-items(center);
   @include flex-direction(column);
   width: 100%;
   overflow: hidden;
-  &.visible { @include flex(1 0 0); }
+  &.visible { @include flex-grow(1); }
   &.small {
     min-height: 50px;
     .actions {

@@ -1,0 +1,30 @@
+$imgSize: 40px;
+.layer-selector-wrapper {
+  @include display(flex);
+  @include flex(0 1 auto);
+  margin: 0;
+  padding: 0;
+
+  .container {
+    @include display(flex);
+    @include flex-direction(column);
+    @include flex(1 0 0);
+    @include justify-content(space-around);
+  }
+}
+.layer-selector {
+  img {
+    border-radius: 20px;
+    &:hover {
+      background: lightpink;
+      cursor: pointer;
+    }
+  }
+  &.selected img {
+    background: rgb(200, 200, 200);
+    &:hover {
+      background: lightpink;
+      cursor: pointer;
+    }
+  }
+}

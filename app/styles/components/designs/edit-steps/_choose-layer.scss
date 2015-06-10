@@ -1,6 +1,8 @@
 .choose-layer {
   @include display(flex);
-  @include flex(0 0 0);
+  @include flex-grow(0.00001);
+  @include flex-shrink(0);
+  @include flex-basis(0);
   overflow: hidden;
   margin: 0;
   padding: 0;

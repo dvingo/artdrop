@@ -1,9 +1,15 @@
 import React from 'react'
-import State from '../../../state/main'
+import reactor from '../../../state/reactor'
+import Store from '../../../state/main'
 import {iconPath} from '../../../utils'
+import {Link} from 'react-router'
 var classNames = require('classnames')
 
 export default React.createClass({
+  mixins: [reactor.ReactMixin],
+  getDataBindings() {
+    return { design: Store.getters.currentDesign }
+  },
 
   render() {
     return (
@@ -11,7 +17,7 @@ export default React.createClass({
 
         <div className="actions">
           <div className="new-colors-button">
-            <div className="container" onClick={State.actions.nextDesignColors}>
+            <div className="container" onClick={Store.actions.nextDesignColors}>
               <span className="left">
                 <img src={iconPath('triangle-left.svg')}/>
               </span>
@@ -27,7 +33,9 @@ export default React.createClass({
         </div>
 
         <div className="more-options">
-          <button onClick={this.moreOptionsClicked}>MORE OPTIONS</button>
+          <Link to="designEdit" params={{designId: this.state.design.get('id'), step: 'choose-layer'}}>
+            <button onClick={this.moreOptionsClicked}>MORE OPTIONS</button>
+          </Link>
         </div>
       </div>
     )

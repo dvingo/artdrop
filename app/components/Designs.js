@@ -20,7 +20,7 @@ export default React.createClass({
     });
 
     return (
-      <div>
+      <div className="main">
         <ul className="designs">
           {designs}
         </ul>

@@ -14,7 +14,9 @@ export default React.createClass({
   },
 
   componentWillMount() {
-    Store.actions.selectDesignId(this.props.params.designId);
+    // TODO redirect if invalid step
+    //if (this.props.params.step  not in validSteps...)
+    Store.actions.selectDesignId(this.props.params.designId)
   },
 
   render() {
@@ -30,7 +32,7 @@ export default React.createClass({
       })
 
     return (
-      <section className="design-edit">
+      <section className="main design-edit">
 
         <div className="canvas">
           {layerImages}

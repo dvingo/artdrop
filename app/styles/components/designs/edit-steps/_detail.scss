@@ -1,10 +1,14 @@
 .detail {
-  @include flex(0 0 0);
+  @include flex-grow(0.00001);
+  @include flex-shrink(0);
+  @include flex-basis(0);
   &.visible { @include flex-grow(1); }
 
   .palette-art-container {
     @include display(flex);
-    @include flex(0 0 0);
+    @include flex-grow(0);
+    @include flex-shrink(0);
+    @include flex-basis(0);
     @include flex-direction(column);
     visibility: hidden;
     position: relative;

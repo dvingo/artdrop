@@ -9,10 +9,19 @@
 
 html {
   height: 100%;
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
 }
 body {
   background: white;
   height: 100%;
+  padding: 0;
+  margin: 0;
+}
+.main {
+  height: 93%;
 }
 #app {
   height: 100%;
