@@ -1,18 +1,20 @@
 import React from 'react'
 import reactor from '../../state/reactor'
-import State from '../../state/main'
+import Router from 'react-router'
+import Store from '../../state/main'
 import SVGInlineLayer  from '../SVGInlineLayer'
 import Start from './EditSteps/Start'
+import Container from './EditSteps/Container'
 
 export default React.createClass({
-  mixins: [reactor.ReactMixin],
+  mixins: [reactor.ReactMixin, Router.State],
 
   getDataBindings() {
-    return { design: State.getters.currentDesign }
+    return { design: Store.getters.currentDesign }
   },
 
   componentWillMount() {
-    State.actions.selectDesignId(this.props.params.designId);
+    Store.actions.selectDesignId(this.props.params.designId);
   },
 
   render() {
@@ -22,7 +24,7 @@ export default React.createClass({
       layer => {
         return (
           <div className="layer" key={layer.get('id')}>
-            <SVGInlineLayer layer={layer} width={100} height={100} />
+            <SVGInlineLayer layer={layer}/>
           </div>
         )
       })
@@ -36,7 +38,8 @@ export default React.createClass({
 
         <div className="edit-ui">
           <div className="edit-steps">
-            <Start/>
+            <Start isActive={this.props.params.step === 'start'}/>
+            <Container design={this.state.design} currentStep={this.props.params.step}/>
           </div>
         </div>
 

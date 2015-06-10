@@ -1,13 +1,14 @@
 import React from 'react'
-import reactor from '../../../state/reactor'
 import State from '../../../state/main'
 import {iconPath} from '../../../utils'
+var classNames = require('classnames')
 
 export default React.createClass({
 
   render() {
     return (
-      <div className="start visible">
+      <div className={classNames('start', {visible: this.props.isActive})}>
+
         <div className="actions">
           <div className="new-colors-button">
             <div className="container" onClick={State.actions.nextDesignColors}>
@@ -21,7 +22,12 @@ export default React.createClass({
                 <img src={iconPath('triangle-right.svg')}/>
               </span>
             </div>
+            <span className="rand-button-text">New Colors</span>
           </div>
+        </div>
+
+        <div className="more-options">
+          <button onClick={this.moreOptionsClicked}>MORE OPTIONS</button>
         </div>
       </div>
     )

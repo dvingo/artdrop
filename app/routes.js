@@ -13,6 +13,6 @@ export default (
     <Route name="designs" handler={Designs} path="designs/?">
       <Route name="designDetail" handler={DesignDetail} path=":designId/?"/>
     </Route>
-    <Route name="designEdit" handler={DesignEdit} path="/designs/:designId/edit/?"/>
+    <Route name="designEdit" handler={DesignEdit} path="/designs/:designId/edit/:step/?"/>
   </Route>
 );

@@ -38,6 +38,7 @@
     "webpack-dev-server": "^1.8.2"
   },
   "dependencies": {
+    "classnames": "^2.1.2",
     "css-loader": "^0.14.4",
     "immutable": "^3.7.3",
     "node-sass": "^3.1.2",

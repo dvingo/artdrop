@@ -48,8 +48,6 @@ export default React.createClass({
     return (
       <div ref="container" className="layer-container">
         <img src={imageUrlForLayer(this.props.layer)}
-             width={this.props.width}
-             height={this.props.height}
              style={{display:'none'}}
              ref="imgRef"/>
       </div>
