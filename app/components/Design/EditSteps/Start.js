@@ -12,31 +12,36 @@ export default React.createClass({
   },
 
   render() {
+    var isActive = this.props.isActive
     return (
-      <div className={classNames('start', {visible: this.props.isActive})}>
+      <div className={classNames('start', {visible: isActive, small: !isActive})}>
 
         <div className="actions">
           <div className="new-colors-button">
             <div className="container" onClick={Store.actions.nextDesignColors}>
-              <span className="left">
+              <span className={classNames("left", {small: !isActive})}>
                 <img src={iconPath('triangle-left.svg')}/>
               </span>
-              <span className="color-wheel">
+              <span className={classNames("color-wheel", {small: !isActive})}>
                 <img src={iconPath('color-wheel.svg')}/>
               </span>
-              <span className="right">
+              <span className={classNames("right", {small: !isActive})}>
                 <img src={iconPath('triangle-right.svg')}/>
               </span>
             </div>
-            <span className="rand-button-text">New Colors</span>
+            {this.props.isActive ?
+              <span className="rand-button-text">New Colors</span>
+              : null}
           </div>
         </div>
 
-        <div className="more-options">
-          <Link to="designEdit" params={{designId: this.state.design.get('id'), step: 'choose-layer'}}>
-            <button onClick={this.moreOptionsClicked}>MORE OPTIONS</button>
-          </Link>
-        </div>
+         {this.props.isActive ?
+          <div className="more-options">
+            <Link to="designEdit" params={{designId: this.state.design.get('id'), step: 'choose-layer'}}>
+              <button onClick={this.moreOptionsClicked}>MORE OPTIONS</button>
+            </Link>
+          </div>
+          : null }
       </div>
     )
   }

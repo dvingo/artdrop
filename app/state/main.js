@@ -60,13 +60,6 @@ var currentDesignIdStore = new Nuclear.Store({
   }
 })
 
-var currentEditStepStore = new Nuclear.Store({
-  getInitialState() { return '' },
-  initialize() {
-    this.on('selectEditStep', (state, editStep) => { return editStep })
-  }
-})
-
 var colorPalettesStore = new Nuclear.Store({
   getInitialState() {
     return Nuclear.toImmutable({});
@@ -79,11 +72,23 @@ var colorPalettesStore = new Nuclear.Store({
  }
 })
 
+var layerImagesStore = new Nuclear.Store({
+  getInitialState() {
+    return Nuclear.toImmutable({});
+  },
+
+  initialize() {
+   this.on('addLayerImage', function(state, layerImage) {
+     return state.set(layerImage.id, Nuclear.Immutable.fromJS(layerImage));
+   })
+ }
+})
+
 reactor.registerStores({
   designs: designsStore,
   currentDesignId: currentDesignIdStore,
   colorPalettes: colorPalettesStore,
-  currentEditStep: currentEditStepStore
+  layerImages: layerImagesStore
 })
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -170,13 +175,19 @@ var hydrateColorPalette = hydrateObj.bind(null, colorPalettesRef)
 // Init from Firebase.
 ////////////////////////////////////////////////////////////////////////////////
 
+// TODO data retrieval should be lazy, as this strategy won't scale.
+// On boot, select all "home screen designs, and pull all of their data."
 firebaseRef.once('value', data => {
   var allData = data.val();
   var designIds = Object.keys(allData.designs);
   designIds.map(hydrateDesignById.bind(null, allData))
            .forEach(d => reactor.dispatch('addDesign', d))
 
-  var paletteIds = Object.keys(allData.colorPalettes);
-  paletteIds.map(id => idsToObjs(id, allData.colorPalettes))
-            .forEach(c => reactor.dispatch('addColorPalette', c))
+  Object.keys(allData.colorPalettes)
+    .map(id => idsToObjs(id, allData.colorPalettes))
+    .forEach(c => reactor.dispatch('addColorPalette', c))
+
+  Object.keys(allData.layerImages)
+    .map(id => idsToObjs(id, allData.layerImages))
+    .forEach(li => reactor.dispatch('addLayerImage', li))
 })

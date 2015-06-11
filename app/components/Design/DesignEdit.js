@@ -20,7 +20,7 @@ export default React.createClass({
   },
 
   render() {
-    if (this.state.design == null) { return null; }
+    if (this.state.design == null) { return null }
 
     let layerImages = this.state.design.get('layers').map(
       layer => {
@@ -41,7 +41,7 @@ export default React.createClass({
         <div className="edit-ui">
           <div className="edit-steps">
             <Start isActive={this.props.params.step === 'start'}/>
-            <Container design={this.state.design} currentStep={this.props.params.step}/>
+            <Container design={this.state.design} step={this.props.params.step} layerId={this.props.params.layerId}/>
           </div>
         </div>
 

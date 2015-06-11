@@ -27,11 +27,17 @@
       margin-top: 2px;
       margin-left: -2px;
     }
+    &.small { margin-bottom: 12px; }
   }
   .color-wheel {
     width: 50px;
     height: 50px;
     &:hover { cursor: pointer; }
+    &.small {
+      position: relative;
+      top: 2px;
+      left: 3px;
+    }
   }
   .right {
     width: 25px;
@@ -42,6 +48,7 @@
       margin-top: 2px;
       margin-left: 5px;
     }
+    &.small { margin-bottom: 12px; }
   }
 
   &.small {

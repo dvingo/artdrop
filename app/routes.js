@@ -14,5 +14,6 @@ export default (
       <Route name="designDetail" handler={DesignDetail} path=":designId/?"/>
     </Route>
     <Route name="designEdit" handler={DesignEdit} path="/designs/:designId/edit/:step/?"/>
+    <Route name="layerEdit" handler={DesignEdit} path="/designs/:designId/edit/layers/:layerId/?"/>
   </Route>
 );
