@@ -12,8 +12,8 @@ export default React.createClass({
   },
 
   componentWillMount() {
-    if (this.props.layerId)
-      Store.actions.selectLayerId(this.props.layerId)
+    if (this.props.layerId) {
+      Store.actions.selectLayerId(this.props.layerId)}
   },
 
   selectLayerImage(layerImage) {

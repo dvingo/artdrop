@@ -26,7 +26,6 @@ export default React.createClass({
   },
 
   shouldComponentUpdate(nextProps, nextState) {
-    console.log('SHOULD UPDATE')
     if (nextState.design && this.state.design) {
       return (this.state.design !== nextState.design ||
               this.props.params.step !== this.getParams().step ||
@@ -36,7 +35,8 @@ export default React.createClass({
   },
 
   componentWillUpdate(nextProps) {
-    if (this.props.params.layerId !== this.getParams().layerId) {
+    if (this.getParams().layerId &&
+        this.props.params.layerId !== this.getParams().layerId) {
       Store.actions.selectLayerId(this.getParams().layerId)}
   },
 
