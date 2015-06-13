@@ -38,7 +38,7 @@ export default React.createClass({
          {this.props.isActive ?
           <div className="more-options">
             <Link to="designEdit" params={{designId: this.state.design.get('id'), step: 'choose-layer'}}>
-              <button onClick={this.moreOptionsClicked}>MORE OPTIONS</button>
+              <button>MORE OPTIONS</button>
             </Link>
           </div>
           : null }

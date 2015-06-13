@@ -39,6 +39,18 @@ var designsStore = new Nuclear.Store({
      var newDesign = currentDesign.set('layers', layers)
      return state.set(newDesign.get('id'), newDesign)
    })
+
+   this.on('selectLayerImageId', (state, layerImageId) => {
+     var currentDesign = reactor.evaluate(getters.currentDesign)
+     var currentLayerId = reactor.evaluate(['currentLayerId'])
+     var layerImages = reactor.evaluate(['layerImages'])
+     var layers = currentDesign.get('layers')
+     var i = layers.findIndex(l => l.get('id') === currentLayerId)
+     var newLayers = layers.update(i, v => v.set('selectedLayerImage', layerImages.get(layerImageId)))
+     var newDesign = currentDesign.set('layers', newLayers)
+     return state.set(newDesign.get('id'), newDesign)
+   })
+
  }
 })
 
@@ -84,11 +96,32 @@ var layerImagesStore = new Nuclear.Store({
  }
 })
 
+var currentLayerIdStore = new Nuclear.Store({
+  getInitialState() { return '' },
+
+  initialize() {
+    this.on('selectLayerId', (state, layerId) => layerId)
+  }
+})
+
+//var editStepsStore = new Nuclear.Store({
+  //getInitialState() {
+    //return Nuclear.toImmutable({});
+  //},
+
+  //initialize() {
+   //this.on('addLayerImage', function(state, layerImage) {
+     //return state.set(layerImage.id, Nuclear.Immutable.fromJS(layerImage));
+   //})
+ //}
+//})
+
 reactor.registerStores({
   designs: designsStore,
   currentDesignId: currentDesignIdStore,
   colorPalettes: colorPalettesStore,
-  layerImages: layerImagesStore
+  layerImages: layerImagesStore,
+  currentLayerId: currentLayerIdStore
 })
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -103,12 +136,31 @@ getters.currentDesign = [
   (currentDesignId, designsMap) => designsMap.get(currentDesignId)
 ]
 getters.colorPalettes = [['colorPalettes'], palettes => palettes.toList()]
+getters.currentLayer = [
+  ['currentLayerId'],
+  getters.currentDesign,
+  (layerId, design) =>  design.get('layers').find(v => v.get('id') === layerId)
+]
+getters.layerImageOptions = [
+  getters.currentLayer,
+  ['layerImages'],
+  (layer, layerImages) => {
+    if (layer == null) return null
+    var lis = layer.get('layerImages')
+    return lis.keySeq().map(li =>  {
+        var x  = layerImages.get(li)
+      return x
+    })
+  }
+]
 
 module.exports = {
   getters: getters,
   actions: {
-    selectDesignId(id) { reactor.dispatch('selectDesignId', id); },
-    nextDesignColors() { reactor.dispatch('nextDesignColors'); }
+    selectDesignId(id) { reactor.dispatch('selectDesignId', id) },
+    nextDesignColors() { reactor.dispatch('nextDesignColors') },
+    selectLayerId(id)  { reactor.dispatch('selectLayerId', id) },
+    selecteLayerImageId(id) { reactor.dispatch('selectLayerImageId', id) }
   }
 }
 

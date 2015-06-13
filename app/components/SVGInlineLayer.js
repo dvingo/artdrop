@@ -24,9 +24,9 @@ export default React.createClass({
     }
     container.appendChild(imgClone)
     SVGInjector(imgClone, {"each": function(svgEl) {
-      svgEl.style.height = '100%';
-      svgEl.style.width = '100%';
-      svgEl.style.margin = '0 auto';
+      svgEl.style.height  = '100%';
+      svgEl.style.width   = '100%';
+      svgEl.style.margin  = '0 auto';
       svgEl.style.display = 'block';
       svgLayerIds.forEach(id => {
         var color = self.props.layer.get('colorPalette').get(layersToColors[id])
