@@ -1,16 +1,13 @@
 .choose-palette {
-  @include flex-grow(0);
+  @include flex-grow(0.0001);
   @include flex-shrink(0);
   @include flex-basis(0);
-  display: none;
-  float: left;
+  @include flex-wrap(wrap);
   margin: 2px;
-  overflow: auto;
+  display: flex;
+  overflow-y: hidden;
 
   &:hover { cursor: pointer; }
   &.highlighted { border: 4px solid blue; }
-  &.visible {
-    @include flex-grow(1);
-    @include flex-wrap(wrap);
-  }
+  &.visible { @include flex-grow(1); }
 }

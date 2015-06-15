@@ -1,7 +1,8 @@
 .choose-art {
-  @include flex-grow(0);
+  @include flex-grow(0.0001);
   @include flex-shrink(0);
   @include flex-basis(0);
+  display: flex;
   height: 0;
   overflow: hidden;
 
