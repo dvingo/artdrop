@@ -2,17 +2,18 @@ import React from 'react'
 import {imageUrlForLayer, imageUrlForSurface} from '../../../state/utils'
 import reactor from '../../../state/reactor'
 import Store from '../../../state/main'
-import {Navigation} from 'react-router'
+import {Navigation, State} from 'react-router'
 var classNames = require('classnames')
 
 export default React.createClass({
-  mixins: [reactor.ReactMixin, Navigation],
+  mixins: [reactor.ReactMixin, Navigation, State],
   getDataBindings() {
     return {currentLayerId: ['currentLayerId']}
   },
   selectLayer(layerId) {
     Store.actions.selectLayerId(layerId)
-    this.transitionTo('layerEdit', {designId: this.props.design.get('id'), layerId: layerId})
+    this.transitionTo('layerEdit', {designId: this.props.design.get('id'), layerId: layerId,
+                                    imagesOrColors: this.getParams().imagesOrColors})
   },
   render() {
     return (

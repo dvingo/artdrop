@@ -27,9 +27,12 @@ export default React.createClass({
 
   shouldComponentUpdate(nextProps, nextState) {
     if (nextState.design && this.state.design) {
+      var getParams = this.getParams()
+      var propParams = this.props.params
       return (this.state.design !== nextState.design ||
-              this.props.params.step !== this.getParams().step ||
-              this.props.params.layerId !== this.getParams().layerId)
+              propParams.step !== getParams.step ||
+              propParams.layerId !== getParams.layerId ||
+              propParams.imagesOrColors !== getParams.imagesOrColors)
     }
     return true
   },
@@ -52,6 +55,8 @@ export default React.createClass({
         )
       })
 
+    var step = this.props.params.step
+
     return (
       <section className="main design-edit">
 
@@ -61,9 +66,10 @@ export default React.createClass({
 
         <div className="edit-ui">
           <div className="edit-steps">
-            <Start isActive={this.props.params.step === 'start'}/>
+            <Start isActive={step === 'start'}
+                   isSmall={step === 'choose-layer'}/>
             <Container design={this.state.design}
-                       step={this.props.params.step}
+                       step={step}
                        layerId={this.props.params.layerId}/>
           </div>
         </div>

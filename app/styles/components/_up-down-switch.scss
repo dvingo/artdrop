@@ -1,0 +1,18 @@
+.toggle-options-button {
+  display: inline-block;
+  background: $color5;
+  border-radius: 16px;
+  color: white;
+  width: 150px;
+  height: 25px;
+  margin: 0 5px;
+  text-align: center;
+  cursor: pointer;
+
+  span {
+    position: relative;
+    display: inline-block;
+    margin-top: 5px;
+    img { width: 15px; }
+  }
+}

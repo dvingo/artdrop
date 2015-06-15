@@ -7,21 +7,26 @@ import ChoosePalette from './ChoosePalette'
 import ChooseArt from './ChooseArt'
 import ChooseSurface from './ChooseSurface'
 import LayerSelector from './LayerSelector'
+import ColorsButton from '../../ColorsButton'
+import UpDownSwitch from '../../UpDownSwitch'
 import Router from 'react-router'
 var classNames = require('classnames')
 
 export default React.createClass({
-  mixins: [Router.State],
-            //{{new-colors-button size="small"}}
-            //{{toggle-options-button upLabel="Color Options"
-                                    //downLabel="Art Options"
-                                    //inUpPosition=isChooseArtVisible
-                                    //onToggle="switchVisibleOptions"
-                                    //}}
+  mixins: [Router.State, Router.Navigation],
+  onSwitchEditLayerImagesOrColors() {
+    var imagesOrColors = (this.getParams().imagesOrColors === 'images'
+                         ? 'colors' : 'images')
+    this.transitionTo('layerEdit', {designId: this.getParams().designId,
+                                     layerId: this.getParams().layerId,
+                                     imagesOrColors: imagesOrColors})
+  },
 
   render() {
     var step = this.getParams().step
     var layerId = this.getParams().layerId
+    var editingLayerImages = this.getParams().imagesOrColors === 'images'
+    var editingLayerColors = this.getParams().imagesOrColors === 'colors'
     return (
       <section className={classNames('detail', {visible: step !== 'start'})}>
         <LayerSelector design={this.props.design}/>
@@ -29,13 +34,20 @@ export default React.createClass({
         <ChooseLayer design={this.props.design} isActive={step === 'choose-layer'}/>
 
         <article className={classNames('palette-art-container', {visible: layerId != null})}>
-          <ChoosePalette />
+
+          <ChoosePalette isActive={editingLayerColors}/>
+
           <section className="options-button-container">
+            <ColorsButton isSmall={true}/>
+            <UpDownSwitch upLabel="Color Options"
+                          downLabel="Art Options"
+                          inUpPosition={editingLayerImages}
+                          onToggle={this.onSwitchEditLayerImagesOrColors}/>
           </section>
 
           <ChooseArt design={this.props.design}
                      layerId={layerId}
-                     isActive={layerId != null}/>
+                     isActive={editingLayerImages}/>
         </article>
 
         <ChooseSurface/>

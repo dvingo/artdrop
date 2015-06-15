@@ -22,7 +22,7 @@ export default React.createClass({
 
   shouldComponentUpdate(nextProps, nextState) {
     if (nextState.design && this.state.design) {
-      return this.state.design.get('id') !== nextState.design.get('id')
+      return this.state.design !== nextState.design
     }
     return true
   },

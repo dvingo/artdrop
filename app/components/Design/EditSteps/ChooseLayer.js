@@ -10,7 +10,8 @@ export default React.createClass({
 
   selectLayer(layerId) {
     Store.actions.selectLayerId(layerId)
-    this.transitionTo('layerEdit', {designId: this.props.design.get('id'), layerId: layerId})
+    this.transitionTo('layerEdit', {designId: this.props.design.get('id'), layerId: layerId,
+                                    imagesOrColors: 'images'})
   },
 
   render() {
@@ -18,7 +19,7 @@ export default React.createClass({
       return (
           <li onClick={this.selectLayer.bind(null, layer.get('id'))}>
             <img src={iconPath("eyeball.svg")} height="40" width="40"/>
-            <span>Edit Layer {layer.order}</span>
+            <span>Edit Layer {layer.get('order')}</span>
           </li>
       )
     })
