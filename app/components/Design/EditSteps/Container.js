@@ -1,7 +1,5 @@
 import React from 'react'
-import State from '../../../state/main'
-import {iconPath} from '../../../utils'
-import {imageUrlForLayer, imageUrlForSurface} from '../../../state/utils'
+import Router from 'react-router'
 import ChooseLayer from './ChooseLayer'
 import ChoosePalette from './ChoosePalette'
 import ChooseArt from './ChooseArt'
@@ -9,14 +7,15 @@ import ChooseSurface from './ChooseSurface'
 import LayerSelector from './LayerSelector'
 import ColorsButton from '../../ColorsButton'
 import UpDownSwitch from '../../UpDownSwitch'
-import Router from 'react-router'
 var classNames = require('classnames')
 
 export default React.createClass({
   mixins: [Router.State, Router.Navigation],
+
   onSwitchEditLayerImagesOrColors() {
-    var imagesOrColors = (this.getParams().imagesOrColors === 'images'
-                         ? 'colors' : 'images')
+    var imagesOrColors = (
+      this.getParams().imagesOrColors === 'images'
+        ? 'colors' : 'images')
     this.transitionTo('layerEdit', {designId: this.getParams().designId,
                                      layerId: this.getParams().layerId,
                                      imagesOrColors: imagesOrColors})

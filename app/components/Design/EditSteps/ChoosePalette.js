@@ -1,5 +1,5 @@
 import React from 'react'
-import State from '../../../state/main'
+import Store from '../../../state/main'
 import reactor from '../../../state/reactor'
 var classNames = require('classnames')
 
@@ -7,17 +7,17 @@ export default React.createClass({
   mixins: [reactor.ReactMixin],
 
   getDataBindings() {
-    return { colorPalettes: State.getters.colorPalettes }
+    return { colorPalettes: Store.getters.colorPalettes }
   },
 
-  choosePalette(palette) {
-    console.log('chose palette: ', palette.toJS())
+  choosePalette(paletteId) {
+    Store.actions.selectColorPaletteId(paletteId)
   },
 
   render() {
     var palettes = this.state.colorPalettes.map(palette => {
       return (
-        <div className="color-palette" onClick={this.choosePalette.bind(null, palette)}>
+        <div className="color-palette" onClick={this.choosePalette.bind(null, palette.get('id'))}>
           <div className="single-color" style={{backgroundColor: palette.get('colorOne')}}></div>
           <div className="single-color" style={{backgroundColor: palette.get('colorTwo')}}></div>
           <div className="single-color" style={{backgroundColor: palette.get('colorThree')}}></div>

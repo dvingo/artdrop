@@ -21,7 +21,7 @@ export default React.createClass({
       .map(layer => {
         return (
           <div className="layer" key={layer.get('id')}>
-            <SVGInlineLayer layer={layer} width={100} height={100} />
+            <SVGInlineLayer layer={layer}/>
           </div>
         )
       })
