@@ -3,7 +3,7 @@ import Modal from '../Modal'
 import reactor from '../../state/reactor'
 import State from '../../state/main'
 import {Navigation} from 'react-router';
-import {iconPath} from '../../utils'
+import {iconPath} from '../../utils';
 import SVGInlineLayer  from '../SVGInlineLayer'
 var appElement = document.getElementById('app')
 Modal.setAppElement(appElement)
@@ -47,15 +47,29 @@ export default React.createClass({
     return (
       <Modal isOpen={true}>
         <section className="show-design">
+          <div className="show-design-top-ui">
+            <span className="price">$75</span>
+            <ul className="cart">
+              <li>
+                <img src={iconPath('cart-icon-black.svg')}/>
+              </li>
+              <li>add to cart</li>
+            </ul>
+            <span className="exit-detail">
+              <img src={iconPath('cancel-x.svg')}/>
+            </span>
+          </div>
           <div className="show-canvas">
             <div className="canvas">
               {layerImages}
             </div>
           </div>
-          <div className="edit">
-            <img src={iconPath('edit-pencil.svg')}
-                 width={40} height={40}
-                 onClick={this.transitionToEdit}/>
+          <div className="show-design-bottom-ui">
+            <ul className="edit">
+              <img src={iconPath('edit-pencil.svg')}
+                   width={40} height={40}
+                   onClick={this.transitionToEdit}/>
+            </ul>
           </div>
         </section>
       </Modal>

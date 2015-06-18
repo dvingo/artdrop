@@ -18,11 +18,13 @@
     @include flex-wrap(wrap);
     overflow-x: scroll;
     width: 100%;
+    height: 300px;
 
     li {
       display: inline-block;
       position: relative;
       margin-right: 4px;
+      width: 75px;
       &:hover { cursor: pointer; }
 
       img {

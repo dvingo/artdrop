@@ -1,20 +1,91 @@
 //
 // Isolated preview of a single design.
 //
+.ReactModal__Content .show-design {
+  background-color: white;
+  @include justify-content(flex-start);
+}
+
 .show-design {
   @include display(flex);
   @include flex-direction(column);
+  @include justify-content(center);
   position: relative;
   width: 100%;
   height: 100%;
   background-color: rgba(211, 210, 213, 0.37);
   border-radius: 4px;
 
+  .show-design-top-ui {
+    @include display(flex);
+    @include align-items(center);
+    height: 70px;
+
+    span:nth-child(1) {
+      @include display(flex);
+      @include flex(2 0 0);
+      font-family: 'Helvetica';
+      font-size: 2.5em;
+    }
+    ul {
+      @include display(flex);
+      @include flex(1 0 0);
+      @include align-items(center);
+      @include justify-content(center);
+      @include flex-direction(column);
+      list-style-type: none;
+      height: 100%;
+      font-family: 'Helvetica';
+      font-size: 1em;
+      -webkit-padding-start: 0;
+      -webkit-margin-after: 0;
+      -webkit-margin-before: 0;
+
+      li:nth-child(1) { 
+        @include display(flex);
+        @include align-items(center);
+        @include justify-content(centers);
+        margin-bottom: 5px;
+        height: 40px;
+        width: 40px;
+
+        img {
+          width: 100%;
+          height: auto;
+        }
+      }
+      li:nth-child(2) {
+
+      }
+    }
+    span:nth-child(3) {
+      @include display(flex);
+      @include align-items(center);
+      @include justify-content(center);
+      position: absolute;
+      background: white;
+      right: -25px;
+      top: -25px;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+
+        img {
+          position: relative;
+          width: 60%;
+          height: auto;
+        }
+    }
+  }
+  .show-design-bottom-ui {
+    background: yellow;
+  }
+
   .show-canvas {
-    height: 70%;
+    height: 0;
     width: 100%;
+    padding-bottom: 100%;
     position: relative;
-    left: 0;
   }
 
   .top-buttons {
@@ -84,5 +155,10 @@
   }
 
   .canvas { height: 90%; }
-  .canvas { height: 100%; width: 100%; }
+  .canvas { 
+    height: 100%;
+    width: 100%;
+    display: block;
+    position: absolute;
+  }
 }
