@@ -24,6 +24,7 @@
     "surface": "surfaceId",
     "price": 2000,
     "designer": "userId",
+    "adminCreated": false,
     "createdAt": "2015-05-21T12:11:35",
     "updatedAt": "2015-05-21T14:02:17"
   }],

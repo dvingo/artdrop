@@ -3,6 +3,7 @@ import {hydrateDesign} from './helpers'
 import {designsRef} from './firebaseRefs'
 import reactor from './reactor'
 import getters from './getters'
+import {newId} from './utils'
 
 var stores = {}
 
@@ -55,6 +56,25 @@ stores.designsStore = new Nuclear.Store({
      return state.set(newDesign.get('id'), newDesign)
    })
 
+   this.on('makeDesignCopy', (state, newDesignId) => {
+     var currentDesign = reactor.evaluate(getters.currentDesign)
+     var newDesign = currentDesign.update(d => {
+       var newLayers = d.get('layers').map(l => l.set('id', newId()))
+       var now = new Date().getTime()
+       var newD = d.withMutations(newDesign => {
+         newDesign.set('id', newDesignId)
+                  .set('adminCreated', false)
+                  .set('layers', newLayers)
+                  .set('createdAt', now)
+                  .set('updatedAt', now)
+       })
+       return newD
+     })
+     // TODO need to map nested properties back to ids in order to save to firebase.
+     //designsRef.set(newDesign.toJS())
+     return state.set(newDesignId, newDesign)
+   })
+
  }
 })
 
@@ -63,7 +83,7 @@ stores.currentDesignIdStore = new Nuclear.Store({
 
   initialize() {
     this.on('selectDesignId', (state, designId) => {
-      var designs = reactor.evaluate(getters.designs)
+      var designs = reactor.evaluate(['designs'])
       if (!designs.has(designId)) {
         designsRef.child(designId).on('value', (design) => {
           design = design.val()
