@@ -3,7 +3,7 @@
 //
 .ReactModal__Content .show-design {
   background-color: white;
-  @include justify-content(flex-start);
+  @include justify-content(space-around);
 }
 
 .show-design {
@@ -18,8 +18,8 @@
 
   .show-design-top-ui {
     @include display(flex);
+    @include flex(1 0 0);
     @include align-items(center);
-    height: 70px;
 
     span:nth-child(1) {
       @include display(flex);
@@ -78,7 +78,40 @@
     }
   }
   .show-design-bottom-ui {
-    background: yellow;
+    @include display(flex);
+    @include flex(1 0 0);
+    @include align-items(center);
+    @include justify-content(center);
+
+    ul {
+      @include display(flex);
+      @include flex(1 0 0);
+      @include flex-direction(column);
+      @include justify-content(center);
+      @include align-items(center);
+      list-style-type: none;
+      -webkit-margin-after: 0;
+      -webkit-margin-before: 0;
+      -webkit-padding-start: 0;
+      height: 100%;
+      font-family: 'Helvetica';
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      li {
+
+        img {
+          height: 30px;
+          width: 30px;
+        }
+      }
+
+      li:nth-child(2) {
+        margin-top: 5px;
+      }
+    }
   }
 
   .show-canvas {
@@ -88,73 +121,6 @@
     position: relative;
   }
 
-  .top-buttons {
-    padding: 10px 0;
-    h1 {
-      margin: 0;
-      display: inline-block;
-      font-size: 45px;
-    }
-  }
-
-  .edit {
-    width: 25%;
-    margin: 0 auto;
-    text-align: center;
-    &:hover {
-      cursor: pointer;
-    }
-  }
-
-  .button-container {
-    @include display(flex);
-    @include flex-direction(row);
-    @include justify-content(center);
-
-    a {
-      @include display(flex);
-      @include flex-direction(column);
-      @include justify-content(center);
-      text-decoration: none;
-      color: rgb(58, 60, 63);
-      &:hover { color: rgb(145, 147, 150); }
-      img {
-        fill: rgb(58, 60, 63);
-        &:hover { fill: rgb(145, 147, 150); }
-      }
-    }
-
-    .icon {
-      position: absolute;
-      left: 0;
-      top: 0;
-      z-index: 20;
-      opacity: 0.3;
-      margin: 5px;
-	  &:hover { opacity: 1; }
-      img {
-        width: 25px;
-        height: 25px;
-      }
-      &.copy-icon { z-index: 30; }
-      &.delete-icon {
-        top: 30px;
-        z-index: 30;
-      }
-    }
-  }
-
-  .purchase {
-    display: inline-block;
-    float: right;
-    margin-right: 60px;
-    img {
-      display: block;
-      margin-left: 18px;
-    }
-  }
-
-  .canvas { height: 90%; }
   .canvas { 
     height: 100%;
     width: 100%;

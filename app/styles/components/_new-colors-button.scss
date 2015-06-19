@@ -7,6 +7,7 @@
   @include align-items(center);
   width: 100px;
   height: 70px;
+  font-family: 'Helvetica';
   &.off { display: none; }
 
   .container {
@@ -16,6 +17,10 @@
     @include justify-content(center);
     width: 100px;
     height: 50px;
+  }
+
+  .rand-button-text {
+      margin-top: 5px;
   }
 
   .left {

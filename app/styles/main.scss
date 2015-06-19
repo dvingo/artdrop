@@ -25,6 +25,9 @@ body {
 }
 .main {
   height: 93%;
+  display: flex;
+  flex: 1 0 0;
+  flex-direction: column;
 }
 #app {
   height: 100%;

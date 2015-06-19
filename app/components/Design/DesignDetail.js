@@ -62,10 +62,21 @@ export default React.createClass({
           </div>
 
           <div className="show-design-bottom-ui">
+            <ul className="share">
+              <li>
+                <img src={iconPath('share-icon-black.svg')}/>
+              </li>
+              <li>
+                share
+              </li>
+            </ul>
             <ul className="edit">
-              <img src={iconPath('edit-pencil.svg')}
-                   width={40} height={40}
-                   onClick={this.transitionToEdit}/>
+              <li>
+                <img src={iconPath('edit-pencil.svg')} onClick={this.transitionToEdit}/>
+              </li>
+              <li>
+                edit
+              </li>
             </ul>
           </div>
 
