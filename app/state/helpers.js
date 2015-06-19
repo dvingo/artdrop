@@ -11,10 +11,19 @@ var idsToObjs = (ids, dataSrc) => {
                             : setupObj(ids);
 }
 
+exports.designPropsToIds = (design) => {
+  var layerIds = design.get('layers').map(l => l.get('id'))
+  var surfaceId = (_ => {
+    design.get('surface') ? design.getIn(['surface', 'id']) : null
+  }())
+  return surfaceId ? design.withMutations(d => d.set('layers', layerIds).set('surface', surfaceId))
+                   : design.set('layers', layerIds)
+}
+
 exports.hydrateDesignById = (dataSrc, designId) => {
   var design = idsToObjs(designId, dataSrc.designs);
   var colorPaletteIds = Object.keys(dataSrc.colorPalettes)
-  var layers = idsToObjs(Object.keys(design.layers), dataSrc.layers).map(l => {
+  var layers = idsToObjs(design.layers, dataSrc.layers).map(l => {
     l.selectedLayerImage = idsToObjs(l.selectedLayerImage, dataSrc.layerImages);
     if (l.colorPalette == null) {
       var i = Math.floor(Math.random() * Object.keys(dataSrc.colorPalettes).length)
@@ -29,7 +38,7 @@ exports.hydrateDesignById = (dataSrc, designId) => {
 }
 
 exports.hydrateDesign = (design) => {
-  var layers = Object.keys(design.layers).map(layerId => {
+  var layers = design.layers.map(layerId => {
     return hydrateLayer(layerId).then(layer => {
       return hydrateLayerImage(layer.selectedLayerImage).then(layerImage => {
         layer.selectedLayerImage = layerImage

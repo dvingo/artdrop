@@ -1,6 +1,7 @@
 import React from 'react'
 import Store from '../../../state/main'
 import reactor from '../../../state/reactor'
+import ColorPalette from '../../ColorPalette'
 var classNames = require('classnames')
 
 export default React.createClass({
@@ -17,12 +18,8 @@ export default React.createClass({
   render() {
     var palettes = this.state.colorPalettes.map(palette => {
       return (
-        <div className="color-palette" onClick={this.choosePalette.bind(null, palette.get('id'))}>
-          <div className="single-color" style={{backgroundColor: palette.get('colorOne')}}></div>
-          <div className="single-color" style={{backgroundColor: palette.get('colorTwo')}}></div>
-          <div className="single-color" style={{backgroundColor: palette.get('colorThree')}}></div>
-          <div className="single-color" style={{backgroundColor: palette.get('colorFour')}}></div>
-        </div>
+        <ColorPalette onClick={this.choosePalette.bind(null, palette.get('id'))}
+                      palette={palette}/>
       )
     })
     return (

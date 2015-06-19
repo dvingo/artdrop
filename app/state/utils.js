@@ -70,7 +70,7 @@ export default {
   },
   imageUrlForSurface(surface) {
     return surface.get('imageUrl')
-                .replace('/assets/images/new/', '/' + srcDir + '/images/surfaces/')
+                .replace('/assets/surfaces/', '/' + srcDir + '/images/surfaces/')
   },
   newId: generateFirebaseID
 }

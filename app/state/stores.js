@@ -1,6 +1,6 @@
 var Nuclear = require('nuclear-js');
-import {hydrateDesign} from './helpers'
-import {designsRef} from './firebaseRefs'
+import {hydrateDesign, designPropsToIds, layerPropsToIds} from './helpers'
+import {designsRef, layersRef} from './firebaseRefs'
 import reactor from './reactor'
 import getters from './getters'
 import {newId} from './utils'
@@ -60,19 +60,47 @@ stores.designsStore = new Nuclear.Store({
      var currentDesign = reactor.evaluate(getters.currentDesign)
      var newDesign = currentDesign.update(d => {
        var newLayers = d.get('layers').map(l => l.set('id', newId()))
-       var now = new Date().getTime()
-       var newD = d.withMutations(newDesign => {
-         newDesign.set('id', newDesignId)
-                  .set('adminCreated', false)
-                  .set('layers', newLayers)
-                  .set('createdAt', now)
-                  .set('updatedAt', now)
+       newLayers.forEach(layer => {
+         var l = layer.toJS()
+         l.colorPalette = l.colorPalette.id
+         l.selectedLayerImage = l.selectedLayerImage.id
+         layersRef.child(l.id).set(l)
        })
-       return newD
+       var now = new Date().getTime()
+       return d.withMutations(d2 => {
+         d2.set('id', newDesignId)
+           .set('adminCreated', false)
+           .set('layers', newLayers)
+           .set('createdAt', now)
+           .set('updatedAt', now)
+       })
      })
-     // TODO need to map nested properties back to ids in order to save to firebase.
-     //designsRef.set(newDesign.toJS())
+     var firebaseDesign = designPropsToIds(newDesign)
+     designsRef.child(firebaseDesign.get('id')).set(firebaseDesign.toJS())
      return state.set(newDesignId, newDesign)
+   })
+
+   this.on('createNewDesign', (state, newDesign) => {
+     // This assumes layerImages, surfaces, and palettes already exist in firebase.
+     var now = new Date().getTime()
+     var design = newDesign.toJS()
+     var layerIds = design.layers.map((layer, i) => {
+       layer.order = i
+       layer.colorPalette = layer.colorPalette.id
+       layer.selectedLayerImage = layer.selectedLayerImage.id
+       layer.createdAt = now
+       layer.updatedAt = now
+       layer.layerImages = reactor.evaluate(getters.layerImageIds).toJS()
+       var newLayerRef = layersRef.push(layer)
+       return newLayerRef.key()
+     })
+     design.layers = layerIds
+     design.surface = design.surface.id
+     design.price = 2000
+     design.createdAt = now
+     design.updatedAt = now
+     designsRef.push(design)
+     return state
    })
 
  }
@@ -109,10 +137,7 @@ stores.colorPalettesStore = new Nuclear.Store({
 })
 
 stores.layerImagesStore = new Nuclear.Store({
-  getInitialState() {
-    return Nuclear.toImmutable({});
-  },
-
+  getInitialState() { return Nuclear.toImmutable({}); },
   initialize() {
    this.on('addLayerImage', function(state, layerImage) {
      return state.set(layerImage.id, Nuclear.Immutable.fromJS(layerImage));
@@ -122,10 +147,18 @@ stores.layerImagesStore = new Nuclear.Store({
 
 stores.currentLayerIdStore = new Nuclear.Store({
   getInitialState() { return '' },
-
   initialize() {
     this.on('selectLayerId', (state, layerId) => layerId)
   }
+})
+
+stores.surfacesStore = new Nuclear.Store({
+  getInitialState() { return Nuclear.toImmutable({}) },
+  initialize() {
+   this.on('addSurface', function(state, surface) {
+     return state.set(surface.id, Nuclear.Immutable.fromJS(surface))
+   })
+ }
 })
 
 export default stores

@@ -13,7 +13,19 @@ getters.colorPalettes = [['colorPalettes'], palettes => palettes.toList()]
 getters.currentLayer = [
   ['currentLayerId'],
   getters.currentDesign,
-  (layerId, design) =>  design.get('layers').find(v => v.get('id') === layerId)
+  (layerId, design) => design.get('layers').find(v => v.get('id') === layerId)
+]
+
+getters.layerImages = [
+  ['layerImages'], layerImages => layerImages.toList()
+]
+
+getters.layerImageIds = [
+  getters.layerImages, layerImages => layerImages.map(li => li.get('id'))
+]
+
+getters.surfaces = [
+  ['surfaces'], surfaces => surfaces.toList()
 ]
 
 getters.layerImageOptions = [

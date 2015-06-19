@@ -11,7 +11,8 @@ reactor.registerStores({
   currentDesignId: stores.currentDesignIdStore,
   colorPalettes: stores.colorPalettesStore,
   layerImages: stores.layerImagesStore,
-  currentLayerId: stores.currentLayerIdStore
+  currentLayerId: stores.currentLayerIdStore,
+  surfaces: stores.surfacesStore
 })
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -26,7 +27,8 @@ module.exports = {
     selectLayerId(id)  { reactor.dispatch('selectLayerId', id) },
     selecteLayerImageId(id) { reactor.dispatch('selectLayerImageId', id) },
     selectColorPaletteId(id) { reactor.dispatch('selectColorPaletteId', id) },
-    makeDesignCopy(newId) { reactor.dispatch('makeDesignCopy', newId) }
+    makeDesignCopy(newId) { reactor.dispatch('makeDesignCopy', newId) },
+    createNewDesign(newDesign) { reactor.dispatch('createNewDesign', newDesign) }
   }
 }
 
@@ -38,9 +40,9 @@ module.exports = {
 // On boot, select all "home screen designs, and pull all of their data."
 firebaseRefs.firebaseRef.once('value', data => {
   var allData = data.val();
-  var designIds = Object.keys(allData.designs);
-  designIds.map(hydrateDesignById.bind(null, allData))
-           .forEach(d => reactor.dispatch('addDesign', d))
+  Object.keys(allData.designs)
+    .map(hydrateDesignById.bind(null, allData))
+    .forEach(d => reactor.dispatch('addDesign', d))
 
   Object.keys(allData.colorPalettes)
     .map(id => idsToObjs(id, allData.colorPalettes))
@@ -49,4 +51,8 @@ firebaseRefs.firebaseRef.once('value', data => {
   Object.keys(allData.layerImages)
     .map(id => idsToObjs(id, allData.layerImages))
     .forEach(li => reactor.dispatch('addLayerImage', li))
+
+  Object.keys(allData.surfaces)
+    .map(id => idsToObjs(id, allData.surfaces))
+    .forEach(s => reactor.dispatch('addSurface', s))
 })

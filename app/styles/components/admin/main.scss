@@ -1,0 +1,21 @@
+.admin {
+  @import "../designs/edit-steps/choose-palette.scss";
+
+  .select-layer-image {
+    list-style: none;
+    li {
+      display: inline-block;
+      position: relative;
+      margin-right: 4px;
+      width: 75px;
+      &:hover { cursor: pointer; }
+
+      img {
+        padding: 0;
+        background-size: 100% 100%;
+        width: 73px;
+        height: 73px;
+      }
+    }
+  }
+}

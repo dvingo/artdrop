@@ -1,11 +1,11 @@
-import App from './components/App';
-import Designs from './components/Designs';
-import DesignDetail from './components/Design/DesignDetail';
-import DesignEdit from './components/Design/DesignEdit';
-import Test from './components/Test';
-import React from 'react';
-import Router from 'react-router';
-var Route = Router.Route;
+import App from './components/App'
+import Designs from './components/Designs'
+import DesignDetail from './components/Design/DesignDetail'
+import DesignEdit from './components/Design/DesignEdit'
+import Admin from './components/Admin'
+import React from 'react'
+import Router from 'react-router'
+var Route = Router.Route
 
 export default (
   <Route handler={App}>
@@ -15,5 +15,7 @@ export default (
     </Route>
     <Route name="designEdit" handler={DesignEdit} path="/designs/:designId/edit/:step/?"/>
     <Route name="layerEdit" handler={DesignEdit} path="/designs/:designId/edit/layers/:layerId/:imagesOrColors/?"/>
+    <Route name="admin" handler={Admin} path="admin/?">
+    </Route>
   </Route>
-);
+)
