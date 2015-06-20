@@ -2,39 +2,30 @@
   @include display(flex);
   @include flex-direction(row);
   @include justify-content(flex-start);
+  @include align-items(center);
+  @include flex(1 0 0);
   background: black;
   z-index: 100;
   width: 100%;
   height: 7%;
   min-height: 35px;
   color: white;
-  align-items: center;
-  flex: 1 0 0;
 }
-	.nav-bar span:nth-child(1) {
-		width: 100px;
 
-		img {
-			width: 90%;
-		}
-	}
+.logo {
+  width: 100px;
+  img { width: 90%; }
+}
 
-	.nav-bar span:nth-child(2) {
-		@include display(flex);
-		flex: 1 0 0;
-	}
-	.nav-bar ul {
-		@include display(flex);
-		flex: 3 0 0;
-		justify-content: flex-end;
+.right-icons {
+  @include display(flex);
+  @include flex(3 0 0);
+  @include justify-content(flex-end);
+  list-style: none;
 
-		li {
-			width: 20px;
-			margin: 0 7px;
-			list-style-type: none;
-
-			img {
-				width: 100%;
-			}
-		}
-	}
+  li {
+    width: 20px;
+    margin: 0 7px;
+    img { width: 100%; }
+  }
+}

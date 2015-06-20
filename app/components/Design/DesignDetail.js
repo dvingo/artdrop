@@ -12,16 +12,31 @@ Modal.setAppElement(appElement)
 Modal.injectCSS()
 
 export default React.createClass({
-  mixins: [Navigation],
+  mixins: [Navigation, reactor.ReactMixin],
+
+  getDataBindings() {
+    return {design: Store.getters.currentDesign}
+  },
 
   componentWillMount() {
     Store.actions.selectDesignId(this.props.params.designId)
+  },
+
+  shouldComponentUpdate(nextProps, nextState) {
+    var currentDesign = reactor.evaluate(getters.currentDesign)
+    if (nextState.design && this.state.design) {
+      return currentDesign !== nextState.design
+    }
+    return true
   },
 
   transitionToEdit() {
     var newDesignId = newId()
     Store.actions.makeDesignCopy(newDesignId)
     this.transitionTo('designEdit', {designId: newDesignId, step: 'start'})
+  },
+  transitionToDesigns() {
+    this.transitionTo('designs')
   },
 
   render() {
@@ -41,42 +56,38 @@ export default React.createClass({
       <Modal isOpen={true}>
         <section className="show-design">
 
-          <div className="show-design-top-ui">
+          <div className="top-ui">
             <span className="price">$75</span>
             <ul className="cart">
-              <li>
+              <li className="cart-image">
                 <img src={iconPath('cart-icon-black.svg')}/>
               </li>
               <li>add to cart</li>
             </ul>
 
-            <span className="exit-detail">
+            <span className="exit" onClick={this.transitionToDesigns}>
               <img src={iconPath('cancel-x.svg')}/>
             </span>
           </div>
 
-          <div className="show-canvas">
+          <div className="canvas-container">
             <div className="canvas">
               {layerImages}
             </div>
           </div>
 
-          <div className="show-design-bottom-ui">
-            <ul className="share">
+          <div className="bottom-ui">
+            <ul className="image-with-label">
               <li>
                 <img src={iconPath('share-icon-black.svg')}/>
               </li>
-              <li>
-                share
-              </li>
+              <li className="label">share</li>
             </ul>
-            <ul className="edit">
+            <ul className="image-with-label">
               <li>
                 <img src={iconPath('edit-pencil.svg')} onClick={this.transitionToEdit}/>
               </li>
-              <li>
-                edit
-              </li>
+              <li className="label">edit</li>
             </ul>
           </div>
 
