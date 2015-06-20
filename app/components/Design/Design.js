@@ -29,7 +29,7 @@ export default React.createClass({
     return (
       <section className="show-design">
         <div className="show-canvas">
-          <div className="canvas" onClick={this.selectDesign}>
+          <div className="canvas" onClick={this.selectDesign} onTouchStart={this.selectDesign}>
             {layerImages}
           </div>
         </div>

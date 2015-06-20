@@ -26,10 +26,11 @@ export default React.createClass({
         .filter(layerImage => layerImage)
         .map(layerImage => {
       return (
-          <li onClick={this.selectLayerImage.bind(null, layerImage)}>
-            <img src={imageUrlForLayerImage(layerImage)}/>
-          </li>
-        )
+        <li onClick={this.selectLayerImage.bind(null, layerImage)}
+            onTouchStart={this.selectLayerImage.bind(null, layerImage)}>
+          <img src={imageUrlForLayerImage(layerImage)}/>
+        </li>
+      )
     })
     return (
       <section className={classNames('choose-art', {visible: this.props.isActive})}>
