@@ -27,6 +27,7 @@ stores.designsStore = new Nuclear.Store({
      var layers = currentDesign.get('layers').map(layer => {
        var index = allPalettes.findIndex(c => c.get('id') === layer.getIn(['colorPalette', 'id']))
        var newPalette = allPalettes.get((index + 1) % allPalettes.count())
+       layersRef.child(layer.get('id')).update({'colorPalette':newPalette.get('id')})
        return layer.set('colorPalette', newPalette)
      })
      var newDesign = currentDesign.set('layers', layers)
@@ -41,6 +42,7 @@ stores.designsStore = new Nuclear.Store({
      var i = layers.findIndex(l => l.get('id') === currentLayerId)
      var newLayers = layers.update(i, v => v.set('selectedLayerImage', layerImages.get(layerImageId)))
      var newDesign = currentDesign.set('layers', newLayers)
+     layersRef.child(currentLayerId).update({'selectedLayerImage':layerImageId})
      return state.set(newDesign.get('id'), newDesign)
    })
 

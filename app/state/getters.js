@@ -33,11 +33,10 @@ getters.layerImageOptions = [
   ['layerImages'],
   (layer, layerImages) => {
     if (layer == null) return null
-    var lis = layer.get('layerImages')
-    return lis.keySeq().map(li =>  {
-        var x  = layerImages.get(li)
-      return x
-    })
+    return (
+      layer.get('layerImages')
+        .map(li => layerImages.get(li))
+    )
   }
 ]
 
