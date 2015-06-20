@@ -8,18 +8,19 @@ var classNames = require('classnames')
 export default React.createClass({
   mixins: [reactor.ReactMixin, Navigation, State],
   getDataBindings() {
-    return {currentLayerId: ['currentLayerId']}
+    return {currentLayerId: ['currentLayerId'],
+            design: Store.getters.currentDesign}
   },
   selectLayer(layerId) {
     Store.actions.selectLayerId(layerId)
-    this.transitionTo('layerEdit', {designId: this.props.design.get('id'), layerId: layerId,
+    this.transitionTo('layerEdit', {designId: this.state.design.get('id'), layerId: layerId,
                                     imagesOrColors: this.getParams().imagesOrColors})
   },
   render() {
     return (
       <article className="layer-selector-wrapper small">
         <div className="container">
-          {this.props.design.get('layers').map(layer => {
+          {this.state.design.get('layers').map(layer => {
             return (
               <div className="layer-selector"
                    onClick={this.selectLayer.bind(null, layer.get('id'))}>

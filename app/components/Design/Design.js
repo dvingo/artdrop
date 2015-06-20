@@ -28,7 +28,7 @@ export default React.createClass({
 
     return (
       <section className="show-design">
-        <div className="show-canvas">
+        <div className="canvas-container">
           <div className="canvas" onClick={this.selectDesign} onTouchStart={this.selectDesign}>
             {layerImages}
           </div>

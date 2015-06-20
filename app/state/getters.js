@@ -32,7 +32,7 @@ getters.layerImageOptions = [
   getters.currentLayer,
   ['layerImages'],
   (layer, layerImages) => {
-    if (layer == null) return null
+    if (layer == null) {return null}
     return (
       layer.get('layerImages')
         .map(li => layerImages.get(li))

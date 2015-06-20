@@ -78,7 +78,7 @@ stores.designsStore = new Nuclear.Store({
        })
      })
      var firebaseDesign = designPropsToIds(newDesign)
-     designsRef.child(firebaseDesign.get('id')).set(firebaseDesign.toJS())
+     designsRef.child(newDesignId).set(firebaseDesign.toJS())
      return state.set(newDesignId, newDesign)
    })
 
