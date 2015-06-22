@@ -69,6 +69,7 @@ export default {
                 .replace('/assets/images/new/', '/' + srcDir + '/images/layers/')
   },
   imageUrlForSurface(surface) {
+    if (surface == null) { return null }
     return surface.get('imageUrl')
                 .replace('/assets/surfaces/', '/' + srcDir + '/images/surfaces/')
   },

@@ -33,6 +33,12 @@ exports.hydrateDesignById = (dataSrc, designId) => {
     }
     return l;
   });
+  if (design.surface == null) {
+    var i = Math.floor(Math.random() * Object.keys(dataSrc.surfaces).length)
+    design.surface = idsToObjs(Object.keys(dataSrc.surfaces)[i], dataSrc.surfaces)
+  } else {
+    design.surface = idsToObjs(design.surface, dataSrc.surfaces)
+  }
   design.layers = layers;
   return design;
 }
