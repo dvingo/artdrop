@@ -67,6 +67,15 @@ stores.designsStore = new Nuclear.Store({
      var i = layers.findIndex(l => l.get('id') === currentLayerId)
      var newLayers = layers.update(i, v => v.set('colorPalette', colorPalette))
      var newDesign = currentDesign.set('layers', newLayers)
+     layersRef.child(currentLayerId).update({'colorPalette':colorPalette.get('id')})
+     return state.set(newDesign.get('id'), newDesign)
+   })
+
+   this.on('selectSurfaceId', (state, surfaceId) => {
+     var currentDesign = reactor.evaluate(getters.currentDesign)
+     var surfaces = reactor.evaluate(['surfaces'])
+     var newDesign = currentDesign.set('surface', surfaces.get(surfaceId))
+     designsRef.child(newDesign.get('id')).update({'surface':surfaceId})
      return state.set(newDesign.get('id'), newDesign)
    })
 

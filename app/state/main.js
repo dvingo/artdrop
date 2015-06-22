@@ -28,6 +28,7 @@ module.exports = {
     selectLayerId(id)  { reactor.dispatch('selectLayerId', id) },
     selecteLayerImageId(id) { reactor.dispatch('selectLayerImageId', id) },
     selectColorPaletteId(id) { reactor.dispatch('selectColorPaletteId', id) },
+    selectSurfaceId(id) { reactor.dispatch('selectSurfaceId', id) },
     makeDesignCopy(newId) { reactor.dispatch('makeDesignCopy', newId) },
     createNewDesign(newDesign) { reactor.dispatch('createNewDesign', newDesign) }
   }
