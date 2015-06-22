@@ -44,12 +44,11 @@ export default React.createClass({
                           onToggle={this.onSwitchEditLayerImagesOrColors}/>
           </section>
 
-          <ChooseArt design={this.props.design}
-                     layerId={layerId}
+          <ChooseArt layerId={layerId}
                      isActive={editingLayerImages}/>
         </article>
 
-        <ChooseSurface/>
+        <ChooseSurface isActive={step === 'surface'}/>
 
       </section>
     )

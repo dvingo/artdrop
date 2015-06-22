@@ -3,13 +3,4 @@
   @include flex-shrink(0);
   @include flex-basis(0);
   &.visible { @include flex-grow(1); }
-
-  .design-selection {
-    display: none;
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    &.open { background: rgba(200, 200, 200, 0.2); }
-    &.visible { display: block; }
-  }
 }

@@ -19,6 +19,10 @@ export default React.createClass({
                                     imagesOrColors: 'images'})
   },
 
+  editSurface() {
+    this.transitionTo('designEdit', {designId:this.state.design.get('id'), step:'surface'})
+  },
+
   render() {
     var editLayers = this.state.design.get('layers').map(layer => {
       return (
@@ -34,7 +38,7 @@ export default React.createClass({
           {editLayers}
           <li className="surface">
             <img src="" height="40" width="40"/>
-            <span>Choose a Surface</span>
+            <span onClick={this.editSurface}>Choose a Surface</span>
           </li>
         </ol>
       </section>

@@ -25,6 +25,9 @@ body {
   padding: 0;
   margin: 0;
 }
+ul, ol {
+  list-style: none;
+}
 .main {
   height: 93%;
   display: flex;
