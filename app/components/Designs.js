@@ -8,7 +8,7 @@ export default React.createClass({
   mixins: [reactor.ReactMixin],
 
   getDataBindings() {
-    return { designs: State.getters.designs };
+    return { designs: State.getters.adminDesigns };
   },
 
   render() {
