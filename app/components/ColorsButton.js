@@ -16,7 +16,8 @@ export default React.createClass({
                 onClick={onLeftClick}>
             <img src={iconPath('triangle-left.svg')}/>
           </span>
-          <span className={classNames("color-wheel", {small:isSmall})}>
+          <span className={classNames("color-wheel", {small:isSmall})}
+                onClick={onRightClick}>
             <img src={iconPath('color-wheel.svg')}/>
           </span>
           <span className={classNames("right", {small:isSmall})}

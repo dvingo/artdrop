@@ -7,6 +7,24 @@ import {newId} from './utils'
 
 var stores = {}
 
+var transitionDesignColors = (direction, state) => {
+   var allPalettes = reactor.evaluate(getters.colorPalettes)
+   var currentDesign = reactor.evaluate(getters.currentDesign)
+   var layers = currentDesign.get('layers').map(layer => {
+     var index = allPalettes.findIndex(c => c.get('id') === layer.getIn(['colorPalette', 'id']))
+     var newPalette;
+     if (direction === 'forward') {
+       newPalette = allPalettes.get((index + 1) % allPalettes.count())
+     } else if (direction === 'backward') {
+       newPalette = allPalettes.get((index - 1) % allPalettes.count())
+     }
+     layersRef.child(layer.get('id')).update({'colorPalette':newPalette.get('id')})
+     return layer.set('colorPalette', newPalette)
+   })
+   var newDesign = currentDesign.set('layers', layers)
+   return state.set(newDesign.get('id'), newDesign)
+}
+
 stores.designsStore = new Nuclear.Store({
 
   getInitialState() {
@@ -22,16 +40,10 @@ stores.designsStore = new Nuclear.Store({
    });
 
    this.on('nextDesignColors', (state) => {
-     var allPalettes = reactor.evaluate(getters.colorPalettes)
-     var currentDesign = reactor.evaluate(getters.currentDesign)
-     var layers = currentDesign.get('layers').map(layer => {
-       var index = allPalettes.findIndex(c => c.get('id') === layer.getIn(['colorPalette', 'id']))
-       var newPalette = allPalettes.get((index + 1) % allPalettes.count())
-       layersRef.child(layer.get('id')).update({'colorPalette':newPalette.get('id')})
-       return layer.set('colorPalette', newPalette)
-     })
-     var newDesign = currentDesign.set('layers', layers)
-     return state.set(newDesign.get('id'), newDesign)
+     return transitionDesignColors('forward', state)
+   })
+   this.on('previousDesignColors', (state) => {
+     return transitionDesignColors('backward', state)
    })
 
    this.on('selectLayerImageId', (state, layerImageId) => {

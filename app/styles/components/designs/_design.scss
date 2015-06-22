@@ -10,4 +10,8 @@
   padding: 0;
   list-style-type: none;
   display: inline-block;
+  &:hover {
+    outline: 2px solid;
+    cursor: pointer;
+  }
 }

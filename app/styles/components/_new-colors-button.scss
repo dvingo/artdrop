@@ -1,13 +1,7 @@
-.start.visible .new-colors-button {
-  height: auto;
-}
 .new-colors-button {
   @include display(flex);
   @include flex-direction(column);
   @include align-items(center);
-  width: 100px;
-  height: 70px;
-  font-family: 'Helvetica';
   &.off { display: none; }
 
   .container {
@@ -20,7 +14,7 @@
   }
 
   .rand-button-text {
-      margin-top: 5px;
+    margin-top: 5px;
   }
 
   .left {
@@ -32,6 +26,7 @@
       margin-top: 2px;
       margin-left: -2px;
     }
+    &:hover { cursor: pointer; }
     &.small { margin-bottom: 12px; }
   }
   .color-wheel {
@@ -53,6 +48,7 @@
       margin-top: 2px;
       margin-left: 5px;
     }
+    &:hover { cursor: pointer; }
     &.small { margin-bottom: 12px; }
   }
 

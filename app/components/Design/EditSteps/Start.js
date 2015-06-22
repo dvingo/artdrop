@@ -19,7 +19,7 @@ export default React.createClass({
       <div className={classNames('start', {visible: isActive, small: isSmall})}>
         <div className="actions">
           <ColorsButton isSmall={false}
-                        onLeftClick={Store.actions.nextDesignColors}
+                        onLeftClick={Store.actions.previousDesignColors}
                         onRightClick={Store.actions.nextDesignColors}
                         label={isActive ? "New Colors" : null}/>
         </div>
