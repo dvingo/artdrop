@@ -4,6 +4,7 @@ import Router from 'react-router'
 import Store from '../../state/main'
 import SVGInlineLayer  from '../SVGInlineLayer'
 import Start from './EditSteps/Start'
+import RenderLayers from './RenderLayers'
 import Container from './EditSteps/Container'
 
 export default React.createClass({
@@ -45,23 +46,11 @@ export default React.createClass({
 
   render() {
     if (this.state.design == null) { return null }
-
-    let layerImages = this.state.design.get('layers').map(
-      layer => {
-        return (
-          <div className="layer" key={layer.get('id')}>
-            <SVGInlineLayer layer={layer}/>
-          </div>
-        )
-      })
-
     var step = this.props.params.step
     return (
       <section className="main design-edit">
 
-        <div className="canvas">
-          {layerImages}
-        </div>
+        <RenderLayers layers={this.state.design.get('layers')}/>
 
         <div className="edit-ui">
           <div className="edit-steps">

@@ -1,9 +1,9 @@
 import fixtures from '../fixtures'
 import reactor from './reactor'
 import stores from './stores'
-import {idsToObjs, hydrateDesignById} from './helpers'
+import {idsToObjs, hydrateDesignById, hydrateDesign} from './helpers'
 import getters from './getters'
-import firebaseRefs from './firebaseRefs'
+import {firebaseRef, designsRef} from './firebaseRefs'
 var Nuclear = require('nuclear-js')
 
 reactor.registerStores({
@@ -40,7 +40,7 @@ module.exports = {
 
 // TODO data retrieval should be lazy, as this strategy won't scale.
 // On boot, select all "home screen designs, and pull all of their data."
-firebaseRefs.firebaseRef.once('value', data => {
+firebaseRef.once('value', data => {
   var allData = data.val();
   Object.keys(allData.designs)
     .map(hydrateDesignById.bind(null, allData))
@@ -57,4 +57,10 @@ firebaseRefs.firebaseRef.once('value', data => {
   Object.keys(allData.surfaces)
     .map(id => idsToObjs(id, allData.surfaces))
     .forEach(s => reactor.dispatch('addSurface', s))
+})
+
+designsRef.on('child_added', (snapshot, prevChildKey) => {
+  var design = snapshot.val()
+  design.id = snapshot.key()
+  hydrateDesign(design)
 })
