@@ -2,27 +2,90 @@
 // Displays the layers of the image to show what the final result will
 // look like.
 //
-.canvas {
-  position: relative;
-  width: 100%;
-  height: 100%;
 
-  .layer, .layer-container {
-    position: absolute;
+.canvas-flex-wrapper {
+  @include display(flex);
+  @include flex(1 0 0);
+  @include align-items(center);
+  @include justify-content(center);
+  width: 100%;
+  max-width: 375px;
+
+  span {
+    width: 75%;
+    padding-bottom: 75%;
+    position: relative;
+
+    .canvas {
+      top: 0;
+      left: 0;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+
+        .layer {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+        }
+
+        .layer, .layer-container {
+          position: absolute;
+          height: 100%;
+          width: 100%;
+          top: 0;
+          left: 0;
+
+          img {
+            height: 100%;
+            width: 100%;
+            opacity: 0;
+            visibility: hidden;
+            display: none;
+          }
+
+          .off {
+            visibility: hidden;
+            opacity: 0;
+            display: none;
+          }
+        }
+    }
+  }
+}
+
+.layer, .layer-container {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+
+  img {
     height: 100%;
     width: 100%;
-    top: 0;
-    left: 0;
+    opacity: 0;
+    visibility: hidden;
+    display: none;
+  }
 
-    img {
-      height: 100%;
-      width: 100%;
-    }
+  .off {
+    visibility: hidden;
+    opacity: 0;
+    display: none;
+  }
+}
 
-    .off {
-      visibility: hidden;
-      opacity: 0;
-      display: none;
+@media (min-width: 650px) {
+  .canvas-flex-wrapper {
+
+    @include flex-direction(column);
+    span {
+      width: 90%;
+      padding-bottom: 90%;
     }
   }
 }

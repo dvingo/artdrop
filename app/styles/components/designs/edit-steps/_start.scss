@@ -8,6 +8,7 @@
   @include flex-direction(column);
   width: 100%;
   overflow: hidden;
+
   &.visible { @include flex-grow(1); }
   &.small {
     min-height: 50px;

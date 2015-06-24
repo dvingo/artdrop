@@ -46,12 +46,18 @@ export default React.createClass({
 
   render() {
     if (this.state.design == null) { return null }
+
     var step = this.props.params.step
     return (
       <section className="main design-edit">
 
-        <RenderLayers layers={this.state.design.get('layers')}/>
 
+        <div className="canvas-flex-wrapper">
+          <span>
+            <RenderLayers layers={this.state.design.get('layers')}/>
+          </span>
+        </div>
+        
         <div className="edit-ui">
           <div className="edit-steps">
 
