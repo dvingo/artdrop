@@ -81,8 +81,6 @@
 
 @media (min-width: 650px) {
   .canvas-flex-wrapper {
-
-    @include flex-direction(column);
     span {
       width: 90%;
       padding-bottom: 90%;

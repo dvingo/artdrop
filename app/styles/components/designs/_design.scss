@@ -4,8 +4,8 @@
 .design {
   position: relative;
   width: 32%;
-  height: 120px;
-  width: 120px;
+  height: 100px;
+  width: 100px;
   margin: 2px;
   padding: 0;
   list-style-type: none;
@@ -13,5 +13,20 @@
   &:hover {
     outline: 2px solid;
     cursor: pointer;
+  }
+}
+
+
+@media (min-width: 650px) {
+  .design {
+    height: 120px;
+    width: 120px;
+  }
+}
+
+@media (min-width: 900px) {
+  .design {
+    height: 180px;
+    width: 180px;
   }
 }

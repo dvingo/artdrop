@@ -11,6 +11,7 @@
     @include display(flex);
     @include flex-direction(column);
     @include flex(1 0 0);
+    width: 100%;
   }
 }
 

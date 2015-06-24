@@ -12,12 +12,6 @@
   &.visible { @include flex-grow(1); }
   &.small {
     min-height: 50px;
-    .actions {
-      div:first-child {
-        height: 35px;
-        width: 70px;
-      }
-    }
   }
 
   .actions {

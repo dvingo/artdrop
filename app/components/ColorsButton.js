@@ -10,17 +10,17 @@ export default React.createClass({
     var label = this.props.label
 
     return (
-      <div className="new-colors-button">
+      <div className={classNames("new-colors-button" , {small:isSmall})} >
         <div className="container">
-          <span className={classNames("left", {small:isSmall})}
+          <span className="left"
                 onClick={onLeftClick}>
             <img src={iconPath('triangle-left.svg')}/>
           </span>
-          <span className={classNames("color-wheel", {small:isSmall})}
+          <span className="color-wheel"
                 onClick={onRightClick}>
             <img src={iconPath('color-wheel.svg')}/>
           </span>
-          <span className={classNames("right", {small:isSmall})}
+          <span className="right"
                 onClick={onRightClick}>
             <img src={iconPath('triangle-right.svg')}/>
           </span>
