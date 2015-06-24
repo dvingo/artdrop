@@ -1,7 +1,7 @@
 var getters = {}
 
 getters.designs = [['designs'], designsMap => designsMap.toList()]
-getters.adminDesigns = [
+getters.adminCreatedDesigns = [
   getters.designs,
   designs => designs.filter(d => d.get('adminCreated'))
 ]

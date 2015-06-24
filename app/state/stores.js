@@ -1,6 +1,8 @@
 var Nuclear = require('nuclear-js');
-import {hydrateDesign, designPropsToIds, layerPropsToIds} from './helpers'
-import {designsRef, layersRef} from './firebaseRefs'
+import {hydrateDesign, designPropsToIds, layerPropsToIds,
+  hydrateAndDispatchSurfaces, hydrateAndDispatchLayerImages,
+  hydrateAndDispatchColorPalettes} from './helpers'
+import {designsRef, layersRef, surfacesRef, layerImagesRef} from './firebaseRefs'
 import reactor from './reactor'
 import getters from './getters'
 import {newId} from './utils'
@@ -37,7 +39,17 @@ stores.designsStore = new Nuclear.Store({
        return state.set(design.id, Nuclear.Immutable.fromJS(design));
      }
      return state
-   });
+   })
+
+   this.on('loadAdminCreatedDesigns', function(state, design) {
+     var designsQuery = designsRef.orderByChild('adminCreated').equalTo(true)
+     designsQuery.on('child_added', snapshot => {
+       var design = snapshot.val()
+       design.id = snapshot.key()
+       hydrateDesign(design)
+     })
+     return state
+   })
 
    this.on('nextDesignColors', (state) => {
      return transitionDesignColors('forward', state)
@@ -156,6 +168,11 @@ stores.colorPalettesStore = new Nuclear.Store({
    this.on('addColorPalette', function(state, colorPalette) {
      return state.set(colorPalette.id, Nuclear.Immutable.fromJS(colorPalette));
    })
+
+   this.on('loadAdminCreateDesignData', state => {
+     hydrateAndDispatchColorPalettes()
+     return state
+   })
  }
 })
 
@@ -164,6 +181,11 @@ stores.layerImagesStore = new Nuclear.Store({
   initialize() {
    this.on('addLayerImage', function(state, layerImage) {
      return state.set(layerImage.id, Nuclear.Immutable.fromJS(layerImage));
+   })
+
+   this.on('loadAdminCreateDesignData', state => {
+     hydrateAndDispatchLayerImages()
+     return state
    })
  }
 })
@@ -180,6 +202,11 @@ stores.surfacesStore = new Nuclear.Store({
   initialize() {
    this.on('addSurface', function(state, surface) {
      return state.set(surface.id, Nuclear.Immutable.fromJS(surface))
+   })
+
+   this.on('loadAdminCreateDesignData', state => {
+     hydrateAndDispatchSurfaces()
+     return state
    })
  }
 })

@@ -30,17 +30,8 @@ module.exports = {
     selectColorPaletteId(id) { reactor.dispatch('selectColorPaletteId', id) },
     selectSurfaceId(id) { reactor.dispatch('selectSurfaceId', id) },
     makeDesignCopy(newId) { reactor.dispatch('makeDesignCopy', newId) },
-    createNewDesign(newDesign) { reactor.dispatch('createNewDesign', newDesign) }
+    createNewDesign(newDesign) { reactor.dispatch('createNewDesign', newDesign) },
+    loadAdminCreateDesignData() { reactor.dispatch('loadAdminCreateDesignData') },
+    loadAdminCreatedDesigns() { reactor.dispatch('loadAdminCreatedDesigns')  }
   }
 }
-
-////////////////////////////////////////////////////////////////////////////////
-// Init from Firebase.
-////////////////////////////////////////////////////////////////////////////////
-
-var designsQuery = designsRef.orderByChild('adminCreated').equalTo(true)
-designsQuery.on('child_added', snapshot => {
-  var design = snapshot.val()
-  design.id = snapshot.key()
-  hydrateDesign(design)
-})

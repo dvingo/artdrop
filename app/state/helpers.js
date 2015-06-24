@@ -1,4 +1,5 @@
-import firebaseRefs from './firebaseRefs'
+import {layersRef, layerImagesRef,
+colorPalettesRef,surfacesRef} from './firebaseRefs'
 import reactor from './reactor'
 var RSVP = require('RSVP')
 var exports = {}
@@ -14,9 +15,7 @@ var idsToObjs = (ids, dataSrc) => {
 
 exports.designPropsToIds = (design) => {
   var layerIds = design.get('layers').map(l => l.get('id'))
-  var surfaceId = (_ => {
-    design.get('surface') ? design.getIn(['surface', 'id']) : null
-  }())
+  var surfaceId = design.get('surface') ? design.getIn(['surface', 'id']) : null
   return surfaceId ? design.withMutations(d => d.set('layers', layerIds).set('surface', surfaceId))
                    : design.set('layers', layerIds)
 }
@@ -45,7 +44,7 @@ exports.hydrateDesign = (design) => {
       design.surface = surface
       reactor.dispatch('addSurface', surface)
       reactor.dispatch('addDesign', design)
-    })
+    }).catch(e => console.error('Got surface error: ', e))
   }).catch(e => console.error("Got Error: ", e))
 }
 
@@ -55,13 +54,30 @@ var hydrateObj = (ref, id) => {
   })
 }
 
-var hydrateLayer = hydrateObj.bind(null, firebaseRefs.layersRef)
-var hydrateLayerImage = hydrateObj.bind(null, firebaseRefs.layerImagesRef)
-var hydrateColorPalette = hydrateObj.bind(null, firebaseRefs.colorPalettesRef)
-var hydrateSurface = hydrateObj.bind(null, firebaseRefs.surfacesRef)
+var hydrateAndDispatchData = (dbRef, dispatchMsg) => {
+  dbRef.once('value', snapshot => {
+    var data = snapshot.val()
+    Object.keys(data).map(id => {
+      var obj = data[id]
+      obj.id = id
+      reactor.dispatch(dispatchMsg, obj)
+    })
+  })
+}
+
+exports.hydrateAndDispatchLayerImages = hydrateAndDispatchData.bind(null, layerImagesRef, 'addLayerImage')
+exports.hydrateAndDispatchSurfaces = hydrateAndDispatchData.bind(null, surfacesRef, 'addSurface')
+exports.hydrateAndDispatchColorPalettes = hydrateAndDispatchData.bind(null, colorPalettesRef, 'addColorPalette')
+
+var hydrateLayer = hydrateObj.bind(null, layersRef)
+var hydrateLayerImage = hydrateObj.bind(null, layerImagesRef)
+var hydrateColorPalette = hydrateObj.bind(null, colorPalettesRef)
+var hydrateSurface = hydrateObj.bind(null, surfacesRef)
+
 exports.hydrateLayer = hydrateLayer
 exports.hydrateLayerImage = hydrateLayerImage
 exports.hydrateColorPalette = hydrateColorPalette
+exports.hydrateSurface = hydrateSurface
 exports.hydrateObj = hydrateObj
 exports.idsToObjs = idsToObjs
 export default exports

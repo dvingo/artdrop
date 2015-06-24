@@ -15,7 +15,7 @@ export default React.createClass({
   render() {
     var containerStyle = {
       padding: 10,
-      background: 'rgb(228, 216, 201)',
+      background: 'rgb(253, 252, 148)',
       position: 'relative',
       display: this.state.isVisible ? 'block' : 'none'
     }
