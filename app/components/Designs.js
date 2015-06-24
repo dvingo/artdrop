@@ -1,14 +1,14 @@
-import React from 'react';
-import Router from 'react-router';
-import Design from './Design/Design';
-import reactor from '../state/reactor';
-import State from '../state/main';
+import React from 'react'
+import Router from 'react-router'
+import Design from './Design/Design'
+import reactor from '../state/reactor'
+import State from '../state/main'
 
 export default React.createClass({
   mixins: [reactor.ReactMixin],
 
   getDataBindings() {
-    return { designs: State.getters.adminDesigns };
+    return { designs: State.getters.adminDesigns }
   },
 
   render() {
@@ -16,8 +16,9 @@ export default React.createClass({
       return (
         <li className="design" key={d.get('id')}>
           <Design design={d}/>
-        </li>);
-    });
+        </li>
+      )
+    })
 
     return (
       <div className="main">
@@ -26,6 +27,6 @@ export default React.createClass({
         </ul>
         <Router.RouteHandler/>
       </div>
-    );
+    )
   }
-});
+})

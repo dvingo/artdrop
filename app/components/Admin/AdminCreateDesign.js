@@ -11,6 +11,7 @@ import {imageUrlForLayerImage,imageUrlForSurface} from '../../state/utils'
 export default React.createClass({
   mixins: [reactor.ReactMixin],
 
+  // TODO on componentWillMount - Send Store action to load the required data (palettes,images, and surfaces)
   getDataBindings() {
     return { layerImages: Store.getters.layerImages,
              colorPalettes: Store.getters.colorPalettes,

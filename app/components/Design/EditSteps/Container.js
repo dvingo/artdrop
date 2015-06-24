@@ -17,8 +17,8 @@ export default React.createClass({
       this.getParams().imagesOrColors === 'images'
         ? 'colors' : 'images')
     this.transitionTo('layerEdit', {designId: this.getParams().designId,
-                                     layerId: this.getParams().layerId,
-                                     imagesOrColors: imagesOrColors})
+                                    layerId: this.getParams().layerId,
+                                    imagesOrColors: imagesOrColors})
   },
 
   render() {
@@ -28,9 +28,9 @@ export default React.createClass({
     var editingLayerColors = this.getParams().imagesOrColors === 'colors'
     return (
       <section className={classNames('detail', {visible: step !== 'start'})}>
-        <LayerSelector design={this.props.design}/>
+        <LayerSelector/>
 
-        <ChooseLayer design={this.props.design} isActive={step === 'choose-layer'}/>
+        <ChooseLayer isActive={step === 'choose-layer'}/>
 
         <article className={classNames('palette-art-container', {visible: layerId != null})}>
 

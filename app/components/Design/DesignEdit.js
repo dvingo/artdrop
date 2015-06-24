@@ -58,9 +58,7 @@ export default React.createClass({
             <Start isActive={step === 'start'}
                    isSmall={step === 'choose-layer'}/>
 
-            <Container design={this.state.design}
-                       step={step}
-                       layerId={this.props.params.layerId}/>
+            <Container/>
           </div>
         </div>
 

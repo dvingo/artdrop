@@ -1,7 +1,7 @@
 import fixtures from '../fixtures'
 import reactor from './reactor'
 import stores from './stores'
-import {idsToObjs, hydrateDesignById, hydrateDesign} from './helpers'
+import {idsToObjs, hydrateDesign} from './helpers'
 import getters from './getters'
 import {firebaseRef, designsRef} from './firebaseRefs'
 var Nuclear = require('nuclear-js')
@@ -38,28 +38,8 @@ module.exports = {
 // Init from Firebase.
 ////////////////////////////////////////////////////////////////////////////////
 
-// TODO data retrieval should be lazy, as this strategy won't scale.
-// On boot, select all "home screen designs, and pull all of their data."
-firebaseRef.once('value', data => {
-  var allData = data.val();
-  Object.keys(allData.designs)
-    .map(hydrateDesignById.bind(null, allData))
-    .forEach(d => reactor.dispatch('addDesign', d))
-
-  Object.keys(allData.colorPalettes)
-    .map(id => idsToObjs(id, allData.colorPalettes))
-    .forEach(c => reactor.dispatch('addColorPalette', c))
-
-  Object.keys(allData.layerImages)
-    .map(id => idsToObjs(id, allData.layerImages))
-    .forEach(li => reactor.dispatch('addLayerImage', li))
-
-  Object.keys(allData.surfaces)
-    .map(id => idsToObjs(id, allData.surfaces))
-    .forEach(s => reactor.dispatch('addSurface', s))
-})
-
-designsRef.on('child_added', (snapshot, prevChildKey) => {
+var designsQuery = designsRef.orderByChild('adminCreated').equalTo(true)
+designsQuery.on('child_added', snapshot => {
   var design = snapshot.val()
   design.id = snapshot.key()
   hydrateDesign(design)
