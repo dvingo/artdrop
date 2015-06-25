@@ -32,6 +32,7 @@ module.exports = {
     makeDesignCopy(newId) { reactor.dispatch('makeDesignCopy', newId) },
     createNewDesign(newDesign) { reactor.dispatch('createNewDesign', newDesign) },
     loadAdminCreateDesignData() { reactor.dispatch('loadAdminCreateDesignData') },
-    loadAdminCreatedDesigns() { reactor.dispatch('loadAdminCreatedDesigns')  }
+    loadAdminCreatedDesigns() { reactor.dispatch('loadAdminCreatedDesigns')  },
+    loadCurrentDesignEditResources() {reactor.dispatch('loadCurrentDesignEditResources')}
   }
 }

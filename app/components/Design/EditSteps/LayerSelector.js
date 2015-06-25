@@ -30,8 +30,10 @@ export default React.createClass({
             )
            })
           }
-          <img src={imageUrlForSurface(this.state.design.get('surface'))}
-               width={40} height={40}/>
+          <div className="layer-selector surface">
+            <img src={imageUrlForSurface(this.state.design.get('surface'))}
+                 width={40} height={40}/>
+          </div>
         </div>
       </article>
     )

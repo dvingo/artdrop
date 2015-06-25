@@ -22,6 +22,7 @@ export default React.createClass({
       //this.redirectTo('designEdit')
     //}
     Store.actions.selectDesignId(this.props.params.designId)
+    Store.actions.loadCurrentDesignEditResources()
     if (this.props.params.layerId) {
       Store.actions.selectLayerId(this.props.params.layerId)}
   },

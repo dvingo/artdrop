@@ -9,6 +9,9 @@
   background: orange;
   border-radius: 30px;
   margin: 5px;
+  @media (min-width: 650px) {
+    margin: 30px;
+  }
   overflow: hidden;
 }
 
