@@ -173,6 +173,11 @@ stores.colorPalettesStore = new Nuclear.Store({
      hydrateAndDispatchColorPalettes()
      return state
    })
+
+   this.on('loadCurrentDesignEditResources', state => {
+     hydrateAndDispatchColorPalettes()
+     return state
+   })
  }
 })
 
@@ -184,6 +189,11 @@ stores.layerImagesStore = new Nuclear.Store({
    })
 
    this.on('loadAdminCreateDesignData', state => {
+     hydrateAndDispatchLayerImages()
+     return state
+   })
+
+   this.on('loadCurrentDesignEditResources', state => {
      hydrateAndDispatchLayerImages()
      return state
    })

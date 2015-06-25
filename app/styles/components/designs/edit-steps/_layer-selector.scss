@@ -2,29 +2,60 @@ $imgSize: 40px;
 .layer-selector-wrapper {
   @include display(flex);
   @include flex(0 1 auto);
+  @include align-items(center);
   margin: 0;
   padding: 0;
+  overflow: hidden;
+  background: yellow;
+
+  // &.off {
+  //   overflow: hidden;
+  // }
 
   .container {
     @include display(flex);
     @include flex-direction(column);
     @include flex(1 0 0);
+    @include align-items(center);
     @include justify-content(space-around);
+    // margin-top: 54px;
+    background: red;
+    width: 50px;
+    height: 180px;
+    @media (min-width: 650px) {
+      width: 100px;
+      height: 360px;
+    }
   }
 }
 .layer-selector {
+  width: 80%;
+  padding-bottom: 80%;
+  height: 0;
+
   img {
-    border-radius: 20px;
+    width: 100%;
+    height: auto;
+    border-radius: 50%;
+    margin: 0;
+    // background: rgb(200, 200, 200);
+    opacity: 0.4;
+
     &:hover {
-      background: lightpink;
+      opacity: 1;
       cursor: pointer;
     }
     &.selected {
-      background: $selected-layer-color;
+      // background: $selected-layer-color;
+      opacity: 1;
       &:hover {
-        background: lightpink;
+        // background: lightpink;
+        opacity: 1;
         cursor: pointer;
       }
     }
+  }
+  &.surface {
+    // background: red;
   }
 }
