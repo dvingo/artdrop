@@ -6,7 +6,6 @@
   overflow: hidden;
   margin: 0;
   padding: 0;
-  height: 0;
   &.visible { @include flex-grow(1); }
   ol {
     @include display(flex);
