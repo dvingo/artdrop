@@ -54,13 +54,15 @@ var hydrateObj = (ref, id) => {
   })
 }
 
-var hydrateAndDispatchData = (dbRef, dispatchMsg) => {
+var hydrateAndDispatchData = (dbRef, dispatchMsg, currentState) => {
   dbRef.once('value', snapshot => {
     var data = snapshot.val()
     Object.keys(data).map(id => {
-      var obj = data[id]
-      obj.id = id
-      reactor.dispatch(dispatchMsg, obj)
+      if (!currentState.has(id)) {
+        var obj = data[id]
+        obj.id = id
+        reactor.dispatch(dispatchMsg, obj)
+      }
     })
   })
 }

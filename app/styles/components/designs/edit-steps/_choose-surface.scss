@@ -1,5 +1,5 @@
 .choose-surface {
-  @include flex-grow(0);
+  @include flex-grow($flex-zero);
   @include flex-shrink(0);
   @include flex-basis(0);
   &.visible { @include flex-grow(1); }

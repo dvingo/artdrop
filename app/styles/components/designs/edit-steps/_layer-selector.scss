@@ -1,7 +1,7 @@
 $imgSize: 40px;
 .layer-selector-wrapper {
   @include display(flex);
-  @include flex(0 1 auto);
+  @include flex($flex-zero 1 auto);
   @include align-items(center);
   margin: 0;
   padding: 0;

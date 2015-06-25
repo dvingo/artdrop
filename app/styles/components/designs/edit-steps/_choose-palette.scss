@@ -1,10 +1,10 @@
 .choose-palette {
-  @include flex-grow(0.0001);
+  @include display(flex);
+  @include flex-grow($flex-zero);
   @include flex-shrink(0);
   @include flex-basis(0);
   @include flex-wrap(wrap);
   margin: 2px;
-  display: flex;
   overflow-y: hidden;
 
   &:hover { cursor: pointer; }

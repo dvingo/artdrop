@@ -44,9 +44,12 @@ stores.designsStore = new Nuclear.Store({
    this.on('loadAdminCreatedDesigns', function(state, design) {
      var designsQuery = designsRef.orderByChild('adminCreated').equalTo(true)
      designsQuery.on('child_added', snapshot => {
-       var design = snapshot.val()
-       design.id = snapshot.key()
-       hydrateDesign(design)
+       var id = snapshot.key()
+       if (!state.has(id)) {
+         var design = snapshot.val()
+         design.id = id
+         hydrateDesign(design)
+       }
      })
      return state
    })
@@ -175,7 +178,7 @@ stores.colorPalettesStore = new Nuclear.Store({
    })
 
    this.on('loadCurrentDesignEditResources', state => {
-     hydrateAndDispatchColorPalettes()
+     hydrateAndDispatchColorPalettes(state)
      return state
    })
  }
@@ -194,7 +197,7 @@ stores.layerImagesStore = new Nuclear.Store({
    })
 
    this.on('loadCurrentDesignEditResources', state => {
-     hydrateAndDispatchLayerImages()
+     hydrateAndDispatchLayerImages(state)
      return state
    })
  }

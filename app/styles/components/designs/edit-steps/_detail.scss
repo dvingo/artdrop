@@ -1,6 +1,6 @@
 .detail {
   @include display(flex);
-  @include flex-grow(0.00001);
+  @include flex-grow($flex-zero);
   @include flex-shrink(0);
   @include flex-basis(0);
   &.visible { @include flex-grow(1); }
@@ -14,9 +14,8 @@
     position: relative;
     margin: 0;
     padding: 0;
-    &.visible {
-      @include flex-grow(1);
-    }
+    overflow: hidden;
+    &.visible { @include flex-grow(1); }
   }
 
   .options-button-container {
