@@ -192,7 +192,7 @@ stores.layerImagesStore = new Nuclear.Store({
    })
 
    this.on('loadAdminCreateDesignData', state => {
-     hydrateAndDispatchLayerImages()
+     hydrateAndDispatchLayerImages(state)
      return state
    })
 

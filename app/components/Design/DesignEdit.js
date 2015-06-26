@@ -58,7 +58,7 @@ export default React.createClass({
             <RenderLayers layers={this.state.design.get('layers')}/>
           </span>
         </div>
-        
+
         <div className="edit-ui">
           <div className="edit-steps">
 

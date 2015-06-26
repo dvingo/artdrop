@@ -18,6 +18,7 @@ export default React.createClass({
         <div className="admin-nav-bar" style={navBarStyle}>
           <Link to="adminDesigns" style={navLinkStyle}>All Designs</Link>
           <Link to="adminCreateDesign" style={navLinkStyle}>Create Design</Link>
+          <Link to="adminCreateLayerImage" style={navLinkStyle}>Upload Layer Image</Link>
         </div>
         <RouteHandler/>
       </div>
