@@ -121,7 +121,7 @@ export default React.createClass({
         {this.state.messages.length > 0 ? <div>{messages}</div> : null}
         <p>New Design</p>
 
-        <div style={{height:100, width:100}}>
+        <div style={{height:100, width:100, position:'relative'}}>
           <RenderLayers layers={layers}/>
         </div>
         <label>Select layer to edit</label>

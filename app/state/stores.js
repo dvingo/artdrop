@@ -173,7 +173,7 @@ stores.colorPalettesStore = new Nuclear.Store({
    })
 
    this.on('loadAdminCreateDesignData', state => {
-     hydrateAndDispatchColorPalettes()
+     hydrateAndDispatchColorPalettes(state)
      return state
    })
 
@@ -218,7 +218,7 @@ stores.surfacesStore = new Nuclear.Store({
    })
 
    this.on('loadAdminCreateDesignData', state => {
-     hydrateAndDispatchSurfaces()
+     hydrateAndDispatchSurfaces(state)
      return state
    })
  }
