@@ -6,40 +6,74 @@ import RenderLayers from '../Design/RenderLayers'
 import ColorPalette from '../ColorPalette'
 import Immutable from 'Immutable'
 import Notification from '../Notification'
-import {imageUrlForLayerImage,imageUrlForSurface} from '../../state/utils'
+import {imageUrlForLayer,imageUrlForLayerImage,imageUrlForSurface} from '../../state/utils'
+import {toA} from '../../utils'
 
 export default React.createClass({
   mixins: [reactor.ReactMixin],
 
   getDataBindings() {
-    return { layerImages: Store.getters.layerImages,
-             colorPalettes: Store.getters.colorPalettes,
-             surfaces: Store.getters.surfaces};
+    return {layerImages: Store.getters.layerImages,
+            colorPalettes: Store.getters.colorPalettes,
+            surfaces: Store.getters.surfaces};
   },
 
   getInitialState() {
-    return { newDesign: Immutable.fromJS({layers:[{},{},{}], adminCreated: true}),
-             currentLayer: 0,
-             errors: [],
-             messages: []}
+    return {newDesign: Immutable.fromJS({layers:[{},{},{}], adminCreated: true}),
+            currentLayer: 0,
+            errors: [],
+            messages: []}
   },
 
   componentWillMount() {
     Store.actions.loadAdminCreateDesignData()
   },
 
+  jpgImageString(w,h) {
+    return "left=0,top=0,width=" + w + ",height=" + h +
+           ",toolbar=0,resizable=0"
+  },
+
+  componentDidUpdate() {
+    var canvas = React.findDOMNode(this.refs.canvas)
+    var svgs = toA(document.querySelectorAll('.canvas .layer svg')).map(this.svgTextToImage)
+    if (canvas && svgs.length === 3) {
+      var ctx = canvas.getContext('2d')
+      ctx.clearRect(0, 0, 100, 100)
+      var bgColor = '#fff'
+      var compositeOperation = ctx.globalCompositeOperation
+      svgs.forEach(svg => {
+        ctx.drawImage(svg, 0, 0, 100, 100)
+      })
+      var data = ctx.getImageData(0, 0, 100, 100);
+
+      // Draw a white background.
+      ctx.globalCompositeOperation = "destination-over";
+      ctx.fillStyle = bgColor;
+      ctx.fillRect(0,0,100,100);
+      var jpgImage = canvas.toDataURL('image/jpeg');
+
+      // Reset to original composition setting.
+      ctx.clearRect (0,0,100,100);
+      ctx.putImageData(data, 0,0);
+      ctx.globalCompositeOperation = compositeOperation;
+      console.log('jpg: ', jpgImage);
+      window.open(jpgImage,"canvasImage", this.jpgImageString(jpgImage, 100, 100));
+    }
+  },
+
   clearMessages() {
-    this.setState({messages:[]})
+    this.setState({messages: []})
   },
 
   selectSurface(surface) {
-    this.setState({newDesign:this.state.newDesign.set('surface', surface)})
+    this.setState({newDesign: this.state.newDesign.set('surface', surface)})
   },
 
   selectLayerImage(layerImage) {
     var layerIndex = this.state.currentLayer
     var newDesign = this.state.newDesign.updateIn(['layers', layerIndex], l => l.set('selectedLayerImage', layerImage))
-    this.setState({newDesign:newDesign})
+    this.setState({newDesign: newDesign})
   },
 
   selectColorPalette(palette) {
@@ -49,11 +83,11 @@ export default React.createClass({
   },
 
   selectLayer(e) {
-    this.setState({currentLayer:e.target.value})
+    this.setState({currentLayer: e.target.value})
   },
 
   updateTitle(e) {
-    this.setState({newDesign:this.state.newDesign.set('title', e.target.value)})
+    this.setState({newDesign: this.state.newDesign.set('title', e.target.value)})
   },
 
   saveIt(e) {
@@ -76,6 +110,15 @@ export default React.createClass({
       messages.push('Design successfully created.')
     }
     this.setState({errors: errors, messages:messages})
+  },
+
+  svgTextToImage(svgEl) {
+    var xmlSerializer = new window.XMLSerializer()
+    var svgString = xmlSerializer.serializeToString(svgEl)
+    var imageString = 'data:image/svg+xml;base64,' + window.btoa(svgString)
+    var img = new Image()
+    img.src = imageString
+    return img
   },
 
   render() {
@@ -124,6 +167,11 @@ export default React.createClass({
         <div style={{height:100, width:100, position:'relative'}}>
           <RenderLayers layers={layers}/>
         </div>
+
+        <div style={{height:100, width:100, position:'relative'}}>
+          <canvas style={{height:100, width:100}} ref="canvas"></canvas>
+        </div>
+
         <label>Select layer to edit</label>
         <select value={this.state.currentLayer} onChange={this.selectLayer}>
           <option value="0">Layer 1</option>

@@ -1,5 +1,6 @@
 import React from 'react'
 import {imageUrlForLayer} from '../state/utils'
+import {toA} from '../utils'
 var SVGInjector = require('svg-injector')
 
 var layersToColors = {
@@ -8,7 +9,6 @@ var layersToColors = {
   'Layer_3': 'colorThree',
   'Layer_4': 'colorFour'}
 var svgLayerIds = Object.keys(layersToColors)
-var toA = (list) => Array.prototype.slice.call(list, 0)
 
 export default React.createClass({
 
