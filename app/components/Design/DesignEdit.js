@@ -6,6 +6,7 @@ import SVGInlineLayer  from '../SVGInlineLayer'
 import Start from './EditSteps/Start'
 import RenderLayers from './RenderLayers'
 import Container from './EditSteps/Container'
+import EditFooter from './EditFooter';
 
 export default React.createClass({
   mixins: [reactor.ReactMixin, Router.State],
@@ -68,7 +69,7 @@ export default React.createClass({
             <Container/>
           </div>
         </div>
-
+        <EditFooter />
       </section>
     )
   }

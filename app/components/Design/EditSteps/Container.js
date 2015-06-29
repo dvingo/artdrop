@@ -5,7 +5,7 @@ import ChoosePalette from './ChoosePalette'
 import ChooseArt from './ChooseArt'
 import ChooseSurface from './ChooseSurface'
 import LayerSelector from './LayerSelector'
-import ColorsButton from '../../ColorsButton'
+import ColorsButton from '../../ColorsButtonSort'
 import UpDownSwitch from '../../UpDownSwitch'
 var classNames = require('classnames')
 
