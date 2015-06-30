@@ -32,7 +32,15 @@ export default React.createClass({
   },
 
   jpgImageString(w,h) {
-    return "left=0,top=0,width=100,height=100,toolbar=0,resizable=0"
+    return `left=0,top=0,width=${w},height=${h},toolbar=0,resizable=0`
+  },
+
+  svgTextToImage(svgEl) {
+    var svgString = (new window.XMLSerializer()).serializeToString(svgEl)
+    var imageString = 'data:image/svg+xml;base64,' + window.btoa(svgString)
+    var img = new Image()
+    img.src = imageString
+    return img
   },
 
   componentDidUpdate() {
@@ -40,11 +48,6 @@ export default React.createClass({
     var canvas = React.findDOMNode(this.refs.canvas)
     var admin = document.querySelector('.admin-create-design')
     var svgs = toA(document.querySelectorAll('.canvas .layer svg'))
-    .map(svg => {
-      svg.setAttribute('height', String(h))
-      svg.setAttribute('width', String(w))
-      return svg
-    })
     .map(this.svgTextToImage)
     .map(svg => {
       svg.setAttribute('height', String(h))
@@ -89,7 +92,8 @@ export default React.createClass({
 
   selectLayerImage(layerImage) {
     var layerIndex = this.state.currentLayer
-    var newDesign = this.state.newDesign.updateIn(['layers', layerIndex], l => l.set('selectedLayerImage', layerImage))
+    var newDesign = this.state.newDesign.updateIn(['layers', layerIndex],
+                                l => l.set('selectedLayerImage', layerImage))
     this.setState({newDesign: newDesign})
   },
 
@@ -127,15 +131,6 @@ export default React.createClass({
       messages.push('Design successfully created.')
     }
     this.setState({errors: errors, messages:messages})
-  },
-
-  svgTextToImage(svgEl) {
-    var xmlSerializer = new window.XMLSerializer()
-    var svgString = xmlSerializer.serializeToString(svgEl)
-    var imageString = 'data:image/svg+xml;base64,' + window.btoa(svgString)
-    var img = new Image()
-    img.src = imageString
-    return img
   },
 
   render() {
