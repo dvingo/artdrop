@@ -6,7 +6,8 @@ export default React.createClass({
       layer => {
         return (
           <div className="layer" key={layer.get('id')}>
-            <SVGInlineLayer layer={layer}/>
+            <SVGInlineLayer layer={layer} width={this.props.width}
+                                          height={this.props.height}/>
           </div>
         )
       })

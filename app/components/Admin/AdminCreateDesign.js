@@ -22,7 +22,9 @@ export default React.createClass({
     return {newDesign: Immutable.fromJS({layers:[{},{},{}], adminCreated: true}),
             currentLayer: 0,
             errors: [],
-            messages: []}
+            messages: [],
+            w: 400,
+            h: 400}
   },
 
   componentWillMount() {
@@ -30,36 +32,51 @@ export default React.createClass({
   },
 
   jpgImageString(w,h) {
-    return "left=0,top=0,width=" + w + ",height=" + h +
-           ",toolbar=0,resizable=0"
+    return "left=0,top=0,width=100,height=100,toolbar=0,resizable=0"
   },
 
   componentDidUpdate() {
+    var w = this.state.w, h = this.state.h
     var canvas = React.findDOMNode(this.refs.canvas)
-    var svgs = toA(document.querySelectorAll('.canvas .layer svg')).map(this.svgTextToImage)
-    if (canvas && svgs.length === 3) {
+    var admin = document.querySelector('.admin-create-design')
+    var svgs = toA(document.querySelectorAll('.canvas .layer svg'))
+    .map(svg => {
+      svg.setAttribute('height', String(h))
+      svg.setAttribute('width', String(w))
+      return svg
+    })
+    .map(this.svgTextToImage)
+    .map(svg => {
+      svg.setAttribute('height', String(h))
+      svg.setAttribute('width', String(w))
+      return svg
+    })
+    console.log('svgs: ', svgs)
+
+    //if (canvas && svgs.length === 3) {
       var ctx = canvas.getContext('2d')
-      ctx.clearRect(0, 0, 100, 100)
+      ctx.clearRect(0, 0, w, h)
       var bgColor = '#fff'
       var compositeOperation = ctx.globalCompositeOperation
       svgs.forEach(svg => {
-        ctx.drawImage(svg, 0, 0, 100, 100)
+        console.log('svg: ', svg)
+        ctx.drawImage(svg, 0, 0, w, h)
       })
-      var data = ctx.getImageData(0, 0, 100, 100);
+      var data = ctx.getImageData(0, 0, w, h);
 
-      // Draw a white background.
+       //Draw a white background.
       ctx.globalCompositeOperation = "destination-over";
       ctx.fillStyle = bgColor;
-      ctx.fillRect(0,0,100,100);
+      ctx.fillRect(0,0,w,h);
       var jpgImage = canvas.toDataURL('image/jpeg');
 
       // Reset to original composition setting.
-      ctx.clearRect (0,0,100,100);
+      ctx.clearRect(0,0,w,h);
       ctx.putImageData(data, 0,0);
       ctx.globalCompositeOperation = compositeOperation;
       console.log('jpg: ', jpgImage);
-      window.open(jpgImage,"canvasImage", this.jpgImageString(jpgImage, 100, 100));
-    }
+      window.open(jpgImage,"canvasImage", this.jpgImageString(jpgImage, w, h));
+    //}
   },
 
   clearMessages() {
@@ -158,18 +175,20 @@ export default React.createClass({
       return <Notification message={m} onClose={this.clearMessages}/>
     })
 
+    var height = this.state.h
+    var width = this.state.w
     return (
       <div className="admin-create-design">
         {this.state.errors.length > 0 ? <div>{errors}</div> : null}
         {this.state.messages.length > 0 ? <div>{messages}</div> : null}
         <p>New Design</p>
 
-        <div style={{height:100, width:100, position:'relative'}}>
-          <RenderLayers layers={layers}/>
+        <div style={{height:height, width:width, position:'relative'}}>
+          <RenderLayers layers={layers} width={width} height={height}/>
         </div>
 
-        <div style={{height:100, width:100, position:'relative'}}>
-          <canvas style={{height:100, width:100}} ref="canvas"></canvas>
+        <div style={{height:height, width:width, position:'relative'}}>
+          <canvas height={height} width={width} ref="canvas"></canvas>
         </div>
 
         <label>Select layer to edit</label>

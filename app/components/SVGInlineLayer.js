@@ -17,6 +17,8 @@ export default React.createClass({
     var container = React.findDOMNode(this.refs.container)
     var img = React.findDOMNode(this.refs.imgRef)
     var imgClone = img.cloneNode()
+    var width = this.props.width || '100%'
+    var height = this.props.height || '100%'
     imgClone.removeAttribute('data-reactid')
     var currentSvg = container.querySelector('svg')
     if (currentSvg != null) {
@@ -24,8 +26,8 @@ export default React.createClass({
     }
     container.appendChild(imgClone)
     SVGInjector(imgClone, {"each": function(svgEl) {
-      svgEl.style.height  = '100%';
-      svgEl.style.width   = '100%';
+      svgEl.style.height  = height;
+      svgEl.style.width   = width;
       svgEl.style.margin  = '0 auto';
       svgEl.style.display = 'block';
       svgLayerIds.forEach(id => {
