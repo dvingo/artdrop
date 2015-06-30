@@ -22,6 +22,9 @@
   @include flex(3 0 0);
   @include justify-content(flex-end);
   list-style: none;
+  -webkit-padding-before: 0;
+  -webkit-padding-after: 0;
+  -webkit-margin-start: 0;
 
   li {
     width: 20px;

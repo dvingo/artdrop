@@ -11,9 +11,6 @@ export default React.createClass({
         </Link>
         <ul className="right-icons">
           <li>
-            <img src={iconPath('home-icon.svg')}/>
-          </li>
-          <li>
             <img src={iconPath('share-icon.svg')}/>
           </li>
           <li>

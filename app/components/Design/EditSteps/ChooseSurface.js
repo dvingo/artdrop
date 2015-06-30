@@ -20,7 +20,9 @@ export default React.createClass({
       return (
         <li className="material" onClick={this.selectSurface.bind(null, surface.get('id'))}>
           <span style={{fontWeight: highlight?'bold':'normal'}}>{surface.get('title')}</span>
-          <img src={imageUrlForSurface(surface)} height={surfaceSize} width={surfaceSize}/>
+          <span>
+            <img src={imageUrlForSurface(surface)} height={surfaceSize} width={surfaceSize}/>
+          </span>
         </li>
       )
     })

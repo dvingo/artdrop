@@ -4,6 +4,20 @@ $color3: #eef0f5;
 $color4: #828690;
 $color5: #6a8cc4;
 
+@mixin footer-button {
+  @include display(flex);
+  @include flex(1 0 0);
+  @include align-items(center);
+  @include justify-content(center);
+  color: white;
+  border-radius: 2px;
+  height: 20px;
+  width: 100px;
+  max-width: 40px;
+  font-size: 11px;
+  margin: 5px 0 5px 5px;
+}
+
 .edit-footer {
   @include display(flex);
   @include flex(1 0 0);
@@ -13,57 +27,40 @@ $color5: #6a8cc4;
   max-height: 30px;
   margin: 0;
   padding: 0;
-  background: red;
-}
 
-@mixin footer-button {
-  @include display(flex);
-  @include flex(1 0 0);
-  @include align-items(center);
-  @include justify-content(center);
-  color: white;
-  border-radius: 2px;
-  margin: 5px;
-  height: 19px;
-  max-height: 20px;
-  width: 100px;
-  max-width: 40px;
-  font-size: 11px;
-}
-.reset, .save, .price, .buy {
-  @include footer-button;
-}
-.lower-ui {
-  @include display(flex);
-  @include flex(1 0 0);
-}
-.purchase { @include justify-content(flex-end); }
-// .reset { background: $color1; }
-// .save { background: $color2; }
-// .buy { background: $color1; }
-.price {
-  color: black;
-  font-size: 18px;
-  line-height: 12px;
-}
-.share {
-  @include display(flex);
-  // background: $color2;
-  border-radius: 3px;
-  width: 70px;
-  height: 20px;
-  margin: 5px;
-  span {
-    position: relative;
-    padding: 0;
-    margin-top: 0;
-    height: 40px;
-    width: 40px;
+  .reset, .save, .price, .buy, .share {
+    @include footer-button;
   }
-  img {
-    position: relative;
-    padding: 0;
-    margin-top: 0;
-    width: 100%;
+
+  .lower-ui {
+    @include display(flex);
+    @include flex(1 0 0);
+  }
+  .purchase { @include justify-content(flex-end); }
+  .reset { background: $color1; }
+  .save { background: $color2; }
+  .buy { background: $color1; margin-right: 5px; }
+  .price {
+    color: black;
+    font-size: 18px;
+    line-height: 12px;
+  }
+  .share {
+    @include display(flex);
+    background: $color2;
+    min-width: 70px;
+
+    span {
+      position: relative;
+      padding: 3px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    img {
+      position: relative;
+      padding: 0;
+      width: 100%;
+    }
   }
 }

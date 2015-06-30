@@ -4,4 +4,34 @@
   @include flex-basis(0);
   &.visible { @include flex-grow(1); }
   overflow-y: scroll;
+
+  ul {
+	@include display(flex);
+	@include align-items(center);
+	@include justify-content(space-around);
+	@include flex-wrap(wrap);
+  	-webkit-padding-start: 0;
+  	-webkit-margin-before: 0;
+  	-webkit-margin-after: 0;
+
+  	.material {
+  		@include display(flex);
+  		@include flex-direction(column);
+  		@include align-items(center);
+  		@include justify-content(center);
+  		@include flex(1 0 0);
+  		margin: 10px;
+  		max-width: 150px;
+  		min-width: 70px;
+
+  		span:nth-child(2) {
+  			width: 100%;
+
+  			img {
+  				width: 100%;
+  				height: auto;
+  			}
+  		}
+  	}
+  }
 }

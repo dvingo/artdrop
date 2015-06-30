@@ -37,7 +37,7 @@ export default React.createClass({
               propParams.layerId        !== getParams.layerId ||
               propParams.imagesOrColors !== getParams.imagesOrColors)
     }
-    return true
+    return true;
   },
 
   componentWillUpdate(nextProps) {
@@ -68,8 +68,8 @@ export default React.createClass({
 
             <Container/>
           </div>
+          <EditFooter />
         </div>
-        <EditFooter />
       </section>
     )
   }
