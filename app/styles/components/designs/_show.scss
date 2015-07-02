@@ -43,7 +43,7 @@
     .cart-image {
       @include display(flex);
       @include align-items(center);
-      @include justify-content(centers);
+      @include justify-content(center);
       margin-bottom: 5px;
       height: 40px;
       width: 40px;

@@ -1,11 +1,17 @@
 import React from 'react'
 import Router from 'react-router'
-import reactor from '../state/reactor'
-import Store from '../state/main'
-import ColorPalette from './ColorPalette'
+import {firebaseRef} from '../state/firebaseRefs'
 var Link = Router.Link
 var RouteHandler = Router.RouteHandler
 export default React.createClass({
+
+  authorizeGoogle() {
+    firebaseRef.authWithOAuthPopup('google', (err, data) => {
+      if (err) { console.log('Login failed!', err) }
+      else { console.log('login success!: ', data) }
+    }, {scope:'email'})
+  },
+
   render() {
     var navBarStyle = {
       border: '1px solid'
@@ -19,6 +25,7 @@ export default React.createClass({
           <Link to="adminDesigns" style={navLinkStyle}>All Designs</Link>
           <Link to="adminCreateDesign" style={navLinkStyle}>Create Design</Link>
           <Link to="adminCreateLayerImage" style={navLinkStyle}>Upload Layer Image</Link>
+          <button onClick={this.authorizeGoogle}>Login with Google</button>
         </div>
         <RouteHandler/>
       </div>

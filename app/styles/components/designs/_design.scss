@@ -3,19 +3,16 @@
 //
 .design {
   position: relative;
-  width: 32%;
   height: 100px;
   width: 100px;
   margin: 2px;
   padding: 0;
-  list-style-type: none;
   display: inline-block;
   &:hover {
     outline: 2px solid;
     cursor: pointer;
   }
 }
-
 
 @media (min-width: 650px) {
   .design {

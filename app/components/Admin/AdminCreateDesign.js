@@ -15,7 +15,7 @@ export default React.createClass({
   getDataBindings() {
     return {layerImages: Store.getters.layerImages,
             colorPalettes: Store.getters.colorPalettes,
-            surfaces: Store.getters.surfaces};
+            surfaces: Store.getters.surfaces}
   },
 
   getInitialState() {
@@ -24,7 +24,8 @@ export default React.createClass({
             errors: [],
             messages: [],
             w: 400,
-            h: 400}
+            h: 400,
+            designJpgUrl: null}
   },
 
   componentWillMount() {
@@ -43,20 +44,19 @@ export default React.createClass({
     return img
   },
 
-  componentDidUpdate() {
+  renderDesignToCanvasAndJpg() {
     var w = this.state.w, h = this.state.h
     var canvas = React.findDOMNode(this.refs.canvas)
-    var admin = document.querySelector('.admin-create-design')
-    var svgs = toA(document.querySelectorAll('.canvas .layer svg'))
-    .map(this.svgTextToImage)
-    .map(svg => {
-      svg.setAttribute('height', String(h))
-      svg.setAttribute('width', String(w))
-      return svg
-    })
+    var svgs = (toA(document.querySelectorAll('.canvas .layer svg'))
+      .map(svg => {
+        svg.setAttribute('height', String(h))
+        svg.setAttribute('width', String(w))
+        return svg
+      })
+      .map(this.svgTextToImage))
     console.log('svgs: ', svgs)
 
-    //if (canvas && svgs.length === 3) {
+    if (canvas && svgs.length === 3) {
       var ctx = canvas.getContext('2d')
       ctx.clearRect(0, 0, w, h)
       var bgColor = '#fff'
@@ -71,15 +71,15 @@ export default React.createClass({
       ctx.globalCompositeOperation = "destination-over";
       ctx.fillStyle = bgColor;
       ctx.fillRect(0,0,w,h);
-      var jpgImage = canvas.toDataURL('image/jpeg');
+      var jpgImageUrl = canvas.toDataURL('image/jpeg');
 
       // Reset to original composition setting.
       ctx.clearRect(0,0,w,h);
       ctx.putImageData(data, 0,0);
       ctx.globalCompositeOperation = compositeOperation;
-      console.log('jpg: ', jpgImage);
-      window.open(jpgImage,"canvasImage", this.jpgImageString(jpgImage, w, h));
-    //}
+      this.setState({designJpgUrl:jpgImageUrl})
+    }
+      //window.open(jpgImage,"canvasImage", this.jpgImageString(jpgImage, w, h));
   },
 
   clearMessages() {
@@ -176,14 +176,20 @@ export default React.createClass({
       <div className="admin-create-design">
         {this.state.errors.length > 0 ? <div>{errors}</div> : null}
         {this.state.messages.length > 0 ? <div>{messages}</div> : null}
-        <p>New Design</p>
+        <p>New Design, svg:</p>
 
-        <div style={{height:height, width:width, position:'relative'}}>
-          <RenderLayers layers={layers} width={width} height={height}/>
+        <div style={{height:height, width:width, position:'relative', border: '1px solid'}}>
+          <RenderLayers layers={layers} width={width} height={height} />
         </div>
 
+        <p>New Design, canvas:</p>
         <div style={{height:height, width:width, position:'relative'}}>
-          <canvas height={height} width={width} ref="canvas"></canvas>
+          <canvas height={height} width={width} ref="canvas" style={{border:'1px solid'}}></canvas>
+        </div>
+
+        <p>New Design, jpg:</p>
+        <div style={{height:height, width:width, position:'relative'}}>
+          <img src={this.state.designJpgUrl} height={height} width={width} style={{border:'1px solid'}}/>
         </div>
 
         <label>Select layer to edit</label>
@@ -192,6 +198,8 @@ export default React.createClass({
           <option value="1">Layer 2</option>
           <option value="2">Layer 3</option>
         </select>
+
+        <button onClick={this.renderDesignToCanvasAndJpg}>Render to JPG</button>
 
         <form onSubmit={this.saveIt}>
           <label>Title</label>
