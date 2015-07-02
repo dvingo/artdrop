@@ -2,12 +2,39 @@ var Nuclear = require('nuclear-js');
 import {hydrateDesign, designPropsToIds, layerPropsToIds,
   hydrateAndDispatchSurfaces, hydrateAndDispatchLayerImages,
   hydrateAndDispatchColorPalettes} from './helpers'
-import {designsRef, layersRef, surfacesRef, layerImagesRef} from './firebaseRefs'
+import {usersRef, designsRef, layersRef, surfacesRef,
+  layerImagesRef} from './firebaseRefs'
 import reactor from './reactor'
 import getters from './getters'
 import {newId} from './utils'
+var Immutable = Nuclear.Immutable
 
 var stores = {}
+
+stores.usersStore = new Nuclear.Store({
+
+  newUserObj(name, email, isAdmin) {
+    var now = new Date().getTime()
+    return {
+      name: name,
+      email: email,
+      isAdmin: isAdmin,
+      createdAt: now,
+      updatedAt: now}
+  },
+
+  getInitialState() { return Nuclear.toImmutable({}) },
+
+  initialize() {
+   this.on('createNewUser', function(state, userProps) {
+     var {name, email, isAdmin} = userProps
+     var newUser = this.newUserObj(name, email, isAdmin)
+     var newUserRef = usersRef.push(newUser)
+     newUser.id = newUserRef.key()
+     return state.set(newUser.id, Immutable.fromJS(newUser))
+   }.bind(this))
+  }
+})
 
 var transitionDesignColors = (direction, state) => {
    var allPalettes = reactor.evaluate(getters.colorPalettes)
@@ -36,7 +63,7 @@ stores.designsStore = new Nuclear.Store({
   initialize() {
    this.on('addDesign', function(state, design) {
      if (!state.has(design.id)) {
-       return state.set(design.id, Nuclear.Immutable.fromJS(design));
+       return state.set(design.id, Immutable.fromJS(design));
      }
      return state
    })
@@ -169,7 +196,7 @@ stores.colorPalettesStore = new Nuclear.Store({
 
   initialize() {
    this.on('addColorPalette', function(state, colorPalette) {
-     return state.set(colorPalette.id, Nuclear.Immutable.fromJS(colorPalette));
+     return state.set(colorPalette.id, Immutable.fromJS(colorPalette));
    })
 
    this.on('loadAdminCreateDesignData', state => {
@@ -188,7 +215,7 @@ stores.layerImagesStore = new Nuclear.Store({
   getInitialState() { return Nuclear.toImmutable({}); },
   initialize() {
    this.on('addLayerImage', function(state, layerImage) {
-     return state.set(layerImage.id, Nuclear.Immutable.fromJS(layerImage));
+     return state.set(layerImage.id, Immutable.fromJS(layerImage));
    })
 
    this.on('loadAdminCreateDesignData', state => {
@@ -214,7 +241,7 @@ stores.surfacesStore = new Nuclear.Store({
   getInitialState() { return Nuclear.toImmutable({}) },
   initialize() {
    this.on('addSurface', function(state, surface) {
-     return state.set(surface.id, Nuclear.Immutable.fromJS(surface))
+     return state.set(surface.id, Immutable.fromJS(surface))
    })
 
    this.on('loadAdminCreateDesignData', state => {

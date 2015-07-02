@@ -6,6 +6,7 @@ exports.fireBaseUri = fireBaseUri
 // Test for internet connectivity and branch on that
 // to decide whether or not to use Firebase or fixtures.
 exports.firebaseRef      = new Firebase(fireBaseUri)
+exports.usersRef         = new Firebase(fireBaseUri + "/users")
 exports.designsRef       = new Firebase(fireBaseUri + "/designs")
 exports.layersRef        = new Firebase(fireBaseUri + "/layers")
 exports.layerImagesRef   = new Firebase(fireBaseUri + "/layerImages")

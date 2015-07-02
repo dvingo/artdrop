@@ -47,14 +47,14 @@ export default React.createClass({
   renderDesignToCanvasAndJpg() {
     var w = this.state.w, h = this.state.h
     var canvas = React.findDOMNode(this.refs.canvas)
-    var svgs = (toA(document.querySelectorAll('.canvas .layer svg'))
+    var svgs = (
+      toA(document.querySelectorAll('.canvas .layer svg'))
       .map(svg => {
         svg.setAttribute('height', String(h))
         svg.setAttribute('width', String(w))
         return svg
       })
       .map(this.svgTextToImage))
-    console.log('svgs: ', svgs)
 
     if (canvas && svgs.length === 3) {
       var ctx = canvas.getContext('2d')
@@ -62,12 +62,11 @@ export default React.createClass({
       var bgColor = '#fff'
       var compositeOperation = ctx.globalCompositeOperation
       svgs.forEach(svg => {
-        console.log('svg: ', svg)
         ctx.drawImage(svg, 0, 0, w, h)
       })
       var data = ctx.getImageData(0, 0, w, h);
 
-       //Draw a white background.
+      //Draw a white background.
       ctx.globalCompositeOperation = "destination-over";
       ctx.fillStyle = bgColor;
       ctx.fillRect(0,0,w,h);
@@ -159,11 +158,8 @@ export default React.createClass({
         .filter(l => l.has('colorPalette') &&
                      l.has('selectedLayerImage')))
 
-    var errorStyle = {
-      background: '#E85672'
-    }
     var errors = this.state.errors.map(e => {
-      return <p style={errorStyle}>{e}</p>
+      return <p style={{background:'#E85672'}}>{e}</p>
     })
 
     var messages = this.state.messages.map(m => {

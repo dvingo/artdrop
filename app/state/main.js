@@ -3,10 +3,11 @@ import reactor from './reactor'
 import stores from './stores'
 import {idsToObjs, hydrateDesign} from './helpers'
 import getters from './getters'
-import {firebaseRef, designsRef} from './firebaseRefs'
+import {usersRef, firebaseRef} from './firebaseRefs'
 var Nuclear = require('nuclear-js')
 
 reactor.registerStores({
+  users: stores.usersStore,
   designs: stores.designsStore,
   currentDesignId: stores.currentDesignIdStore,
   colorPalettes: stores.colorPalettesStore,
@@ -32,7 +33,23 @@ module.exports = {
     makeDesignCopy(newId) { reactor.dispatch('makeDesignCopy', newId) },
     createNewDesign(newDesign) { reactor.dispatch('createNewDesign', newDesign) },
     loadAdminCreateDesignData() { reactor.dispatch('loadAdminCreateDesignData') },
-    loadAdminCreatedDesigns() { reactor.dispatch('loadAdminCreatedDesigns')  },
-    loadCurrentDesignEditResources() {reactor.dispatch('loadCurrentDesignEditResources')}
+    loadAdminCreatedDesigns() { reactor.dispatch('loadAdminCreatedDesigns') },
+    loadCurrentDesignEditResources() { reactor.dispatch('loadCurrentDesignEditResources') },
+    createNewUser(userProps) { reactor.dispatch('createNewUser', userProps) }
   }
 }
+
+firebaseRef.onAuth(authData => {
+  if (authData) {
+    console.log("User " + authData.uid + " is logged in with " + authData.provider);
+    console.log('All data: ', authData)
+    // TODO at this point we look up the user in the DB if they exist, we set app state indicating
+    // the current user and this will determine if they are an admin or not.
+    usersRef.orderByChild('uid')
+            .equalTo(authData.uid)
+            .once('value', snapshot => console.log('got snapshot: ', snapshot.val(), ' id: ', snapshot.key()))
+  } else {
+    console.log("User is logged out");
+  }
+})
+
