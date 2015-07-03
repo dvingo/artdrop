@@ -6,22 +6,27 @@ import SVGInlineLayer  from '../SVGInlineLayer'
 import Start from './EditSteps/Start'
 import RenderLayers from './RenderLayers'
 import Container from './EditSteps/Container'
-import EditFooter from './EditFooter';
+import EditFooter from './EditFooter'
+import {isInvalidEditStep} from '../../utils'
 
 export default React.createClass({
-  mixins: [reactor.ReactMixin, Router.State],
+  mixins: [reactor.ReactMixin, Router.State, Router.Navigation],
 
   getDataBindings() {
-    return {design: Store.getters.currentDesign}
-            //validSteps: Store.getters.validSteps}
+    return {design: Store.getters.currentDesign,
+            validEditSteps: ['validEditSteps']}
   },
 
   componentWillMount() {
-    // TODO redirect if invalid step
-    //if (this.props.params.step  not in validSteps...)
-    //if (!this.state.validSteps.contains(this.props.params.step)) {
-      //this.redirectTo('designEdit')
-    //}
+    if (isInvalidEditStep(this.state.validEditSteps,
+        this.props.params.step, this.props.params.imagesOrColors)) {
+      // setTimeout strategy from:
+      // http://stackoverflow.com/questions/30620827/router-is-duplicating-when-clicking-a-link-element
+      window.setTimeout(() => {
+        this.transitionTo('designs')
+      }.bind(this), 0)
+      return
+    }
     Store.actions.selectDesignId(this.props.params.designId)
     Store.actions.loadCurrentDesignEditResources()
     if (this.props.params.layerId) {
@@ -53,7 +58,6 @@ export default React.createClass({
     return (
       <section className="main design-edit">
 
-
         <div className="canvas-flex-wrapper">
           <span>
             <RenderLayers layers={this.state.design.get('layers')}/>
@@ -67,6 +71,7 @@ export default React.createClass({
                    isSmall={step === 'choose-layer'}/>
 
             <Container/>
+
           </div>
           <EditFooter />
         </div>

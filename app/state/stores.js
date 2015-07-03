@@ -2,7 +2,7 @@ var Nuclear = require('nuclear-js');
 import {hydrateDesign, designPropsToIds, layerPropsToIds,
   hydrateAndDispatchSurfaces, hydrateAndDispatchLayerImages,
   hydrateAndDispatchColorPalettes} from './helpers'
-import {usersRef, designsRef, layersRef, surfacesRef,
+import {firebaseRef, usersRef, designsRef, layersRef, surfacesRef,
   layerImagesRef} from './firebaseRefs'
 import reactor from './reactor'
 import getters from './getters'
@@ -26,7 +26,7 @@ stores.usersStore = new Nuclear.Store({
   getInitialState() { return Nuclear.toImmutable({}) },
 
   initialize() {
-   this.on('createNewUser', function(state, userProps) {
+   this.on('createNewUser', (state, userProps) => {
      var {name, email, isAdmin} = userProps
      var newUser = this.newUserObj(name, email, isAdmin)
      var newUserRef = usersRef.push(newUser)
@@ -34,6 +34,25 @@ stores.usersStore = new Nuclear.Store({
      return state.set(newUser.id, Immutable.fromJS(newUser))
    }.bind(this))
   }
+})
+
+stores.currentUserStore = new Nuclear.Store({
+  getInitialState() { return null },
+  initialize() {
+    this.on('setCurrentUser', (state, currentUser) => {
+      return Immutable.fromJS(currentUser)
+    })
+    this.on('logoutCurrentUser', state => {
+      firebaseRef.unauth()
+      return null
+    })
+  }
+})
+
+stores.validEditSteps = new Nuclear.Store({
+  getInitialState() {
+    return Immutable.List(['start', 'choose-layer', 'surface', 'layers'])
+  },
 })
 
 var transitionDesignColors = (direction, state) => {

@@ -8,12 +8,14 @@ var Nuclear = require('nuclear-js')
 
 reactor.registerStores({
   users: stores.usersStore,
+  currentUser: stores.currentUserStore,
   designs: stores.designsStore,
   currentDesignId: stores.currentDesignIdStore,
   colorPalettes: stores.colorPalettesStore,
   layerImages: stores.layerImagesStore,
   currentLayerId: stores.currentLayerIdStore,
-  surfaces: stores.surfacesStore
+  surfaces: stores.surfacesStore,
+  validEditSteps: stores.validEditSteps
 })
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -35,21 +37,29 @@ module.exports = {
     loadAdminCreateDesignData() { reactor.dispatch('loadAdminCreateDesignData') },
     loadAdminCreatedDesigns() { reactor.dispatch('loadAdminCreatedDesigns') },
     loadCurrentDesignEditResources() { reactor.dispatch('loadCurrentDesignEditResources') },
-    createNewUser(userProps) { reactor.dispatch('createNewUser', userProps) }
+    createNewUser(userProps) { reactor.dispatch('createNewUser', userProps) },
+    setCurrentUser(currentUser) { reactor.dispatch('setCurrentUser', currentUser) },
+    logoutCurrentUser() { reactor.dispatch('logoutCurrentUser') }
   }
 }
 
 firebaseRef.onAuth(authData => {
   if (authData) {
-    console.log("User " + authData.uid + " is logged in with " + authData.provider);
-    console.log('All data: ', authData)
-    // TODO at this point we look up the user in the DB if they exist, we set app state indicating
-    // the current user and this will determine if they are an admin or not.
-    usersRef.orderByChild('uid')
-            .equalTo(authData.uid)
-            .once('value', snapshot => console.log('got snapshot: ', snapshot.val(), ' id: ', snapshot.key()))
+    (usersRef.orderByChild('uid')
+      .equalTo(authData.uid)
+      .once('value', snapshot => {
+        var users = snapshot.val()
+        if (users != null) {
+          var keys = Object.keys(users)
+          if (keys.length > 0) {
+            var userId = keys[0]
+            var currentUser = users[userId]
+            currentUser.id = userId
+            reactor.dispatch('setCurrentUser', currentUser)
+          }
+        }
+      }))
   } else {
     console.log("User is logged out");
   }
 })
-
