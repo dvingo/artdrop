@@ -52,25 +52,9 @@ export default React.createClass({
     })
     return (
       <div className="admin-users">
+        <p>Users will be here</p>
         {this.state.errors.length > 0 ? <div>{errors}</div> : null}
         {this.state.messages.length > 0 ? <div>{messages}</div> : null}
-
-        <p>Create a new user</p>
-        <form onSubmit={this.createNewUser}>
-
-          <label>Name</label>
-          <input type="text" onChange={this.updateStringProp.bind(null, 'name')}/>
-
-          <label>Email</label>
-          <input type="email" onChange={this.updateStringProp.bind(null, 'email')}/>
-
-          <label>Is admin?</label>
-          <input type="checkbox" checked={this.state.isAdmin}
-                 onChange={() => this.setState({isAdmin:!this.state.isAdmin})}/>
-
-          <input type="submit"></input>
-        </form>
-
       </div>
     )
   }

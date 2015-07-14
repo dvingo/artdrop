@@ -38,6 +38,7 @@ module.exports = {
     loadAdminCreatedDesigns() { reactor.dispatch('loadAdminCreatedDesigns') },
     loadCurrentDesignEditResources() { reactor.dispatch('loadCurrentDesignEditResources') },
     createNewUser(userProps) { reactor.dispatch('createNewUser', userProps) },
+    createNewUserAndSetAsCurrent(userProps) { reactor.dispatch('createNewUserAndSetAsCurrent', userProps) },
     setCurrentUser(currentUser) { reactor.dispatch('setCurrentUser', currentUser) },
     logoutCurrentUser() { reactor.dispatch('logoutCurrentUser') }
   }
@@ -45,20 +46,20 @@ module.exports = {
 
 firebaseRef.onAuth(authData => {
   if (authData) {
-    (usersRef.orderByChild('uid')
-      .equalTo(authData.uid)
-      .once('value', snapshot => {
-        var users = snapshot.val()
-        if (users != null) {
-          var keys = Object.keys(users)
-          if (keys.length > 0) {
-            var userId = keys[0]
-            var currentUser = users[userId]
-            currentUser.id = userId
-            reactor.dispatch('setCurrentUser', currentUser)
-          }
-        }
-      }))
+    usersRef.child(authData.uid).once('value', s => {
+      var existingUser = s.val()
+      if (existingUser == null) {
+        let userData = {
+          id: authData.uid,
+          name: authData.google.displayName,
+          email: authData.google.email,
+          isAdmin: false}
+        reactor.dispatch('createNewUserAndSetAsCurrent', userData)
+      } else {
+        existingUser.id = s.key()
+        reactor.dispatch('setCurrentUser', existingUser)
+      }
+    });
   } else {
     console.log("User is logged out");
   }

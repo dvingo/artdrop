@@ -27,12 +27,22 @@ stores.usersStore = new Nuclear.Store({
 
   initialize() {
    this.on('createNewUser', (state, userProps) => {
-     var {name, email, isAdmin} = userProps
+     var {id, name, email, isAdmin} = userProps
      var newUser = this.newUserObj(name, email, isAdmin)
-     var newUserRef = usersRef.push(newUser)
-     newUser.id = newUserRef.key()
-     return state.set(newUser.id, Immutable.fromJS(newUser))
+     usersRef.child(id).set(newUser)
+     newUser.id = id
+     return state.set(id, Immutable.fromJS(newUser))
    }.bind(this))
+
+   this.on('createNewUserAndSetAsCurrent', (state, userProps) => {
+     var {id, name, email, isAdmin} = userProps
+     var newUser = this.newUserObj(name, email, isAdmin)
+     usersRef.child(id).set(newUser)
+     newUser.id = id
+     reactor.dispatch('setCurrentUser', newUser)
+     return state.set(id, Immutable.fromJS(newUser))
+   }.bind(this))
+
   }
 })
 
