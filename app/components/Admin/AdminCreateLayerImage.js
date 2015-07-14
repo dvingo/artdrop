@@ -1,10 +1,10 @@
 import React from 'react'
-var s3Endpoint = 'https://s3.amazonaws.com'
-var bucketName = 'com.artdrop.images'
+import Store from '../../state/main'
+
 export default React.createClass({
 
   getInitialState() {
-    return {file:null}
+    return {file: null}
   },
 
   fileSelected(e) {
@@ -16,24 +16,7 @@ export default React.createClass({
 
   uploadFile(e) {
     e.preventDefault()
-    AWS.config.credentials = {
-      accessKeyId: '',
-      secretAccessKey:''}
-    var s3 = new AWS.S3()
-    var params = {
-      Bucket: 'com.artdrop.images',
-      Key: this.state.file.name,
-      ACL: 'public-read',
-      Body: this.state.file
-    }
-    s3.putObject(params, (err,d) => {
-     if (err) {console.log('got error: ',err)}
-     else {console.log('got data: ',d)
-       // here we would create a layerImage in firebase
-       // url is:
-       //`${s3Endpoint}/${bucketName}/${this.state.file.name}`
-     }
-    })
+    Store.actions.uploadLayerImageToS3(this.state.file)
     console.log('upload file')
   },
 

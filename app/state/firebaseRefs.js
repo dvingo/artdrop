@@ -12,4 +12,5 @@ exports.layersRef        = new Firebase(fireBaseUri + "/layers")
 exports.layerImagesRef   = new Firebase(fireBaseUri + "/layerImages")
 exports.surfacesRef      = new Firebase(fireBaseUri + "/surfaces")
 exports.colorPalettesRef = new Firebase(fireBaseUri + "/colorPalettes")
+exports.credsRef         = new Firebase(fireBaseUri + "/creds")
 export default exports

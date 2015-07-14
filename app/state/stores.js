@@ -3,11 +3,13 @@ import {hydrateDesign, designPropsToIds, layerPropsToIds,
   hydrateAndDispatchSurfaces, hydrateAndDispatchLayerImages,
   hydrateAndDispatchColorPalettes} from './helpers'
 import {firebaseRef, usersRef, designsRef, layersRef, surfacesRef,
-  layerImagesRef} from './firebaseRefs'
+  layerImagesRef, credsRef} from './firebaseRefs'
 import reactor from './reactor'
 import getters from './getters'
 import {newId} from './utils'
 var Immutable = Nuclear.Immutable
+var s3Endpoint = 'https://s3.amazonaws.com'
+var s3BucketName = 'com.artdrop.images'
 
 var stores = {}
 
@@ -241,22 +243,60 @@ stores.colorPalettesStore = new Nuclear.Store({
 })
 
 stores.layerImagesStore = new Nuclear.Store({
-  getInitialState() { return Nuclear.toImmutable({}); },
+  getInitialState() { return Nuclear.toImmutable({}) },
+
+  newLayerImageObj(imageUrl) {
+    var now = new Date().getTime()
+    return {
+      imageUrl: imageUrl,
+      validOrders: [0,1,2],
+      createdAt: now,
+      updatedAt: now}
+  },
+
   initialize() {
-   this.on('addLayerImage', function(state, layerImage) {
-     return state.set(layerImage.id, Immutable.fromJS(layerImage));
-   })
+    this.on('addLayerImage', (state, layerImage) => {
+      return state.set(layerImage.id, Immutable.fromJS(layerImage));
+    })
 
-   this.on('loadAdminCreateDesignData', state => {
-     hydrateAndDispatchLayerImages(state)
-     return state
-   })
+    this.on('loadAdminCreateDesignData', state => {
+      hydrateAndDispatchLayerImages(state)
+      return state
+    })
 
-   this.on('loadCurrentDesignEditResources', state => {
-     hydrateAndDispatchLayerImages(state)
-     return state
-   })
- }
+    this.on('loadCurrentDesignEditResources', state => {
+      hydrateAndDispatchLayerImages(state)
+      return state
+    })
+
+    this.on('uploadLayerImageToS3', (state, file) => {
+      var self = this
+      credsRef.once('value', snapshot => {
+        var creds = snapshot.val()
+        AWS.config.credentials = {
+          accessKeyId: creds.s3AccessKey,
+          secretAccessKey: creds.s3SecretKey}
+        var params = {
+          Bucket: s3BucketName,
+          Key: file.name,
+          ACL: 'public-read',
+          Body: file }
+        var s3 = new AWS.S3()
+        s3.putObject(params, (err, d) => {
+          if (err) {console.log('got error: ',err)}
+          else {console.log('got data: ',d)
+            var imageUrl = `${s3Endpoint}/${s3BucketName}/${file.name}`
+            var newLayerImage = self.newLayerImageObj(imageUrl)
+            var newLayerImageRef = layerImagesRef.push(newLayerImage)
+            var layerImageId = newLayerImageRef.key()
+            newLayerImage.id = layerImageId
+            reactor.dispatch('addLayerImage', newLayerImage)
+          }
+        })
+      })
+      return state
+    })
+  }
 })
 
 stores.currentLayerIdStore = new Nuclear.Store({
