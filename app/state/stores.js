@@ -280,7 +280,8 @@ stores.layerImagesStore = new Nuclear.Store({
           Bucket: s3BucketName,
           Key: file.name,
           ACL: 'public-read',
-          Body: file }
+          ContentType: 'image/svg+xml',
+          Body: file}
         var s3 = new AWS.S3()
         s3.putObject(params, (err, d) => {
           if (err) {console.log('got error: ',err)}
