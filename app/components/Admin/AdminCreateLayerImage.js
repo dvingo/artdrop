@@ -1,6 +1,8 @@
 import React from 'react'
 import Store from '../../state/main'
 import reactor from '../../state/reactor'
+import {s3UrlForImage} from '../../state/utils'
+import {layerImagesRef} from '../../state/firebaseRefs'
 import Notification from '../Notification'
 import {replaceSvgImageWithText, svgLayerIds} from '../../utils'
 var allLayersInSvg = svgEl => {
@@ -27,37 +29,48 @@ export default React.createClass({
     }
   },
 
+  uploadIfImageIsNew(file) {
+    var imageUrl = s3UrlForImage(file.name)
+    layerImagesRef.orderByChild('imageUrl').equalTo(imageUrl).once('value', snapshot => {
+
+      var existingImageUrl = snapshot.val()
+      if (existingImageUrl != null) {
+        this.setState({errors: [`A layer already exists with that URL: ${imageUrl}`]})
+        return
+      }
+
+      var self = this
+      var reader = new FileReader()
+      reader.onloadend = e => {
+        if ('srcElement' in e && 'result' in e.srcElement) {
+          let svgText = e.srcElement.result
+          let parser = new DOMParser()
+          let svgEl = parser.parseFromString(svgText, 'image/svg+xml').children[0]
+          if (!allLayersInSvg(svgEl)) {
+            let err = 'The SVG file you selected does not have all the required layers.'
+            err += ` The layers are: ${svgLayerIds.join(', ')}`
+            this.setState({errors: [err]})
+          } else {
+            self.setState({file: file})
+          }
+        }
+      }
+      reader.readAsText(file)
+    })
+  },
+
   fileSelected(e) {
     if (e.target.files.length > 0) {
       var file = e.target.files[0]
       var errors = []
       var messages = []
       var self = this
-      var reader;
-
       if (file.type !== 'image/svg+xml') {
         errors.push('You can only use svg images for layers.')
-        this.setState({errors: errors, messages: messages})
       } else {
-        reader = new FileReader()
-        reader.onloadend = e => {
-          if ('srcElement' in e && 'result' in e.srcElement) {
-            let svgText = e.srcElement.result
-            let parser = new DOMParser()
-            let svgEl = parser.parseFromString(svgText, 'image/svg+xml').children[0]
-            if (!allLayersInSvg(svgEl)) {
-              let err = 'The SVG file you selected does not have all the required layers.'
-              err += ` The layers are: ${svgLayerIds.join(', ')}`
-              errors.push(err)
-              this.setState({errors: errors, messages: messages})
-            } else {
-              self.setState({file: file})
-            }
-          }
-        }
-        reader.readAsText(file)
+        this.uploadIfImageIsNew(file)
       }
-      this.setState({errors: errors, messages: messages})
+      this.setState({errors: errors})
     }
   },
 

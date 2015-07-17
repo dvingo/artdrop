@@ -1,4 +1,7 @@
-var srcDir = require('../../config').srcDir
+var config = require('../../config')
+var srcDir = config.srcDir
+var s3Endpoint = config.s3Endpoint
+var s3BucketName = config.s3BucketName
 /**
  * From: https://gist.github.com/mikelehen/3596a30bd69384624c11
  * Fancy ID generator that creates 20-character string identifiers with the following properties:
@@ -73,5 +76,8 @@ export default {
     return surface.get('imageUrl')
                 .replace('/assets/surfaces/', '/' + srcDir + '/images/surfaces/')
   },
-  newId: generateFirebaseID
+  newId: generateFirebaseID,
+  s3UrlForImage(filename) {
+    return `${s3Endpoint}/${s3BucketName}/${filename}`
+  }
 }

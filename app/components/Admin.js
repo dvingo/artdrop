@@ -32,10 +32,6 @@ export default React.createClass({
     var navLinkStyle = {
       margin: '0 10px'
     }
-    if (this.state.currentUser) {
-      console.log('currnt user: ', this.state.currentUser)
-      console.log('is admin?: ', this.state.currentUser.get('isAdmin'))
-    }
     if (this.state.currentUser && this.state.currentUser.get('isAdmin')) {
       return (
         <div className="admin">

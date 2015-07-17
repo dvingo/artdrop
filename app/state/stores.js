@@ -6,11 +6,12 @@ import {firebaseRef, usersRef, designsRef, layersRef, surfacesRef,
   layerImagesRef, credsRef} from './firebaseRefs'
 import reactor from './reactor'
 import getters from './getters'
-import {newId} from './utils'
+import {newId, s3UrlForImage} from './utils'
+var config = require('../../config')
+var srcDir = config.srcDir
+var s3Endpoint = config.s3Endpoint
+var s3BucketName = config.s3BucketName
 var Immutable = Nuclear.Immutable
-var s3Endpoint = 'https://s3.amazonaws.com'
-var s3BucketName = 'com.artdrop.images'
-
 var stores = {}
 
 stores.usersStore = new Nuclear.Store({
@@ -295,7 +296,7 @@ stores.layerImagesStore = new Nuclear.Store({
         s3.putObject(params, (err, d) => {
           if (err) {console.log('got error: ',err)}
           else {
-            var imageUrl = `${s3Endpoint}/${s3BucketName}/${file.name}`
+            var imageUrl = s3UrlForImage(file.name)
             var newLayerImage = self.newLayerImageObj(imageUrl)
             var newLayerImageRef = layerImagesRef.push(newLayerImage)
             var layerImageId = newLayerImageRef.key()
