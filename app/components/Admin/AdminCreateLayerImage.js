@@ -1,18 +1,30 @@
 import React from 'react'
 import Store from '../../state/main'
+import reactor from '../../state/reactor'
 import Notification from '../Notification'
 import {replaceSvgImageWithText, svgLayerIds} from '../../utils'
-
 var allLayersInSvg = svgEl => {
   return svgLayerIds.every(id => svgEl.querySelector(`#${id}`) != null)
 }
 
 export default React.createClass({
+  mixins: [reactor.ReactMixin],
+  getDataBindings() {
+    return {layerImageUploaded: ['layerImageUploaded']}
+  },
 
   getInitialState() {
     return {file: null,
             errors: [],
             messages: []}
+  },
+
+  componentDidUpdate(prevProps, prevState) {
+    var layerImageUploaded = this.state.layerImageUploaded
+    if (layerImageUploaded != null && prevState.layerImageUploaded !== layerImageUploaded) {
+      var messages = [`Layer successfully uploaded at url: ${layerImageUploaded.get('imageUrl')}`]
+      this.setState({messages: messages})
+    }
   },
 
   fileSelected(e) {
@@ -52,6 +64,10 @@ export default React.createClass({
   uploadFile(e) {
     e.preventDefault()
     Store.actions.uploadLayerImageToS3(this.state.file)
+  },
+
+  clearMessages() {
+    this.setState({messages: []})
   },
 
   render() {

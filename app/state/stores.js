@@ -242,6 +242,15 @@ stores.colorPalettesStore = new Nuclear.Store({
  }
 })
 
+stores.layerImageUploadedStore = new Nuclear.Store({
+  getInitialState() { return null },
+  initialize() {
+   this.on('layerImageUploadedSuccessfully', (state, layerImage) => {
+     return layerImage
+   })
+  }
+})
+
 stores.layerImagesStore = new Nuclear.Store({
   getInitialState() { return Nuclear.toImmutable({}) },
 
@@ -285,13 +294,15 @@ stores.layerImagesStore = new Nuclear.Store({
         var s3 = new AWS.S3()
         s3.putObject(params, (err, d) => {
           if (err) {console.log('got error: ',err)}
-          else {console.log('got data: ',d)
+          else {
             var imageUrl = `${s3Endpoint}/${s3BucketName}/${file.name}`
             var newLayerImage = self.newLayerImageObj(imageUrl)
             var newLayerImageRef = layerImagesRef.push(newLayerImage)
             var layerImageId = newLayerImageRef.key()
             newLayerImage.id = layerImageId
-            reactor.dispatch('addLayerImage', newLayerImage)
+            var layerImageImm = Immutable.fromJS(newLayerImage)
+            reactor.dispatch('addLayerImage', layerImageImm)
+            reactor.dispatch('layerImageUploadedSuccessfully', layerImageImm)
           }
         })
       })

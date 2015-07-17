@@ -13,6 +13,7 @@ reactor.registerStores({
   currentDesignId: stores.currentDesignIdStore,
   colorPalettes: stores.colorPalettesStore,
   layerImages: stores.layerImagesStore,
+  layerImageUploaded: stores.layerImageUploadedStore,
   currentLayerId: stores.currentLayerIdStore,
   surfaces: stores.surfacesStore,
   validEditSteps: stores.validEditSteps
