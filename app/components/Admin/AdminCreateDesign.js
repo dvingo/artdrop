@@ -129,7 +129,7 @@ export default React.createClass({
       Store.actions.createNewDesign(this.state.newDesign)
       messages.push('Design successfully created.')
     }
-    this.setState({errors: errors, messages:messages})
+    this.setState({errors: errors, messages: messages})
   },
 
   render() {

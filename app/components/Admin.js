@@ -34,7 +34,7 @@ export default React.createClass({
     }
     if (this.state.currentUser) {
       console.log('currnt user: ', this.state.currentUser)
-    console.log('is admin?: ', this.state.currentUser.get('isAdmin'))
+      console.log('is admin?: ', this.state.currentUser.get('isAdmin'))
     }
     if (this.state.currentUser && this.state.currentUser.get('isAdmin')) {
       return (
