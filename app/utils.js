@@ -12,10 +12,9 @@ var toA = (list) => Array.prototype.slice.call(list, 0)
 export default {
 
   iconPath: (name) => `/${srcDir}/images/icons/${name}`,
-
   surfacePath: (name) => `/${srcDir}/images/surfaces/${name}`,
-
   toA: toA,
+  svgLayerIds: svgLayerIds,
 
   isInvalidEditStep: (validSteps, step, layerStep) => {
     var retVal = false
@@ -39,7 +38,6 @@ export default {
     }
     container.appendChild(imgClone)
     SVGInjector(imgClone, {"each": function(svgEl) {
-      console.log('svgEl: ', svgEl)
       svgEl.style.height = '100%';
       svgEl.style.width = '100%';
       svgEl.style.margin  = '0 auto';

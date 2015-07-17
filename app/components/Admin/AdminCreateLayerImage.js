@@ -1,7 +1,11 @@
 import React from 'react'
 import Store from '../../state/main'
 import Notification from '../Notification'
-import {replaceSvgImageWithText} from '../../utils'
+import {replaceSvgImageWithText, svgLayerIds} from '../../utils'
+
+var allLayersInSvg = svgEl => {
+  return svgLayerIds.every(id => svgEl.querySelector(`#${id}`) != null)
+}
 
 export default React.createClass({
 
@@ -21,24 +25,26 @@ export default React.createClass({
 
       if (file.type !== 'image/svg+xml') {
         errors.push('You can only use svg images for layers.')
-      }
-
-      if (errors.length === 0) {
+        this.setState({errors: errors, messages: messages})
+      } else {
         reader = new FileReader()
         reader.onloadend = e => {
           if ('srcElement' in e && 'result' in e.srcElement) {
             let svgText = e.srcElement.result
-            console.log('got svgText: ', svgText)
             let parser = new DOMParser()
-            let svgEl = parser.parseFromString(svgText, 'application/xml')
-            console.log('GOT SVG: ', svgEl)
-            // TODO check that the svg has all four layer ids
-            self.setState({file:file})
+            let svgEl = parser.parseFromString(svgText, 'image/svg+xml').children[0]
+            if (!allLayersInSvg(svgEl)) {
+              let err = 'The SVG file you selected does not have all the required layers.'
+              err += ` The layers are: ${svgLayerIds.join(', ')}`
+              errors.push(err)
+              this.setState({errors: errors, messages: messages})
+            } else {
+              self.setState({file: file})
+            }
           }
         }
         reader.readAsText(file)
       }
-
       this.setState({errors: errors, messages: messages})
     }
   },
