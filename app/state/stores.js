@@ -249,6 +249,11 @@ stores.colorPalettesStore = new Nuclear.Store({
      return state
    })
 
+   this.on('loadAdminColorPalettes', state => {
+     hydrateAndDispatchColorPalettes(state)
+     return state
+   })
+
    this.on('loadCurrentDesignEditResources', state => {
      hydrateAndDispatchColorPalettes(state)
      return state

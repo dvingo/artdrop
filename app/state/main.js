@@ -38,6 +38,7 @@ module.exports = {
     createNewDesign(newDesign) { reactor.dispatch('createNewDesign', newDesign) },
     loadAdminCreateDesignData() { reactor.dispatch('loadAdminCreateDesignData') },
     loadAdminCreatedDesigns() { reactor.dispatch('loadAdminCreatedDesigns') },
+    loadAdminColorPalettes() { reactor.dispatch('loadAdminColorPalettes') },
     loadCurrentDesignEditResources() { reactor.dispatch('loadCurrentDesignEditResources') },
     createNewUser(userProps) { reactor.dispatch('createNewUser', userProps) },
     createNewUserAndSetAsCurrent(userProps) { reactor.dispatch('createNewUserAndSetAsCurrent', userProps) },

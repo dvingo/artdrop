@@ -38,6 +38,7 @@ export default React.createClass({
           <div className="admin-nav-bar" style={navBarStyle}>
             {/*<Link to="adminUsers" style={navLinkStyle}>Edit Users</Link>
             <Link to="adminDesigns" style={navLinkStyle}>All Designs</Link>*/}
+            <Link to="adminColorPalettes" style={navLinkStyle}>Color Palettes</Link>
             <Link to="adminCreateDesign" style={navLinkStyle}>Create Design</Link>
             <Link to="adminCreateLayerImage" style={navLinkStyle}>Upload Layer Image</Link>
             <button onClick={this.logoutCurrentUser}>Logout</button>
