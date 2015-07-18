@@ -1,5 +1,4 @@
 import React from 'react'
-import Router from 'react-router'
 import reactor from '../../state/reactor'
 import Store from '../../state/main'
 import RenderLayers from '../Design/RenderLayers'
@@ -7,7 +6,7 @@ import ColorPalette from '../ColorPalette'
 import Immutable from 'Immutable'
 import Notification from '../Notification'
 import {imageUrlForLayer,imageUrlForLayerImage,imageUrlForSurface} from '../../state/utils'
-import {toA} from '../../utils'
+import {svgTextToImage, renderDesignToImage} from '../../utils'
 
 export default React.createClass({
   mixins: [reactor.ReactMixin],
@@ -30,55 +29,6 @@ export default React.createClass({
 
   componentWillMount() {
     Store.actions.loadAdminCreateDesignData()
-  },
-
-  jpgImageString(w,h) {
-    return `left=0,top=0,width=${w},height=${h},toolbar=0,resizable=0`
-  },
-
-  svgTextToImage(svgEl) {
-    var svgString = (new window.XMLSerializer()).serializeToString(svgEl)
-    var imageString = 'data:image/svg+xml;base64,' + window.btoa(svgString)
-    var img = new Image()
-    img.src = imageString
-    return img
-  },
-
-  renderDesignToCanvasAndJpg() {
-    var w = this.state.w, h = this.state.h
-    var canvas = React.findDOMNode(this.refs.canvas)
-    var svgs = (
-      toA(document.querySelectorAll('.canvas .layer svg'))
-      .map(svg => {
-        svg.setAttribute('height', String(h))
-        svg.setAttribute('width', String(w))
-        return svg
-      })
-      .map(this.svgTextToImage))
-
-    if (canvas && svgs.length === 3) {
-      var ctx = canvas.getContext('2d')
-      ctx.clearRect(0, 0, w, h)
-      var bgColor = '#fff'
-      var compositeOperation = ctx.globalCompositeOperation
-      svgs.forEach(svg => {
-        ctx.drawImage(svg, 0, 0, w, h)
-      })
-      var data = ctx.getImageData(0, 0, w, h);
-
-      //Draw a white background.
-      ctx.globalCompositeOperation = "destination-over";
-      ctx.fillStyle = bgColor;
-      ctx.fillRect(0,0,w,h);
-      var jpgImageUrl = canvas.toDataURL('image/jpeg');
-
-      // Reset to original composition setting.
-      ctx.clearRect(0,0,w,h);
-      ctx.putImageData(data, 0,0);
-      ctx.globalCompositeOperation = compositeOperation;
-      this.setState({designJpgUrl:jpgImageUrl})
-    }
-      //window.open(jpgImage,"canvasImage", this.jpgImageString(jpgImage, w, h));
   },
 
   clearMessages() {
@@ -110,7 +60,7 @@ export default React.createClass({
     this.setState({newDesign: this.state.newDesign.set('title', e.target.value)})
   },
 
-  saveIt(e) {
+  saveDesign(e) {
     e.preventDefault()
     var title = this.state.newDesign.get('title')
     var surface = this.state.newDesign.get('surface')
@@ -120,13 +70,20 @@ export default React.createClass({
       errors.push('You must set a title')
     }
     if (!surface) { errors.push('You must select a surface') }
-    var layersValid = (this.state.newDesign.get('layers')
-       .map(l => l.has('colorPalette') && l.has('selectedLayerImage')))
-       .every(v => v)
-    if (!layersValid) { errors.push('You must select a color palette and image for every layer.') }
+    var layersValid = (
+      this.state.newDesign.get('layers')
+      .map(l => l.has('colorPalette') && l.has('selectedLayerImage'))
+      .every(v => v)
+    )
+    if (!layersValid) {
+      errors.push('You must select a color palette and image for every layer.')
+    }
 
     if (errors.length === 0) {
-      Store.actions.createNewDesign(this.state.newDesign)
+      let svgEls = document.querySelectorAll('.canvas .layer svg')
+      let designJpgBlob = renderDesignToImage(400, svgEls)
+      Store.actions.createNewDesign({newDesign: this.state.newDesign,
+                                     jpgBlob: designJpgBlob})
       messages.push('Design successfully created.')
     }
     this.setState({errors: errors, messages: messages})
@@ -178,16 +135,6 @@ export default React.createClass({
           <RenderLayers layers={layers} width={width} height={height} />
         </div>
 
-        <p>New Design, canvas:</p>
-        <div style={{height:height, width:width, position:'relative'}}>
-          <canvas height={height} width={width} ref="canvas" style={{border:'1px solid'}}></canvas>
-        </div>
-
-        <p>New Design, jpg:</p>
-        <div style={{height:height, width:width, position:'relative'}}>
-          <img src={this.state.designJpgUrl} height={height} width={width} style={{border:'1px solid'}}/>
-        </div>
-
         <label>Select layer to edit</label>
         <select value={this.state.currentLayer} onChange={this.selectLayer}>
           <option value="0">Layer 1</option>
@@ -195,9 +142,7 @@ export default React.createClass({
           <option value="2">Layer 3</option>
         </select>
 
-        <button onClick={this.renderDesignToCanvasAndJpg}>Render to JPG</button>
-
-        <form onSubmit={this.saveIt}>
+        <form onSubmit={this.saveDesign}>
           <label>Title</label>
           <input type="text" value={this.state.newDesign.get('title')} onChange={this.updateTitle}></input>
           <input type="submit"></input>

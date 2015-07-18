@@ -1,20 +1,20 @@
 # Admin
+- Color palette admin
+  - Update existing
+  - Create new
 
-- Upload new layer images which are SVGs to S3 or Google Bucket
-  - Validate before uploading that it contains the proper layer ids as expected
-    for the color replacement to work.
+- For now remove user and all designs links
 
-- Clean up create a new design page to be more like the user facing one.
-  - Upload finished JPG image to S3, set this URL on the design.
+## Error and message reporting
+- Add an error store and have the admin subscribe to it, display any errors if it isn't empty
+- Same thing for success messages
 
-- All designs admin page
-  - Search, enter by id, by author/creator
-
-# Orders
-- For now on buy screen, create an "order" in the db and fill in its properties.
+## Create Design
+- Remove the canvas and jpg rendering.
+- Upload to S3, set this on the design.
 
 # LayerImages
-- validOrder should be an array.
+- validOrder should be an array. - new layer images have this set to validOrders, but old ones do not
 
 # Etc
 - on the layers model, layerImages should be a collection of ids, not an array.

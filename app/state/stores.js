@@ -6,7 +6,7 @@ import {firebaseRef, usersRef, designsRef, layersRef, surfacesRef,
   layerImagesRef, credsRef} from './firebaseRefs'
 import reactor from './reactor'
 import getters from './getters'
-import {newId, s3UrlForImage} from './utils'
+import {newId, uploadImgToS3} from './utils'
 var config = require('../../config')
 var srcDir = config.srcDir
 var s3Endpoint = config.s3Endpoint
@@ -177,29 +177,42 @@ stores.designsStore = new Nuclear.Store({
      return state.set(newDesignId, newDesign)
    })
 
-   this.on('createNewDesign', (state, newDesign) => {
+   this.on('createNewDesign', (state, newDesignData) => {
      // This assumes layerImages, surfaces, and palettes already exist in firebase.
-     var now = new Date().getTime()
-     var design = newDesign.toJS()
-     var layerIds = design.layers.map((layer, i) => {
-       layer.order = i
-       layer.colorPalette = layer.colorPalette.id
-       layer.selectedLayerImage = layer.selectedLayerImage.id
-       layer.createdAt = now
-       layer.updatedAt = now
-       layer.layerImages = reactor.evaluate(getters.layerImageIds).toJS()
-       var newLayerRef = layersRef.push(layer)
-       return newLayerRef.key()
-     })
-     design.layers = layerIds
-     design.surface = design.surface.id
-     design.price = 2000
-     design.createdAt = now
-     design.updatedAt = now
-     designsRef.push(design)
+     var newDesign = newDesignData.newDesign
+     var designJpgBlob = newDesignData.jpgBlob
+     console.log('new design: ', newDesign.get('title'))
+     var imageFilename = newDesign.get('title') + '.jpg'
+     uploadImgToS3(designJpgBlob, imageFilename, 'image/jpeg', (err, imgUrl) => {
+       if (err) {
+         console.log('got error: ', err)
+       } else {
+         var now = new Date().getTime()
+         var design = newDesign.toJS()
+         var layerIds = design.layers.map((layer, i) => {
+           layer.order = i
+           layer.colorPalette = layer.colorPalette.id
+           layer.selectedLayerImage = layer.selectedLayerImage.id
+           layer.createdAt = now
+           layer.updatedAt = now
+           layer.layerImages = reactor.evaluate(getters.layerImageIds).toJS()
+           var newLayerRef = layersRef.push(layer)
+           return newLayerRef.key()
+         })
+         design.imageUrl = imgUrl
+         design.layers = layerIds
+         design.surface = design.surface.id
+         design.price = 2000
+         design.createdAt = now
+         design.updatedAt = now
+         var newDesignRef = designsRef.push(design)
+         design.id = newDesignRef.key()
+         reactor.dispatch('addDesign', design)
+       }
+     }.bind(this))
+
      return state
    })
-
  }
 })
 
@@ -280,33 +293,19 @@ stores.layerImagesStore = new Nuclear.Store({
     })
 
     this.on('uploadLayerImageToS3', (state, file) => {
-      var self = this
-      credsRef.once('value', snapshot => {
-        var creds = snapshot.val()
-        AWS.config.credentials = {
-          accessKeyId: creds.s3AccessKey,
-          secretAccessKey: creds.s3SecretKey}
-        var params = {
-          Bucket: s3BucketName,
-          Key: file.name,
-          ACL: 'public-read',
-          ContentType: 'image/svg+xml',
-          Body: file}
-        var s3 = new AWS.S3()
-        s3.putObject(params, (err, d) => {
-          if (err) {console.log('got error: ',err)}
-          else {
-            var imageUrl = s3UrlForImage(file.name)
-            var newLayerImage = self.newLayerImageObj(imageUrl)
-            var newLayerImageRef = layerImagesRef.push(newLayerImage)
-            var layerImageId = newLayerImageRef.key()
-            newLayerImage.id = layerImageId
-            var layerImageImm = Immutable.fromJS(newLayerImage)
-            reactor.dispatch('addLayerImage', layerImageImm)
-            reactor.dispatch('layerImageUploadedSuccessfully', layerImageImm)
-          }
-        })
-      })
+      uploadImgToS3(file, file.name,  'image/svg+xml', (err, imgUrl) => {
+        if (err) {
+          console.log('got err: ', err)
+        } else {
+          var newLayerImage = this.newLayerImageObj(imageUrl)
+          var newLayerImageRef = layerImagesRef.push(newLayerImage)
+          var layerImageId = newLayerImageRef.key()
+          newLayerImage.id = layerImageId
+          var layerImageImm = Immutable.fromJS(newLayerImage)
+          reactor.dispatch('addLayerImage', layerImageImm)
+          reactor.dispatch('layerImageUploadedSuccessfully', layerImageImm)
+        }
+      }.bind(this))
       return state
     })
   }

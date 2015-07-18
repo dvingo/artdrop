@@ -49,7 +49,7 @@ export default React.createClass({
           if (!allLayersInSvg(svgEl)) {
             let err = 'The SVG file you selected does not have all the required layers.'
             err += ` The layers are: ${svgLayerIds.join(', ')}`
-            this.setState({errors: [err]})
+            self.setState({errors: [err]})
           } else {
             self.setState({file: file})
           }
@@ -63,8 +63,6 @@ export default React.createClass({
     if (e.target.files.length > 0) {
       var file = e.target.files[0]
       var errors = []
-      var messages = []
-      var self = this
       if (file.type !== 'image/svg+xml') {
         errors.push('You can only use svg images for layers.')
       } else {

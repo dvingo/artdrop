@@ -1,3 +1,4 @@
+import {credsRef} from './firebaseRefs'
 var config = require('../../config')
 var srcDir = config.srcDir
 var s3Endpoint = config.s3Endpoint
@@ -62,6 +63,10 @@ var generateFirebaseID = (function() {
   };
 }())
 
+var s3UrlForImage = (filename) => {
+  return `${s3Endpoint}/${s3BucketName}/${filename}`
+}
+
 export default {
   imageUrlForLayer(layer) {
     return layer.getIn(['selectedLayerImage', 'imageUrl'])
@@ -77,7 +82,30 @@ export default {
                 .replace('/assets/surfaces/', '/' + srcDir + '/images/surfaces/')
   },
   newId: generateFirebaseID,
-  s3UrlForImage(filename) {
-    return `${s3Endpoint}/${s3BucketName}/${filename}`
+
+  s3UrlForImage: s3UrlForImage,
+
+  uploadImgToS3(file, filename, imgType, onComplete) {
+    credsRef.once('value', snapshot => {
+      var creds = snapshot.val()
+      AWS.config.credentials = {
+        accessKeyId: creds.s3AccessKey,
+        secretAccessKey: creds.s3SecretKey}
+      var params = {
+        Bucket: s3BucketName,
+        Key: filename,
+        ACL: 'public-read',
+        ContentType: imgType,
+        Body: file}
+      var s3 = new AWS.S3()
+      s3.putObject(params, (err, d) => {
+        if (err) {
+          console.log('got error: ',err)
+          onComplete(new Error('Failed to upload to s3.'))
+        } else {
+          onComplete(null, s3UrlForImage(filename))
+        }
+      })
+    })
   }
 }
