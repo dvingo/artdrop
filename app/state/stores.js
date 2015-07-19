@@ -271,6 +271,23 @@ stores.colorPalettesStore = new Nuclear.Store({
        })
      return state.set(colorPalette.get('id'), colorPalette.set('updatedAt', now))
    })
+
+   this.on('createNewColorPalette', (state, colorPalette) => {
+     var now = new Date().getTime()
+     var newColorObj = {
+       colorOne: colorPalette.get('colorOne'),
+       colorTwo: colorPalette.get('colorTwo'),
+       colorThree: colorPalette.get('colorThree'),
+       colorFour: colorPalette.get('colorFour'),
+       createdAt: now,
+       updatedAt: now
+     }
+     var newColorRef = colorPalettesRef.push(newColorObj)
+     newColorObj.id = newColorRef.key()
+     reactor.dispatch('addColorPalette', newColorObj)
+     return state
+   })
+
  }
 })
 

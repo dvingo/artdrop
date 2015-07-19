@@ -27,7 +27,8 @@ export default React.createClass({
 
   render() {
     var navBarStyle = {
-      border: '1px solid'
+      border: '1px solid',
+      padding: '20px 0'
     }
     var navLinkStyle = {
       margin: '0 10px'
