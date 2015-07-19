@@ -3,7 +3,7 @@ import {hydrateDesign, designPropsToIds, layerPropsToIds,
   hydrateAndDispatchSurfaces, hydrateAndDispatchLayerImages,
   hydrateAndDispatchColorPalettes} from './helpers'
 import {firebaseRef, usersRef, designsRef, layersRef, surfacesRef,
-  layerImagesRef, credsRef} from './firebaseRefs'
+  layerImagesRef, colorPalettesRef, credsRef} from './firebaseRefs'
 import reactor from './reactor'
 import getters from './getters'
 import {newId, uploadImgToS3} from './utils'
@@ -257,6 +257,19 @@ stores.colorPalettesStore = new Nuclear.Store({
    this.on('loadCurrentDesignEditResources', state => {
      hydrateAndDispatchColorPalettes(state)
      return state
+   })
+
+   this.on('saveColorPalette', (state, colorPalette) => {
+     var now = new Date().getTime()
+     colorPalettesRef.child(colorPalette.get('id'))
+       .update({
+         colorOne: colorPalette.get('colorOne'),
+         colorTwo: colorPalette.get('colorTwo'),
+         colorThree: colorPalette.get('colorThree'),
+         colorFour: colorPalette.get('colorFour'),
+         updatedAt: now
+       })
+     return state.set(colorPalette.get('id'), colorPalette.set('updatedAt', now))
    })
  }
 })

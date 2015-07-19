@@ -43,7 +43,8 @@ module.exports = {
     createNewUser(userProps) { reactor.dispatch('createNewUser', userProps) },
     createNewUserAndSetAsCurrent(userProps) { reactor.dispatch('createNewUserAndSetAsCurrent', userProps) },
     setCurrentUser(currentUser) { reactor.dispatch('setCurrentUser', currentUser) },
-    logoutCurrentUser() { reactor.dispatch('logoutCurrentUser') }
+    logoutCurrentUser() { reactor.dispatch('logoutCurrentUser') },
+    saveColorPalette(colorPalette) { reactor.dispatch('saveColorPalette', colorPalette) }
   }
 }
 
