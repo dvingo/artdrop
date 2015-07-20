@@ -1,0 +1,13 @@
+{
+  "firebase": "glaring-fire-8101",
+  "public": "hosted-dir",
+  "ignore": [
+    "firebase.json",
+    "**/.*",
+    "**/node_modules/**"
+  ],
+  "rewrites": [{
+    "source": "**",
+    "destination": "/index.html"
+  }]
+}

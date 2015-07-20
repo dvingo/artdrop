@@ -328,7 +328,7 @@ stores.layerImagesStore = new Nuclear.Store({
     })
 
     this.on('uploadLayerImageToS3', (state, file) => {
-      uploadImgToS3(file, file.name,  'image/svg+xml', (err, imgUrl) => {
+      uploadImgToS3(file, file.name,  'image/svg+xml', (err, imageUrl) => {
         if (err) {
           console.log('got err: ', err)
         } else {
