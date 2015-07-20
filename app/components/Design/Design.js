@@ -12,6 +12,11 @@ export default React.createClass({
     this.transitionTo('designDetail', {designId: this.props.design.get('id')})
   },
 
+  componentDidMount() {
+    var self = this
+    window.addEventListener('resize', () => self.forceUpdate())
+  },
+
   shouldComponentUpdate(nextProps, nextState) {
     return this.props.design !== nextProps.design
   },
@@ -26,11 +31,18 @@ export default React.createClass({
         )
       })
 
+    var imgSize = (() => {
+      var w = window.innerWidth
+       if (w > 900)      { return 180 }
+       else if (w > 650) { return 120 }
+       else              { return 100 }
+    }())
+
     return (
       <section className="show-design">
         <div className="canvas-container">
           <div className="canvas" onClick={this.selectDesign} onTouchEnd={this.selectDesign}>
-            {layerImages}
+            <img src={this.props.design.get('imageUrl')} width={imgSize} height={imgSize}/>
           </div>
         </div>
       </section>
