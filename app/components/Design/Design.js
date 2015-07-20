@@ -41,7 +41,7 @@ export default React.createClass({
     return (
       <section className="show-design">
         <div className="canvas-container">
-          <div className="canvas" onClick={this.selectDesign} onTouchEnd={this.selectDesign}>
+          <div className="canvas" onClick={this.selectDesign}>
             <img src={this.props.design.get('imageUrl')} width={imgSize} height={imgSize}/>
           </div>
         </div>

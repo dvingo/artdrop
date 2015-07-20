@@ -65,7 +65,7 @@ export default React.createClass({
               <li>add to cart</li>
             </ul>
 
-            <span className="exit" onClick={this.transitionToDesigns} onTouchEnd={this.transitionToDesigns}>
+            <span className="exit" onClick={this.transitionToDesigns}>
               <img src={iconPath('cancel-x.svg')}/>
             </span>
           </div>

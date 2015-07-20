@@ -26,8 +26,7 @@ export default React.createClass({
         .filter(layerImage => layerImage)
         .map(layerImage => {
       return (
-        <li onClick={this.selectLayerImage.bind(null, layerImage)}
-            onTouchStart={this.selectLayerImage.bind(null, layerImage)}>
+        <li onClick={this.selectLayerImage.bind(null, layerImage)}>
           <img src={imageUrlForLayerImage(layerImage)}/>
         </li>
       )
