@@ -32,9 +32,9 @@ ul, ol {
 }
 .main {
   height: 93%;
-  display: flex;
-  flex: 1 0 0;
-  flex-direction: column;
+  @include display(flex);
+  @include flex(1 0 0);
+  @include flex-direction(column);
 }
 #app {
   height: 100%;

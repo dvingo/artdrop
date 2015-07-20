@@ -3,7 +3,7 @@
   @include flex-grow($flex-zero);
   @include flex-shrink(0);
   @include flex-basis(0);
-  overflow: hidden;
+  overflow-y: auto;
 
   &.visible {
     @include flex-grow(1);

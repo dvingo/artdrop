@@ -44,10 +44,13 @@ export default {
 
   isInvalidEditStep: (validSteps, step, layerStep) => {
     var retVal = false
-    if (!validSteps.contains(step)) { retVal = true}
-    if (layerStep != null &&
-        (layerStep !== 'images' || layerStep !== 'colors')) {
-      retVal = true
+    if (step == null) {
+      if (layerStep != null &&
+          !(layerStep === 'images' || layerStep === 'colors')) {
+        retVal = true
+      }
+    } else {
+      if (!validSteps.contains(step)) { retVal = true }
     }
     return retVal
   },

@@ -1,13 +1,16 @@
+@import "./start.scss";
+@import "./choose-layer.scss";
+@import "./choose-palette.scss";
+@import "./choose-art.scss";
+@import "./choose-surface.scss";
+@import "./checkout.scss";
+@import "./detail.scss";
+@import "./layer-selector.scss";
+
 .edit-steps {
-  * { transition: flex-grow 0.5s ease-in-out 0s; }
-  @import "./checkout.scss";
-  @import "./choose-art.scss";
-  @import "./choose-layer.scss";
-  @import "./choose-palette.scss";
-  @import "./choose-surface.scss";
-  @import "./detail.scss";
-  @import "./start.scss";
-  @import "./layer-selector.scss";
+  * {
+    @include prefixer(transition, flex-grow 0.5s ease-in-out 0s, webkit moz ms o spec);
+  }
 
   @include display(flex);
   @include flex(1 0 0);

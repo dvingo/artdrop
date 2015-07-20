@@ -30,6 +30,11 @@ export default React.createClass({
     Store.actions.loadAdminColorPalettes()
   },
 
+  componentDidMount() {
+    var self = this
+    window.addEventListener('resize', () => self.forceUpdate())
+  },
+
   choosePalette(palette) {
     this.setState({
       isEditingNewPalette: false,
@@ -82,6 +87,7 @@ export default React.createClass({
   },
 
   render() {
+
     var palettes = this.state.colorPalettes.map(palette => {
       var bgColor = (
         this.state.selectedPalette &&
@@ -97,10 +103,11 @@ export default React.createClass({
     })
 
     var bgColor = (this.state.isEditingNewPalette ? 'yellow' : '#fff')
+    var margin = (window.innerWidth > 650 ? '10px 20px' : '5px')
     palettes = palettes.push(
       <div style={{display:'inline-block', border:'1px solid', background:bgColor}}
         onClick={this.handleEditNewPalette}>
-        <div style={{fontSize:12,margin:5,height:60, width:60,overflow:'hidden'}}>NEW PALETTE</div>
+        <div style={{fontSize:12,margin:margin,height:60, width:60,overflow:'hidden'}}>NEW PALETTE</div>
       </div>
     )
 
