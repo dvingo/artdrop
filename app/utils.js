@@ -66,7 +66,7 @@ export default {
       container.removeChild(currentSvg)
     }
     container.appendChild(imgClone)
-    SVGInjector(imgClone, {"each": function(svgEl) {
+    SVGInjector(imgClone, {each: function(svgEl) {
       svgEl.style.height = '100%';
       svgEl.style.width = '100%';
       svgEl.style.margin  = '0 auto';
@@ -78,7 +78,7 @@ export default {
         })
       }
       return svgEl
-    }});
+    }, evalScripts:'never'});
   },
 
   svgTextToImage: svgTextToImage,
@@ -100,7 +100,6 @@ export default {
     var ctx = canvas.getContext('2d')
     ctx.clearRect(0, 0, w, h)
     var bgColor = '#fff'
-    var compositeOperation = ctx.globalCompositeOperation
     svgs.forEach(svg => {
       ctx.drawImage(svg, 0, 0, w, h)
     })
