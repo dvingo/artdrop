@@ -303,10 +303,11 @@ stores.layerImageUploadedStore = new Nuclear.Store({
 stores.layerImagesStore = new Nuclear.Store({
   getInitialState() { return Nuclear.toImmutable({}) },
 
-  newLayerImageObj(imageUrl) {
+  newLayerImageObj(baseImageUrl, compositeImageUrl) {
     var now = new Date().getTime()
     return {
-      imageUrl: imageUrl,
+      imageUrl: baseImageUrl,
+      compositeImageUrl: compositeImageUrl,
       validOrders: [0,1,2],
       createdAt: now,
       updatedAt: now}
@@ -339,6 +340,31 @@ stores.layerImagesStore = new Nuclear.Store({
           var layerImageImm = Immutable.fromJS(newLayerImage)
           reactor.dispatch('addLayerImage', layerImageImm)
           reactor.dispatch('layerImageUploadedSuccessfully', layerImageImm)
+        }
+      }.bind(this))
+      return state
+    })
+
+    this.on('uploadLayerImageWithCompositeToS3', (state, files) => {
+      var baseFile = files.base
+      var topFile = files.top
+      uploadImgToS3(baseFile, baseFile.name,  'image/svg+xml', (err, baseImageUrl) => {
+        if (err) {
+          console.log('got err: ', err)
+        } else {
+          uploadImgToS3(topFile, topFile.name,  'image/svg+xml', (err, topImageUrl) => {
+            if (err) {
+              console.log('got err: ', err)
+            } else {
+              var newLayerImage = this.newLayerImageObj(baseImageUrl, topImageUrl)
+              var newLayerImageRef = layerImagesRef.push(newLayerImage)
+              var layerImageId = newLayerImageRef.key()
+              newLayerImage.id = layerImageId
+              var layerImageImm = Immutable.fromJS(newLayerImage)
+              reactor.dispatch('addLayerImage', layerImageImm)
+              reactor.dispatch('layerImageUploadedSuccessfully', layerImageImm)
+            }
+          }.bind(this))
         }
       }.bind(this))
       return state

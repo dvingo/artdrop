@@ -2,11 +2,12 @@ import React from 'react'
 import reactor from '../../state/reactor'
 import Store from '../../state/main'
 import RenderLayers from '../Design/RenderLayers'
+import RenderLayersCanvas from '../Design/RenderLayersCanvas'
 import ColorPalette from '../ColorPalette'
 import Immutable from 'Immutable'
 import Notification from '../Notification'
 import {imageUrlForLayer,imageUrlForLayerImage,imageUrlForSurface} from '../../state/utils'
-import {svgTextToImage, renderDesignToImage} from '../../utils'
+import {svgTextToImage, renderDesignToJpegBlob} from '../../utils'
 
 export default React.createClass({
   mixins: [reactor.ReactMixin],
@@ -81,7 +82,7 @@ export default React.createClass({
 
     if (errors.length === 0) {
       let svgEls = document.querySelectorAll('.canvas .layer svg')
-      let designJpgBlob = renderDesignToImage(400, svgEls)
+      let designJpgBlob = renderDesignToJpegBlob(400, svgEls)
       Store.actions.createNewDesign({newDesign: this.state.newDesign,
                                      jpgBlob: designJpgBlob})
       messages.push('Design successfully created.')
@@ -156,6 +157,11 @@ export default React.createClass({
 
         <div style={{height:height, width:width, position:'relative', border: '1px solid'}}>
           <RenderLayers layers={layers} width={width} height={height} />
+        </div>
+
+        <p>In Canvas:</p>
+        <div style={{height:height, width:width, position:'relative', border: '1px solid'}}>
+          <RenderLayersCanvas layers={layers}/>
         </div>
 
         <label>Select layer to edit</label>

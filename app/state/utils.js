@@ -72,6 +72,10 @@ export default {
     return layer.getIn(['selectedLayerImage', 'imageUrl'])
                 .replace('/assets/images/new/', '/' + srcDir + '/images/layers/')
   },
+  compositeImageUrlForLayer(layer) {
+    return layer.getIn(['selectedLayerImage', 'compositeImageUrl'])
+                .replace('/assets/images/new/', '/' + srcDir + '/images/layers/')
+  },
   imageUrlForLayerImage(layerImage) {
     return layerImage.get('imageUrl')
                 .replace('/assets/images/new/', '/' + srcDir + '/images/layers/')

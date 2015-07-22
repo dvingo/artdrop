@@ -83,7 +83,7 @@ export default {
 
   svgTextToImage: svgTextToImage,
 
-  renderDesignToImage(size, svgEls) {
+  renderDesignToJpegBlob(size, svgEls, compositeSvg) {
     var w = size, h = size
     var canvas = document.createElement('canvas')
     canvas.height = h
@@ -103,10 +103,78 @@ export default {
     svgs.forEach(svg => {
       ctx.drawImage(svg, 0, 0, w, h)
     })
+
+    if (compositeSvg) {
+      ctx.globalCompositeOperation = 'multiply'
+      compositeSvg.setAttribute('height', String(h))
+      compositeSvg.setAttribute('width', String(w))
+      let compositeSvg = svgTextToImage(compositeSvg)
+      ctx.drawImage(compositeSvg, 0, 0, w, h)
+    }
     //Draw a white background.
     ctx.globalCompositeOperation = "destination-over"
     ctx.fillStyle = bgColor
     ctx.fillRect(0, 0, w, h)
     return dataUriToBlob(canvas.toDataURL('image/jpeg', 1.0))
+  },
+
+  renderDesignToJpegDataUrl(size, svgEls, compositeSvg) {
+    var w = size, h = size
+    var canvas = document.createElement('canvas')
+    canvas.height = h
+    canvas.width = w
+    var svgs = (
+      toA(svgEls).map(svg => {
+        svg.setAttribute('height', String(h))
+        svg.setAttribute('width', String(w))
+        return svg
+      })
+      .map(svgTextToImage)
+    )
+
+    var ctx = canvas.getContext('2d')
+    ctx.clearRect(0, 0, w, h)
+    var bgColor = '#fff'
+    svgs.forEach(svg => {
+      ctx.drawImage(svg, 0, 0, w, h)
+    })
+
+    if (compositeSvg) {
+      ctx.globalCompositeOperation = 'multiply'
+      compositeSvg.setAttribute('height', String(h))
+      compositeSvg.setAttribute('width', String(w))
+      let compositeSvg = svgTextToImage(compositeSvg)
+      ctx.drawImage(compositeSvg, 0, 0, w, h)
+    }
+    //Draw a white background.
+    ctx.globalCompositeOperation = "destination-over"
+    ctx.fillStyle = bgColor
+    ctx.fillRect(0, 0, w, h)
+    return canvas.toDataURL('image/jpeg', 1.0)
+  },
+
+  compositeTwoImages(size, baseImg, topImg) {
+    baseImg.setAttribute('height', String(size))
+    baseImg.setAttribute('width', String(size))
+    baseImg = svgTextToImage(baseImg)
+    topImg.setAttribute('height', String(size))
+    topImg.setAttribute('width', String(size))
+    topImg = svgTextToImage(topImg)
+    var w = size, h = size
+    var canvas = document.createElement('canvas')
+    canvas.height = h
+    canvas.width = w
+    var ctx = canvas.getContext('2d')
+    ctx.clearRect(0, 0, w, h)
+    ctx.globalCompositeOperation = 'multiply'
+    var bgColor = '#fff'
+    ctx.drawImage(baseImg, 0, 0, w, h)
+    ctx.drawImage(topImg, 0, 0, w, h)
+    // Draw a white background.
+    ctx.globalCompositeOperation = "destination-over"
+    ctx.fillStyle = bgColor
+    ctx.fillRect(0, 0, w, h)
+    return canvas.toDataURL('image/jpeg', 1.0)
   }
+
 }

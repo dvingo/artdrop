@@ -32,6 +32,7 @@ module.exports = {
     selectLayerId(id)  { reactor.dispatch('selectLayerId', id) },
     selecteLayerImageId(id) { reactor.dispatch('selectLayerImageId', id) },
     uploadLayerImageToS3(file) { reactor.dispatch('uploadLayerImageToS3', file) },
+    uploadLayerImageWithCompositeToS3(files) { reactor.dispatch('uploadLayerImageWithCompositeToS3', files) },
     selectColorPaletteId(id) { reactor.dispatch('selectColorPaletteId', id) },
     selectSurfaceId(id) { reactor.dispatch('selectSurfaceId', id) },
     makeDesignCopy(newId) { reactor.dispatch('makeDesignCopy', newId) },
