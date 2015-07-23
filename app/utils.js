@@ -14,6 +14,8 @@ var svgTextToImage = (svgEl) => {
   var svgString = (new window.XMLSerializer()).serializeToString(svgEl)
   var imageString = 'data:image/svg+xml;base64,' + window.btoa(svgString)
   var img = new Image()
+  img.height = 400
+  img.width = 400
   img.src = imageString
   return img
 }
@@ -175,6 +177,32 @@ export default {
     ctx.fillStyle = bgColor
     ctx.fillRect(0, 0, w, h)
     return canvas.toDataURL('image/jpeg', 1.0)
+  },
+
+  loadSvgInline(size, imgUrl, cb) {
+    var id = 'to-replace'
+    var img = new Image(size, size)
+    img.onload = () => {
+      var idStr = '#'+id
+      console.log('to replace: ', idStr)
+      var domImg = document.querySelector('#'+id)
+      SVGInjector(domImg, {each: (svgEl) => {
+        svgEl.setAttribute('height', String(size))
+        svgEl.setAttribute('width', String(size))
+        var imageAsDataUri = svgTextToImage(svgEl)
+        imageAsDataUri.height = String(size)
+        imageAsDataUri.width = String(size)
+        cb(imageAsDataUri)
+      }, evalScripts:'never'});
+    }
+    img.src = imgUrl
+    img.style.display = 'none'
+    img.id = id
+    var oldImg = document.querySelector('#'+id)
+    if (oldImg) {
+      document.body.removeChild(oldImg)
+    }
+    document.body.appendChild(img)
   }
 
 }

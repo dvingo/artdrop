@@ -1,6 +1,7 @@
 import React from 'react'
 import SVGInlineLayer  from '../SVGInlineLayer'
 import {imageUrlForLayer, compositeImageUrlForLayer} from '../../state/utils'
+import {loadSvgInline, svgTextToImage} from '../../utils'
 
 export default React.createClass({
 
@@ -14,9 +15,11 @@ export default React.createClass({
     var w = 400, h = 400;
 
     this.props.layers.forEach((l, index) => {
-      var canvas = document.createElement('canvas')
-      var ctx = canvas.getContext('2d')
+      // clear the rect here
       if (l.get('selectedLayerImage').has('compositeImageUrl')) {
+        var canvas = document.createElement('canvas')
+        var ctx = canvas.getContext('2d')
+        console.log('has composite')
         ctx.globalCompositeOperation = 'multiply'
         var img = new Image
         img.src = imageUrlForLayer(l)
@@ -28,18 +31,32 @@ export default React.createClass({
           compImg.src = compositeImageUrlForLayer(l)
           compImg.onload = () => {
             ctx.drawImage(compImg, 0, 0, w, h)
+            // Draw a white background as well
+            ctx.globalCompositeOperation = "destination-over"
+            ctx.fillStyle = '#fff'
+            ctx.fillRect(0, 0, w, h)
             layers = self.state.layersAsJpg
             layers[index] = canvas.toDataURL('image/jpeg', 1.0)
             self.setState({layersAsJpg:layers})
           }
         }
       } else {
-        var img = new Image
-        img.src = imageUrlForLayer(l)
-        img.onload = () => ctx.drawImage(img, 0, 0, w, h)
+        console.log('DOES NOT has composite')
+        loadSvgInline(400, imageUrlForLayer(l), (svg) => {
+          console.log('drawing SVG!')
+          //svg.width = 400
+          //svg.height = 400
+          //svg.style.border = '1px solid'
+          //document.body.appendChild(svg)
+          //ctx.drawImage(svg, 0, 0, w, h)
+        // Draw a white background as well
+        //ctx.globalCompositeOperation = "destination-over"
+        //ctx.fillStyle = '#fff'
+        //ctx.fillRect(0, 0, w, h)
         layers = this.state.layersAsJpg
-        layers[index] = canvas.toDataURL('image/jpeg', 1.0)
+        layers[index] = svg
         this.setState({layersAsJpg:layers})
+        })
       }
     })
 
@@ -55,13 +72,11 @@ export default React.createClass({
     var ctx = canvas.getContext('2d')
     ctx.clearRect(0, 0, w, h)
     this.state.layersAsJpg.forEach(l => {
-      var i = new Image
-      i.src = l
-      ctx.drawImage(i, 0, 0, w, h)
+      ctx.drawImage(l, 0, 0, w, h)
     })
-    ctx.globalCompositeOperation = "destination-over"
-    ctx.fillStyle = '#fff'
-    ctx.fillRect(0, 0, w, h)
+    //ctx.globalCompositeOperation = "destination-over"
+    //ctx.fillStyle = '#fff'
+    //ctx.fillRect(0, 0, w, h)
   },
 
   render() {
