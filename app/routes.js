@@ -14,7 +14,7 @@ var Route = Router.Route
 
 export default (
   <Route handler={App}>
-
+    <NotFoundRoute handler={Designs} />
     <Router.DefaultRoute handler={Designs}/>
 
     <Route name="designs" handler={Designs} path="designs/?">
