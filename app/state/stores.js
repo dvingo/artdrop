@@ -305,12 +305,15 @@ stores.layerImagesStore = new Nuclear.Store({
 
   newLayerImageObj(baseImageUrl, compositeImageUrl) {
     var now = new Date().getTime()
-    return {
+    var retVal = {
       imageUrl: baseImageUrl,
-      compositeImageUrl: compositeImageUrl,
       validOrders: [0,1,2],
       createdAt: now,
       updatedAt: now}
+    if (compositeImageUrl) {
+      retVal.compositeImageUrl = compositeImageUrl
+    }
+    return retVal
   },
 
   initialize() {
