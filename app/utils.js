@@ -2,10 +2,10 @@ import React from 'react'
 var srcDir = require('../config').srcDir
 var SVGInjector = require('svg-injector')
 var layersToColors = {
-  'Layer_1': 'colorOne',
-  'Layer_2': 'colorTwo',
-  'Layer_3': 'colorThree',
-  'Layer_4': 'colorFour'}
+  'Layer1': 'colorOne',
+  'Layer2': 'colorTwo',
+  'Layer3': 'colorThree',
+  'Layer4': 'colorFour'}
 var svgLayerIds = Object.keys(layersToColors)
 
 var toA = (list) => Array.prototype.slice.call(list, 0)
@@ -39,8 +39,8 @@ var dataUriToBlob = (dataUri) => {
 
 export default {
 
-  iconPath: (name) => `${srcDir}/images/icons/${name}`,
-  surfacePath: (name) => `${srcDir}/images/surfaces/${name}`,
+  iconPath: (name) => `/${srcDir}/images/icons/${name}`,
+  surfacePath: (name) => `/${srcDir}/images/surfaces/${name}`,
   toA: toA,
   svgLayerIds: svgLayerIds,
 
