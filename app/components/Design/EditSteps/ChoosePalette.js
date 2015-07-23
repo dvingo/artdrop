@@ -22,9 +22,12 @@ export default React.createClass({
                       palette={palette}/>
       )
     })
+
     return (
       <section className={classNames('choose-palette', {visible: this.props.isActive})}>
-        {palettes}
+        <div className="palettes-container">
+          {palettes}
+        </div>
       </section>
     )
   }

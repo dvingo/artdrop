@@ -23,6 +23,7 @@ export default React.createClass({
             compositeFileUrl: null,
             compositeFileSvgEl: null,
             blendedImageUrl: null,
+            isUploadInProgress: false,
             errors: [],
             messages: []}
   },
@@ -31,7 +32,7 @@ export default React.createClass({
     var layerImageUploaded = this.state.layerImageUploaded
     if (layerImageUploaded != null && prevState.layerImageUploaded !== layerImageUploaded) {
       var messages = [`Layer image successfully uploaded at url: ${layerImageUploaded.get('imageUrl')}`]
-      this.setState({messages: messages})
+      this.setState({messages: messages, isUploadInProgress: false})
     }
 
     var file = this.state.file
@@ -104,7 +105,8 @@ export default React.createClass({
         base: this.state.file,
         top: this.state.compositeFile
       })
-    } else {
+    } else if (!this.state.isUploadInProgress) {
+      this.setState({isUploadInProgress: true})
       Store.actions.uploadLayerImageToS3(this.state.file)
     }
   },

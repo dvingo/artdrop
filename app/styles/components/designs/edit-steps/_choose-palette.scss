@@ -3,11 +3,28 @@
   @include flex-grow($flex-zero);
   @include flex-shrink(0);
   @include flex-basis(0);
-  @include flex-wrap(wrap);
-  margin: 2px;
-  overflow-y: auto;
-
   &:hover { cursor: pointer; }
-  &.highlighted { border: 4px solid blue; }
   &.visible { @include flex-grow(1); }
+
+  .palettes-container {
+    @include display(flex);
+    @include flex-direction(column);
+    @include flex-wrap(wrap);
+    overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    height: 77px * 3;
+
+    @media (min-width: 650px) {
+      height: 100%;
+      @include flex-direction(row);
+    }
+
+    /*& > .color-palette {*/
+      /*display: inline-block;*/
+      /*position: relative;*/
+      /*margin-right: 4px;*/
+      /*&:hover { cursor: pointer; }*/
+    /*}*/
+  }
 }

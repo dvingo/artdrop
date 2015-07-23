@@ -73,7 +73,6 @@ export default React.createClass({
             <Container/>
 
           </div>
-          <EditFooter />
         </div>
       </section>
     )

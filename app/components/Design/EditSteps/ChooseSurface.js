@@ -10,9 +10,11 @@ export default React.createClass({
     return {design: Store.getters.currentDesign,
             surfaces: Store.getters.surfaces}
   },
+
   selectSurface(surfaceId) {
     Store.actions.selectSurfaceId(surfaceId)
   },
+
   render() {
     var surfaceSize = 50
     var surfaces = this.state.surfaces.map(surface => {

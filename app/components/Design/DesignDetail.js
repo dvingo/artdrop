@@ -35,6 +35,7 @@ export default React.createClass({
     Store.actions.makeDesignCopy(newDesignId)
     this.transitionTo('designEdit', {designId: newDesignId, step: 'start'})
   },
+
   transitionToDesigns() {
     this.transitionTo('designs')
   },
@@ -70,7 +71,7 @@ export default React.createClass({
             </span>
           </div>
 
-          <div className="canvas-container">
+          <div className="canvas-container" onClick={this.transitionToEdit}>
             <div className="canvas">
               {layerImages}
             </div>
@@ -87,7 +88,7 @@ export default React.createClass({
               <li>
                 <img src={iconPath('edit-pencil.svg')} onClick={this.transitionToEdit}/>
               </li>
-              <li className="label">edit</li>
+              <li className="label">customize</li>
             </ul>
           </div>
 

@@ -4,6 +4,7 @@ import reactor from '../../../state/reactor'
 import Store from '../../../state/main'
 import {Navigation, State} from 'react-router'
 var classNames = require('classnames')
+var imgSize = 60
 
 export default React.createClass({
   mixins: [reactor.ReactMixin, Navigation, State],
@@ -13,9 +14,16 @@ export default React.createClass({
   },
   selectLayer(layerId) {
     Store.actions.selectLayerId(layerId)
+    var imagesOrColors = this.getParams().imagesOrColors
+    imagesOrColors = (imagesOrColors ? imagesOrColors : 'images')
     this.transitionTo('layerEdit', {designId: this.state.design.get('id'), layerId: layerId,
-                                    imagesOrColors: this.getParams().imagesOrColors})
+                                    imagesOrColors: imagesOrColors})
   },
+
+  editSurface() {
+    this.transitionTo('designEdit', {designId: this.state.design.get('id'), step: 'surface'})
+  },
+
   render() {
     return (
       <article className="layer-selector-wrapper small">
@@ -24,7 +32,7 @@ export default React.createClass({
             return (
               <div className="layer-selector"
                    onClick={this.selectLayer.bind(null, layer.get('id'))}>
-                <img src={imageUrlForLayer(layer)} width={40} height={40}
+                <img src={imageUrlForLayer(layer)} width={imgSize} height={imgSize}
                      className={classNames({selected: this.state.currentLayerId === layer.get('id')})}/>
               </div>
             )
@@ -32,7 +40,8 @@ export default React.createClass({
           }
           <div className="layer-selector surface">
             <img src={imageUrlForSurface(this.state.design.get('surface'))}
-                 width={40} height={40}/>
+                 onClick={this.editSurface}
+                 width={imgSize} height={imgSize}/>
           </div>
         </div>
       </article>

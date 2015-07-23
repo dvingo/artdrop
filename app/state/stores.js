@@ -393,6 +393,10 @@ stores.surfacesStore = new Nuclear.Store({
      hydrateAndDispatchSurfaces(state)
      return state
    })
+   this.on('loadCurrentDesignEditResources', state => {
+     hydrateAndDispatchSurfaces(state)
+     return state
+   })
  }
 })
 

@@ -15,8 +15,7 @@
   }
 }
 
-
-@media (min-width: 650px) {
+@media (min-width: 650px), (orientation: landscape) {
   .main.design-edit {
     @include flex-direction(row);
 

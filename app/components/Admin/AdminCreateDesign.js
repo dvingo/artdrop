@@ -159,10 +159,10 @@ export default React.createClass({
           <RenderLayers layers={layers} width={width} height={height} />
         </div>
 
-        <p>In Canvas:</p>
+        {/*<p>In Canvas:</p>
         <div style={{height:height, width:width, position:'relative', border: '1px solid'}}>
           <RenderLayersCanvas layers={layers}/>
-        </div>
+        </div>*/}
 
         <label>Select layer to edit</label>
         <div style={{padding:20}}>
