@@ -3,17 +3,15 @@
   @include flex-grow($flex-zero);
   @include flex-shrink(0);
   @include flex-basis(0);
+  overflow: scroll;
   &.visible { @include flex-grow(1); }
 
   ul {
     @include display(flex);
     @include flex-direction(column);
     @include flex-wrap(wrap);
-    overflow-x: scroll;
     -webkit-overflow-scrolling: touch;
     width: 100%;
-    height: 77px * 2;
-
     @media (min-width: 650px) {
       height: 100%;
       @include flex-direction(row);
@@ -23,31 +21,21 @@
     -webkit-margin-after: 0;
 
     li {
-      display: inline-block;
       position: relative;
       margin-right: 4px;
-      width: 75px;
+      width: 33%;
+      max-width: 150px;
       &:hover { cursor: pointer; }
 
       img {
         padding: 0;
         background-image: url('/assets/helpers/transparent.png');
         background-size: 100% 100%;
-        width: 73px;
-        height: 73px;
+        width: 100%;
+        height: 100%;
       }
       &.highlighted:before { opacity: 0; }
       &.highlighted { box-sizing: border-box; }
-      &:before {
-        content: "";
-        width: 73px;
-        height: 73px;
-        background: black;
-        z-index: 100;
-        position: absolute;
-        opacity: 0.4;
-        overflow: hidden;
-      }
     }
   }
 }

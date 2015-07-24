@@ -4,6 +4,7 @@
   @include align-items(center);
   @include justify-content(center);
   height: 100%;
+  width: 60%;
 
   &.off { display: none; }
 
@@ -21,7 +22,7 @@
   .left {
     @include display(flex);
     @include align-items(center);
-    @include justify-content(center); 
+    @include justify-content(center);
     @include flex(1 0 0);
     height: 100%;
 

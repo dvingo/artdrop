@@ -1,41 +1,39 @@
-$imgSize: 60px;
 .layer-selector-wrapper {
   @include display(flex);
-  @include flex($flex-zero 1 auto);
-  @include align-items(center);
-  margin: 0;
-  padding: 0;
+  @include flex-grow(0.2);
+  @include flex-shrink(0);
+  @include flex-basis(0);
   overflow: hidden;
+  margin: 0;
+  padding: 0 4px 0 0;
 
   .container {
     @include display(flex);
     @include flex-direction(column);
     @include flex(1 0 0);
-    @include align-items(center);
-    @include justify-content(space-around);
-    width: 68px;
-    @media (min-width: 650px) {
-      width: 100px;
-    }
+    margin: 0;
+    padding: 0;
   }
 }
 .layer-selector {
-  width: 82%;
-  padding-bottom: 80%;
-  height: 0;
-  margin-bottom: 10%;
-
+  @include display(flex);
+  @include flex-grow(1);
+  @include align-items(center);
+  @include justify-content(center);
   img {
-    width: 100%;
-    height: auto;
     border-radius: 50%;
-    margin: 0;
     opacity: 0.4;
-
-    &:hover {
-      opacity: 1;
-      cursor: pointer;
+    @media (max-width: 360px) {
+      width: 50px;
+      height: 50px;
     }
-    &.selected { opacity: 1; border: 2px solid coral; }
+    @media (orientation: landscape) and (max-height: 360px) {
+      width: 40px;
+      height: 40px;
+    }
+    &.selected {
+      opacity: 1;
+      border: 2px solid coral;
+    }
   }
 }

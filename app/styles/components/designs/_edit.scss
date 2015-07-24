@@ -18,7 +18,6 @@
 @media (min-width: 650px), (orientation: landscape) {
   .main.design-edit {
     @include flex-direction(row);
-
     .canvas-flex-wrapper {
       max-width: none;
     }
@@ -26,5 +25,13 @@
     .edit-ui {
       height: 100%;
     }
+  }
+}
+
+@media (width: 768) and (height: 1024) and (orientation: portrait) {
+  .main.design-edit {
+    @include flex-direction(column);
+    .canvas-flex-wrapper { max-width: auto; }
+    .edit-ui { height: auto; }
   }
 }

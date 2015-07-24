@@ -11,7 +11,7 @@
 
   &.visible { @include flex-grow(1); }
   &.small {
-    min-height: 50px;
+    min-height: 40px;
   }
 
   .actions {
