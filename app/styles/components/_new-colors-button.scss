@@ -1,10 +1,12 @@
 .new-colors-button {
+  -webkit-tap-highlight-color:  rgba(255, 255, 255, 0);
   @include display(flex);
   @include flex-direction(column);
   @include align-items(center);
   @include justify-content(center);
   height: 100%;
   width: 60%;
+  max-width: 210px;
 
   &.off { display: none; }
 

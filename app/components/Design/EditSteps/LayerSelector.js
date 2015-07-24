@@ -29,7 +29,6 @@ export default React.createClass({
 
   render() {
     var editingSurface = this.getParams().step === 'surface'
-      console.log('SURAF: ',editingSurface)
     return (
       <article className="layer-selector-wrapper small">
         <div className="container">
