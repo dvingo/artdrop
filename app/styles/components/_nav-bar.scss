@@ -10,23 +10,40 @@
   height: 7%;
   min-height: 35px;
   color: white;
+
+  .btn {
+    @include display(flex);
+    @include flex(1 0 0);
+    @include align-items(center);
+    @include justify-content(center);
+    color: #fff;
+    border: 2px solid;
+    border-radius: 2px;
+    font-size: 20px;
+    margin: 5px 0 5px 5px;
+    max-width: 65px;
+  }
 }
 
 .logo {
-  width: 100px;
-  img { width: 90%; }
+  margin-right: 20px;
+  img {
+    width: 30px;
+    height: 40px;
+  }
+}
+.price {
+  font-size: 25px;
+  margin-right: 20px;
 }
 
 .right-icons {
   @include display(flex);
   @include flex(3 0 0);
   @include justify-content(flex-end);
-  list-style: none;
-  -webkit-padding-before: 0;
-  -webkit-padding-after: 0;
-  -webkit-margin-start: 0;
-
-  li {
+  @include align-items(center);
+  margin-right: 5px;
+  .icon {
     width: 20px;
     margin: 0 7px;
     img { width: 100%; }

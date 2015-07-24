@@ -8,10 +8,12 @@ var imgSize = 60
 
 export default React.createClass({
   mixins: [reactor.ReactMixin, Navigation, State],
+
   getDataBindings() {
     return {currentLayerId: ['currentLayerId'],
             design: Store.getters.currentDesign}
   },
+
   selectLayer(layerId) {
     Store.actions.selectLayerId(layerId)
     var imagesOrColors = this.getParams().imagesOrColors
@@ -21,14 +23,17 @@ export default React.createClass({
   },
 
   editSurface() {
+    Store.actions.selectLayerId('')
     this.transitionTo('designEdit', {designId: this.state.design.get('id'), step: 'surface'})
   },
 
   render() {
+    var editingSurface = this.getParams().step === 'surface'
+      console.log('SURAF: ',editingSurface)
     return (
       <article className="layer-selector-wrapper small">
         <div className="container">
-          {this.state.design.get('layers').map(layer => {
+          {this.state.design.get('layers').reverse().map(layer => {
             return (
               <div className="layer-selector"
                    onClick={this.selectLayer.bind(null, layer.get('id'))}>
@@ -40,6 +45,7 @@ export default React.createClass({
           }
           <div className="layer-selector surface">
             <img src={imageUrlForSurface(this.state.design.get('surface'))}
+                 className={classNames({selected: editingSurface})}
                  onClick={this.editSurface}
                  width={imgSize} height={imgSize}/>
           </div>

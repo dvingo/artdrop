@@ -1,0 +1,13 @@
+@mixin footer-button {
+  @include display(flex);
+  @include flex(1 0 0);
+  @include align-items(center);
+  @include justify-content(center);
+  color: white;
+  border-radius: 2px;
+  height: 20px;
+  width: 100px;
+  max-width: 40px;
+  font-size: 11px;
+  margin: 5px 0 5px 5px;
+}

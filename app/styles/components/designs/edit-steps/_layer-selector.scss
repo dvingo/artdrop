@@ -21,7 +21,7 @@
   @include align-items(center);
   @include justify-content(center);
   img {
-    border-radius: 50%;
+    border-radius: 10px;
     opacity: 0.4;
     @media (max-width: 360px) {
       width: 50px;
@@ -33,7 +33,7 @@
     }
     &.selected {
       opacity: 1;
-      border: 2px solid coral;
+      border: 2px solid $color5;
     }
   }
 }
