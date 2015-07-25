@@ -3,6 +3,7 @@ var config = require('../../config')
 var srcDir = config.srcDir
 var s3Endpoint = config.s3Endpoint
 var s3BucketName = config.s3BucketName
+var hostname = config.env === 'dev' ? config.devHostname + ':' + config.devPort : config.prodHostname
 /**
  * From: https://gist.github.com/mikelehen/3596a30bd69384624c11
  * Fancy ID generator that creates 20-character string identifiers with the following properties:
@@ -67,19 +68,30 @@ var s3UrlForImage = (filename) => {
   return `${s3Endpoint}/${s3BucketName}/${filename}`
 }
 
+var imageUrlForLayerImage = (layerImage) => {
+  var filename = (layerImage.has('filename')
+      ? layerImage.get('filename')
+      : layerImage.get('imageUrl').split('/').pop())
+  return hostname + '/images/' + filename
+}
+
 export default {
+  imageUrlForDesign(design) {
+    var filename = (design.has('filename')
+        ? design.get('filename')
+        : design.get('imageUrl').split('/').pop())
+    return hostname + '/images/' + filename
+  },
+
   imageUrlForLayer(layer) {
-    return layer.getIn(['selectedLayerImage', 'imageUrl'])
-                .replace('/assets/images/new/', '/' + srcDir + '/images/layers/')
+    return imageUrlForLayerImage(layer.get('selectedLayerImage'))
   },
   compositeImageUrlForLayer(layer) {
     return layer.getIn(['selectedLayerImage', 'compositeImageUrl'])
                 .replace('/assets/images/new/', '/' + srcDir + '/images/layers/')
   },
-  imageUrlForLayerImage(layerImage) {
-    return layerImage.get('imageUrl')
-                .replace('/assets/images/new/', '/' + srcDir + '/images/layers/')
-  },
+  imageUrlForLayerImage: imageUrlForLayerImage,
+
   imageUrlForSurface(surface) {
     if (surface == null) { return null }
     return surface.get('imageUrl')

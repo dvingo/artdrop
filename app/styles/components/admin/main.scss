@@ -1,7 +1,7 @@
 .admin {
   @import "../designs/edit-steps/choose-palette.scss";
   .choose-palette {
-    flex-wrap: wrap;
+    @include flex-wrap(wrap);
   }
 
   .select-layer-image {

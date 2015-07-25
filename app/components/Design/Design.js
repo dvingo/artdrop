@@ -2,7 +2,7 @@ import React from 'react';
 import {Navigation} from 'react-router';
 import State from '../../state/main';
 import SVGInlineLayer  from '../SVGInlineLayer'
-import {imageUrlForLayer} from '../../state/utils';
+import {imageUrlForDesign} from '../../state/utils';
 
 export default React.createClass({
   mixins: [Navigation],
@@ -42,7 +42,7 @@ export default React.createClass({
       <section className="show-design">
         <div className="canvas-container">
           <div className="canvas" onClick={this.selectDesign}>
-            <img src={this.props.design.get('imageUrl')} width={imgSize} height={imgSize}/>
+            <img src={imageUrlForDesign(this.props.design)} width={imgSize} height={imgSize}/>
           </div>
         </div>
       </section>

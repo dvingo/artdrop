@@ -303,15 +303,17 @@ stores.layerImageUploadedStore = new Nuclear.Store({
 stores.layerImagesStore = new Nuclear.Store({
   getInitialState() { return Nuclear.toImmutable({}) },
 
-  newLayerImageObj(baseImageUrl, compositeImageUrl) {
+  newLayerImageObj(filename, baseImageUrl, compositeImageUrl, compositeFilename) {
     var now = new Date().getTime()
     var retVal = {
+      filename: filename,
       imageUrl: baseImageUrl,
       validOrders: [0,1,2],
       createdAt: now,
       updatedAt: now}
     if (compositeImageUrl) {
       retVal.compositeImageUrl = compositeImageUrl
+      retVal.compositeFilename = compositeFilename
     }
     return retVal
   },
@@ -341,7 +343,7 @@ stores.layerImagesStore = new Nuclear.Store({
         if (err) {
           console.log('got err: ', err)
         } else {
-          var newLayerImage = this.newLayerImageObj(imageUrl)
+          var newLayerImage = this.newLayerImageObj(file.name, imageUrl)
           var newLayerImageRef = layerImagesRef.push(newLayerImage)
           var layerImageId = newLayerImageRef.key()
           newLayerImage.id = layerImageId
@@ -364,7 +366,7 @@ stores.layerImagesStore = new Nuclear.Store({
             if (err) {
               console.log('got err: ', err)
             } else {
-              var newLayerImage = this.newLayerImageObj(baseImageUrl, topImageUrl)
+              var newLayerImage = this.newLayerImageObj(baseFile.name, baseImageUrl, topImageUrl, topFile.name)
               var newLayerImageRef = layerImagesRef.push(newLayerImage)
               var layerImageId = newLayerImageRef.key()
               newLayerImage.id = layerImageId
