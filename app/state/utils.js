@@ -4,6 +4,8 @@ var srcDir = config.srcDir
 var s3Endpoint = config.s3Endpoint
 var s3BucketName = config.s3BucketName
 var hostname = config.env === 'dev' ? config.devHostname + ':' + config.devPort : config.prodHostname
+var scheme = window.location.protocol
+hostname = scheme + '//' + hostname
 /**
  * From: https://gist.github.com/mikelehen/3596a30bd69384624c11
  * Fancy ID generator that creates 20-character string identifiers with the following properties:
