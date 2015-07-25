@@ -326,6 +326,11 @@ stores.layerImagesStore = new Nuclear.Store({
       return state
     })
 
+    this.on('loadAdminLayerImages', state => {
+      hydrateAndDispatchLayerImages(state)
+      return state
+    })
+
     this.on('loadCurrentDesignEditResources', state => {
       hydrateAndDispatchLayerImages(state)
       return state

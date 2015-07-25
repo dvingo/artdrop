@@ -42,6 +42,7 @@ export default React.createClass({
             <Link to="adminColorPalettes" style={navLinkStyle}>Color Palettes</Link>
             <Link to="adminCreateDesign" style={navLinkStyle}>Create Design</Link>
             <Link to="adminCreateLayerImage" style={navLinkStyle}>Upload Layer Image</Link>
+            <Link to="adminLayerImages" style={navLinkStyle}>Edit Layer Images</Link>
             <button onClick={this.logoutCurrentUser}>Logout</button>
           </div>
           <RouteHandler/>

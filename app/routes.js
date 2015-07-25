@@ -1,5 +1,6 @@
 import Admin from './components/Admin'
 import AdminDesigns from './components/Admin/AdminDesigns'
+import AdminLayerImages from './components/Admin/AdminLayerImages'
 import AdminColorPalettes from './components/Admin/AdminColorPalettes'
 import AdminUsers from './components/Admin/AdminUsers'
 import AdminCreateDesign from './components/Admin/AdminCreateDesign'
@@ -25,6 +26,7 @@ export default (
 
     <Route name="admin" handler={Admin} path="admin/?">
       <Route name="adminDesigns" handler={AdminDesigns} path="designs/?"/>
+      <Route name="adminLayerImages" handler={AdminLayerImages} path="layerImages/?"/>
       <Route name="adminColorPalettes" handler={AdminColorPalettes} path="colorPalettes/?"/>
       <Route name="adminUsers" handler={AdminUsers} path="users/?"/>
       <Route name="adminCreateDesign" handler={AdminCreateDesign} path="createDesign/?"/>
