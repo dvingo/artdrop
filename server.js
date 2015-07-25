@@ -16,7 +16,7 @@ app.use(express.static('hosted-dir'))
 app.get('/*', function(req, res) {
   res.sendFile(__dirname + '/hosted-dir/index.html')
 })
-var port = config.devPort
+var port = (config.env === 'dev' ? config.devPort : 80)
 var server = app.listen(port, function() {
   var host = server.address().address;
   var port = server.address().port;
