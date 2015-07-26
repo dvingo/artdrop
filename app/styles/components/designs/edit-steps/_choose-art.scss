@@ -8,6 +8,7 @@
 
   ul {
     @include display(flex);
+    display: flex !important;
     @include flex-direction(column);
     @include flex-wrap(wrap);
     -webkit-overflow-scrolling: touch;

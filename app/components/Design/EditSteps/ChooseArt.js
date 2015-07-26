@@ -32,8 +32,12 @@ export default React.createClass({
     var bodyWidth = document.body.clientWidth
     var bodyHeight = document.body.clientHeight
     var ul = React.findDOMNode(this.refs.ul)
-    var isLandscape = (bodyWidth > 650 || bodyWidth > bodyHeight)
-    return (isLandscape ? ul.clientWidth : ul.clientHeight)
+    if (ul != null) {
+      var isLandscape = (bodyWidth > 650 || bodyWidth > bodyHeight)
+      return (isLandscape ? ul.clientWidth : ul.clientHeight)
+    } else {
+      return 200
+     }
   },
 
   updateImageSizes(previousUlSize) {
