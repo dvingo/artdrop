@@ -3,8 +3,8 @@
   @include flex-grow($flex-zero);
   @include flex-shrink(0);
   @include flex-basis(0);
-  overflow: scroll;
   &.visible { @include flex-grow(1); }
+  overflow: auto;
 
   ul {
     @include display(flex);
@@ -12,6 +12,7 @@
     @include flex-wrap(wrap);
     -webkit-overflow-scrolling: touch;
     width: 100%;
+    overflow: auto;
     @media (min-width: 650px) {
       height: 100%;
       @include flex-direction(row);
@@ -22,18 +23,8 @@
 
     li {
       position: relative;
-      margin-right: 4px;
-      width: 33%;
-      max-width: 150px;
       &:hover { cursor: pointer; }
-
-      img {
-        padding: 0;
-        background-image: url('/assets/helpers/transparent.png');
-        background-size: 100% 100%;
-        width: 100%;
-        height: 100%;
-      }
+      img { padding: 0; }
       &.highlighted:before { opacity: 0; }
       &.highlighted { box-sizing: border-box; }
     }
