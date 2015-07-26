@@ -8,6 +8,9 @@ function s3Url(filename) {
 }
 
 app.get('/images/:imageName', function(req, res) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With, Content-Length");
+  res.header("Access-Control-Expose-Headers", "Content-Length");
   request(s3Url(req.params.imageName)).pipe(res)
 })
 
@@ -16,6 +19,7 @@ app.use(express.static('hosted-dir'))
 app.get('/*', function(req, res) {
   res.sendFile(__dirname + '/hosted-dir/index.html')
 })
+
 var port = process.env.PORT || config.devPort
 var server = app.listen(port, function() {
   var host = server.address().address;
