@@ -3,7 +3,7 @@ import Modal from '../Modal'
 import reactor from '../../state/reactor'
 import getters from '../../state/getters'
 import Store from '../../state/main'
-import {newId} from '../../state/utils'
+import {imageUrlForDesign, imageUrlForLayer, newId} from '../../state/utils'
 import {Navigation} from 'react-router';
 import {iconPath} from '../../utils';
 import SVGInlineLayer  from '../SVGInlineLayer'
@@ -20,6 +20,13 @@ export default React.createClass({
 
   componentWillMount() {
     Store.actions.selectDesignId(this.props.params.designId)
+    // Preload svg layer images, to be used for edit screen.
+    if (this.state.design != null) {
+      this.state.design.get('layers').forEach(layer => {
+        var liImage = new Image
+        liImage.src = imageUrlForLayer(layer)
+      })
+    }
   },
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -44,15 +51,6 @@ export default React.createClass({
     var currentDesign = reactor.evaluate(getters.currentDesign)
     if (currentDesign == null) { return null }
 
-    let layerImages = currentDesign.get('layers').map(
-      layer => {
-        return (
-          <div className="layer" key={layer.get('id')}>
-            <SVGInlineLayer layer={layer}/>
-          </div>
-        )
-      })
-
     return (
       <Modal isOpen={true}>
         <section className="show-design">
@@ -73,7 +71,7 @@ export default React.createClass({
 
           <div className="canvas-container" onClick={this.transitionToEdit}>
             <div className="canvas">
-              {layerImages}
+              <img src={imageUrlForDesign(this.state.design)} width='100%'/>
             </div>
           </div>
 

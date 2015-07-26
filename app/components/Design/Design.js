@@ -22,15 +22,6 @@ export default React.createClass({
   },
 
   render() {
-    let layerImages = this.props.design.get('layers')
-      .map(layer => {
-        return (
-          <div className="layer" key={layer.get('id')}>
-            <SVGInlineLayer layer={layer}/>
-          </div>
-        )
-      })
-
     var imgSize = (() => {
       var w = window.innerWidth
        if (w > 900)      { return 180 }
