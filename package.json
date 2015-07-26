@@ -39,6 +39,7 @@
   },
   "dependencies": {
     "classnames": "^2.1.2",
+    "cors": "^2.7.1",
     "css-loader": "^0.14.4",
     "express": "^4.13.1",
     "immutable": "^3.7.3",

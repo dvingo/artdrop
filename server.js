@@ -1,16 +1,22 @@
 var express = require('express')
 var app = express()
 var request = require('request')
+var cors = require('cors')
 var config = require('./config')
 
 function s3Url(filename) {
   return [config.s3Endpoint, config.s3BucketName, filename].join('/')
 }
 
-app.get('/images/:imageName', function(req, res) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With, Content-Length");
-  res.header("Access-Control-Expose-Headers", "Content-Length");
+//var corsRequest = request.defaults({
+  //headers: {
+    //"Access-Control-Allow-Origin": "*",
+    //"Access-Control-Allow-Headers": "X-Requested-With, Content-Length",
+    //"Access-Control-Expose-Headers": "Content-Length"
+  //}
+//})
+
+app.get('/images/:imageName', cors(), function(req, res) {
   request(s3Url(req.params.imageName)).pipe(res)
 })
 
