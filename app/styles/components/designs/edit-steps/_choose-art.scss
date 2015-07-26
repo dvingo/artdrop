@@ -14,7 +14,7 @@
     -webkit-overflow-scrolling: touch;
     width: 100%;
     overflow: auto;
-    @media (min-width: 650px) {
+    @media (min-width: 650px), (orientation: landscape) {
       @include flex-direction(row);
     }
     -webkit-padding-start: 0;
