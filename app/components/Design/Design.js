@@ -14,7 +14,11 @@ export default React.createClass({
 
   componentDidMount() {
     var self = this
-    window.addEventListener('resize', () => self.forceUpdate())
+    window.addEventListener('resize', () => {
+      if (self.isMounted()) {
+        self.forceUpdate()
+      }
+    })
   },
 
   shouldComponentUpdate(nextProps, nextState) {

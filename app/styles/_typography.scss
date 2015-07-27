@@ -1,3 +1,8 @@
+@font-face {
+  font-family: circular;
+  src: url(/app/fonts/circular/circular-medium.otf);
+}
+
 body {
-  font-family: Helvetica, sans-serif;
+  font-family: circular, Helvetica, sans-serif;
 }

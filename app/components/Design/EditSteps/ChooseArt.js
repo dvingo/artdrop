@@ -18,7 +18,11 @@ export default React.createClass({
 
   componentDidMount() {
     var self = this
-    window.addEventListener('resize', () => self.forceUpdate())
+    window.addEventListener('resize', () => {
+      if (self.isMounted()) {
+        self.forceUpdate()
+      }
+    })
     setTimeout(() => self.updateImageSizes(-1), delay)
   },
 
