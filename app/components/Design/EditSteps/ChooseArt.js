@@ -3,6 +3,7 @@ import Store from '../../../state/main'
 import reactor from '../../../state/reactor'
 import {imageUrlForLayerImage} from '../../../state/utils'
 var classNames = require('classnames')
+var delay = 60
 
 export default React.createClass({
   mixins: [reactor.ReactMixin],
@@ -12,19 +13,34 @@ export default React.createClass({
   },
 
   getInitialState() {
-    return { liSize: 105,
-             ulSize: 210 }
+    return { liSize: 105, ulSize: 210 }
   },
 
   componentDidMount() {
     var self = this
     window.addEventListener('resize', () => self.forceUpdate())
-    this.updateImageSizes(0)
+    setTimeout(() => self.updateImageSizes(-1), delay)
   },
 
   componentWillMount() {
     if (this.props.layerId) {
       Store.actions.selectLayerId(this.props.layerId)
+    }
+  },
+
+  componentDidUpdate(prevProps, prevState) {
+    var self = this
+    setTimeout(() => self.updateImageSizes(prevState.ulSize), delay)
+  },
+
+  updateImageSizes(previousUlSize) {
+    var ulSize = this.currentUlSize()
+    if (ulSize === 0) {
+      var self = this;
+      setTimeout(() => self.updateImageSizes(-1), delay)
+    }
+    if (previousUlSize !== ulSize) {
+      this.setState({ulSize: ulSize, liSize: Number(((ulSize - 2) / 2).toFixed(0))})
     }
   },
 
@@ -38,17 +54,6 @@ export default React.createClass({
     } else {
       return 200
      }
-  },
-
-  updateImageSizes(previousUlSize) {
-    var ulSize = this.currentUlSize()
-    if (previousUlSize !== ulSize) {
-      this.setState({ulSize: ulSize, liSize: Number(((ulSize - 2) / 2).toFixed(0))})
-    }
-  },
-
-  componentDidUpdate(prevProps, prevState) {
-    this.updateImageSizes(prevState.ulSize)
   },
 
   selectLayerImage(layerImage) {
