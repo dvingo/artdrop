@@ -21,7 +21,14 @@ getters.currentLayer = [
 ]
 
 getters.layerImages = [
-  ['layerImages'], layerImages => layerImages.toList()
+  ['layerImages'], layerImages => {
+    return (
+      layerImages
+        .toList()
+        .filter(layerImage => layerImage)
+        .sort((imageOne, imageTwo) => imageTwo.get('createdAt') - imageOne.get('createdAt'))
+    )
+  }
 ]
 
 getters.layerImageIds = [

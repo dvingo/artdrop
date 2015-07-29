@@ -379,6 +379,11 @@ stores.layerImagesStore = new Nuclear.Store({
       }.bind(this))
       return state
     })
+
+    this.on('deleteLayerImage', (state, layerImage) => {
+      layerImagesRef.child(layerImage.get('id')).remove()
+      return state.delete(layerImage.get('id'))
+    })
   }
 })
 

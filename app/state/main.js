@@ -31,6 +31,7 @@ module.exports = {
     nextDesignColors() { reactor.dispatch('nextDesignColors') },
     selectLayerId(id)  { reactor.dispatch('selectLayerId', id) },
     selecteLayerImageId(id) { reactor.dispatch('selectLayerImageId', id) },
+    deleteLayerImage(layerImage) { reactor.dispatch('deleteLayerImage', layerImage) },
     uploadLayerImageToS3(file) { reactor.dispatch('uploadLayerImageToS3', file) },
     uploadLayerImageWithCompositeToS3(files) { reactor.dispatch('uploadLayerImageWithCompositeToS3', files) },
     selectColorPaletteId(id) { reactor.dispatch('selectColorPaletteId', id) },

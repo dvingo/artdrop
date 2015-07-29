@@ -16,7 +16,9 @@ export default React.createClass({
   getInitialState() {
     return {selectedLayerImage: null,
             errors: [],
-            messages: []}
+            messages: [],
+            showDeleteConfirmation: false,
+            confirmDeleteText: ''}
   },
 
   componentWillMount() {
@@ -24,7 +26,20 @@ export default React.createClass({
   },
 
   selectLayerImage(layerImage) {
-    this.setState({selectedLayerImage:layerImage})
+    this.setState({selectedLayerImage:layerImage, confirmDeleteText: '', showDeleteConfirmation: false})
+  },
+
+  handleShowDeleteConfirmation(){
+     this.setState({showDeleteConfirmation: true})
+  },
+
+  confirmedDeleteSelectedLayerImage() {
+    Store.actions.deleteLayerImage(this.state.selectedLayerImage)
+    this.setState({selectedLayerImage: null, confirmDeleteText: '', showDeleteConfirmation: false})
+  },
+
+  onConfirmDeleteChange(e) {
+    this.setState({confirmDeleteText: e.target.value})
   },
 
   render() {
@@ -38,8 +53,6 @@ export default React.createClass({
     })
 
     var layerImages = this.state.layerImages
-        .filter(layerImage => layerImage)
-        .sort((imageOne, imageTwo) => imageTwo.get('createdAt') - imageOne.get('createdAt'))
         .map(layerImage => {
       var border = this.state.selectedLayerImage === layerImage ? '2px solid' : 'none'
       return (
@@ -56,6 +69,7 @@ export default React.createClass({
     var selectedLayerImage = this.state.selectedLayerImage
     var selectedLayerImageInfo = selectedLayerImage ? (
         <div style={{margin: '20px 0'}}>
+          <img src={imageUrlForLayerImage(selectedLayerImage)} height={200} width={200}/>
           <div style={rowStyle}>
             <div style={labelStyle}>Created:</div>
             <div style={infoStyle}>{new Date(selectedLayerImage.get('createdAt')).toString()}</div>
@@ -65,7 +79,22 @@ export default React.createClass({
             <div style={infoStyle}>{new Date(selectedLayerImage.get('updatedAt')).toString()}</div>
           </div>
           <div style={rowStyle}>
-          <div style={labelStyle}>Image URL:</div><div style={infoStyle}>{selectedLayerImage.get('imageUrl')}</div>
+            <div style={labelStyle}>Image URL:</div><div style={infoStyle}>{selectedLayerImage.get('imageUrl')}</div>
+          </div>
+          <div style={rowStyle}>
+
+            {!this.state.showDeleteConfirmation ?
+              <button onClick={this.handleShowDeleteConfirmation}>DELETE</button> : null}
+
+            {this.state.showDeleteConfirmation ? (
+              <div>
+                <label>Enter 'yes' to confirm.</label>
+                <input type="text" value={this.state.confirmDeleteText} onChange={this.onConfirmDeleteChange}/>
+                {this.state.confirmDeleteText === 'yes' ?
+                    <button onClick={this.confirmedDeleteSelectedLayerImage}>REALLY DELETE</button> : null}
+              </div>
+              ) : null}
+
           </div>
         </div>
     ) : null

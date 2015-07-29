@@ -111,7 +111,6 @@ export default React.createClass({
     })
 
     var layerImages = this.state.layerImages
-        .filter(layerImage => layerImage)
         .map(layerImage => {
       var bg = (this.state.newDesign.getIn(['layers',this.state.currentLayer,
                   'selectedLayerImage']) === layerImage ? 'yellow' : '#fff')
