@@ -38,13 +38,15 @@ export default React.createClass({
   },
 
   updateImageSizes(previousUlSize) {
-    var ulSize = this.currentUlSize()
-    if (ulSize === 0) {
-      var self = this;
-      setTimeout(() => self.updateImageSizes(-1), delay)
-    }
-    if (previousUlSize !== ulSize) {
-      this.setState({ulSize: ulSize, liSize: Number(((ulSize - 2) / 2).toFixed(0))})
+    if (this.isMounted()) {
+      var ulSize = this.currentUlSize()
+      if (ulSize === 0) {
+        var self = this;
+        setTimeout(() => self.updateImageSizes(-1), delay)
+      }
+      if (previousUlSize !== ulSize) {
+        this.setState({ulSize: ulSize, liSize: Number(((ulSize - 2) / 2).toFixed(0))})
+      }
     }
   },
 

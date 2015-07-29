@@ -12,7 +12,8 @@ getters.currentDesign = [
   (currentDesignId, designsMap) => designsMap.get(currentDesignId)
 ]
 
-getters.colorPalettes = [['colorPalettes'], palettes => palettes.toList()]
+getters.colorPalettes = [['colorPalettes'],
+  palettes => palettes.toList().sort((colorOne, colorTwo) => colorTwo.get('createdAt') - colorOne.get('createdAt'))]
 
 getters.currentLayer = [
   ['currentLayerId'],

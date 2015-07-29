@@ -1,5 +1,6 @@
+var config = require('../../config')
 var exports = {}
-var fireBaseUri = "https://glaring-fire-8101.firebaseio.com"
+var fireBaseUri = config.fireBaseUri
 exports.fireBaseUri = fireBaseUri
 // TODO At this point, check for Firebase availability,
 // or bundle it into the local build.

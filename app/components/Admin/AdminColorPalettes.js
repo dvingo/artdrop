@@ -47,6 +47,12 @@ export default React.createClass({
     })
   },
 
+  handleDelete(e) {
+    e.preventDefault()
+    this.setState({selectedPalette: null, tempPalette: null})
+    Store.actions.deleteColorPalette(this.state.selectedPalette)
+  },
+
   handleEditNewPalette() {
     this.setState({
       isEditingNewPalette: true,
@@ -118,46 +124,48 @@ export default React.createClass({
         let colorThree = this.state.tempPalette.get('colorThree')
         let colorFour = this.state.tempPalette.get('colorFour')
         return (
-          <form style={{border: '1px solid'}} onSubmit={this.handleSavePalette}>
+          <form style={{border: '1px solid', padding: '20px 10px'}} onSubmit={this.handleSavePalette}>
+            <div>
+              <label>Color One</label>
+              <input type="color" value={colorOne} onChange={this.handleColorChange.bind(null, 'colorOne')}/>
+              <input type="text" value={this.state.tempColorOne}
+                onChange={this.handleColorChange.bind(null, 'colorOne')}/>
+              <div style={{width:20,height:20,background:colorOne,display:'inline-block'}}/>
+              <span>{colorOne}</span>
+            </div>
 
-           <div>
-             <label>Color One</label>
-             <input type="color" value={colorOne} onChange={this.handleColorChange.bind(null, 'colorOne')}/>
-             <input type="text" value={this.state.tempColorOne}
-               onChange={this.handleColorChange.bind(null, 'colorOne')}/>
-             <div style={{width:20,height:20,background:colorOne,display:'inline-block'}}/>
-             <span>{colorOne}</span>
-           </div>
+            <div>
+              <label>Color Two</label>
+              <input type="color" value={colorTwo} onChange={this.handleColorChange.bind(null, 'colorTwo')}/>
+              <input type="text" value={this.state.tempColorTwo}
+                onChange={this.handleColorChange.bind(null, 'colorTwo')}/>
+              <div style={{width:20,height:20,background:colorTwo,display:'inline-block'}}/>
+              <span>{colorTwo}</span>
+            </div>
 
-           <div>
-             <label>Color Two</label>
-             <input type="color" value={colorTwo} onChange={this.handleColorChange.bind(null, 'colorTwo')}/>
-             <input type="text" value={this.state.tempColorTwo}
-               onChange={this.handleColorChange.bind(null, 'colorTwo')}/>
-             <div style={{width:20,height:20,background:colorTwo,display:'inline-block'}}/>
-             <span>{colorTwo}</span>
-           </div>
+            <div>
+              <label>Color Three</label>
+              <input type="color" value={colorThree} onChange={this.handleColorChange.bind(null, 'colorThree')}/>
+              <input type="text" value={this.state.tempColorThree}
+                onChange={this.handleColorChange.bind(null, 'colorThree')}/>
+              <div style={{width:20,height:20,background:colorThree,display:'inline-block'}}/>
+              <span>{colorThree}</span>
+            </div>
 
-           <div>
-             <label>Color Three</label>
-             <input type="color" value={colorThree} onChange={this.handleColorChange.bind(null, 'colorThree')}/>
-             <input type="text" value={this.state.tempColorThree}
-               onChange={this.handleColorChange.bind(null, 'colorThree')}/>
-             <div style={{width:20,height:20,background:colorThree,display:'inline-block'}}/>
-             <span>{colorThree}</span>
-           </div>
+            <div>
+              <label>Color Four</label>
+              <input type="color" value={colorFour} onChange={this.handleColorChange.bind(null, 'colorFour')}/>
+              <input type="text" value={this.state.tempColorFour}
+                 onChange={this.handleColorChange.bind(null, 'colorFour')}/>
+              <div style={{width:20,height:20,background:colorFour,display:'inline-block'}}/>
+              <span>{colorFour}</span>
+            </div>
 
-           <div>
-             <label>Color Four</label>
-             <input type="color" value={colorFour} onChange={this.handleColorChange.bind(null, 'colorFour')}/>
-             <input type="text" value={this.state.tempColorFour}
-                onChange={this.handleColorChange.bind(null, 'colorFour')}/>
-             <div style={{width:20,height:20,background:colorFour,display:'inline-block'}}/>
-             <span>{colorFour}</span>
-           </div>
-
-           <ColorPalette palette={this.state.tempPalette}/>
-           <input type="submit" value="save"/>
+            <ColorPalette palette={this.state.tempPalette}/>
+            <div style={{width:'50%'}}>
+              <input type="submit" value="Save" style={{marginRight:20}}/>
+              <button onClick={this.handleDelete}>DELETE</button>
+            </div>
 
           </form>
         )

@@ -95,7 +95,15 @@ stores.designsStore = new Nuclear.Store({
   initialize() {
    this.on('addDesign', function(state, design) {
      if (!state.has(design.id)) {
-       return state.set(design.id, Immutable.fromJS(design));
+       return state.set(design.id, Immutable.fromJS(design))
+     }
+     return state
+   })
+
+   this.on('deleteDesign', function(state, design) {
+     if (state.has(design.id)) {
+       designsRef.child(d.get('id')).remove()
+       return state.remove(design.get('id'))
      }
      return state
    })
@@ -244,6 +252,21 @@ stores.colorPalettesStore = new Nuclear.Store({
      return state.set(colorPalette.id, Immutable.fromJS(colorPalette));
    })
 
+   this.on('deleteColorPalette', (state, colorPalette) => {
+     var colorPalettes = reactor.evaluate(getters.colorPalettes)
+     var replacementColorPalette = colorPalettes.find(color => color.get('id') !== colorPalette.get('id'))
+     layersRef.orderByChild('colorPalette').equalTo(colorPalette.get('id')).on('value', snapshot => {
+       var layers = snapshot.val()
+       if (layers) {
+         Object.keys(layers).forEach(layerId => {
+           layersRef.child(layerId).update({colorPalette: replacementColorPalette.get('id')})
+         })
+       }
+     })
+     colorPalettesRef.child(colorPalette.get('id')).remove()
+     return state.remove(colorPalette.get('id'))
+   })
+
    this.on('loadAdminCreateDesignData', state => {
      hydrateAndDispatchColorPalettes(state)
      return state
@@ -381,7 +404,12 @@ stores.layerImagesStore = new Nuclear.Store({
     })
 
     this.on('deleteLayerImage', (state, layerImage) => {
-      layerImagesRef.child(layerImage.get('id')).remove()
+      var layerImageId = layerImage.get('id')
+      var designsToDelete = reactor.evaluate(['designs']).filter(d => {
+        return d.get('layers').some(layer => layer.getIn(['selectedLayerImage', 'id']) === layerImageId)
+      })
+      designsToDelete.forEach(d => reactor.dispatch('deleteDesign', d))
+      layerImagesRef.child(layerImageId).remove()
       return state.delete(layerImage.get('id'))
     })
   }
