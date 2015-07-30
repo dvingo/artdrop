@@ -16,6 +16,10 @@ export default React.createClass({
     return { liSize: 105, ulSize: 210 }
   },
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.state !== nextState || this.props !== nextProps
+  },
+
   componentDidMount() {
     var self = this
     window.addEventListener('resize', () => {

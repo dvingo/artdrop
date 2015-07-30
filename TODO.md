@@ -35,6 +35,8 @@ $design-large-size: 180px;
   - All data should be lazy loaded, the homepage calls hydrateDesign for all admin designs, this is blocking the
     homepage from loading until all resources for all designs are loaded. We should just load the designs and show the images
     immediately. When someone clicks on a design, then load its dependent data.
+  - ChooseArt - we should limit the max number of possible layerImages, as downloading hundreds of images is too many.
+    - We could also lazy load them somehow. Load the first 30, then when you scroll to the end, load the next 30 etc.
 
 # Firebase
   - Script to delete any non admin created designs that are older than 2 days.
