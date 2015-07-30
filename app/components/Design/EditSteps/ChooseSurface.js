@@ -16,15 +16,13 @@ export default React.createClass({
   },
 
   render() {
-    var surfaceSize = 50
+    var surfaceSize = 100
     var surfaces = this.state.surfaces.map(surface => {
       var highlight = surface.get('id') === this.state.design.getIn(['surface','id'])
       return (
         <li className="material" onClick={this.selectSurface.bind(null, surface.get('id'))}>
           <span style={{fontWeight: highlight?'bold':'normal'}}>{surface.get('title')}</span>
-          <span>
-            <img src={imageUrlForSurface(surface)} height={surfaceSize} width={surfaceSize}/>
-          </span>
+          <img src={imageUrlForSurface(surface)} height={surfaceSize} width={surfaceSize}/>
         </li>
       )
     })

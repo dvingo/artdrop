@@ -15,7 +15,7 @@
   }
 }
 
-@media (min-width: 650px), (orientation: landscape) {
+@media (min-width: $media-min-width), (orientation: landscape) {
   .main.design-edit {
     @include flex-direction(row);
     .canvas-flex-wrapper {

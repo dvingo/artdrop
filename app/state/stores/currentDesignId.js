@@ -12,23 +12,20 @@ var designIsNotHydrated = (designId) => {
   return false
 }
 
-var currentlyHydratingDesignId = null
-
 export default new Nuclear.Store({
   getInitialState() { return '' },
 
   initialize() {
     this.on('selectDesignId', (state, designId) => {
-      if (currentlyHydratingDesignId === designId) {
+      if (state === designId) {
         return designId
       }
       var designs = reactor.evaluate(['designs'])
       if (!designs.has(designId) || designIsNotHydrated(designId)) {
-        currentlyHydratingDesignId = designId
         designsRef.child(designId).on('value', (design) => {
           design = design.val()
           design.id = designId
-          hydrateDesign(design).then(() => currentlyHydratingDesignId = null)
+          hydrateDesign(design)
         })
       }
       return designId
