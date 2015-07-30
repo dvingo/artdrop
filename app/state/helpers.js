@@ -21,13 +21,17 @@ exports.designPropsToIds = (design) => {
 }
 
 exports.hydrateDesign = (design) => {
+  console.log('hydrating design: ', design)
   var layers = design.layers.map(layerId => {
     return hydrateLayer(layerId).then(layer => {
       return hydrateLayerImage(layer.selectedLayerImage).then(layerImage => {
         layerImage.id = layer.selectedLayerImage
         layer.selectedLayerImage = layerImage
         layer.id = layerId
+        console.log('layer: ', layer)
+        console.log('layer.colorPalette: ', layer.colorPalette)
         return hydrateColorPalette(layer.colorPalette).then(colorPalette => {
+          console.log('hydrated color palette: ', colorPalette)
           colorPalette.id = layer.colorPalette
           layer.colorPalette = colorPalette
           reactor.dispatch('addColorPalette', colorPalette)
@@ -37,7 +41,7 @@ exports.hydrateDesign = (design) => {
       })
     })
   })
-  RSVP.all(layers).then(layers => {
+  return RSVP.all(layers).then(layers => {
     design.layers = layers;
     hydrateSurface(design.surface).then(surface => {
       surface.id = design.surface
@@ -49,8 +53,16 @@ exports.hydrateDesign = (design) => {
 }
 
 var hydrateObj = (ref, id) => {
+  if (ref === colorPalettesRef) {
+    console.log('hydrating color palette: ', id)
+  }
   return new RSVP.Promise(resolve => {
-    ref.child(id).on('value', o => resolve(o.val()))
+    ref.child(id).on('value', o => {
+      if (ref === colorPalettesRef) {
+        console.log('Resolved colorPalette: ', o.val())
+      }
+      resolve(o.val())
+    })
   })
 }
 

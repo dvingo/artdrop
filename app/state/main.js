@@ -1,6 +1,8 @@
 import fixtures from '../fixtures'
 import reactor from './reactor'
 import stores from './stores'
+import designsStore from './stores/designs'
+import currentDesignIdStore from './stores/currentDesignId'
 import {idsToObjs, hydrateDesign} from './helpers'
 import getters from './getters'
 import {usersRef, firebaseRef} from './firebaseRefs'
@@ -9,8 +11,8 @@ var Nuclear = require('nuclear-js')
 reactor.registerStores({
   users: stores.usersStore,
   currentUser: stores.currentUserStore,
-  designs: stores.designsStore,
-  currentDesignId: stores.currentDesignIdStore,
+  designs: designsStore,
+  currentDesignId: currentDesignIdStore,
   colorPalettes: stores.colorPalettesStore,
   layerImages: stores.layerImagesStore,
   layerImageUploaded: stores.layerImageUploadedStore,
@@ -68,7 +70,7 @@ firebaseRef.onAuth(authData => {
         existingUser.id = s.key()
         reactor.dispatch('setCurrentUser', existingUser)
       }
-    });
+    })
   } else {
     console.log("User is logged out");
   }

@@ -30,7 +30,8 @@ export default React.createClass({
     Store.actions.selectDesignId(this.props.params.designId)
     Store.actions.loadCurrentDesignEditResources()
     if (this.props.params.layerId) {
-      Store.actions.selectLayerId(this.props.params.layerId)}
+      Store.actions.selectLayerId(this.props.params.layerId)
+    }
   },
 
   shouldComponentUpdate(nextProps, nextState) {

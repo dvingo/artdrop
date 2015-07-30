@@ -21,16 +21,19 @@ export default React.createClass({
   componentWillMount() {
     Store.actions.selectDesignId(this.props.params.designId)
     // Preload svg layer images, to be used for edit screen.
-    if (this.state.design != null) {
-      this.state.design.get('layers').forEach(layer => {
-        var liImage = new Image
-        liImage.src = imageUrlForLayer(layer)
-      })
-    }
+    //if (this.state.design != null) {
+      //this.state.design.get('layers').forEach(layer => {
+        //var liImage = new Image
+        //liImage.src = imageUrlForLayer(layer)
+      //})
+    //}
   },
 
   shouldComponentUpdate(nextProps, nextState) {
     var currentDesign = reactor.evaluate(getters.currentDesign)
+    if (typeof nextState.design.getIn(['layers', 0]) === 'string') {
+      return true
+    }
     if (nextState.design && this.state.design) {
       return currentDesign !== nextState.design
     }
@@ -49,7 +52,10 @@ export default React.createClass({
 
   render() {
     var currentDesign = reactor.evaluate(getters.currentDesign)
-    if (currentDesign == null) { return null }
+    if (currentDesign == null ||
+        typeof currentDesign.getIn(['layers', 0]) === 'string') {
+      return null
+    }
 
     return (
       <Modal isOpen={true}>
