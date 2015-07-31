@@ -28,7 +28,6 @@ export default React.createClass({
       return
     }
     Store.actions.selectDesignId(this.props.params.designId)
-    Store.actions.loadCurrentDesignEditResources()
     if (this.props.params.layerId) {
       Store.actions.selectLayerId(this.props.params.layerId)
     }
@@ -50,6 +49,16 @@ export default React.createClass({
     if (this.getParams().layerId &&
         this.props.params.layerId !== this.getParams().layerId) {
       Store.actions.selectLayerId(this.getParams().layerId)}
+  },
+
+  componentDidMount() {
+    var interval = setInterval(() => {
+      var svgs = document.querySelectorAll('.canvas svg')
+      if (svgs.length === 3) {
+        clearInterval(interval)
+        Store.actions.loadCurrentDesignEditResources()
+      }
+    }, 50)
   },
 
   render() {

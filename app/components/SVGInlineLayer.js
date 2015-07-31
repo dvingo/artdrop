@@ -13,6 +13,10 @@ export default React.createClass({
       this.props.layer.get('colorPalette'))
   },
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props !== nextProps
+  },
+
   render() {
     return (
       <div ref="container" className="layer">
