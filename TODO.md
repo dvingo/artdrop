@@ -37,6 +37,8 @@ $design-large-size: 180px;
     immediately. When someone clicks on a design, then load its dependent data.
   - ChooseArt - we should limit the max number of possible layerImages, as downloading hundreds of images is too many.
     - We could also lazy load them somehow. Load the first 30, then when you scroll to the end, load the next 30 etc.
+  - When mounting designEdit use setInterval to check that the SVG replacement has occurred for all three images.
+    Once this has happened, send a Store action to start loading the edit resources for that design.
 
 # Firebase
   - Script to delete any non admin created designs that are older than 2 days.
