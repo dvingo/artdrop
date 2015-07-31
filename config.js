@@ -5,7 +5,7 @@ module.exports = {
   //s3BucketName: 'com.artdrop.test1',
   s3BucketName: 'com.artdrop.images2',
   //s3BucketName: 'test-dvingo-1',
-  fireBaseUri: 'https://artdrop-testing-2.firebaseio.com/',
+  fireBaseUri: 'https://artrop.firebaseio.com/',
   //fireBaseUri: "https://glaring-fire-8101.firebaseio.com",
   devPort: 8111,
   devHostname: 'localhost',
