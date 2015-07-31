@@ -51,14 +51,23 @@ export default React.createClass({
       Store.actions.selectLayerId(this.getParams().layerId)}
   },
 
-  componentDidMount() {
+  attemptLoadResources() {
     var interval = setInterval(() => {
       var svgs = document.querySelectorAll('.canvas svg')
       if (svgs.length === 3) {
-        clearInterval(interval)
+        clearInterval(this.state.interval)
         Store.actions.loadCurrentDesignEditResources()
       }
     }, 50)
+    this.setState({interval: interval})
+  },
+
+  componentDidMount() {
+    this.attemptLoadResources()
+  },
+
+  componentWillUnmount() {
+    clearInterval(this.state.interval)
   },
 
   render() {
