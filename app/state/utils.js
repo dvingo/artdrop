@@ -66,6 +66,10 @@ var generateFirebaseID = (function() {
   };
 }())
 
+var urlForImage = (filename) => {
+  return hostname + '/images/' + filename
+}
+
 var s3UrlForImage = (filename) => {
   return `${s3Endpoint}/${s3BucketName}/${filename}`
 }
@@ -74,8 +78,7 @@ var imageUrlForLayerImage = (layerImage) => {
   var filename = (layerImage.has('filename')
       ? layerImage.get('filename')
       : layerImage.get('imageUrl').split('/').pop())
-  return s3UrlForImage(filename)
-  //return hostname + '/images/' + filename
+  return urlForImage(filename)
 }
 
 export default {
@@ -83,8 +86,7 @@ export default {
     var filename = (design.has('filename')
         ? design.get('filename')
         : design.get('imageUrl').split('/').pop())
-    return s3UrlForImage(filename)
-    //return hostname + '/images/' + filename
+    return urlForImage(filename)
   },
 
   imageUrlForLayer(layer) {

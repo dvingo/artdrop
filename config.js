@@ -9,5 +9,5 @@ module.exports = {
   //fireBaseUri: "https://glaring-fire-8101.firebaseio.com",
   devPort: 8111,
   devHostname: 'localhost',
-  prodHostname: 'obscure-atoll-2694.herokuapp.com'
+  prodHostname: 'obscure-headland-1710.herokuapp.com'
 }
