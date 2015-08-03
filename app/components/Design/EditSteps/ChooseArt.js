@@ -68,6 +68,7 @@ export default React.createClass({
     if (this.state.layerImageOptions == null) return null
     var layerImages = this.state.layerImageOptions
         .filter(layerImage => layerImage)
+        .slice(0, 30)
         .map(layerImage => {
       return (
         <li onClick={this.selectLayerImage.bind(null, layerImage)}
