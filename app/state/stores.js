@@ -103,6 +103,12 @@ stores.colorPalettesStore = new Nuclear.Store({
      return state
    })
 
+   this.on('addManyColorPalettes', (state, colorPalettes) => {
+     return colorPalettes.reduce((retVal, colorPalette) => {
+       return retVal.set(colorPalette.id, Immutable.fromJS(colorPalette))
+     }, state)
+   })
+
    this.on('loadCurrentDesignEditResources', state => {
      hydrateAndDispatchColorPalettes(state)
      return state
@@ -170,6 +176,12 @@ stores.layerImagesStore = new Nuclear.Store({
   initialize() {
     this.on('addLayerImage', (state, layerImage) => {
       return state.set(layerImage.id, Immutable.fromJS(layerImage));
+    })
+
+    this.on('addManyLayerImages', (state, layerImages) => {
+      return layerImages.reduce((retVal, layerImage) => {
+        return retVal.set(layerImage.id, Immutable.fromJS(layerImage))
+      }, state)
     })
 
     this.on('loadAdminCreateDesignData', state => {
@@ -253,6 +265,12 @@ stores.surfacesStore = new Nuclear.Store({
   initialize() {
    this.on('addSurface', function(state, surface) {
      return state.set(surface.id, Immutable.fromJS(surface))
+   })
+
+   this.on('addManySurfaces', (state, surfaces) => {
+     return surfaces.reduce((retVal, surface) => {
+       return retVal.set(surface.id, Immutable.fromJS(surface))
+     }, state)
    })
 
    this.on('loadAdminCreateDesignData', state => {

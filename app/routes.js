@@ -14,7 +14,7 @@ import Router from 'react-router'
 var Route = Router.Route
 
 export default (
-  <Route handler={App}>
+  <Route ignoreScrollBehavior={true} handler={App}>
     <Router.NotFoundRoute handler={Designs} />
     <Router.DefaultRoute handler={Designs}/>
 

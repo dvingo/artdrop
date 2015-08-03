@@ -57,19 +57,18 @@ var hydrateObj = (ref, id) => {
 var hydrateAndDispatchData = (dbRef, dispatchMsg, currentState) => {
   dbRef.once('value', snapshot => {
     var data = snapshot.val()
-    Object.keys(data).map(id => {
-      if (!currentState.has(id)) {
-        var obj = data[id]
-        obj.id = id
-        reactor.dispatch(dispatchMsg, obj)
-      }
+    var dataToDispatch = Object.keys(data).map(id => {
+      var obj = data[id]
+      obj.id = id
+      return obj
     })
+    reactor.dispatch(dispatchMsg, dataToDispatch)
   })
 }
 
-exports.hydrateAndDispatchLayerImages = hydrateAndDispatchData.bind(null, layerImagesRef, 'addLayerImage')
-exports.hydrateAndDispatchSurfaces = hydrateAndDispatchData.bind(null, surfacesRef, 'addSurface')
-exports.hydrateAndDispatchColorPalettes = hydrateAndDispatchData.bind(null, colorPalettesRef, 'addColorPalette')
+exports.hydrateAndDispatchLayerImages = hydrateAndDispatchData.bind(null, layerImagesRef, 'addManyLayerImages')
+exports.hydrateAndDispatchSurfaces = hydrateAndDispatchData.bind(null, surfacesRef, 'addManySurfaces')
+exports.hydrateAndDispatchColorPalettes = hydrateAndDispatchData.bind(null, colorPalettesRef, 'addManyColorPalettes')
 
 var hydrateLayer = hydrateObj.bind(null, layersRef)
 var hydrateLayerImage = hydrateObj.bind(null, layerImagesRef)

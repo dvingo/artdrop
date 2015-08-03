@@ -35,6 +35,12 @@ export default new Nuclear.Store({
      return state.set(design.id, Immutable.fromJS(design))
    })
 
+   this.on('addManyDesigns', (state, designs) => {
+     return designs.reduce((retVal, design) => {
+       return retVal.set(design.id, Immutable.fromJS(design))
+     }, state)
+   })
+
    this.on('deleteDesign', function(state, design) {
      if (state.has(design.id)) {
        designsRef.child(d.get('id')).remove()
@@ -45,14 +51,16 @@ export default new Nuclear.Store({
 
    this.on('loadAdminCreatedDesigns', function(state, design) {
      var designsQuery = designsRef.orderByChild('adminCreated').equalTo(true)
-     designsQuery.on('child_added', snapshot => {
-       var id = snapshot.key()
-       if (!state.has(id)) {
-         var design = snapshot.val()
-         design.id = id
-         reactor.dispatch('addDesign', design)
-       }
+     designsQuery.on('value', snapshot => {
+       var data = snapshot.val()
+       var designs = Object.keys(data).map(id => {
+         var obj = data[id]
+         obj.id = id
+         return obj
+       })
+       reactor.dispatch('addManyDesigns', designs)
      })
+
      return state
    })
 

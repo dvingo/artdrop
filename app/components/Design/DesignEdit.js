@@ -8,6 +8,7 @@ import RenderLayers from './RenderLayers'
 import Container from './EditSteps/Container'
 import EditFooter from './EditFooter'
 import {isInvalidEditStep} from '../../utils'
+var Hammer = require('react-hammerjs')
 
 export default React.createClass({
   mixins: [reactor.ReactMixin, Router.State, Router.Navigation],
@@ -70,6 +71,19 @@ export default React.createClass({
     clearInterval(this.state.interval)
   },
 
+  handleSwipe(e) {
+    var direction = e.direction
+    if (direction === 2) {
+      console.log('SWIPE LEFT')
+    } else if (direction === 4) {
+      console.log('SWIPE RIGHT')
+    }
+  },
+
+  handlePan(e) {
+   console.log('GOT PAN: ', e)
+  },
+
   render() {
     if (this.state.design == null) { return null }
 
@@ -78,9 +92,9 @@ export default React.createClass({
       <section className="main design-edit">
 
         <div className="canvas-flex-wrapper">
-          <span>
+          <Hammer onSwipe={this.handleSwipe} onPan={this.handlePan}>
             <RenderLayers layers={this.state.design.get('layers')}/>
-          </span>
+          </Hammer>
         </div>
 
         <div className="edit-ui">
