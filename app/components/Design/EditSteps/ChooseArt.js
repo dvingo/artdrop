@@ -30,12 +30,6 @@ export default React.createClass({
     setTimeout(() => self.updateImageSizes(-1), delay)
   },
 
-  componentWillMount() {
-    if (this.props.layerId) {
-      Store.actions.selectLayerId(this.props.layerId)
-    }
-  },
-
   componentDidUpdate(prevProps, prevState) {
     var self = this
     setTimeout(() => self.updateImageSizes(prevState.ulSize), delay)

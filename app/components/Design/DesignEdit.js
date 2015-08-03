@@ -28,9 +28,10 @@ export default React.createClass({
       }.bind(this), 0)
       return
     }
-    Store.actions.selectDesignId(this.props.params.designId)
     if (this.props.params.layerId) {
-      Store.actions.selectLayerId(this.props.params.layerId)
+      Store.actions.selectDesignAndLayerId({designId: this.props.params.designId, layerId: this.props.params.layerId})
+    } else {
+      Store.actions.selectDesignId(this.props.params.designId)
     }
   },
 

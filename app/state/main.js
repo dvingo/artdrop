@@ -29,6 +29,7 @@ module.exports = {
   getters: getters,
   actions: {
     selectDesignId(id) { reactor.dispatch('selectDesignId', id) },
+    selectDesignAndLayerId(ids) { reactor.dispatch('selectDesignAndLayerId', ids) },
     previousDesignColors() { reactor.dispatch('previousDesignColors') },
     nextDesignColors() { reactor.dispatch('nextDesignColors') },
     selectLayerId(id)  { reactor.dispatch('selectLayerId', id) },
