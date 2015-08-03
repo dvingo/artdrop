@@ -30,12 +30,11 @@ export default React.createClass({
   },
 
   shouldComponentUpdate(nextProps, nextState) {
-    var currentDesign = reactor.evaluate(getters.currentDesign)
     if (typeof nextState.design.getIn(['layers', 0]) === 'string') {
       return true
     }
     if (nextState.design && this.state.design) {
-      return currentDesign !== nextState.design
+      return this.state.design !== nextState.design
     }
     return true
   },
