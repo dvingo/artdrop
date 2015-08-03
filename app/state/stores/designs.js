@@ -50,6 +50,8 @@ export default new Nuclear.Store({
    })
 
    this.on('loadAdminCreatedDesigns', function(state, design) {
+     if (state.count() > 2) { return state }
+
      var designsQuery = designsRef.orderByChild('adminCreated').equalTo(true)
      designsQuery.on('value', snapshot => {
        var data = snapshot.val()
