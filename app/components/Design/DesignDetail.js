@@ -4,10 +4,9 @@ import reactor from '../../state/reactor'
 import getters from '../../state/getters'
 import Store from '../../state/main'
 import {imageUrlForDesign, imageUrlForLayer, newId} from '../../state/utils'
-import {Navigation} from 'react-router';
+import {Link, Navigation} from 'react-router';
 import {iconPath} from '../../utils';
 import SVGInlineLayer  from '../SVGInlineLayer';
-var Link = Router.Link;
 var appElement = document.getElementById('app');
 Modal.setAppElement(appElement);
 Modal.injectCSS()
@@ -65,10 +64,8 @@ export default React.createClass({
             <span className="price">$75</span>
             <ul className="cart">
                 <li className="cart-image">
-                  <Link to='cart' params={{designId: currentDesign.get('id')}}>
-                    <img src={iconPath('cart-icon-black.svg')}/>
-                  </Link>
-                </li>  
+                  <img src={iconPath('cart-icon-black.svg')}/>
+                </li>
               <li>add to cart</li>
             </ul>
 

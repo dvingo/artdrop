@@ -1,24 +1,31 @@
 import fixtures from '../fixtures'
 import reactor from './reactor'
-import stores from './stores'
 import designsStore from './stores/designs'
+import currentUserStore from './stores/currentUser'
+import usersStore from './stores/users'
+import validEditStepsStore from './stores/validEditSteps'
 import currentDesignIdStore from './stores/currentDesignId'
+import colorPalettesStore from './stores/colorPalettes'
+import layerImagesStore from './stores/layerImages'
+import surfacesStore from './stores/surfaces'
+import layerImageUploadedStore from './stores/layerImageUploaded'
+import currentLayerIdStore from './stores/currentLayerId'
 import {idsToObjs, hydrateDesign} from './helpers'
 import getters from './getters'
 import {usersRef, firebaseRef} from './firebaseRefs'
 var Nuclear = require('nuclear-js')
 
 reactor.registerStores({
-  users: stores.usersStore,
-  currentUser: stores.currentUserStore,
+  users: usersStore,
+  currentUser: currentUserStore,
   designs: designsStore,
   currentDesignId: currentDesignIdStore,
-  colorPalettes: stores.colorPalettesStore,
-  layerImages: stores.layerImagesStore,
-  layerImageUploaded: stores.layerImageUploadedStore,
-  currentLayerId: stores.currentLayerIdStore,
-  surfaces: stores.surfacesStore,
-  validEditSteps: stores.validEditSteps
+  colorPalettes: colorPalettesStore,
+  layerImages: layerImagesStore,
+  layerImageUploaded: layerImageUploadedStore,
+  currentLayerId: currentLayerIdStore,
+  surfaces: surfacesStore,
+  validEditSteps: validEditStepsStore
 })
 
 ////////////////////////////////////////////////////////////////////////////////

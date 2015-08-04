@@ -6,7 +6,7 @@
   @include justify-content(space-around);
   @include align-items(center);
   @include flex-direction(column);
-  width: 10%;
+  width: 100%;
   overflow: hidden;
 
   &.visible { @include flex-grow(1); }
