@@ -49,6 +49,10 @@ export default React.createClass({
     this.transitionTo('designs')
   },
 
+  transitionToCart() {
+    this.transitionTo('cart', {designId: this.state.design.get('id')});
+  },
+
   render() {
     var currentDesign = reactor.evaluate(getters.currentDesign)
     if (currentDesign == null ||
@@ -62,7 +66,7 @@ export default React.createClass({
 
           <div className="top-ui">
             <span className="price">$75</span>
-            <ul className="cart">
+            <ul className="cart" onClick={this.transitionToCart}>
               <li className="cart-image">
                 <img src={iconPath('cart-icon-black.svg')}/>
               </li>
