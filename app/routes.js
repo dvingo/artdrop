@@ -12,7 +12,7 @@ import DesignEdit from './components/Design/DesignEdit'
 import Cart from './components/Cart'
 import React from 'react'
 import Router from 'react-router'
-var Route = Router.Route
+var Route = Router.Route;
 
 export default (
   <Route ignoreScrollBehavior={true} handler={App}>

@@ -16,6 +16,10 @@ $color5: #6a8cc4;
 
   .reset, .save, .price, .buy, .share {
     @include footer-button;
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 
   .lower-ui {
