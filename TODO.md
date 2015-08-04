@@ -1,3 +1,8 @@
+# Next
+  - Merge the two repo master branches.
+  - Investigate image replacement performance bottleneck - SvgInlinLayer
+  - React list view https://github.com/morhaus/react-list-view#readme
+
 # Admin
 - Upload multiple design jpeg image sizes on creation.
 
