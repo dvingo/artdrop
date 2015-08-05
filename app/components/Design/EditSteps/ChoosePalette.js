@@ -11,14 +11,14 @@ export default React.createClass({
     return { colorPalettes: Store.getters.colorPalettes }
   },
 
-  choosePalette(paletteId) {
-    Store.actions.selectColorPaletteId(paletteId)
+  choosePalette(colorPalette) {
+    Store.actions.selectColorPalette(colorPalette)
   },
 
   render() {
     var palettes = this.state.colorPalettes.map(palette => {
       return (
-        <ColorPalette onClick={this.choosePalette.bind(null, palette.get('id'))}
+        <ColorPalette onClick={this.choosePalette.bind(null, palette)}
                       palette={palette}/>
       )
     })

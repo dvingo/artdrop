@@ -9,7 +9,9 @@ export default React.createClass({
   mixins: [reactor.ReactMixin],
 
   getDataBindings() {
-    return {layerImageOptions: Store.getters.layerImageOptions}
+    return {layerImageOptions: Store.getters.layerImageOptions,
+            currentLayerImage: Store.getters.currentLayerImage,
+            layerIsBeingReplaced: ['layerIsBeingReplaced']}
   },
 
   getInitialState() {
@@ -61,7 +63,11 @@ export default React.createClass({
   },
 
   selectLayerImage(layerImage) {
-    Store.actions.selecteLayerImageId(layerImage.get('id'))
+    var currentLayerImage = this.state.currentLayerImage
+    if (currentLayerImage == null ||
+       (!this.state.layerIsBeingReplaced && currentLayerImage !== layerImage)) {
+      Store.actions.selectLayerImage(layerImage)
+    }
   },
 
   render() {

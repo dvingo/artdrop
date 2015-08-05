@@ -9,6 +9,7 @@ import colorPalettesStore from './stores/colorPalettes'
 import layerImagesStore from './stores/layerImages'
 import surfacesStore from './stores/surfaces'
 import layerImageUploadedStore from './stores/layerImageUploaded'
+import layerIsBeingReplacedStore from './stores/layerIsBeingReplaced'
 import currentLayerIdStore from './stores/currentLayerId'
 import {idsToObjs, hydrateDesign} from './helpers'
 import getters from './getters'
@@ -25,7 +26,8 @@ reactor.registerStores({
   layerImageUploaded: layerImageUploadedStore,
   currentLayerId: currentLayerIdStore,
   surfaces: surfacesStore,
-  validEditSteps: validEditStepsStore
+  validEditSteps: validEditStepsStore,
+  layerIsBeingReplaced: layerIsBeingReplacedStore
 })
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -40,11 +42,12 @@ module.exports = {
     previousDesignColors() { reactor.dispatch('previousDesignColors') },
     nextDesignColors() { reactor.dispatch('nextDesignColors') },
     selectLayerId(id)  { reactor.dispatch('selectLayerId', id) },
-    selecteLayerImageId(id) { reactor.dispatch('selectLayerImageId', id) },
+    selectLayerImage(layerImage) { reactor.dispatch('selectLayerImage', layerImage) },
     deleteLayerImage(layerImage) { reactor.dispatch('deleteLayerImage', layerImage) },
+    layerReplacementComplete() { reactor.dispatch('layerReplacementComplete') },
     uploadLayerImageToS3(file) { reactor.dispatch('uploadLayerImageToS3', file) },
     uploadLayerImageWithCompositeToS3(files) { reactor.dispatch('uploadLayerImageWithCompositeToS3', files) },
-    selectColorPaletteId(id) { reactor.dispatch('selectColorPaletteId', id) },
+    selectColorPalette(colorPalette) { reactor.dispatch('selectColorPalette', colorPalette) },
     deleteColorPalette(colorPalette) { reactor.dispatch('deleteColorPalette', colorPalette) },
     selectSurfaceId(id) { reactor.dispatch('selectSurfaceId', id) },
     makeDesignCopy(newId) { reactor.dispatch('makeDesignCopy', newId) },

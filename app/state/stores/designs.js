@@ -72,28 +72,25 @@ export default new Nuclear.Store({
      return transitionDesignColors('backward', state)
    })
 
-   this.on('selectLayerImageId', (state, layerImageId) => {
+   this.on('selectLayerImage', (state, layerImage) => {
      var currentDesign = reactor.evaluate(getters.currentDesign)
      var currentLayerId = reactor.evaluate(['currentLayerId'])
-     var layerImages = reactor.evaluate(['layerImages'])
      var layers = currentDesign.get('layers')
      var i = layers.findIndex(l => l.get('id') === currentLayerId)
-     var newLayers = layers.update(i, v => v.set('selectedLayerImage', layerImages.get(layerImageId)))
+     var newLayers = layers.update(i, v => v.set('selectedLayerImage', layerImage))
      var newDesign = currentDesign.set('layers', newLayers)
-     layersRef.child(currentLayerId).update({'selectedLayerImage':layerImageId})
+     layersRef.child(currentLayerId).update({'selectedLayerImage': layerImage.get('id')})
      return state.set(newDesign.get('id'), newDesign)
    })
 
-   this.on('selectColorPaletteId', (state, colorPaletteId) => {
+   this.on('selectColorPalette', (state, colorPalette) => {
      var currentDesign = reactor.evaluate(getters.currentDesign)
      var currentLayerId = reactor.evaluate(['currentLayerId'])
-     var colorPalettes = reactor.evaluate(['colorPalettes'])
-     var colorPalette = colorPalettes.get(colorPaletteId)
      var layers = currentDesign.get('layers')
      var i = layers.findIndex(l => l.get('id') === currentLayerId)
      var newLayers = layers.update(i, v => v.set('colorPalette', colorPalette))
      var newDesign = currentDesign.set('layers', newLayers)
-     layersRef.child(currentLayerId).update({'colorPalette':colorPalette.get('id')})
+     layersRef.child(currentLayerId).update({'colorPalette': colorPalette.get('id')})
      return state.set(newDesign.get('id'), newDesign)
    })
 

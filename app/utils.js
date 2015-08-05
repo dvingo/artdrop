@@ -1,4 +1,5 @@
 import React from 'react'
+import Store from './state/main'
 var srcDir = require('../config').srcDir
 var SVGInjector = require('svg-injector')
 var layersToColors = {
@@ -18,6 +19,13 @@ var svgTextToImage = (svgEl) => {
   img.width = 400
   img.src = imageString
   return img
+}
+
+var setSvgColors = (svgEl, colorPalette) => {
+  svgLayerIds.forEach(id => {
+    var color = colorPalette.get(layersToColors[id])
+    toA(svgEl.querySelectorAll(`#${id} *`)).forEach(el => el.style.fill = color)
+  })
 }
 
 var dataUriToBlob = (dataUri) => {
@@ -57,6 +65,8 @@ export default {
     return retVal
   },
 
+  setSvgColors: setSvgColors,
+
   replaceSvgImageWithText(containerRef, imgRef, colorPalette) {
     if (containerRef == null || imgRef == null) { return }
     var container = React.findDOMNode(containerRef)
@@ -69,16 +79,12 @@ export default {
     }
     container.appendChild(imgClone)
     SVGInjector(imgClone, {each: function(svgEl) {
+      Store.actions.layerReplacementComplete()
       svgEl.style.height = '100%';
       svgEl.style.width = '100%';
       svgEl.style.margin  = '0 auto';
       svgEl.style.display = 'block';
-      if (colorPalette) {
-        svgLayerIds.forEach(id => {
-          var color = colorPalette.get(layersToColors[id])
-          toA(svgEl.querySelectorAll(`#${id} *`)).forEach(el => el.style.fill = color)
-        })
-      }
+      if (colorPalette) { setSvgColors(svgEl, colorPalette) }
       return svgEl
     }, evalScripts:'never'});
   },
@@ -184,7 +190,6 @@ export default {
     var img = new Image(size, size)
     img.onload = () => {
       var idStr = '#'+id
-      console.log('to replace: ', idStr)
       var domImg = document.querySelector('#'+id)
       SVGInjector(domImg, {each: (svgEl) => {
         svgEl.setAttribute('height', String(size))

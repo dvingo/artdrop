@@ -21,6 +21,11 @@ getters.currentLayer = [
   (layerId, design) => design.get('layers').find(v => v.get('id') === layerId)
 ]
 
+getters.currentLayerImage = [
+  getters.currentLayer,
+  (currentLayer) => currentLayer.get('selectedLayerImage')
+]
+
 getters.layerImages = [
   ['layerImages'], layerImages => {
     return (
