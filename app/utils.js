@@ -80,6 +80,7 @@ export default {
     container.appendChild(imgClone)
     SVGInjector(imgClone, {each: function(svgEl) {
       Store.actions.layerReplacementComplete()
+      if (typeof svgEl !== 'object') { return null }
       svgEl.style.height = '100%';
       svgEl.style.width = '100%';
       svgEl.style.margin  = '0 auto';

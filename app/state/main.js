@@ -44,6 +44,7 @@ module.exports = {
     selectLayerId(id)  { reactor.dispatch('selectLayerId', id) },
     selectLayerImage(layerImage) { reactor.dispatch('selectLayerImage', layerImage) },
     deleteLayerImage(layerImage) { reactor.dispatch('deleteLayerImage', layerImage) },
+    layerReplacementStarted() { reactor.dispatch('layerReplacementStarted') },
     layerReplacementComplete() { reactor.dispatch('layerReplacementComplete') },
     uploadLayerImageToS3(file) { reactor.dispatch('uploadLayerImageToS3', file) },
     uploadLayerImageWithCompositeToS3(files) { reactor.dispatch('uploadLayerImageWithCompositeToS3', files) },

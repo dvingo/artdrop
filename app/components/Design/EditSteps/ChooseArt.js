@@ -64,9 +64,11 @@ export default React.createClass({
 
   selectLayerImage(layerImage) {
     var currentLayerImage = this.state.currentLayerImage
-    if (currentLayerImage == null ||
-       (!this.state.layerIsBeingReplaced && currentLayerImage !== layerImage)) {
+    if (currentLayerImage == null) {
       Store.actions.selectLayerImage(layerImage)
+    } else if (!this.state.layerIsBeingReplaced && (currentLayerImage.get('id') !== layerImage.get('id'))) {
+      Store.actions.selectLayerImage(layerImage)
+      Store.actions.layerReplacementStarted(layerImage)
     }
   },
 

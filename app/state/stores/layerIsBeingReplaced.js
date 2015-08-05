@@ -4,7 +4,6 @@ export default new Nuclear.Store({
 
   initialize() {
    this.on('layerReplacementComplete', () => false)
-
-   this.on('selectLayerImage', () => true)
+   this.on('layerReplacementStarted', () => true)
   }
 })

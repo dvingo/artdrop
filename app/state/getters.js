@@ -23,7 +23,9 @@ getters.currentLayer = [
 
 getters.currentLayerImage = [
   getters.currentLayer,
-  (currentLayer) => currentLayer.get('selectedLayerImage')
+  (currentLayer) => {
+    return currentLayer ? currentLayer.get('selectedLayerImage') : null
+  }
 ]
 
 getters.layerImages = [
