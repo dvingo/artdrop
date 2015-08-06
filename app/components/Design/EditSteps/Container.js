@@ -5,7 +5,7 @@ import ChoosePalette from './ChoosePalette'
 import ChooseArt from './ChooseArt'
 import ChooseSurface from './ChooseSurface'
 import LayerSelector from './LayerSelector'
-import ColorsButton from '../../ColorsButtonSort'
+import ColorsButtonRotate from '../../ColorsButtonRotate'
 import UpDownSwitch from '../../UpDownSwitch'
 var classNames = require('classnames')
 
@@ -37,7 +37,9 @@ export default React.createClass({
           <ChoosePalette isActive={editingLayerColors}/>
 
           <section className="options-button-container">
-            <ColorsButton isSmall={true}/>
+
+            <ColorsButtonRotate/>
+
             <UpDownSwitch upLabel="Color Options"
                           downLabel="Art Options"
                           inUpPosition={editingLayerImages}

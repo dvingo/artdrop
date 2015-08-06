@@ -88,7 +88,7 @@ export default new Nuclear.Store({
      var currentLayerId = reactor.evaluate(['currentLayerId'])
      var layers = currentDesign.get('layers')
      var i = layers.findIndex(l => l.get('id') === currentLayerId)
-     var newLayers = layers.update(i, v => v.set('colorPalette', colorPalette))
+     var newLayers = layers.update(i, v => v.set('colorPalette', colorPalette).set('paletteRotation', 0))
      var newDesign = currentDesign.set('layers', newLayers)
      layersRef.child(currentLayerId).update({'colorPalette': colorPalette.get('id')})
      return state.set(newDesign.get('id'), newDesign)
@@ -99,6 +99,21 @@ export default new Nuclear.Store({
      var surfaces = reactor.evaluate(['surfaces'])
      var newDesign = currentDesign.set('surface', surfaces.get(surfaceId))
      designsRef.child(newDesign.get('id')).update({'surface':surfaceId})
+     return state.set(newDesign.get('id'), newDesign)
+   })
+
+   this.on('rotateCurrentLayerColorPalette', (state) => {
+     var currentDesign = reactor.evaluate(getters.currentDesign)
+     var currentLayerId = reactor.evaluate(['currentLayerId'])
+     var layers = currentDesign.get('layers')
+     var i = layers.findIndex(l => l.get('id') === currentLayerId)
+     var currentLayer = layers.get(i)
+     var currentRotation = currentLayer.get('paletteRotation')
+     // 0 - 3
+     var nextRotation = (currentRotation + 1) % 4
+     var newLayers = layers.update(i, v => v.set('paletteRotation', nextRotation))
+     var newDesign = currentDesign.set('layers', newLayers)
+     layersRef.child(currentLayerId).update({'paletteRotation': nextRotation})
      return state.set(newDesign.get('id'), newDesign)
    })
 

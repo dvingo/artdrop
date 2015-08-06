@@ -54,14 +54,13 @@ export default React.createClass({
   },
 
   attemptLoadResources() {
-    var interval = setInterval(() => {
+    this._interval = setInterval(() => {
       var svgs = document.querySelectorAll('.canvas svg')
       if (svgs.length === 3) {
-        clearInterval(this.state.interval)
+        clearInterval(this._interval)
         Store.actions.loadCurrentDesignEditResources()
       }
     }, 50)
-    this.setState({interval: interval})
   },
 
   componentDidMount() {
@@ -69,7 +68,7 @@ export default React.createClass({
   },
 
   componentWillUnmount() {
-    clearInterval(this.state.interval)
+    clearInterval(this._interval)
   },
 
   handleSwipe(e) {

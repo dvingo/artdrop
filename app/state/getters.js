@@ -21,6 +21,11 @@ getters.currentLayer = [
   (layerId, design) => design.get('layers').find(v => v.get('id') === layerId)
 ]
 
+getters.currentPalette = [
+  getters.currentLayer,
+  (currentLayer) => currentLayer ? currentLayer.get('colorPalette') : null
+]
+
 getters.currentLayerImage = [
   getters.currentLayer,
   (currentLayer) => {

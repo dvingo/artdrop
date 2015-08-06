@@ -2,6 +2,7 @@ var express = require('express')
 var app = express()
 var request = require('request')
 var cors = require('cors')
+var compression = require('compression')
 var config = require('./config')
 
 function s3Url(filename) {
@@ -20,6 +21,7 @@ app.get('/images/:imageName', cors(), function(req, res) {
   request(s3Url(req.params.imageName)).pipe(res)
 })
 
+app.use(compression())
 app.use(express.static('hosted-dir'))
 
 app.get('/*', function(req, res) {
