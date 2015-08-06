@@ -117,6 +117,7 @@ export default {
         Bucket: s3BucketName,
         Key: filename,
         ACL: 'public-read',
+        CacheControl: 'max-age: 45792000',
         ContentType: imgType,
         Body: file}
       var s3 = new AWS.S3()

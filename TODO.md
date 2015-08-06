@@ -1,10 +1,12 @@
-# Admin
-- Upload multiple design jpeg image sizes on creation.
-
-Sizes from the scss:
-$design-small-size: 100px;
-$design-medium-size: 120px;
-$design-large-size: 180px;
+# Perf
+  - Use mutiple builds, one for admin one for rest of the site - /admin should use its own router.
+    - In admin build, build only s3 part of aws JS sdk.
+  - Use a sprite sheet to avoid many network requests
+  - Ensure shouldComponentUpdate is implemented for every component.
+  - Load all layer images on the home page, in the background
+  - ChooseArt - we should limit the max number of possible layerImages, as downloading hundreds of images is too many.
+    - We could also lazy load them somehow. Load the first 30, then when you scroll to the end, load the next 30 etc.
+    - See yelp mobile site side scroll of images.
 
 ## Error and message reporting
 - Add an error store and have the admin subscribe to it, display any errors if it isn't empty
@@ -27,12 +29,13 @@ $design-large-size: 180px;
   - Edit existing designs.
     - Will need to recapture the jpeg and upload again.
 
-# Perf
-  - Use a sprite sheet to avoid many network requests
-  - Ensure shouldComponentUpdate is implemented for every component.
-  - Load all layer images on the home page, in the background
-  - ChooseArt - we should limit the max number of possible layerImages, as downloading hundreds of images is too many.
-    - We could also lazy load them somehow. Load the first 30, then when you scroll to the end, load the next 30 etc.
+  - Upload multiple design jpeg image sizes on creation.
+
+  Sizes from the scss:
+  $design-small-size: 100px;
+  $design-medium-size: 120px;
+  $design-large-size: 180px;
+
 
 # Firebase
   - Script to delete any non admin created designs that are older than 2 days. - tough to do once we launch, as you
