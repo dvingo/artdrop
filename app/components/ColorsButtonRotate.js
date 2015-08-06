@@ -3,59 +3,41 @@ import {iconPath} from '../utils'
 import reactor from '../state/reactor'
 import Store from '../state/main'
 import {setSvgColors, replaceSvgImageWithText} from '../utils'
-var classNames = require('classnames')
 
 export default React.createClass({
-	mixins: [reactor.ReactMixin],
+  mixins: [reactor.ReactMixin],
 
-	getDataBindings() {
-	  return {currentLayer: Store.getters.currentLayer}
-	},
+  getDataBindings() {
+    return {currentLayer: Store.getters.currentLayer}
+  },
 
-	getInitialState() {
-		return {
-			rotatingColorPalette: null
-		}
-	},
+  componentDidMount() {
+    this._interval = setInterval(() => {
+      if (this.state.currentLayer) {
+        clearInterval(this._interval)
+        replaceSvgImageWithText(this.refs.container, this.refs.imgRef, this.state.currentLayer)
+      }
+    }, 50)
+  },
 
-	componentDidMount() {
-		if (this.state.currentLayer) {
-			replaceSvgImageWithText(this.refs.container, this.refs.imgRef,
-			  this.state.currentLayer.get('colorPalette'))
+  componentWillUnmount() {
+    if (this._interval) {
+      clearInterval(this._interval)
+    }
+  },
 
-			this.setState({rotatingColorPalette: this.state.currentLayer.get('colorPalette')});
-		}
-	},
+  componentDidUpdate(prevProps, prevState) {
+    var container = React.findDOMNode(this.refs.container)
+    var svgEl = container.querySelector('svg')
+    if (svgEl) {
+      setSvgColors(svgEl, this.state.currentLayer)
+    }
+  },
 
-	componentDidUpdate(prevProps, prevState) {
-		var container = React.findDOMNode(this.refs.container)
-		var svgEl = container.querySelector('svg')
-		var colorPalette = this.state.currentLayer.get('colorPalette');
-
-		if (prevState.currentLayer && colorPalette !== prevState.currentLayer.get('colorPalette')) {
-			this.setState({rotatingColorPalette: colorPalette});	
-		} else {
-			colorPalette = this.state.rotatingColorPalette;
-		}
-
-		if (svgEl) {
-		  setSvgColors(svgEl, colorPalette)
-		}
-	},
-
-	rotateColors() {
-		console.log(this.state.rotatingColorPalette.toJS());
-
-		var palette = this.state.rotatingColorPalette;
-		var newPalette = (
-			palette.set('colorOne', palette.get('colorFour'))
-			.set('colorTwo', palette.get('colorOne'))
-			.set('colorThree', palette.get('colorTwo'))
-			.set('colorFour', palette.get('colorThree'))
-		)
-		this.setState({rotatingColorPalette: newPalette});
-
-	},
+  rotateColors(e) {
+    e.preventDefault()
+    Store.actions.rotateCurrentLayerColorPalette()
+  },
 
   render() {
     return (

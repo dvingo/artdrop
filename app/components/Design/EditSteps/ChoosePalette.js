@@ -8,7 +8,8 @@ export default React.createClass({
   mixins: [reactor.ReactMixin],
 
   getDataBindings() {
-    return { colorPalettes: Store.getters.colorPalettes }
+    return { colorPalettes: Store.getters.colorPalettes,
+             currentPalette: Store.getters.currentPalette }
   },
 
   choosePalette(colorPalette) {
@@ -19,6 +20,7 @@ export default React.createClass({
     var palettes = this.state.colorPalettes.map(palette => {
       return (
         <ColorPalette onClick={this.choosePalette.bind(null, palette)}
+                      currentPalette={this.state.currentPalette}
                       palette={palette}/>
       )
     })

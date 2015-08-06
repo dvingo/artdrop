@@ -63,7 +63,8 @@ module.exports = {
     setCurrentUser(currentUser) { reactor.dispatch('setCurrentUser', currentUser) },
     logoutCurrentUser() { reactor.dispatch('logoutCurrentUser') },
     saveColorPalette(colorPalette) { reactor.dispatch('saveColorPalette', colorPalette) },
-    createNewColorPalette(colorPalette) { reactor.dispatch('createNewColorPalette', colorPalette) }
+    createNewColorPalette(colorPalette) { reactor.dispatch('createNewColorPalette', colorPalette) },
+    rotateCurrentLayerColorPalette() { reactor.dispatch('rotateCurrentLayerColorPalette') }
   }
 }
 

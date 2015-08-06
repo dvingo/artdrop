@@ -37,7 +37,9 @@ export default React.createClass({
           <ChoosePalette isActive={editingLayerColors}/>
 
           <section className="options-button-container">
+
             <ColorsButtonRotate/>
+
             <UpDownSwitch upLabel="Color Options"
                           downLabel="Art Options"
                           inUpPosition={editingLayerImages}

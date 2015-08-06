@@ -4,7 +4,7 @@ import reactor from '../../state/reactor'
 import {s3UrlForImage} from '../../state/utils'
 import {layerImagesRef} from '../../state/firebaseRefs'
 import Notification from '../Notification'
-import {compositeTwoImages, replaceSvgImageWithText, svgLayerIds} from '../../utils'
+import {compositeTwoImages, svgLayerIds} from '../../utils'
 var allLayersInSvg = svgEl => {
   return svgLayerIds.every(id => svgEl.querySelector(`#${id}`) != null)
 }
@@ -100,7 +100,6 @@ export default React.createClass({
   uploadFile(e) {
     e.preventDefault()
     if (this.state.compositeFile) {
-      console.log('IN COMPosite')
       Store.actions.uploadLayerImageWithCompositeToS3({
         base: this.state.file,
         top: this.state.compositeFile
