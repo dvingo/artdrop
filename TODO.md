@@ -8,6 +8,8 @@
     - We could also lazy load them somehow. Load the first 30, then when you scroll to the end, load the next 30 etc.
     - See yelp mobile site side scroll of images.
 
+Need favicon
+
 ## Error and message reporting
 - Add an error store and have the admin subscribe to it, display any errors if it isn't empty
 - Same thing for success messages
@@ -35,7 +37,6 @@
   $design-small-size: 100px;
   $design-medium-size: 120px;
   $design-large-size: 180px;
-
 
 # Firebase
   - Script to delete any non admin created designs that are older than 2 days. - tough to do once we launch, as you
