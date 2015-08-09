@@ -76,7 +76,7 @@ export default new Nuclear.Store({
      }
      var newColorRef = colorPalettesRef.push(newColorObj)
      newColorObj.id = newColorRef.key()
-     reactor.dispatch('addColorPalette', newColorObj)
+     setTimeout(()=> reactor.dispatch('addColorPalette', newColorObj), 50)
      return state
    })
 
