@@ -1,16 +1,8 @@
 import React from 'react';
-import {Navigation} from 'react-router';
-import State from '../../state/main';
 import SVGInlineLayer  from '../SVGInlineLayer'
 import {imageUrlForDesign} from '../../state/utils';
 
 export default React.createClass({
-  mixins: [Navigation],
-
-  selectDesign(e) {
-    State.actions.selectDesignId(this.props.design.get('id'))
-    this.transitionTo('designDetail', {designId: this.props.design.get('id')})
-  },
 
   componentDidMount() {
     var self = this
@@ -36,7 +28,7 @@ export default React.createClass({
     return (
       <section className="show-design">
         <div className="canvas-container">
-          <div className="canvas" onClick={this.selectDesign}>
+          <div className="canvas" onClick={this.props.onClick}>
             <img src={imageUrlForDesign(this.props.design)} width={imgSize} height={imgSize}/>
           </div>
         </div>

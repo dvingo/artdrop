@@ -27,12 +27,16 @@ export default React.createClass({
   },
 
   componentWillMount() {
-    var interval = setInterval(() => {
+    this._interval = setInterval(() => {
       if (!reactor.__isDispatching) {
-        clearInterval(interval)
+        clearInterval(this._interval)
         Store.actions.loadAdminColorPalettes()
       }
     }, 10)
+  },
+
+  componentWillUnmount() {
+    clearInterval(this._interval)
   },
 
   componentDidMount() {
