@@ -30,7 +30,7 @@ export default React.createClass({
   },
 
   handleShowDeleteConfirmation(){
-     this.setState({showDeleteConfirmation: true})
+    this.setState({showDeleteConfirmation: true})
   },
 
   confirmedDeleteSelectedLayerImage() {

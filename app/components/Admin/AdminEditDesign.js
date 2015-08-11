@@ -11,7 +11,7 @@ import {imageUrlForLayer,imageUrlForLayerImage,imageUrlForSurface} from '../../s
 import {svgTextToImage, renderDesignToJpegBlob} from '../../utils'
 
 export default React.createClass({
-  mixins: [reactor.ReactMixin, Router.State],
+  mixins: [reactor.ReactMixin, Router.State, Router.Navigation],
 
   getDataBindings() {
     return {existingDesign: Store.getters.currentDesign,
@@ -27,7 +27,9 @@ export default React.createClass({
             messages: [],
             w: 400,
             h: 400,
-            designJpgUrl: null}
+            designJpgUrl: null,
+            showDeleteConfirmation: false,
+            confirmDeleteText: ''}
   },
 
   componentWillMount() {
@@ -100,7 +102,7 @@ export default React.createClass({
       let svgEls = document.querySelectorAll('.canvas .layer svg')
       let designJpgBlob = renderDesignToJpegBlob(400, svgEls)
       Store.actions.updateDesign({design: this.state.editingDesign, jpgBlob: designJpgBlob})
-      messages.push('Design successfully created.')
+      messages.push('Design successfully saved.')
     }
     this.setState({errors: errors, messages: messages})
   },
@@ -110,6 +112,19 @@ export default React.createClass({
     return !(editingDesign &&
             editingDesign.get('layers').every(l => typeof l === 'object' && l.has('colorPalette') && l.has('selectedLayerImage')) &&
             (typeof editingDesign.get('surface') === 'object'))
+  },
+
+  handleShowDeleteConfirmation(){
+    this.setState({showDeleteConfirmation: true})
+  },
+
+  onConfirmDeleteChange(e) {
+    this.setState({confirmDeleteText: e.target.value})
+  },
+
+  confirmedDeleteDesign() {
+    Store.actions.deleteDesign(this.state.existingDesign)
+    this.transitionTo('adminDesigns')
   },
 
   render() {
@@ -175,7 +190,19 @@ export default React.createClass({
       <div className="admin-create-design">
         {this.state.errors.length > 0 ? <div>{errors}</div> : null}
         {this.state.messages.length > 0 ? <div>{messages}</div> : null}
-        <p>New Design, svg:</p>
+        <p>Edit Design:</p>
+
+        {!this.state.showDeleteConfirmation ?
+          <div><button onClick={this.handleShowDeleteConfirmation}>DELETE</button></div> : null}
+
+        {this.state.showDeleteConfirmation ? (
+          <div>
+            <label>Enter 'yes' to confirm.</label>
+            <input type="text" value={this.state.confirmDeleteText} onChange={this.onConfirmDeleteChange}/>
+            {this.state.confirmDeleteText === 'yes' ?
+                <button onClick={this.confirmedDeleteDesign}>REALLY DELETE</button> : null}
+          </div>
+          ) : null}
 
         <div style={{height:height, width:width, position:'relative', border: '1px solid'}}>
           <RenderLayers layers={layers} width={width} height={height} />

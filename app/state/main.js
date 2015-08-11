@@ -54,6 +54,7 @@ module.exports = {
     makeDesignCopy(newId) { reactor.dispatch('makeDesignCopy', newId) },
     createNewDesign(newDesign) { reactor.dispatch('createNewDesign', newDesign) },
     updateDesign(designData) { reactor.dispatch('updateDesign', designData) },
+    deleteDesign(design) { reactor.dispatch('deleteDesign', design) },
     loadAdminCreateDesignData() { reactor.dispatch('loadAdminCreateDesignData') },
     loadAdminCreatedDesigns() { reactor.dispatch('loadAdminCreatedDesigns') },
     loadAdminColorPalettes() { reactor.dispatch('loadAdminColorPalettes') },

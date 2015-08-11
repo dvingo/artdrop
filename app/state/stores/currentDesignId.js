@@ -33,5 +33,6 @@ export default new Nuclear.Store({
   initialize() {
     this.on('selectDesignId', this.handleSelectDesignId)
     this.on('selectDesignAndLayerId', (state, ids) => this.handleSelectDesignId(state, ids.designId))
+    this.on('deleteDesign', (state, design) => '')
   }
 })
