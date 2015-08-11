@@ -7,6 +7,7 @@ import {imageUrlForDesign, imageUrlForLayer, newId} from '../../state/utils'
 import {Link, Navigation} from 'react-router';
 import {iconPath} from '../../utils';
 import SVGInlineLayer  from '../SVGInlineLayer';
+import Button from '../Button'
 var appElement = document.getElementById('app');
 Modal.setAppElement(appElement);
 Modal.injectCSS()
@@ -60,6 +61,9 @@ export default React.createClass({
       return null
     }
 
+    var buttonShadow = {boxShadow: '1px 1px 1px black', overflow: 'hidden', borderRadius: 2}
+    var buttonDownShadow = {boxShadow: '1px 1px 4px black inset', overflow: 'hidden', borderRadius: 2}
+
     return (
       <Modal isOpen={true}>
         <section className="show-design">
@@ -67,12 +71,8 @@ export default React.createClass({
           <div className="top-ui">
             <span className="price">$75</span>
 
-            <ul className="cart" onClick={this.transitionToCart}>
-              <li className="cart-image">
-                <img src={iconPath('cart-icon-black.svg')}/>
-              </li>
-              <li>add to cart</li>
-            </ul>
+            <Button label="add to cart" imgSrc={iconPath('cart-icon-black.svg')}
+                onClick={this.transitionToCart} size={40}/>
 
             <span className="exit" onClick={this.transitionToDesigns}>
               <img src={iconPath('cancel-x.svg')}/>
@@ -86,18 +86,8 @@ export default React.createClass({
           </div>
 
           <div className="bottom-ui">
-            <ul className="image-with-label">
-              <li>
-                <img src={iconPath('share-icon-black.svg')}/>
-              </li>
-              <li className="label">share</li>
-            </ul>
-            <ul className="image-with-label">
-              <li>
-                <img src={iconPath('edit-pencil.svg')} onClick={this.transitionToEdit}/>
-              </li>
-              <li className="label">customize</li>
-            </ul>
+            <Button label="share" imgSrc={iconPath('share-icon-black.svg')}/>
+            <Button label="customize" imgSrc={iconPath('edit-pencil.svg')} onClick={this.transitionToEdit}/>
           </div>
 
         </section>

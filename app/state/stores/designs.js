@@ -3,7 +3,7 @@ var Immutable = Nuclear.Immutable
 import {designPropsToIds} from '../helpers'
 import getters from '../getters'
 import reactor from '../reactor'
-import {newId, uploadImgToS3} from '../utils'
+import {newId, uploadImgToS3, rotateColorPalette} from '../utils'
 import {designsRef, layersRef} from '../firebaseRefs'
 
 var transitionDesignColors = (direction, state) => {
@@ -108,12 +108,9 @@ export default new Nuclear.Store({
       var layers = currentDesign.get('layers')
       var i = layers.findIndex(l => l.get('id') === currentLayerId)
       var currentLayer = layers.get(i)
-      var currentRotation = currentLayer.get('paletteRotation')
-      // 0 - 3
-      var nextRotation = (currentRotation + 1) % 4
-      var newLayers = layers.update(i, v => v.set('paletteRotation', nextRotation))
-      var newDesign = currentDesign.set('layers', newLayers)
-      layersRef.child(currentLayerId).update({'paletteRotation': nextRotation})
+      var newDesign = rotateColorPalette(currentDesign, currentLayer)
+      var newRotation = newDesign.getIn(['layers', i, 'paletteRotation'])
+      layersRef.child(currentLayerId).update({'paletteRotation': newRotation})
       return state.set(newDesign.get('id'), newDesign)
     })
 

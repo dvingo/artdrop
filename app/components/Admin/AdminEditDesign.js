@@ -1,8 +1,10 @@
 import React from 'react'
 import reactor from '../../state/reactor'
 import Store from '../../state/main'
+import {rotateColorPalette} from '../../state/utils'
 import RenderLayers from '../Design/RenderLayers'
 import RenderLayersCanvas from '../Design/RenderLayersCanvas'
+import ColorsButtonRotate from '../ColorsButtonRotate'
 import ColorPalette from '../ColorPalette'
 import Immutable from 'Immutable'
 import Notification from '../Notification'
@@ -75,6 +77,12 @@ export default React.createClass({
     this.setState({currentLayer: i})
   },
 
+  handleRotateColorPalette() {
+    var design = this.state.editingDesign
+    var layer = design.getIn(['layers', this.state.currentLayer])
+    this.setState({editingDesign: rotateColorPalette(design, layer)})
+  },
+
   updateTitle(e) {
     this.setState({editingDesign: this.state.editingDesign.set('title', e.target.value)})
   },
@@ -126,6 +134,7 @@ export default React.createClass({
     Store.actions.deleteDesign(this.state.existingDesign)
     this.transitionTo('adminDesigns')
   },
+
 
   render() {
     if (this.designIsNotHydrated()) { return null }
@@ -220,6 +229,8 @@ export default React.createClass({
         </form>
 
         <section className='choose-palette'>
+          <ColorsButtonRotate layer={this.state.editingDesign.getIn(['layers', this.state.currentLayer])}
+            onClick={this.handleRotateColorPalette}/>
           {palettes}
         </section>
 

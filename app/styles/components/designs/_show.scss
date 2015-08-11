@@ -27,33 +27,7 @@
     @include flex(2 0 0);
     font-size: 2.5em;
   }
-  .cart {
-    @include display(flex);
-    @include flex(1 0 0);
-    @include align-items(center);
-    @include justify-content(center);
-    @include flex-direction(column);
-    list-style: none;
-    height: 100%;
-    font-size: 1em;
-    -webkit-padding-start: 0;
-    -webkit-margin-after: 0;
-    -webkit-margin-before: 0;
 
-    .cart-image {
-      @include display(flex);
-      @include align-items(center);
-      @include justify-content(center);
-      margin-bottom: 5px;
-      height: 40px;
-      width: 40px;
-
-      img {
-        width: 100%;
-        height: auto;
-      }
-    }
-  }
   .exit {
     @include display(flex);
     @include align-items(center);
@@ -82,27 +56,16 @@
     @include flex(1 0 0);
     @include align-items(center);
     @include justify-content(center);
+  }
 
-    .image-with-label {
-      @include display(flex);
-      @include flex(1 0 0);
-      @include flex-direction(column);
-      @include justify-content(center);
-      @include align-items(center);
-      list-style-type: none;
-      -webkit-margin-after: 0;
-      -webkit-margin-before: 0;
-      -webkit-padding-start: 0;
-      height: 100%;
-
-      &:hover { cursor: pointer; }
-
-      img {
-        height: 30px;
-        width: 30px;
-      }
-      .label { margin-top: 5px; }
-    }
+  .image-with-label {
+    padding: 10px 4px;
+    @include display(flex);
+    @include flex(1 0 0);
+    @include flex-direction(column);
+    @include justify-content(center);
+    @include align-items(center);
+    &:hover { cursor: pointer; }
   }
 
   .canvas-container {

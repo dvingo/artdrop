@@ -130,5 +130,15 @@ export default {
         }
       })
     })
+  },
+
+  rotateColorPalette(design, layer) {
+    var layers = design.get('layers')
+    var i = layers.findIndex(l => l.get('id') === layer.get('id'))
+    var currentRotation = layer.get('paletteRotation')
+    // 0 - 3
+    var nextRotation = (currentRotation + 1) % 4
+    var newLayers = layers.update(i, v => v.set('paletteRotation', nextRotation))
+    return design.set('layers', newLayers)
   }
 }
