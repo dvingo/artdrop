@@ -99,9 +99,7 @@ export default React.createClass({
     if (errors.length === 0) {
       let svgEls = document.querySelectorAll('.canvas .layer svg')
       let designJpgBlob = renderDesignToJpegBlob(400, svgEls)
-      // TODO Actions.updateDesign....
-      Store.actions.createNewDesign({editingDesign: this.state.editingDesign,
-                                     jpgBlob: designJpgBlob})
+      Store.actions.updateDesign({design: this.state.editingDesign, jpgBlob: designJpgBlob})
       messages.push('Design successfully created.')
     }
     this.setState({errors: errors, messages: messages})
@@ -118,7 +116,7 @@ export default React.createClass({
     if (this.designIsNotHydrated()) { return null }
 
     var surfaces = this.state.surfaces.map(s => {
-      var border = (this.state.editingDesign.get('surface') === s ? '2px solid' : 'none')
+      var border = (this.state.editingDesign.get('surface').get('id') === s.get('id') ? '2px solid' : 'none')
       return <img src={imageUrlForSurface(s)}
                   onClick={this.selectSurface.bind(null, s)}
                   width={40} height={40} key={s.get('id')}
@@ -126,8 +124,8 @@ export default React.createClass({
     })
 
     var palettes = this.state.colorPalettes.map(p => {
-      var bg = (this.state.editingDesign.getIn(['layers', this.state.currentLayer, 'colorPalette'])
-               === p ? 'yellow' : '#fff')
+      var bg = (this.state.editingDesign.getIn(['layers', this.state.currentLayer, 'colorPalette', 'id'])
+               === p.get('id') ? 'yellow' : '#fff')
      return (
        <div style={{background:bg}}>
          <ColorPalette onClick={this.selectColorPalette.bind(null, p)}
@@ -138,7 +136,7 @@ export default React.createClass({
 
     var layerImages = this.state.layerImages.map(layerImage => {
       var bg = (this.state.editingDesign.getIn(['layers',this.state.currentLayer,
-                  'selectedLayerImage']) === layerImage ? 'yellow' : '#fff')
+                  'selectedLayerImage', 'id']) === layerImage.get('id') ? 'yellow' : '#fff')
       return (
         <li onClick={this.selectLayerImage.bind(null, layerImage)}
             style={{background:bg}}>

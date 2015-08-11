@@ -31,7 +31,7 @@ export default new Nuclear.Store({
   },
 
   initialize() {
-   this.on('addDesign', function(state, design) {
+   this.on('addDesign', (state, design) => {
      return state.set(design.id, Immutable.fromJS(design))
    })
 
@@ -170,6 +170,42 @@ export default new Nuclear.Store({
          design.updatedAt = now
          var newDesignRef = designsRef.push(design)
          design.id = newDesignRef.key()
+         reactor.dispatch('addDesign', design)
+       }
+     }.bind(this))
+
+     return state
+   })
+
+   this.on('updateDesign', (state, designData) => {
+     var updatedDesign = designData.design
+     var designJpgBlob = designData.jpgBlob
+     var imageFilename = updatedDesign.get('title') + '.jpg'
+     uploadImgToS3(designJpgBlob, imageFilename, 'image/jpeg', (err, imgUrl) => {
+       if (err) {
+         console.log('got error: ', err)
+       } else {
+         var now = new Date().getTime()
+         var design = updatedDesign.toJS()
+         var layerIds = design.layers.map((layer, i) => {
+           var id = layer.id
+           delete layer.id
+           layer.order = i
+           layer.colorPalette = layer.colorPalette.id
+           layer.selectedLayerImage = layer.selectedLayerImage.id
+           layer.updatedAt = now
+           layersRef.child(id).update(layer)
+           return id
+         })
+         var id = design.id
+         delete design.id
+         design.imageUrl = imgUrl
+         design.layers = layerIds
+         design.surface = design.surface.id
+         design.price = 2000
+         design.updatedAt = now
+         designsRef.child(id).update(design)
+         design.id = id
          reactor.dispatch('addDesign', design)
        }
      }.bind(this))
