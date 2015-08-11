@@ -7,9 +7,7 @@ export default React.createClass({
   componentDidMount() {
     var self = this
     window.addEventListener('resize', () => {
-      if (self.isMounted()) {
-        self.forceUpdate()
-      }
+      if (self.isMounted()) { self.forceUpdate() }
     })
   },
 
@@ -20,9 +18,9 @@ export default React.createClass({
   render() {
     var imgSize = (() => {
       var w = window.innerWidth
-       if (w > 900)      { return 180 }
-       else if (w > 650) { return 120 }
-       else              { return 100 }
+      if (w > 900)      { return 180 }
+      else if (w > 650) { return 120 }
+      else              { return 100 }
     }())
 
     return (

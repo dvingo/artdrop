@@ -6,20 +6,22 @@ import RenderLayersCanvas from '../Design/RenderLayersCanvas'
 import ColorPalette from '../ColorPalette'
 import Immutable from 'Immutable'
 import Notification from '../Notification'
+import Router from 'react-router'
 import {imageUrlForLayer,imageUrlForLayerImage,imageUrlForSurface} from '../../state/utils'
 import {svgTextToImage, renderDesignToJpegBlob} from '../../utils'
 
 export default React.createClass({
-  mixins: [reactor.ReactMixin],
+  mixins: [reactor.ReactMixin, Router.State],
 
   getDataBindings() {
-    return {layerImages: Store.getters.layerImages,
+    return {existingDesign: Store.getters.currentDesign,
+            layerImages: Store.getters.layerImages,
             colorPalettes: Store.getters.colorPalettes,
             surfaces: Store.getters.surfaces}
   },
 
   getInitialState() {
-    return {newDesign: Immutable.fromJS({layers:[{},{},{}], adminCreated: true}),
+    return {editingDesign: null,
             currentLayer: 0,
             errors: [],
             messages: [],
@@ -29,7 +31,21 @@ export default React.createClass({
   },
 
   componentWillMount() {
-    Store.actions.loadAdminCreateDesignData()
+    setTimeout(() => {
+      if ((!this.state.editingDesign || this.designIsNotHydrated()) && this.state.existingDesign &&
+          this.getParams().designId === this.state.existingDesign.get('id')) {
+        setTimeout(() => this.setState({editingDesign: this.state.existingDesign}), 200)
+      } else {
+        Store.actions.selectDesignId(this.props.params.designId)
+        Store.actions.loadAdminCreateDesignData()
+      }
+    }, 50)
+  },
+
+  componentDidUpdate(prevProps, prevState) {
+    if ((!this.state.editingDesign || this.designIsNotHydrated()) && this.state.existingDesign) {
+      setTimeout(() => this.setState({editingDesign: this.state.existingDesign}), 200)
+    }
   },
 
   clearMessages() {
@@ -37,20 +53,20 @@ export default React.createClass({
   },
 
   selectSurface(surface) {
-    this.setState({newDesign: this.state.newDesign.set('surface', surface)})
+    this.setState({editingDesign: this.state.editingDesign.set('surface', surface)})
   },
 
   selectLayerImage(layerImage) {
     var layerIndex = this.state.currentLayer
-    var newDesign = this.state.newDesign.updateIn(['layers', layerIndex],
+    var editingDesign = this.state.editingDesign.updateIn(['layers', layerIndex],
                                 l => l.set('selectedLayerImage', layerImage))
-    this.setState({newDesign: newDesign})
+    this.setState({editingDesign: editingDesign})
   },
 
   selectColorPalette(palette) {
     var layerIndex = this.state.currentLayer
-    var newDesign = this.state.newDesign.updateIn(['layers', layerIndex], l => l.set('colorPalette', palette))
-    this.setState({newDesign:newDesign})
+    var editingDesign = this.state.editingDesign.updateIn(['layers', layerIndex], l => l.set('colorPalette', palette))
+    this.setState({editingDesign:editingDesign})
   },
 
   selectLayer(i) {
@@ -58,13 +74,13 @@ export default React.createClass({
   },
 
   updateTitle(e) {
-    this.setState({newDesign: this.state.newDesign.set('title', e.target.value)})
+    this.setState({editingDesign: this.state.editingDesign.set('title', e.target.value)})
   },
 
   saveDesign(e) {
     e.preventDefault()
-    var title = this.state.newDesign.get('title')
-    var surface = this.state.newDesign.get('surface')
+    var title = this.state.editingDesign.get('title')
+    var surface = this.state.editingDesign.get('surface')
     var errors = []
     var messages = []
     if (!title || title.length === 0) {
@@ -72,7 +88,7 @@ export default React.createClass({
     }
     if (!surface) { errors.push('You must select a surface') }
     var layersValid = (
-      this.state.newDesign.get('layers')
+      this.state.editingDesign.get('layers')
       .map(l => l.has('colorPalette') && l.has('selectedLayerImage'))
       .every(v => v)
     )
@@ -83,16 +99,26 @@ export default React.createClass({
     if (errors.length === 0) {
       let svgEls = document.querySelectorAll('.canvas .layer svg')
       let designJpgBlob = renderDesignToJpegBlob(400, svgEls)
-      Store.actions.createNewDesign({newDesign: this.state.newDesign,
+      // TODO Actions.updateDesign....
+      Store.actions.createNewDesign({editingDesign: this.state.editingDesign,
                                      jpgBlob: designJpgBlob})
       messages.push('Design successfully created.')
     }
     this.setState({errors: errors, messages: messages})
   },
 
+  designIsNotHydrated() {
+    var editingDesign = this.state.editingDesign
+    return !(editingDesign &&
+            editingDesign.get('layers').every(l => typeof l === 'object' && l.has('colorPalette') && l.has('selectedLayerImage')) &&
+            (typeof editingDesign.get('surface') === 'object'))
+  },
+
   render() {
+    if (this.designIsNotHydrated()) { return null }
+
     var surfaces = this.state.surfaces.map(s => {
-      var border = (this.state.newDesign.get('surface') === s ? '2px solid' : 'none')
+      var border = (this.state.editingDesign.get('surface') === s ? '2px solid' : 'none')
       return <img src={imageUrlForSurface(s)}
                   onClick={this.selectSurface.bind(null, s)}
                   width={40} height={40} key={s.get('id')}
@@ -100,7 +126,7 @@ export default React.createClass({
     })
 
     var palettes = this.state.colorPalettes.map(p => {
-      var bg = (this.state.newDesign.getIn(['layers', this.state.currentLayer, 'colorPalette'])
+      var bg = (this.state.editingDesign.getIn(['layers', this.state.currentLayer, 'colorPalette'])
                === p ? 'yellow' : '#fff')
      return (
        <div style={{background:bg}}>
@@ -111,7 +137,7 @@ export default React.createClass({
     })
 
     var layerImages = this.state.layerImages.map(layerImage => {
-      var bg = (this.state.newDesign.getIn(['layers',this.state.currentLayer,
+      var bg = (this.state.editingDesign.getIn(['layers',this.state.currentLayer,
                   'selectedLayerImage']) === layerImage ? 'yellow' : '#fff')
       return (
         <li onClick={this.selectLayerImage.bind(null, layerImage)}
@@ -122,7 +148,7 @@ export default React.createClass({
     })
 
     var layers = (
-      this.state.newDesign.get('layers')
+      this.state.editingDesign.get('layers')
         .filter(l => l.has('colorPalette') &&
                      l.has('selectedLayerImage')))
 
@@ -157,11 +183,6 @@ export default React.createClass({
           <RenderLayers layers={layers} width={width} height={height} />
         </div>
 
-        {/*<p>In Canvas:</p>
-        <div style={{height:height, width:width, position:'relative', border: '1px solid'}}>
-          <RenderLayersCanvas layers={layers}/>
-        </div>*/}
-
         <label>Select layer to edit</label>
         <div style={{padding:20}}>
           {selectLayers}
@@ -169,7 +190,7 @@ export default React.createClass({
 
         <form onSubmit={this.saveDesign}>
           <label>Title</label>
-          <input type="text" value={this.state.newDesign.get('title')} onChange={this.updateTitle}></input>
+          <input type="text" value={this.state.editingDesign.get('title')} onChange={this.updateTitle}></input>
           <input type="submit"></input>
         </form>
 

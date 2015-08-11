@@ -19,7 +19,7 @@ export default React.createClass({
   },
 
   getInitialState() {
-    return {newDesign: Immutable.fromJS({layers:[{},{},{}], adminCreated: true}),
+    return {newDesign: Immutable.fromJS({layers:[{paletteRotation:0},{paletteRotation:0},{paletteRotation:0}], adminCreated: true}),
             currentLayer: 0,
             errors: [],
             messages: [],
@@ -29,7 +29,7 @@ export default React.createClass({
   },
 
   componentWillMount() {
-    Store.actions.loadAdminCreateDesignData()
+    setTimeout(() => Store.actions.loadAdminCreateDesignData(), 50)
   },
 
   clearMessages() {
@@ -151,16 +151,11 @@ export default React.createClass({
       <div className="admin-create-design">
         {this.state.errors.length > 0 ? <div>{errors}</div> : null}
         {this.state.messages.length > 0 ? <div>{messages}</div> : null}
-        <p>New Design, svg:</p>
+        <p>Design:</p>
 
         <div style={{height:height, width:width, position:'relative', border: '1px solid'}}>
           <RenderLayers layers={layers} width={width} height={height} />
         </div>
-
-        {/*<p>In Canvas:</p>
-        <div style={{height:height, width:width, position:'relative', border: '1px solid'}}>
-          <RenderLayersCanvas layers={layers}/>
-        </div>*/}
 
         <label>Select layer to edit</label>
         <div style={{padding:20}}>
