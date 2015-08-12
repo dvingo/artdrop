@@ -1,7 +1,8 @@
 module.exports = {
   env: 'prod',
   srcDir: 'app',
-  designPreviewSize: 334,
+  designPreviewSize: 180,
+  designDetailSize: 334,
   s3Endpoint: 'https://s3.amazonaws.com',
   //s3BucketName: 'com.artdrop.test1',
   s3BucketName: 'com.artdrop.images2',

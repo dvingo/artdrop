@@ -27,7 +27,7 @@ export default React.createClass({
       <section className="show-design">
         <div className="canvas-container">
           <div className="canvas" onClick={this.props.onClick}>
-            <img src={imageUrlForDesign(this.props.design)} width={imgSize} height={imgSize}/>
+            <img src={imageUrlForDesign(this.props.design, 'small')} width={imgSize} height={imgSize}/>
           </div>
         </div>
       </section>

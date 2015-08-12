@@ -2,6 +2,8 @@ import {credsRef} from './firebaseRefs'
 var config = require('../../config')
 var srcDir = config.srcDir
 var s3Endpoint = config.s3Endpoint
+var designPreviewSize = config.designPreviewSize
+var designDetailSize = config.designDetailSize
 var s3BucketName = config.s3BucketName
 var hostname = config.env === 'dev' ? config.devHostname + ':' + config.devPort : config.prodHostname
 var scheme = window.location.protocol
@@ -66,8 +68,74 @@ var generateFirebaseID = (function() {
   };
 }())
 
-var urlForImage = (filename) => {
-  return hostname + '/images/' + filename
+var toA = (list) => Array.prototype.slice.call(list, 0)
+
+var dataUriToBlob = (dataUri) => {
+  // convert base64/URLEncoded data component to raw binary data held in a string
+  var byteString = (
+    (dataUri.split(',')[0].indexOf('base64') >= 0)
+    ? atob(dataUri.split(',')[1])
+    : unescape(dataUri.split(',')[1])
+  )
+  // separate out the mime component
+  var mimeString = dataUri.split(',')[0].split(':')[1].split(';')[0]
+  // write the bytes of the string to a typed array
+  var ia = new Uint8Array(byteString.length)
+  for (var i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i)
+  }
+  return new Blob([ia], {type:mimeString});
+}
+
+var svgTextToImage = (svgEl) => {
+  var svgString = (new window.XMLSerializer()).serializeToString(svgEl)
+  var imageString = 'data:image/svg+xml;base64,' + window.btoa(svgString)
+  var img = new Image()
+  img.height = 400
+  img.width = 400
+  img.src = imageString
+  return img
+}
+
+var renderDesignToJpegBlob = (size, svgEls, compositeSvg) => {
+  var w = size, h = size
+  var canvas = document.createElement('canvas')
+  canvas.height = h
+  canvas.width = w
+  var svgs = (
+    toA(svgEls).map(svg => {
+      svg.setAttribute('height', String(h))
+      svg.setAttribute('width', String(w))
+      return svg
+    })
+    .map(svgTextToImage)
+  )
+
+  var ctx = canvas.getContext('2d')
+  ctx.clearRect(0, 0, w, h)
+  var bgColor = '#fff'
+  svgs.forEach(svg => {
+    ctx.drawImage(svg, 0, 0, w, h)
+  })
+
+  if (compositeSvg) {
+    ctx.globalCompositeOperation = 'multiply'
+    compositeSvg.setAttribute('height', String(h))
+    compositeSvg.setAttribute('width', String(w))
+    let compositeSvg = svgTextToImage(compositeSvg)
+    ctx.drawImage(compositeSvg, 0, 0, w, h)
+  }
+  //Draw a white background.
+  ctx.globalCompositeOperation = "destination-over"
+  ctx.fillStyle = bgColor
+  ctx.fillRect(0, 0, w, h)
+  return dataUriToBlob(canvas.toDataURL('image/jpeg', 1.0))
+}
+
+var urlForImage = (title, type) => {
+  var retVal = hostname + '/images/' + title
+  if (type) { retVal += '.' + type }
+  return retVal
 }
 
 var s3UrlForImage = (filename) => {
@@ -81,12 +149,45 @@ var imageUrlForLayerImage = (layerImage) => {
   return urlForImage(filename)
 }
 
+var uploadImgToS3 = (file, filename, imgType, onComplete) => {
+  credsRef.once('value', snapshot => {
+    var creds = snapshot.val()
+    AWS.config.credentials = {
+      accessKeyId: creds.s3AccessKey,
+      secretAccessKey: creds.s3SecretKey}
+    var params = {
+      Bucket: s3BucketName,
+      Key: filename,
+      ACL: 'public-read',
+      CacheControl: 'max-age: 45792000',
+      ContentType: imgType,
+      Body: file}
+    var s3 = new AWS.S3()
+    s3.putObject(params, (err, d) => {
+      if (err) {
+        console.log('got error: ',err)
+        onComplete(new Error('Failed to upload to s3.'))
+      } else {
+        onComplete(null, s3UrlForImage(filename))
+      }
+    })
+  })
+}
+
 export default {
-  imageUrlForDesign(design) {
-    var filename = (design.has('filename')
-        ? design.get('filename')
+  imageUrlForDesign(design, size) {
+    if (size === 'small') {
+      return design.get('smallImageUrl')
+    }
+    if (size === 'large') {
+      console.log('GETTING large image url for design: ', design.toJS())
+        console.log('url is: ', design.get('largeImageUrl'))
+      return design.get('largeImageUrl')
+    }
+    var filename = (design.has('title')
+        ? design.get('title')
         : design.get('imageUrl').split('/').pop())
-    return urlForImage(filename)
+    return urlForImage(filename + '-' + size, 'jpg')
   },
 
   imageUrlForLayer(layer) {
@@ -107,27 +208,26 @@ export default {
 
   s3UrlForImage: s3UrlForImage,
 
-  uploadImgToS3(file, filename, imgType, onComplete) {
-    credsRef.once('value', snapshot => {
-      var creds = snapshot.val()
-      AWS.config.credentials = {
-        accessKeyId: creds.s3AccessKey,
-        secretAccessKey: creds.s3SecretKey}
-      var params = {
-        Bucket: s3BucketName,
-        Key: filename,
-        ACL: 'public-read',
-        CacheControl: 'max-age: 45792000',
-        ContentType: imgType,
-        Body: file}
-      var s3 = new AWS.S3()
-      s3.putObject(params, (err, d) => {
+  uploadImgToS3: uploadImgToS3,
+
+  uploadDesignPreview(title, svgEls, onComplete) {
+    var designJpgBlobSmall = renderDesignToJpegBlob(designPreviewSize, svgEls)
+    var designJpgBlobLarge = renderDesignToJpegBlob(designDetailSize, svgEls)
+    var smallImageFilename = title + '-small' + '.jpg'
+    var largeImageFilename = title + '-large' + '.jpg'
+    uploadImgToS3(designJpgBlobSmall, smallImageFilename, 'image/jpeg', (err, smallImgUrl) => {
+      if (err) {
+        console.log('got error: ',err)
+        onComplete(new Error('Failed to upload ' + smallImgUrl + ' to s3.'))
+        return
+      }
+      uploadImgToS3(designJpgBlobLarge, largeImageFilename, 'image/jpeg', (err, largeImgUrl) => {
         if (err) {
           console.log('got error: ',err)
-          onComplete(new Error('Failed to upload to s3.'))
-        } else {
-          onComplete(null, s3UrlForImage(filename))
+          onComplete(new Error('Failed to upload ' + largeImgUrl + ' to s3.'))
+          return
         }
+        onComplete(null, {small: smallImgUrl, large: largeImgUrl})
       })
     })
   },

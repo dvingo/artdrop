@@ -81,7 +81,7 @@ export default React.createClass({
 
           <div className="canvas-container" onClick={this.transitionToEdit}>
             <div className="canvas">
-              <img src={imageUrlForDesign(this.state.design)} width='100%'/>
+              <img src={imageUrlForDesign(this.state.design, 'large')} width='100%'/>
             </div>
           </div>
 

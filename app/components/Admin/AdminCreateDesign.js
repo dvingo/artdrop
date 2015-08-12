@@ -8,7 +8,6 @@ import ColorPalette from '../ColorPalette'
 import Immutable from 'Immutable'
 import Notification from '../Notification'
 import {imageUrlForLayer,imageUrlForLayerImage,imageUrlForSurface} from '../../state/utils'
-import {svgTextToImage, renderDesignToJpegBlob} from '../../utils'
 import {rotateColorPalette} from '../../state/utils'
 import {designPreviewSize} from '../../../config'
 
@@ -91,9 +90,7 @@ export default React.createClass({
 
     if (errors.length === 0) {
       let svgEls = document.querySelectorAll('.canvas .layer svg')
-      let designJpgBlob = renderDesignToJpegBlob(designPreviewSize, svgEls)
-      Store.actions.createNewDesign({newDesign: this.state.newDesign,
-                                     jpgBlob: designJpgBlob})
+      Store.actions.createNewDesign({design: this.state.newDesign, svgEls: svgEls})
       messages.push('Design successfully created.')
     }
     this.setState({errors: errors, messages: messages})

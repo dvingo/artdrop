@@ -10,7 +10,6 @@ import Immutable from 'Immutable'
 import Notification from '../Notification'
 import Router from 'react-router'
 import {imageUrlForLayer,imageUrlForLayerImage,imageUrlForSurface} from '../../state/utils'
-import {svgTextToImage, renderDesignToJpegBlob} from '../../utils'
 import {designPreviewSize} from '../../../config'
 
 export default React.createClass({
@@ -109,8 +108,7 @@ export default React.createClass({
 
     if (errors.length === 0) {
       let svgEls = document.querySelectorAll('.canvas .layer svg')
-      let designJpgBlob = renderDesignToJpegBlob(designPreviewSize, svgEls)
-      Store.actions.updateDesign({design: this.state.editingDesign, jpgBlob: designJpgBlob})
+      Store.actions.updateDesign({design: this.state.editingDesign, svgEls: svgEls})
       messages.push('Design successfully saved.')
     }
     this.setState({errors: errors, messages: messages})

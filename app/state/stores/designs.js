@@ -3,7 +3,7 @@ var Immutable = Nuclear.Immutable
 import {designPropsToIds} from '../helpers'
 import getters from '../getters'
 import reactor from '../reactor'
-import {newId, uploadImgToS3, rotateColorPalette} from '../utils'
+import {uploadDesignPreview, newId, rotateColorPalette} from '../utils'
 import {designsRef, layersRef} from '../firebaseRefs'
 
 var transitionDesignColors = (direction, state) => {
@@ -140,36 +140,36 @@ export default new Nuclear.Store({
     })
 
     this.on('createNewDesign', (state, newDesignData) => {
-      // This assumes layerImages, surfaces, and palettes already exist in firebase.
-      var newDesign = newDesignData.newDesign
-      var designJpgBlob = newDesignData.jpgBlob
-      var imageFilename = newDesign.get('title') + '.jpg'
-      uploadImgToS3(designJpgBlob, imageFilename, 'image/jpeg', (err, imgUrl) => {
+      var newDesign = newDesignData.design
+      var svgEls = newDesignData.svgEls
+      var title = newDesign.get('title')
+      uploadDesignPreview(title, svgEls, (err, imgUrls) => {
         if (err) {
           console.log('got error: ', err)
-        } else {
-          var now = new Date().getTime()
-          var design = newDesign.toJS()
-          var layerIds = design.layers.map((layer, i) => {
-            layer.order = i
-            layer.colorPalette = layer.colorPalette.id
-            layer.selectedLayerImage = layer.selectedLayerImage.id
-            layer.createdAt = now
-            layer.updatedAt = now
-            layer.layerImages = reactor.evaluate(getters.layerImageIds).toJS()
-            var newLayerRef = layersRef.push(layer)
-            return newLayerRef.key()
-          })
-          design.imageUrl = imgUrl
-          design.layers = layerIds
-          design.surface = design.surface.id
-          design.price = 2000
-          design.createdAt = now
-          design.updatedAt = now
-          var newDesignRef = designsRef.push(design)
-          design.id = newDesignRef.key()
-          reactor.dispatch('addDesign', design)
+          return
         }
+        var now = new Date().getTime()
+        var design = newDesign.toJS()
+        var layerIds = design.layers.map((layer, i) => {
+          layer.order = i
+          layer.colorPalette = layer.colorPalette.id
+          layer.selectedLayerImage = layer.selectedLayerImage.id
+          layer.createdAt = now
+          layer.updatedAt = now
+          layer.layerImages = reactor.evaluate(getters.layerImageIds).toJS()
+          var newLayerRef = layersRef.push(layer)
+          return newLayerRef.key()
+        })
+        design.smallImageUrl = imgUrls.small
+        design.largeImageUrl = imgUrls.large
+        design.layers = layerIds
+        design.surface = design.surface.id
+        design.price = 2000
+        design.createdAt = now
+        design.updatedAt = now
+        var newDesignRef = designsRef.push(design)
+        design.id = newDesignRef.key()
+        reactor.dispatch('addDesign', design)
       }.bind(this))
 
       return state
@@ -177,37 +177,37 @@ export default new Nuclear.Store({
 
     this.on('updateDesign', (state, designData) => {
       var updatedDesign = designData.design
-      var designJpgBlob = designData.jpgBlob
-      var imageFilename = updatedDesign.get('title') + '.jpg'
-      uploadImgToS3(designJpgBlob, imageFilename, 'image/jpeg', (err, imgUrl) => {
+      var svgEls = designData.svgEls
+      var title = updatedDesign.get('title')
+      uploadDesignPreview(title, svgEls, (err, imgUrls) => {
         if (err) {
           console.log('got error: ', err)
-        } else {
-          var now = new Date().getTime()
-          var design = updatedDesign.toJS()
-          var layerIds = design.layers.map((layer, i) => {
-            var id = layer.id
-            delete layer.id
-            layer.order = i
-            layer.colorPalette = layer.colorPalette.id
-            layer.selectedLayerImage = layer.selectedLayerImage.id
-            layer.updatedAt = now
-            layersRef.child(id).update(layer)
-            return id
-          })
-          var id = design.id
-          delete design.id
-          design.imageUrl = imgUrl
-          design.layers = layerIds
-          design.surface = design.surface.id
-          design.price = 2000
-          design.updatedAt = now
-          designsRef.child(id).update(design)
-          design.id = id
-          reactor.dispatch('addDesign', design)
+          return
         }
-      }.bind(this))
-
+        var now = new Date().getTime()
+        var design = updatedDesign.toJS()
+        var layerIds = design.layers.map((layer, i) => {
+          var id = layer.id
+          delete layer.id
+          layer.order = i
+          layer.colorPalette = layer.colorPalette.id
+          layer.selectedLayerImage = layer.selectedLayerImage.id
+          layer.updatedAt = now
+          layersRef.child(id).update(layer)
+          return id
+        })
+        var id = design.id
+        delete design.id
+        design.smallImageUrl = imgUrls.small
+        design.largeImageUrl = imgUrls.large
+        design.layers = layerIds
+        design.surface = design.surface.id
+        design.price = 2000
+        design.updatedAt = now
+        designsRef.child(id).update(design)
+        design.id = id
+        reactor.dispatch('addDesign', design)
+      })
       return state
     })
 
