@@ -59,7 +59,7 @@ export default React.createClass({
   handleRotateColorPalette() {
     var design = this.state.newDesign
     var layer = design.getIn(['layers', this.state.currentLayer])
-    this.setState({newDesign: rotateColorPalette(design, layer)})
+    this.setState({newDesign: rotateColorPalette(design, layer, this.state.currentLayer)})
   },
 
   selectLayer(i) {

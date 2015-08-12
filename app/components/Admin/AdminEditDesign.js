@@ -136,7 +136,6 @@ export default React.createClass({
     this.transitionTo('adminDesigns')
   },
 
-
   render() {
     if (this.designIsNotHydrated()) { return null }
 

@@ -132,13 +132,16 @@ export default {
     })
   },
 
-  rotateColorPalette(design, layer) {
+  rotateColorPalette(design, layer, layerIndex) {
     var layers = design.get('layers')
-    var i = layers.findIndex(l => l.get('id') === layer.get('id'))
+    var index = layerIndex
+    if (layerIndex == null) {
+     index = layers.findIndex(l => l.get('id') === layer.get('id'))
+    }
     var currentRotation = layer.get('paletteRotation')
     // 0 - 3
     var nextRotation = (currentRotation + 1) % 4
-    var newLayers = layers.update(i, v => v.set('paletteRotation', nextRotation))
+    var newLayers = layers.update(index, v => v.set('paletteRotation', nextRotation))
     return design.set('layers', newLayers)
   }
 }
