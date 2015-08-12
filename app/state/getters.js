@@ -18,7 +18,7 @@ getters.colorPalettes = [['colorPalettes'],
 getters.currentLayer = [
   ['currentLayerId'],
   getters.currentDesign,
-  (layerId, design) => design.get('layers').find(v => v.get('id') === layerId)
+  (layerId, design) => design ? design.get('layers').find(v => v.get('id') === layerId) : null
 ]
 
 getters.currentPalette = [

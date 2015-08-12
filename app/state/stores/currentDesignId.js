@@ -21,7 +21,7 @@ export default new Nuclear.Store({
     }
     var designs = reactor.evaluate(['designs'])
     if (!designs.has(designId) || designIsNotHydrated(designId)) {
-      designsRef.child(designId).on('value', (design) => {
+      designsRef.child(designId).once('value', (design) => {
         design = design.val()
         design.id = designId
         hydrateDesign(design)

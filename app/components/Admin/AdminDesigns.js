@@ -24,7 +24,7 @@ export default React.createClass({
         clearInterval(this._interval)
         Store.actions.loadAdminCreatedDesigns()
       }
-    }, 10)
+    }, 100)
   },
 
   componentWillUnmount() {

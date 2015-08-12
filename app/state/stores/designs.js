@@ -41,10 +41,11 @@ export default new Nuclear.Store({
       }, state)
     })
 
-    this.on('deleteDesign', function(state, design) {
-      if (state.has(design.id)) {
-        designsRef.child(d.get('id')).remove()
-        return state.remove(design.get('id'))
+    this.on('deleteDesign', (state, design) => {
+      var designId = design.get('id')
+      if (state.has(designId)) {
+        designsRef.child(designId).remove()
+        return state.remove(designId)
       }
       return state
     })
@@ -210,9 +211,5 @@ export default new Nuclear.Store({
       return state
     })
 
-    this.on('deleteDesign', (state, design) => {
-      designsRef.child(design.get('id')).set(null)
-      return state.remove(design.get('id'))
-    })
   }
 })

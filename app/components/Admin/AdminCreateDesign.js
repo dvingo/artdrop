@@ -8,6 +8,7 @@ import Immutable from 'Immutable'
 import Notification from '../Notification'
 import {imageUrlForLayer,imageUrlForLayerImage,imageUrlForSurface} from '../../state/utils'
 import {svgTextToImage, renderDesignToJpegBlob} from '../../utils'
+import {designPreviewSize} from '../../../config'
 
 export default React.createClass({
   mixins: [reactor.ReactMixin],
@@ -23,8 +24,8 @@ export default React.createClass({
             currentLayer: 0,
             errors: [],
             messages: [],
-            w: 400,
-            h: 400,
+            width: 400,
+            height: 400,
             designJpgUrl: null}
   },
 
@@ -82,7 +83,7 @@ export default React.createClass({
 
     if (errors.length === 0) {
       let svgEls = document.querySelectorAll('.canvas .layer svg')
-      let designJpgBlob = renderDesignToJpegBlob(400, svgEls)
+      let designJpgBlob = renderDesignToJpegBlob(designPreviewSize, svgEls)
       Store.actions.createNewDesign({newDesign: this.state.newDesign,
                                      jpgBlob: designJpgBlob})
       messages.push('Design successfully created.')
@@ -134,8 +135,8 @@ export default React.createClass({
       return <Notification message={m} onClose={this.clearMessages}/>
     })
 
-    var height = this.state.h
-    var width = this.state.w
+    var height = this.state.height
+    var width = this.state.width
     var selectLayers = [0,1,2].map(i => {
       return (
         <div style={{
