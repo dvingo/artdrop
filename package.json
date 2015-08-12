@@ -47,6 +47,7 @@
     "immutable": "^3.7.3",
     "node-sass": "^3.1.2",
     "nuclear-js": "^1.0.2",
+    "pako": "^0.2.7",
     "react": "^0.13.0",
     "react-hammerjs": "^0.2.2",
     "react-router": "^0.13.3",

@@ -49,8 +49,10 @@ export default new Nuclear.Store({
       return state
     })
 
-    this.on('uploadLayerImageToS3', (state, file) => {
-      uploadImgToS3(file, file.name,  'image/svg+xml', (err, imageUrl) => {
+    this.on('uploadLayerImageToS3', (state, fileData) => {
+      var file = fileData.file
+      var svgText = fileData.svgText
+      uploadImgToS3(svgText, file.name,  'image/svg+xml', (err, imageUrl) => {
         if (err) {
           console.log('got err: ', err)
         } else {

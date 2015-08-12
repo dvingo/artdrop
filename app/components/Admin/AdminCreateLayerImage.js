@@ -19,6 +19,7 @@ export default React.createClass({
     return {file: null,
             fileUrl: null,
             fileSvgEl: null,
+            svgText: null,
             compositeFile: null,
             compositeFileUrl: null,
             compositeFileSvgEl: null,
@@ -71,10 +72,12 @@ export default React.createClass({
             var newState = (propName === 'imageUrl' ?
                {file: file,
                 fileUrl: URL.createObjectURL(file),
-                fileSvgEl: svgEl}
+                fileSvgEl: svgEl,
+                svgText: svgText}
                : {compositeFile: file,
                   compositeFileUrl: URL.createObjectURL(file),
-                  compositeFileSvgEl: svgEl}
+                  compositeFileSvgEl: svgEl,
+                  svgText: svgText}
               )
               this.setState(newState)
           }
@@ -106,7 +109,7 @@ export default React.createClass({
       })
     } else if (!this.state.isUploadInProgress) {
       this.setState({isUploadInProgress: true})
-      Store.actions.uploadLayerImageToS3(this.state.file)
+      Store.actions.uploadLayerImageToS3({file: this.state.file, svgText: this.state.svgText})
     }
   },
 

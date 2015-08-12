@@ -1,5 +1,6 @@
 import {credsRef} from './firebaseRefs'
 var config = require('../../config')
+var pako = require('pako')
 var srcDir = config.srcDir
 var s3Endpoint = config.s3Endpoint
 var designPreviewSize = config.designPreviewSize
@@ -150,6 +151,10 @@ var imageUrlForLayerImage = (layerImage) => {
 }
 
 var uploadImgToS3 = (file, filename, imgType, onComplete) => {
+  var body = file
+  if (imgType === 'image/svg+xml') {
+    body = pako.gzip(file)
+  }
   credsRef.once('value', snapshot => {
     var creds = snapshot.val()
     AWS.config.credentials = {
@@ -161,7 +166,11 @@ var uploadImgToS3 = (file, filename, imgType, onComplete) => {
       ACL: 'public-read',
       CacheControl: 'max-age: 45792000',
       ContentType: imgType,
-      Body: file}
+      Body: body}
+
+    if (imgType === 'image/svg+xml') {
+      params.ContentEncoding = 'gzip'
+    }
     var s3 = new AWS.S3()
     s3.putObject(params, (err, d) => {
       if (err) {
