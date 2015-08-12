@@ -3,11 +3,13 @@ import reactor from '../../state/reactor'
 import Store from '../../state/main'
 import RenderLayers from '../Design/RenderLayers'
 import RenderLayersCanvas from '../Design/RenderLayersCanvas'
+import ColorsButtonRotate from '../ColorsButtonRotate'
 import ColorPalette from '../ColorPalette'
 import Immutable from 'Immutable'
 import Notification from '../Notification'
 import {imageUrlForLayer,imageUrlForLayerImage,imageUrlForSurface} from '../../state/utils'
 import {svgTextToImage, renderDesignToJpegBlob} from '../../utils'
+import {rotateColorPalette} from '../../state/utils'
 import {designPreviewSize} from '../../../config'
 
 export default React.createClass({
@@ -52,6 +54,12 @@ export default React.createClass({
     var layerIndex = this.state.currentLayer
     var newDesign = this.state.newDesign.updateIn(['layers', layerIndex], l => l.set('colorPalette', palette))
     this.setState({newDesign:newDesign})
+  },
+
+  handleRotateColorPalette() {
+    var design = this.state.newDesign
+    var layer = design.getIn(['layers', this.state.currentLayer])
+    this.setState({newDesign: rotateColorPalette(design, layer)})
   },
 
   selectLayer(i) {
@@ -170,6 +178,11 @@ export default React.createClass({
         </form>
 
         <section className='choose-palette'>
+          {this.state.newDesign.getIn(['layers', this.state.currentLayer, 'colorPalette']) ?
+            <ColorsButtonRotate layer={this.state.newDesign.getIn(['layers', this.state.currentLayer])}
+              onClick={this.handleRotateColorPalette}/>
+            : null
+          }
           {palettes}
         </section>
 
