@@ -11,11 +11,16 @@ export default React.createClass({
   mixins: [reactor.ReactMixin, Router.Navigation],
 
   getDataBindings() {
-    return { designs: Store.getters.adminCreatedDesigns }
+    return { designs: Store.getters.adminCreatedDesigns,
+             tags: Store.getters.tags,
+             tagsMap: ['tags']}
   },
 
   getInitialState() {
-    return { selectedDesign: null }
+    return { selectedDesign: null,
+             selectedTag: null,
+             editMode: 'editDesign',
+             selectedDesigns: Immutable.Set() }
   },
 
   componentWillMount() {
@@ -23,6 +28,7 @@ export default React.createClass({
       if (!reactor.__isDispatching) {
         clearInterval(this._interval)
         Store.actions.loadAdminCreatedDesigns()
+        Store.actions.loadAdminTags()
       }
     }, 100)
   },
@@ -31,22 +37,86 @@ export default React.createClass({
     clearInterval(this._interval)
   },
 
-  selectDesign(designId, e) {
+  componentDidUpdate(prevProps, prevState) {
+    if (!this.state.selectedTag && this.state.tags.count() > 0) {
+      this.setState({selectedTag: this.state.tags.get(0)})
+    }
+  },
+
+  selectDesign(design, e) {
+    var designId = design.get('id')
     e.preventDefault()
-    this.transitionTo('adminEditDesign', {designId: designId})
+    if (this.state.editMode === 'editDesign') {
+      this.transitionTo('adminEditDesign', {designId: designId})
+    } else {
+      var selectedDesigns = this.state.selectedDesigns
+      if (selectedDesigns.includes(design)) {
+        this.setState({selectedDesigns: selectedDesigns.remove(design)})
+      } else {
+        this.setState({selectedDesigns: selectedDesigns.add(design)})
+      }
+    }
+  },
+
+  handleAddDesignsToTag() {
+    console.log('this.state.selectedTag: ',this.state.selectedTag.toJS())
+    Store.actions.addDesignsToTag({tag: this.state.selectedTag, designs: this.state.selectedDesigns})
+  },
+
+  onFormChange(e) {
+    this.setState({editMode: e.target.value})
+  },
+
+  handleTagChange(e) {
+    var tag = this.state.tagsMap.get(e.target.value)
+    var selectedDesigns = tag.get('designs') || Immutable.Set()
+    this.setState({selectedTag:tag, selectedDesigns:selectedDesigns})
   },
 
   render() {
     let designs = this.state.designs.map(d => {
+      var outline = this.state.selectedDesigns.includes(d) ? '3px solid #ff0093' : 'none'
       return (
-        <li className="design" key={d.get('id')}>
-          <Design design={d} onClick={this.selectDesign.bind(null, d.get('id'))}/>
+        <li className="design" key={d.get('id')} style={{outline: outline, margin: 4}}>
+          <Design design={d} onClick={this.selectDesign.bind(null, d)}/>
         </li>
       )
     })
 
+    var tagOptions = this.state.tags.map(tag => {
+      return (
+        <option value={tag.get('id')}>{tag.get('name')}</option>
+      )
+    })
+
+    var selectedTag = this.state.selectedTag ? this.state.selectedTag.get('id') : ''
     return (
       <div className="main">
+
+        <form onChange={this.onFormChange}>
+          <div>
+            <label>Edit a design</label>
+            <input type="radio" value="editDesign" name="editMode" checked={this.state.editMode === 'editDesign'}/>
+          </div>
+          <div>
+            <label>Group designs by tag</label>
+            <input type="radio" value="groupDesignsByTag" name="editMode" checked={this.state.editMode === 'groupDesignsByTag'}/>
+          </div>
+        </form>
+
+        { this.state.editMode === 'groupDesignsByTag' ?
+          <div style={{padding:'10px'}}>
+            <select value={selectedTag} style={{width:'50%'}} onChange={this.handleTagChange}>
+              {tagOptions}
+            </select>
+            { this.state.selectedDesigns.count() > 0 ?
+              <div style={{padding:'10px 0'}}>
+                <button onClick={this.handleAddDesignsToTag}>Tag Selected Designs</button>
+              </div>
+              : null }
+          </div>
+          : null }
+
         <ul className="designs">
           {designs}
         </ul>

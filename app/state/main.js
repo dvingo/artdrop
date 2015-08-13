@@ -1,4 +1,3 @@
-import fixtures from '../fixtures'
 import reactor from './reactor'
 import designsStore from './stores/designs'
 import currentUserStore from './stores/currentUser'
@@ -11,7 +10,7 @@ import surfacesStore from './stores/surfaces'
 import layerImageUploadedStore from './stores/layerImageUploaded'
 import layerIsBeingReplacedStore from './stores/layerIsBeingReplaced'
 import currentLayerIdStore from './stores/currentLayerId'
-import {idsToObjs, hydrateDesign} from './helpers'
+import tagsStore from './stores/tags'
 import getters from './getters'
 import {usersRef, firebaseRef} from './firebaseRefs'
 var Nuclear = require('nuclear-js')
@@ -27,7 +26,8 @@ reactor.registerStores({
   currentLayerId: currentLayerIdStore,
   surfaces: surfacesStore,
   validEditSteps: validEditStepsStore,
-  layerIsBeingReplaced: layerIsBeingReplacedStore
+  layerIsBeingReplaced: layerIsBeingReplacedStore,
+  tags: tagsStore
 })
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -66,7 +66,10 @@ module.exports = {
     logoutCurrentUser() { reactor.dispatch('logoutCurrentUser') },
     saveColorPalette(colorPalette) { reactor.dispatch('saveColorPalette', colorPalette) },
     createNewColorPalette(colorPalette) { reactor.dispatch('createNewColorPalette', colorPalette) },
-    rotateCurrentLayerColorPalette() { reactor.dispatch('rotateCurrentLayerColorPalette') }
+    rotateCurrentLayerColorPalette() { reactor.dispatch('rotateCurrentLayerColorPalette') },
+    createTag(newTagName) { reactor.dispatch('createTag', newTagName) },
+    loadAdminTags() { reactor.dispatch('loadAdminTags') },
+    addDesignsToTag(data) { reactor.dispatch('addDesignsToTag', data) }
   }
 }
 

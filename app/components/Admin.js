@@ -38,6 +38,7 @@ export default React.createClass({
         <div className="admin">
           <div className="admin-nav-bar" style={navBarStyle}>
             {/*<Link to="adminUsers" style={navLinkStyle}>Edit Users</Link>*/}
+            <Link to="adminTags" style={navLinkStyle}>Tags</Link>
             <Link to="adminColorPalettes" style={navLinkStyle}>Color Palettes</Link>
             <Link to="adminDesigns" style={navLinkStyle}>Edit Designs</Link>
             <Link to="adminCreateDesign" style={navLinkStyle}>Create Design</Link>

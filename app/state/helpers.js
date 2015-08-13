@@ -1,17 +1,9 @@
 import {layersRef, layerImagesRef,
-colorPalettesRef,surfacesRef} from './firebaseRefs'
+colorPalettesRef,surfacesRef, tagsRef} from './firebaseRefs'
 import reactor from './reactor'
 var RSVP = require('RSVP')
+
 var exports = {}
-var idsToObjs = (ids, dataSrc) => {
-  var setupObj = (k) => {
-    var o = dataSrc[k];
-    o.id = k;
-    return o;
-  }
-  return Array.isArray(ids) ? ids.map(setupObj)
-                            : setupObj(ids);
-}
 
 exports.designPropsToIds = (design) => {
   var layerIds = design.get('layers').map(l => l.get('id'))
@@ -68,6 +60,7 @@ var hydrateAndDispatchData = (dbRef, dispatchMsg, currentState) => {
 
 exports.hydrateAndDispatchLayerImages = hydrateAndDispatchData.bind(null, layerImagesRef, 'addManyLayerImages')
 exports.hydrateAndDispatchSurfaces = hydrateAndDispatchData.bind(null, surfacesRef, 'addManySurfaces')
+exports.hydrateAndDispatchTags = hydrateAndDispatchData.bind(null, tagsRef, 'addManyTags')
 exports.hydrateAndDispatchColorPalettes = hydrateAndDispatchData.bind(null, colorPalettesRef, 'addManyColorPalettes')
 
 var hydrateLayer = hydrateObj.bind(null, layersRef)
@@ -80,5 +73,4 @@ exports.hydrateLayerImage = hydrateLayerImage
 exports.hydrateColorPalette = hydrateColorPalette
 exports.hydrateSurface = hydrateSurface
 exports.hydrateObj = hydrateObj
-exports.idsToObjs = idsToObjs
 export default exports

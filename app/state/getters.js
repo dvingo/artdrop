@@ -64,4 +64,8 @@ getters.layerImageOptions = [
   }
 ]
 
+getters.tags = [
+  ['tags'], tags => tags ? tags.toList() : []
+]
+
 export default getters
