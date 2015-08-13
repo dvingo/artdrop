@@ -32,11 +32,13 @@ export default new Nuclear.Store({
 
   initialize() {
     this.on('addDesign', (state, design) => {
+      design.tags = design.tags ? Object.keys(design.tags) : []
       return state.set(design.id, Immutable.fromJS(design))
     })
 
     this.on('addManyDesigns', (state, designs) => {
       return designs.reduce((retVal, design) => {
+        design.tags = design.tags ? Object.keys(design.tags) : []
         return retVal.set(design.id, Immutable.fromJS(design))
       }, state)
     })

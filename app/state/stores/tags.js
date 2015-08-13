@@ -8,6 +8,23 @@ var hydrateTags = (state) => {
   return state
 }
 
+var addTagToDesignTags = (tagId, design) => {
+  var designId = design.get('id')
+  console.log('handling design: ', designId)
+  var tagIds = design.get('tags')
+  if (tagIds) console.log('tagIds.toJS(): ', tagIds.toJS())
+  var tagIdSet = (tagIds ? Immutable.Set(tagIds) : Immutable.Set()).add(tagId)
+  //var tagsObj = {}
+  //tagIdSet.forEach(id => {
+    //console.log('id is: ', id)
+    //tagsObj[id] = true
+  //})
+  //designsRef.child(designId).update({tags: tagsObj})
+  var theTagSet = tagIdSet.toKeyedSeq()
+  console.log('tagIdSet.toJS(): ', theTagSet.toJS())
+  return design.set('tags', theTagSet)
+}
+
 export default new Nuclear.Store({
   getInitialState() { return Nuclear.toImmutable({}) },
 
@@ -33,34 +50,33 @@ export default new Nuclear.Store({
       var tag = data.tag
       console.log('tag is: ', tag.toJS())
       var tagId = tag.get('id')
-      var allDesignsMap = reactor.evaluate(['designs'])
-      var designs = data.designs.map(designId => allDesignsMap.get(designId))
-      // TODO Need to handle removing the designs that were deselected.
-      var updatedDesigns = designs.map(design => {
-        var designId = design.get('id')
-        console.log('handling design: ', designId)
-        var tagIds = design.get('tags')
-        if (tagIds)
-        console.log('tagIds.toJS(): ', tagIds.toJS())
-        var tagIdSet = tagIds ? Immutable.Set.fromKeys(tagIds.toJS()) : Immutable.Set()
-        tagIdSet = tagIdSet.add(tagId)
-        var tagsObj = tagIdSet.reduce((retVal, id) => {
-          console.log('id is: ', id)
-          retVal[id] = true
-          return retVal
-        }, {})
-        designsRef.child(designId).update({tags: tagsObj})
-        console.log('tagIdSet.toJS(): ', tagIdSet.toJS())
-        return design.set('tags', tagIdSet.toJS())
-      })
+      var existingsDesignsForTag = tag.get('designs')
+      console.log('DESIGNS: ', data.designs.toJS())
+      var designsToAddTagTo ;
+      if (existingsDesignsForTag) {
+        existingsDesignsForTag = Immutable.Set(existingsDesignsForTag)
+        console.log('existingsDesignsForTagSEt : ', existingsDesignsForTag.toJS())
+        // This is the designs that are already in the tag.designs
+        var designsIntersect = existingsDesignsForTag.intersect(data.designs)
+        designsToAddTagTo = designsIntersect.subtract(data.designs)
+        console.log('designs TO ADD: ', designsToAddTagTo.toJS())
+        var designsToRemoveTagFrom = existingsDesignsForTag.subtract(data.designs)
+        console.log('designs to REMOVE TAG FROM: ', designsToRemoveTagFrom.toJS())
+      } else {
+        console.log('NO EXISTING DESIGNS FOR TAg')
+        var allDesignsMap = reactor.evaluate(['designs'])
+        designsToAddTagTo = data.designs.map(designId => allDesignsMap.get(designId))
+      }
+      // TODO THIS could be empty
+      var updatedDesigns = designsToAddTagTo.map(addTagToDesignTags.bind(null, tagId))
       var existingTagDesigns = tag.get('designs')
       var designIdSet = existingTagDesigns ? Immutable.Set(existingTagDesigns) : Immutable.Set()
-      designIdSet = designs.reduce((retVal, d) => retVal.add(d.get('id')), designIdSet)
+      designIdSet = updatedDesigns.reduce((retVal, d) => retVal.add(d.get('id')), designIdSet)
       var designIdsObj = designIdSet.reduce((retVal, id) => {
         retVal[id] = true
         return retVal
       }, {})
-      tagsRef.child(tagId).update({designs: designIdsObj})
+      //tagsRef.child(tagId).update({designs: designIdsObj})
 
       setTimeout(() => reactor.dispatch('addManyDesigns', updatedDesigns.toJS()), 100)
         console.log('designIdSet.toJS(): ', designIdSet.toJS())
