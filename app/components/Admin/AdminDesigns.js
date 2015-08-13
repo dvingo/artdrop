@@ -39,7 +39,15 @@ export default React.createClass({
 
   componentDidUpdate(prevProps, prevState) {
     if (!this.state.selectedTag && this.state.tags.count() > 0) {
-      this.setState({selectedTag: this.state.tags.get(0)})
+      var selectedTag = this.state.tags.get(0)
+      var newState = {selectedTag: selectedTag}
+      console.log('SELECTED TAG: ', selectedTag.toJS())
+      if (selectedTag.get('designs') && selectedTag.get('designs').count() > 0) {
+        console.log('SETTING SELECTED DESIGNS')
+          console.log('selected designs: ', selectedTag.get('designs').toJS())
+        newState.selectedDesigns = Immutable.Set(selectedTag.get('designs'))
+      }
+      this.setState(newState)
     }
   },
 
@@ -50,10 +58,10 @@ export default React.createClass({
       this.transitionTo('adminEditDesign', {designId: designId})
     } else {
       var selectedDesigns = this.state.selectedDesigns
-      if (selectedDesigns.includes(design)) {
-        this.setState({selectedDesigns: selectedDesigns.remove(design)})
+      if (selectedDesigns.includes(designId)) {
+        this.setState({selectedDesigns: selectedDesigns.remove(designId)})
       } else {
-        this.setState({selectedDesigns: selectedDesigns.add(design)})
+        this.setState({selectedDesigns: selectedDesigns.add(designId)})
       }
     }
   },
@@ -69,13 +77,14 @@ export default React.createClass({
 
   handleTagChange(e) {
     var tag = this.state.tagsMap.get(e.target.value)
-    var selectedDesigns = tag.get('designs') || Immutable.Set()
+    var selectedDesigns = Immutable.Set(tag.get('designs')) || Immutable.Set()
     this.setState({selectedTag:tag, selectedDesigns:selectedDesigns})
   },
 
   render() {
     let designs = this.state.designs.map(d => {
-      var outline = this.state.selectedDesigns.includes(d) ? '3px solid #ff0093' : 'none'
+      var outline = this.state.selectedDesigns.includes(d.get('id')) ? '3px solid #ff0093' : 'none'
+      if (this.state.editMode === 'editDesign') { outline = 'none' }
       return (
         <li className="design" key={d.get('id')} style={{outline: outline, margin: 4}}>
           <Design design={d} onClick={this.selectDesign.bind(null, d)}/>

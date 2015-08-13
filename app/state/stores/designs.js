@@ -61,7 +61,13 @@ export default new Nuclear.Store({
           obj.id = id
           return obj
         })
-        reactor.dispatch('addManyDesigns', designs)
+        var interval = setInterval(() => {
+          if (!reactor.__isDispatching) {
+            console.log('clearing interval in load admin designs')
+            clearInterval(interval)
+            reactor.dispatch('addManyDesigns', designs)
+          }
+        }, 100)
       })
       return state
     })
