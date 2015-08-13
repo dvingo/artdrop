@@ -49,6 +49,15 @@ export default React.createClass({
       }
       this.setState(newState)
     }
+    var tagsMap = this.state.tagsMap
+    var selectedTag = this.state.selectedTag
+    if (selectedTag && tagsMap.get(selectedTag.get('id'))
+       && tagsMap.get(selectedTag.get('id')) !== selectedTag) {
+      var updatedTag = tagsMap.get(selectedTag.get('id'))
+      console.log('CURRENT TAG: ', selectedTag.toJS())
+      console.log('SETTING TO UPDATED TAG: ', updatedTag.toJS())
+      this.setState({selectedTag:updatedTag})
+    }
   },
 
   selectDesign(design, e) {
@@ -118,11 +127,9 @@ export default React.createClass({
             <select value={selectedTag} style={{width:'50%'}} onChange={this.handleTagChange}>
               {tagOptions}
             </select>
-            { this.state.selectedDesigns.count() > 0 ?
-              <div style={{padding:'10px 0'}}>
-                <button onClick={this.handleAddDesignsToTag}>Tag Selected Designs</button>
-              </div>
-              : null }
+            <div style={{padding:'10px 0'}}>
+              <button onClick={this.handleAddDesignsToTag}>Update Designs</button>
+            </div>
           </div>
           : null }
 
