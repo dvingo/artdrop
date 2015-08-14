@@ -69,7 +69,8 @@ module.exports = {
     rotateCurrentLayerColorPalette() { reactor.dispatch('rotateCurrentLayerColorPalette') },
     createTag(newTagName) { reactor.dispatch('createTag', newTagName) },
     loadAdminTags() { reactor.dispatch('loadAdminTags') },
-    addDesignsToTag(data) { reactor.dispatch('addDesignsToTag', data) }
+    addDesignsToTag(data) { reactor.dispatch('addDesignsToTag', data) },
+    addManyTags(tags) { reactor.dispatch('addManyTags', tags) }
   }
 }
 

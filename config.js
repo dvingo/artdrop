@@ -1,5 +1,9 @@
+var env = 'prod'
+if (process) {
+  env = process.env.NODE_ENV
+}
 module.exports = {
-  env: 'prod',
+  env: env,
   srcDir: 'app',
   designPreviewSize: 180,
   designDetailSize: 334,
@@ -7,10 +11,8 @@ module.exports = {
   //s3BucketName: 'com.artdrop.test1',
   s3BucketName: 'com.artdrop.images2',
   //s3BucketName: 'test-dvingo-1',
-  fireBaseUri: 'https://artrop.firebaseio.com/',
+  //fireBaseUri: 'https://artrop.firebaseio.com/',
+  fireBaseUri: 'https://artdrop-testing3.firebaseio.com/',
   //fireBaseUri: "https://glaring-fire-8101.firebaseio.com",
-  devPort: 8111,
-  devHostname: 'localhost',
-  //prodHostname: 'obscure-headland-1710.herokuapp.com'
-  prodHostname: 'obscure-atoll-2694.herokuapp.com'
+  hostname: 'obscure-atoll-2694.herokuapp.com'
 }

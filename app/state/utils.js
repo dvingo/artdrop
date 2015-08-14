@@ -6,8 +6,9 @@ var s3Endpoint = config.s3Endpoint
 var designPreviewSize = config.designPreviewSize
 var designDetailSize = config.designDetailSize
 var s3BucketName = config.s3BucketName
-var hostname = config.env === 'dev' ? config.devHostname + ':' + config.devPort : config.prodHostname
-var scheme = window.location.protocol
+var hostname = config.hostname
+var window;
+var scheme = window ? window.location.protocol : ''
 hostname = scheme + '//' + hostname
 /**
  * From: https://gist.github.com/mikelehen/3596a30bd69384624c11

@@ -1,2 +1,4 @@
+var {env} = require('../../config')
 var Nuclear = require('nuclear-js');
-module.exports = new Nuclear.Reactor({debug:true});
+var debug = env === 'prod' ? false : true
+module.exports = new Nuclear.Reactor({debug:debug});
