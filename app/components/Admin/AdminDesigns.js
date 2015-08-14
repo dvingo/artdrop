@@ -41,10 +41,7 @@ export default React.createClass({
     if (!this.state.selectedTag && this.state.tags.count() > 0) {
       var selectedTag = this.state.tags.get(0)
       var newState = {selectedTag: selectedTag}
-      console.log('SELECTED TAG: ', selectedTag.toJS())
       if (selectedTag.get('designs') && selectedTag.get('designs').count() > 0) {
-        console.log('SETTING SELECTED DESIGNS')
-          console.log('selected designs: ', selectedTag.get('designs').toJS())
         newState.selectedDesigns = Immutable.Set(selectedTag.get('designs'))
       }
       this.setState(newState)
@@ -54,8 +51,6 @@ export default React.createClass({
     if (selectedTag && tagsMap.get(selectedTag.get('id'))
        && tagsMap.get(selectedTag.get('id')) !== selectedTag) {
       var updatedTag = tagsMap.get(selectedTag.get('id'))
-      console.log('CURRENT TAG: ', selectedTag.toJS())
-      console.log('SETTING TO UPDATED TAG: ', updatedTag.toJS())
       this.setState({selectedTag:updatedTag})
     }
   },
@@ -76,7 +71,6 @@ export default React.createClass({
   },
 
   handleAddDesignsToTag() {
-    console.log('this.state.selectedTag: ',this.state.selectedTag.toJS())
     Store.actions.addDesignsToTag({tag: this.state.selectedTag, designs: this.state.selectedDesigns})
   },
 

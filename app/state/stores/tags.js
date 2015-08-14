@@ -9,56 +9,61 @@ var hydrateTags = (state) => {
 }
 
 var addTagToDesign = (tagId, design) => {
-  var designId = design.get('id')
-  console.log('handling add tag to design: ', designId)
-  var tagIds = design.get('tags')
-  if (tagIds) console.log('TAGS BEFORE: ', tagIds.toJS())
-  var tagIdSet = (tagIds ? Immutable.Set(tagIds) : Immutable.Set()).add(tagId)
-  console.log('TAGS AFTER: ', tagIdSet.toJS())
-  var tagsObj = {}
-  tagIdSet.forEach(id => {
-    console.log('id is: ', id)
-    tagsObj[id] = true
-  })
-  console.log('Saving design tags')
-  designsRef.child(designId).update({tags: tagsObj})
-  var theTagSet = tagIdSet.toKeyedSeq()
-  console.log('tagIdSet.toJS(): ', theTagSet.toJS())
-  return design.set('tags', theTagSet)
+  var updatedTags = Immutable.Set(design.get('tags')).add(tagId).toKeyedSeq()
+  return design.set('tags', updatedTags)
 }
 
 var removeTagFromDesign = (tagId, design) => {
   var designId = design.get('id')
-  console.log('removing tag from design: ', designId)
-  console.log('TAGS BEFORE: ',design.get('tags').toJS())
   var tagIds = Immutable.Set(design.get('tags')).remove(tagId)
-
-  var tagsObj = {}
-  tagIds.forEach(id => {
-    console.log('id is: ', id)
-    tagsObj[id] = true
-  })
-  console.log('Saving design tags')
-  designsRef.child(designId).update({tags: tagsObj})
-  console.log('TAGS AFTER: ', tagIds.toJS())
   return design.set('tags', tagIds.toKeyedSeq())
 }
 
-var removeDesignsFromTag = (tag, designs) => {
+var removeDesignsFromTag = (tag, designsToRemove) => {
+  designsToRemove = designsToRemove.map(d => d.get('id'))
   var currentDesigns = Immutable.Set(tag.get('designs'))
-  console.log("Tags current designs: ", currentDesigns.toJS())
-  console.log("DESIGNS TO REMOVE: ", designs.toJS())
-  console.log('DESIGNS are now: ', currentDesigns.subtract(designs).toJS())
-
-  return tag.set('designs', currentDesigns.subtract(designs))
+  return tag.set('designs', currentDesigns.subtract(designsToRemove))
 }
 
 var addDesignsToTag = (tag, designs) => {
   var currentDesigns = Immutable.Set(tag.get('designs'))
-  console.log("Tags current designs: ", currentDesigns.toJS())
-  console.log("DESIGNS TO ADD: ", designs.toJS())
-  console.log('DESIGNS are now: ', currentDesigns.union(designs).toJS())
   return tag.set('designs', currentDesigns.union(designs))
+}
+
+var updateTagAndDesigns = (tag, selectedDesigns) => {
+  var allDesignsMap = reactor.evaluate(['designs'])
+  var existingsDesigns = Immutable.Set(tag.get('designs'))
+  var selectedDesigns = Immutable.Set(selectedDesigns)
+  var designsToRemoveTagFrom = (
+    existingsDesigns.subtract(selectedDesigns)
+      .map(d => allDesignsMap.get(d))
+      .map(removeTagFromDesign.bind(null, tag.get('id'))))
+
+  var tag = removeDesignsFromTag(tag, designsToRemoveTagFrom)
+
+  var designsToAddTagTo = (
+    selectedDesigns.subtract(
+      existingsDesigns.intersect(selectedDesigns)))
+
+  var updatedDesigns = (
+    designsToRemoveTagFrom.union(designsToAddTagTo
+     .map(id => allDesignsMap.get(id))
+     .map(addTagToDesign.bind(null, tag.get('id')))))
+  tag = addDesignsToTag(tag, designsToAddTagTo)
+  return { updatedTag: tag, updatedDesigns: updatedDesigns }
+}
+
+// TODO combine common code
+var persistTagWithUpdatedDesigns = (tag) => {
+  var designIdsObj = {}
+  tag.get('designs').forEach(d => designIdsObj[d] = true)
+  tagsRef.child(tag.get('id')).update({designs: designIdsObj})
+}
+
+var persistDesignWithUpdatedTags = (design) => {
+  var tagsObj = {}
+  design.get('tags').forEach(id => tagsObj[id] = true)
+  designsRef.child(design.get('id')).update({tags: tagsObj})
 }
 
 export default new Nuclear.Store({
@@ -84,42 +89,12 @@ export default new Nuclear.Store({
 
     this.on('addDesignsToTag', (state, data) => {
       var tag = data.tag
-      var tagId = tag.get('id')
-      var existingsDesignsForTag = tag.get('designs')
-      var designsToAddTagTo = data.designs
-      var allDesignsMap = reactor.evaluate(['designs'])
-      var updatedDesigns = Immutable.Set();
-      var updatedTag = tag
-      if (existingsDesignsForTag) {
-        existingsDesignsForTag = Immutable.Set(existingsDesignsForTag)
-        var selectedDesigns = Immutable.Set(data.designs)
-        var designsIntersect = existingsDesignsForTag.intersect(selectedDesigns)
-        designsToAddTagTo = selectedDesigns.subtract(designsIntersect)
-        var designsToRemoveTagFrom = existingsDesignsForTag.subtract(data.designs)
-        updatedDesigns = updatedDesigns.union(
-          designsToRemoveTagFrom.map(d => allDesignsMap.get(d)).map(removeTagFromDesign.bind(null, tagId)))
-        updatedTag = removeDesignsFromTag(tag, designsToRemoveTagFrom)
-      }
-      if (designsToAddTagTo.count() > 0) {
-        console.log('DESIGNS to add: ', designsToAddTagTo.toJS())
-        updatedDesigns = updatedDesigns.union(
-          designsToAddTagTo.map(id => allDesignsMap.get(id)).map(addTagToDesign.bind(null, tagId)))
-        updatedTag = addDesignsToTag(updatedTag, designsToAddTagTo)
-      } else {
-        console.log('NO designs to ADD')
-      }
-      if (updatedDesigns.count() > 0) {
-        setTimeout(() => reactor.dispatch('addManyDesigns', updatedDesigns.toJS()), 100)
-      }
-      if (updatedTag !== tag) {
-        console.log('TAG HAS CHANGES, saving to Firebase')
-        var designIdsObj = {}
-        updatedTag.get('designs').forEach(d => designIdsObj[d] = true)
-        console.log('updatedTag.designs: ', updatedTag.get('designs').toJS())
-        console.log('design id obj: ', designIdsObj)
-        tagsRef.child(tagId).update({designs: designIdsObj})
-      }
-      return state.set(tagId, updatedTag)
+      var selectedDesigns = data.designs
+      var { updatedTag, updatedDesigns } = updateTagAndDesigns(tag, selectedDesigns)
+      updatedDesigns.forEach(d => persistDesignWithUpdatedTags(d))
+      persistTagWithUpdatedDesigns(updatedTag)
+      setTimeout(() => reactor.dispatch('addManyDesigns', updatedDesigns.toJS()), 100)
+      return state.set(tag.get('id'), updatedTag)
     })
 
     this.on('createTag', (state, newTagName) => {
