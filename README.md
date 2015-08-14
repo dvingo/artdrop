@@ -13,3 +13,9 @@ Run:
 npm i
 npm start
 ```
+
+# Running Tests
+
+```bash
+npm test
+```
