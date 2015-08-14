@@ -80,7 +80,7 @@ export default React.createClass({
 
   handleTagChange(e) {
     var tag = this.state.tagsMap.get(e.target.value)
-    var selectedDesigns = Immutable.Set(tag.get('designs')) || Immutable.Set()
+    var selectedDesigns = Immutable.Set(tag.get('designs'))
     this.setState({selectedTag:tag, selectedDesigns:selectedDesigns})
   },
 

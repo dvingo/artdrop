@@ -16,7 +16,8 @@ module.exports = {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin()
+    new webpack.NoErrorsPlugin(),
+    new webpack.DefinePlugin({DEBUG:true})
   ],
   resolve: {
     extensions: ['', '.js', '.jsx']

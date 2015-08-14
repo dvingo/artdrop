@@ -1,9 +1,4 @@
-var env = 'prod'
-if (process) {
-  env = process.env.NODE_ENV
-}
 module.exports = {
-  env: env,
   srcDir: 'app',
   designPreviewSize: 180,
   designDetailSize: 334,

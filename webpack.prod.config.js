@@ -11,7 +11,8 @@ module.exports = {
   },
   plugins: [
     new webpack.optimize.UglifyJsPlugin(),
-    new webpack.NoErrorsPlugin()
+    new webpack.NoErrorsPlugin(),
+    new webpack.DefinePlugin({DEBUG:false})
   ],
   resolve: {
     extensions: ['', '.js', '.jsx']
