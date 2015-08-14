@@ -15,7 +15,7 @@ describe('TagsStore', function() {
     var tags = reactor.evaluate(Store.getters.tags)
     var firstTag = tags.get(0)
     assert.equal(tags.count(), 1)
-    assert.equal(firstTag.get('id',), '-JwZ4CsYpdIQu_pKMXx6')
+    assert.equal(firstTag.get('id'), '-JwZ4CsYpdIQu_pKMXx6')
     assert.equal(firstTag.getIn(['designs', 0]), '-JvCSGWGPtfhL6IKPMOt')
     done()
   })

@@ -16,6 +16,8 @@ npm start
 
 # Running Tests
 
+Run the following two commands in separate terminals:
 ```bash
-npm test
+webpack --config webpack.test.config.js --watch
+mocha test-build/tests.js  --watch
 ```
