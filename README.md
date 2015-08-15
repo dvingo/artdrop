@@ -18,6 +18,6 @@ npm start
 
 Run the following two commands in separate terminals:
 ```bash
-webpack --config webpack.test.config.js --watch
+./scripts/compile_tests.sh
 mocha test-build/tests.js  --watch
 ```

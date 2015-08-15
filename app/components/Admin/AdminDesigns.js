@@ -55,7 +55,7 @@ export default React.createClass({
     }
   },
 
-  selectDesign(design, e) {
+  clickDesign(design, e) {
     var designId = design.get('id')
     e.preventDefault()
     if (this.state.editMode === 'editDesign') {
@@ -71,7 +71,8 @@ export default React.createClass({
   },
 
   handleAddDesignsToTag() {
-    Store.actions.addDesignsToTag({tag: this.state.selectedTag, designs: this.state.selectedDesigns})
+    Store.actions.addDesignsToTag({tag: this.state.selectedTag,
+                                   designs: this.state.selectedDesigns})
   },
 
   onFormChange(e) {
@@ -85,12 +86,28 @@ export default React.createClass({
   },
 
   render() {
+    var selectDivStyles = {
+      width: '100%',
+      height: '100%',
+      background: '#d3d3d3',
+      opacity: '0.8',
+      position: 'absolute',
+      top: '0',
+      left: '0'
+    }
     let designs = this.state.designs.map(d => {
-      var outline = this.state.selectedDesigns.includes(d.get('id')) ? '3px solid #ff0093' : 'none'
-      if (this.state.editMode === 'editDesign') { outline = 'none' }
+      var overlayStyles = (
+        (() => {
+          if (this.state.editMode === 'editDesign') { return null }
+          else if (this.state.selectedDesigns.includes(d.get('id'))) {
+            return selectDivStyles }
+          else { return null }
+        }()))
+
       return (
-        <li className="design" key={d.get('id')} style={{outline: outline, margin: 4}}>
-          <Design design={d} onClick={this.selectDesign.bind(null, d)}/>
+        <li className="design" key={d.get('id')} style={{margin: 4}}>
+          <Design design={d} onClick={this.clickDesign.bind(null, d)}/>
+          <div style={overlayStyles} onClick={this.clickDesign.bind(null, d)}></div>
         </li>
       )
     })
@@ -108,11 +125,13 @@ export default React.createClass({
         <form onChange={this.onFormChange}>
           <div>
             <label>Edit a design</label>
-            <input type="radio" value="editDesign" name="editMode" checked={this.state.editMode === 'editDesign'}/>
+            <input type="radio" value="editDesign" name="editMode"
+                   checked={this.state.editMode === 'editDesign'}/>
           </div>
           <div>
             <label>Group designs by tag</label>
-            <input type="radio" value="groupDesignsByTag" name="editMode" checked={this.state.editMode === 'groupDesignsByTag'}/>
+            <input type="radio" value="groupDesignsByTag"
+                   name="editMode" checked={this.state.editMode === 'groupDesignsByTag'}/>
           </div>
         </form>
 
