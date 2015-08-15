@@ -3,7 +3,7 @@ var app = express()
 var request = require('request')
 var cors = require('cors')
 var compression = require('compression')
-var config = require('./config')
+var config = require('./server-config')
 
 function s3Url(filename) {
   return [config.s3Endpoint, config.s3BucketName, filename].join('/')

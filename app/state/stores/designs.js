@@ -65,7 +65,6 @@ export default new Nuclear.Store({
         })
         var interval = setInterval(() => {
           if (!reactor.__isDispatching) {
-            console.log('clearing interval in load admin designs')
             clearInterval(interval)
             reactor.dispatch('addManyDesigns', designs)
           }
