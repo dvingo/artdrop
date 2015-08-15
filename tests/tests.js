@@ -4,6 +4,9 @@ var Store = require('../app/state/main')
 var Immutable = require('immutable')
 
 describe('TagsStore', function() {
+  afterEach(function() {
+    reactor.reset()
+  })
   var tagId = '-JwZ4CsYpdIQu_pKMXx6'
   var tag = {
     id: tagId,
@@ -12,7 +15,10 @@ describe('TagsStore', function() {
     createdAt: new Date().getTime(),
     updatedAt: new Date().getTime()}
 
-  designs = [{
+  var design1Id = "-JuwNGKBIuLpQLTcMnSN"
+  var design2Id = "-JuwTLo8mMamQgZSeBF3"
+  var design3Id = "-JvB89K_c5GBpGsRuvXI"
+  var designs = [{
     adminCreated:true,
     createdAt:1437679586636,
     imageUrl:"https://s3.amazonaws.com/com.artdrop.images2/fgd.jpg",
@@ -23,7 +29,7 @@ describe('TagsStore', function() {
     surface:"-JkT6We0_K_YzQCT4TMA",
     title:"fgd",
     updatedAt:1437679586636,
-    id:"-JuwNGKBIuLpQLTcMnSN",
+    id:design1Id,
     tags:[]
     }, {"adminCreated":true,
     "createdAt":1437681160041,
@@ -37,7 +43,7 @@ describe('TagsStore', function() {
     "surface":"-JkT6We1HXt0lARN0M2y",
     "title":"hjkl",
     "updatedAt":1437681160041,
-    "id":"-JuwTLo8mMamQgZSeBF3",
+    id:design2Id,
     "tags":[]},
     {"adminCreated":true,
     "createdAt":1437944030574,
@@ -50,7 +56,7 @@ describe('TagsStore', function() {
     "surface":"-JkT6We1HXt0lARN0M2z",
     "title":"2",
     "updatedAt":1437944030574,
-    "id":"-JvB89K_c5GBpGsRuvXI",
+    "id":design3Id,
     "tags":[]}
   ]
   var designIds = designs.map(function(d) { return d.id })
@@ -70,6 +76,39 @@ describe('TagsStore', function() {
         assert(designIds.indexOf(d) !== -1, 'The tag should contain the design: ' + d)
       })
       done()
+    })
+  })
+
+  it('Should remove tags', function(done) {
+    Store.actions.addManyTags([tag])
+    Store.actions.addManyDesigns(designs)
+    Store.actions.addDesignsToTag({tag:Immutable.fromJS(tag), designs:Immutable.fromJS(designIds)})
+    reactor.observe(['designs'], function() {
+      var tags = reactor.evaluate(Store.getters.tags)
+      var firstTag = tags.get(0)
+      var selectedDesigns = [design2Id, design3Id]
+      var interval = setInterval(function() {
+        if (!reactor.__isDispatching) {
+          clearInterval(interval)
+          Store.actions.addDesignsToTag({tag:firstTag,
+            designs:Immutable.fromJS(selectedDesigns)})
+        }
+      }, 50)
+      reactor.observe(['designs'], function(updatedDesigns) {
+        var design1 = updatedDesigns.get(design1Id)
+        var design2 = updatedDesigns.get(design2Id)
+        var design3 = updatedDesigns.get(design3Id)
+        assert(design1.get('tags').count() === 0, 'Design 1 should have no tags')
+        assert(design2.getIn(['tags', 0]) === tagId, 'Design 2 should have the tag')
+        assert(design3.getIn(['tags', 0]) === tagId, 'Design 3 should have the tag')
+        var tags = reactor.evaluate(Store.getters.tags)
+        var firstTag = tags.get(0)
+        var designs = Immutable.Set(firstTag.get('designs'))
+        assert(designs.includes(design2Id), 'Design 2 should have the tag')
+        assert(designs.includes(design3Id), 'Design 3 should have the tag')
+        assert(!designs.includes(design1Id), 'Design 1 should not have the tag')
+        done()
+      })
     })
   })
 })
