@@ -10,7 +10,7 @@ module.exports = {
     filename: 'tests.js',
     publicPath: '/test/'
   },
-  plugins: [new webpack.DefinePlugin({DEBUG:true})],
+  plugins: [new webpack.DefinePlugin({DEBUG:true,TEST:true})],
   resolve: {
     extensions: ['', '.js', '.jsx']
   },

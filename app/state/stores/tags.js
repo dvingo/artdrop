@@ -38,7 +38,6 @@ var updateTagAndDesigns = (tag, selectedDesigns) => {
     existingsDesigns.subtract(selectedDesigns)
       .map(d => allDesignsMap.get(d))
       .map(removeTagFromDesign.bind(null, tag.get('id'))))
-
   var tag = removeDesignsFromTag(tag, designsToRemoveTagFrom)
 
   var designsToAddTagTo = (
@@ -55,12 +54,14 @@ var updateTagAndDesigns = (tag, selectedDesigns) => {
 
 // TODO combine common code
 var persistTagWithUpdatedDesigns = (tag) => {
+  if (TEST) { return }
   var designIdsObj = {}
   tag.get('designs').forEach(d => designIdsObj[d] = true)
   tagsRef.child(tag.get('id')).update({designs: designIdsObj})
 }
 
 var persistDesignWithUpdatedTags = (design) => {
+  if (TEST) { return }
   var tagsObj = {}
   design.get('tags').forEach(id => tagsObj[id] = true)
   designsRef.child(design.get('id')).update({tags: tagsObj})

@@ -70,7 +70,8 @@ module.exports = {
     createTag(newTagName) { reactor.dispatch('createTag', newTagName) },
     loadAdminTags() { reactor.dispatch('loadAdminTags') },
     addDesignsToTag(data) { reactor.dispatch('addDesignsToTag', data) },
-    addManyTags(tags) { reactor.dispatch('addManyTags', tags) }
+    addManyTags(tags) { reactor.dispatch('addManyTags', tags) },
+    addManyDesigns(designs) { reactor.dispatch('addManyDesigns', designs) }
   }
 }
 
