@@ -1,6 +1,6 @@
 var path = require('path')
 var webpack = require('webpack')
-var srcDir = require('./config').srcDir
+var srcDir = 'app'
 
 module.exports = {
   entry: './' + srcDir + '/index',
@@ -12,7 +12,7 @@ module.exports = {
   plugins: [
     new webpack.optimize.UglifyJsPlugin(),
     new webpack.NoErrorsPlugin(),
-    new webpack.DefinePlugin({DEBUG:false,TEST:false})
+    new webpack.DefinePlugin({DEBUG:false,TEST:false,DEV:false})
   ],
   resolve: {
     extensions: ['', '.js', '.jsx']

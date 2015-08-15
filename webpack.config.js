@@ -1,6 +1,6 @@
 var path = require('path')
 var webpack = require('webpack')
-var srcDir = require('./config').srcDir
+var srcDir = 'app'
 
 module.exports = {
   devtool: 'eval',
@@ -17,7 +17,7 @@ module.exports = {
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
-    new webpack.DefinePlugin({DEBUG:true,TEST:false})
+    new webpack.DefinePlugin({DEBUG:true,TEST:false,DEV:true})
   ],
   resolve: {
     extensions: ['', '.js', '.jsx']
