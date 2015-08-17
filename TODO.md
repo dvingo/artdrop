@@ -8,7 +8,6 @@
     - We could also lazy load them somehow. Load the first 30, then when you scroll to the end, load the next 30 etc.
     - See yelp mobile site side scroll of images.
 
-Need favicon
 
 ## Error and message reporting
 - Add an error store and have the admin subscribe to it, display any errors if it isn't empty
@@ -21,23 +20,15 @@ Need favicon
 - on the layers model, layerImages should be a collection of ids, not an array.
 - When Editing a layer image, add undo/redo stack.
 
-# Firebase rules
-- Save rules in repo
-- Update .write rules for layers to use $layer_id and then have specific property rules
-  - that only allow changing what the app allows from the UI.
-
-# Admin
-  - Delete designs.
-  - Edit existing designs.
-    - Will need to recapture the jpeg and upload again.
-
-  - Upload multiple design jpeg image sizes on creation.
-
-  Sizes from the scss:
-  $design-small-size: 100px;
-  $design-medium-size: 120px;
-  $design-large-size: 180px;
-
 # Firebase
   - Script to delete any non admin created designs that are older than 2 days. - tough to do once we launch, as you
     don't know if someone saved a link to a design.
+  - Add validation rules to firebase.
+## Rules
+  - Save rules in repo
+  - Update .write rules for layers to use $layer_id and then have specific property rules
+    - that only allow changing what the app allows from the UI.
+
+# General
+  - Change 'addDesign' and 'addManyDesigns' to 'setDesign' and 'setManyDesigns'
+  - Need favicon
