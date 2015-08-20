@@ -7,52 +7,44 @@ import Start from './EditSteps/Start'
 import RenderLayers from './RenderLayers'
 import Container from './EditSteps/Container'
 import EditFooter from './EditFooter'
+import {imageUrlForLayer} from '../../state/utils'
 import {isInvalidEditStep} from '../../utils'
+import ColorsButton from '../ColorsButton'
+import CheckButton from '../CheckButton'
+var classNames = require('classnames')
 var Hammer = require('react-hammerjs')
 
 export default React.createClass({
-  mixins: [reactor.ReactMixin, Router.State, Router.Navigation],
+  mixins: [reactor.ReactMixin, Router.State],
 
   getDataBindings() {
-    return {design: Store.getters.currentDesign,
-            validEditSteps: ['validEditSteps']}
+    return {design: Store.getters.currentDesign}
+  },
+
+  getInitialState() {
+    return {selectedLayer: null}
   },
 
   componentWillMount() {
-    console.log('In DesignEdit Will Mount')
+    Store.actions.selectDesignAndLayerId({designId: this.props.params.designId, layerId: this.props.params.layerId})
+    this._selectedLayerInterval = setInterval(() => {
+      if (this.state.design) {
+        clearInterval(this._selectedLayerInterval)
+        this.setState({selectedLayer: this.state.design.getIn(['layers', 0])})
+      }
+    }, 50)
+  },
 
-    if (isInvalidEditStep(this.state.validEditSteps,
-        this.props.params.step, this.props.params.imagesOrColors)) {
-      // setTimeout strategy from:
-      // http://stackoverflow.com/questions/30620827/router-is-duplicating-when-clicking-a-link-element
-      window.setTimeout(() => {
-        this.transitionTo('designs')
-      }.bind(this), 0)
-      return
-    }
-    if (this.props.params.layerId) {
-      Store.actions.selectDesignAndLayerId({designId: this.props.params.designId, layerId: this.props.params.layerId})
-    } else {
-      Store.actions.selectDesignId(this.props.params.designId)
-    }
+  componentWillUnmount() {
+    clearInterval(this._interval)
+    clearInterval(this._selectedLayerInterval)
   },
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (nextState.design && this.state.design) {
-      var getParams = this.getParams()
-      var propParams = this.props.params
-      return (this.state.design         !== nextState.design  ||
-              propParams.step           !== getParams.step    ||
-              propParams.layerId        !== getParams.layerId ||
-              propParams.imagesOrColors !== getParams.imagesOrColors)
+    if (nextProps !== this.props || nextState !== this.state) {
+      return true
     }
-    return true;
-  },
-
-  componentWillUpdate(nextProps) {
-    if (this.getParams().layerId &&
-        this.props.params.layerId !== this.getParams().layerId) {
-      Store.actions.selectLayerId(this.getParams().layerId)}
+    return false
   },
 
   attemptLoadResources() {
@@ -69,10 +61,6 @@ export default React.createClass({
     this.attemptLoadResources()
   },
 
-  componentWillUnmount() {
-    clearInterval(this._interval)
-  },
-
   handleSwipe(e) {
     var direction = e.direction
     if (direction === 2) {
@@ -86,10 +74,23 @@ export default React.createClass({
    console.log('GOT PAN: ', e)
   },
 
-  render() {
-    if (this.state.design == null) { return null }
+  selectLayer(layer) {
+    this.setState({selectedLayer:layer})
+  },
 
-    var step = this.props.params.step
+  render() {
+    if (this.state.design == null || this.state.selectedLayer == null) { return null }
+    var imgSize = 60
+    var layers = this.state.design.get('layers').reverse().map(layer => {
+      return (
+        <div className="layer-selector"
+             onClick={this.selectLayer.bind(null, layer)}>
+          <img src={imageUrlForLayer(layer)} width={imgSize} height={imgSize}
+               className={classNames({selected: this.state.selectedLayer.get('id') === layer.get('id')})}/>
+        </div>
+      )
+    })
+
     return (
       <section className="main design-edit">
 
@@ -101,7 +102,11 @@ export default React.createClass({
 
         <div className="edit-ui">
           <div className="edit-steps">
-            <Start isActive="true"/>
+            <ColorsButton isSmall={false}
+                          onLeftClick={Store.actions.previousDesignColors}
+                          onRightClick={Store.actions.nextDesignColors}/>
+            <CheckButton isSmall={false}/>
+            {layers}
           </div>
         </div>
 
