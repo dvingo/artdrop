@@ -250,5 +250,20 @@ export default {
     var nextRotation = (currentRotation + 1) % 4
     var newLayers = layers.update(index, v => v.set('paletteRotation', nextRotation))
     return design.set('layers', newLayers)
+  },
+
+  makeDesignCopy(design) {
+    // the design will have a new id and the layers will have a new id
+    return design.update(d => {
+      var newLayers = d.get('layers').map(l => l.set('id', generateFirebaseID()))
+      var now = new Date().getTime()
+      return d.withMutations(d2 => {
+        d2.set('id', generateFirebaseID())
+          .set('adminCreated', false)
+          .set('layers', newLayers)
+          .set('createdAt', now)
+          .set('updatedAt', now)
+      })
+    })
   }
 }

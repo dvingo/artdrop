@@ -2,6 +2,7 @@ import React from 'react'
 import reactor from '../../../state/reactor'
 import Store from '../../../state/main'
 import ColorsButton from '../../ColorsButton'
+import CheckButton from '../../CheckButton'
 import {iconPath} from '../../../utils'
 import {imageUrlForLayer} from '../../../state/utils'
 import {Navigation} from 'react-router'
@@ -42,6 +43,7 @@ export default React.createClass({
                         onLeftClick={Store.actions.previousDesignColors}
                         onRightClick={Store.actions.nextDesignColors}
                         label={isActive ? "New Colors" : null}/>
+          <CheckButton isSmall={isSmall}/>
         </div>
          {this.props.isActive ?
           <div className="more-options">

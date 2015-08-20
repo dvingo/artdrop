@@ -8,6 +8,7 @@ import {Link, Navigation} from 'react-router';
 import {iconPath} from '../../utils';
 import SVGInlineLayer  from '../SVGInlineLayer';
 import Button from '../Button'
+import {makeDesignCopy} from '../../state/utils'
 var appElement = document.getElementById('app');
 Modal.setAppElement(appElement);
 Modal.injectCSS()
@@ -41,9 +42,9 @@ export default React.createClass({
   },
 
   transitionToEdit() {
-    var newDesignId = newId()
-    Store.actions.makeDesignCopy(newDesignId)
-    this.transitionTo('designEdit', {designId: newDesignId, step: 'start'});
+    var newDesign = makeDesignCopy(this.state.design)
+    Store.actions.saveDesign(newDesign)
+    this.transitionTo('designEdit', {designId: newDesign.get('id'), layerId: newDesign.getIn(['layers', 0, 'id'])});
   },
 
   transitionToDesigns() {

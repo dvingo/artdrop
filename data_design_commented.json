@@ -43,7 +43,8 @@
     "layerImages": ["layerImageId1", "layerImageId2", "layerImageId3", "layerImageId4"],
     "order": 1,
     "createdAt": "2015-05-21T12:11:35",
-    "updatedAt": "2015-05-21T14:02:17"
+    "updatedAt": "2015-05-21T14:02:17",
+    "isEnabled": true
   }],
   "layerImages": [{
     "id": "238j98j",

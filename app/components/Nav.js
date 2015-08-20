@@ -15,7 +15,7 @@ export default React.createClass({
     var onDesignEdit = (this.isActive('designEdit') || this.isActive('layerEdit'))
 
     return (
-      <div className="nav-bar">
+      <div className="nav-bar ">
         <div className="nav-bar-container">
 
           <div className="left-side">

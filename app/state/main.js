@@ -53,6 +53,7 @@ module.exports = {
     selectSurfaceId(id) { reactor.dispatch('selectSurfaceId', id) },
     makeDesignCopy(newId) { reactor.dispatch('makeDesignCopy', newId) },
     createNewDesign(newDesign) { reactor.dispatch('createNewDesign', newDesign) },
+    saveDesign(design) { reactor.dispatch('saveDesign', design) },
     updateDesign(designData) { reactor.dispatch('updateDesign', designData) },
     deleteDesign(design) { reactor.dispatch('deleteDesign', design) },
     loadAdminCreateDesignData() { reactor.dispatch('loadAdminCreateDesignData') },

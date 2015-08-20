@@ -19,6 +19,8 @@ export default React.createClass({
   },
 
   componentWillMount() {
+    console.log('In DesignEdit Will Mount')
+
     if (isInvalidEditStep(this.state.validEditSteps,
         this.props.params.step, this.props.params.imagesOrColors)) {
       // setTimeout strategy from:
@@ -99,14 +101,10 @@ export default React.createClass({
 
         <div className="edit-ui">
           <div className="edit-steps">
-
-            <Start isActive={step === 'start'}
-                   isSmall={step === 'choose-layer'}/>
-
-            <Container/>
-
+            <Start isActive="true"/>
           </div>
         </div>
+
       </section>
     )
   }

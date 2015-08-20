@@ -122,28 +122,16 @@ export default new Nuclear.Store({
       return state.set(newDesign.get('id'), newDesign)
     })
 
-    this.on('makeDesignCopy', (state, newDesignId) => {
-      var currentDesign = reactor.evaluate(getters.currentDesign)
-      var newDesign = currentDesign.update(d => {
-        var newLayers = d.get('layers').map(l => l.set('id', newId()))
-        newLayers.forEach(layer => {
-          var l = layer.toJS()
-          l.colorPalette = l.colorPalette.id
-          l.selectedLayerImage = l.selectedLayerImage.id
-          layersRef.child(l.id).set(l)
-        })
-        var now = new Date().getTime()
-        return d.withMutations(d2 => {
-          d2.set('id', newDesignId)
-            .set('adminCreated', false)
-            .set('layers', newLayers)
-            .set('createdAt', now)
-            .set('updatedAt', now)
-        })
+    this.on('saveDesign', (state, design) => {
+      design.get('layers').forEach(layer => {
+        var l = layer.toJS()
+        l.colorPalette = l.colorPalette.id
+        l.selectedLayerImage = l.selectedLayerImage.id
+        layersRef.child(l.id).set(l)
       })
-      var firebaseDesign = designPropsToIds(newDesign)
-      designsRef.child(newDesignId).set(firebaseDesign.toJS())
-      return state.set(newDesignId, newDesign)
+      var firebaseDesign = designPropsToIds(design)
+      designsRef.child(design.get('id')).set(firebaseDesign.toJS())
+      return state.set(design.get('id'), design)
     })
 
     this.on('createNewDesign', (state, newDesignData) => {
