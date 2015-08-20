@@ -12,8 +12,7 @@ export default React.createClass({
   },
 
   render() {
-    var onDesignEdit = (this.isActive('designEdit') || this.isActive('layerEdit'))
-
+    var onDesigns = (this.isActive('designs'))
     return (
       <div className="nav-bar ">
         <div className="nav-bar-container">
@@ -22,19 +21,19 @@ export default React.createClass({
             <Link to="designs" className="logo">
               <img className="space" src={iconPath('drop.svg')} height={40} width={30}/>
             </Link>
-
-            {onDesignEdit ? (
-              <img src={iconPath('back.svg')}
-                className="space"
-                height={30} width={30}
-                onClick={this.handleGoBack}/> ) : null}
-
-            {onDesignEdit ? (
-              <img src={iconPath('refresh.svg')}
+            {onDesigns ? null:
+              (<img src={iconPath('back.svg')}
+                  className="space"
+                  height={30} width={30}
+                  onClick={this.handleGoBack}/>)
+            }
+            
+            {onDesigns ? null:
+              (<img src={iconPath('refresh.svg')}
                    className="space"
                    height={30} width={30}
-                   onClick={this.handleReset}/>
-               ) : null}
+                   onClick={this.handleReset}/>)
+            }
           </div>
 
           <div className="right-side">
@@ -42,14 +41,17 @@ export default React.createClass({
               <img src={iconPath('share-icon.svg')} height={25} width={25}
                    style={{marginTop:4}}/>
             </div>
-            {onDesignEdit ? (
-               <span className="space price">$75</span>) : null}
-            {onDesignEdit ? (
-              <img src={iconPath('buy.svg')}
+
+            {onDesigns ? null:
+              (<span className="space price">$75</span>)
+            }
+
+            {onDesigns ? null:
+              (<img src={iconPath('buy.svg')}
                    className="buy"
                    height={50} width={70}
-                   onClick={this.handleBuy}/>
-               ) : null}
+                   onClick={this.handleBuy}/>)
+            }
           </div>
         </div>
       </div>

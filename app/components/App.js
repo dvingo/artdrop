@@ -11,18 +11,17 @@ export default React.createClass({
     document.addEventListener('DOMContentLoaded', () => FastClick.attach(document.body))
   },
   render() {
-    var onDesignEdit = (this.isActive('designEdit') || this.isActive('layerEdit'))
-
+    var onDesigns = (this.isActive('designs'))
     return (
-        onDesignEdit ? (
+        onDesigns ? (
           <div>
-            <RouteHandler/>
             <Nav/>
-          </div>
+            <RouteHandler/>
+          </div> 
         ) : (
           <div>
-            <Nav/>
             <RouteHandler/>
+            <Nav/>
           </div>
         ) 
     )
