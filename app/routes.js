@@ -12,6 +12,7 @@ import Designs from './components/Designs'
 import DesignDetail from './components/Design/DesignDetail'
 import DesignEdit from './components/Design/DesignEdit'
 import DesignEditDetail from './components/Design/DesignEditDetail'
+import DesignEditSurface from './components/Design/DesignEditSurface'
 import Cart from './components/Cart'
 import React from 'react'
 import Router from 'react-router'
@@ -27,6 +28,7 @@ export default (
     </Route>
     <Route name="cart" handler={Cart} path="/designs/:designId/cart/?"/>
 
+    <Route name="designEditSurface" handler={DesignEditSurface} path="/designs/:designId/edit/surface/?"/>
     <Route name="designEdit" handler={DesignEdit} path="/designs/:designId/edit/:layerId/?"/>
     <Route name="designEditDetail" handler={DesignEditDetail} path="/designs/:designId/edit/:layerId/:imagesOrColors/?"/>
 

@@ -6,7 +6,7 @@ export default React.createClass({
   render() {
     var isSmall = this.props.isSmall
     return (
-      <div className={classNames("check-button" , {small:isSmall})} >
+      <div onClick={this.props.onClick} className={classNames("check-button" , {small:isSmall})} >
         &#916;
       </div>
     )

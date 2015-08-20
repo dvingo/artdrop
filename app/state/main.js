@@ -18,6 +18,7 @@ var Nuclear = require('nuclear-js')
 
 var dispatchHelper = function() {
   var args = arguments
+  console.log('ARGS', args)
   var interval = setInterval(() => {
     if (!reactor.__isDispatching) {
       clearInterval(interval)

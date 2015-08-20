@@ -2,6 +2,7 @@ import React from 'react'
 import reactor from '../../state/reactor'
 import Router from 'react-router'
 import Store from '../../state/main'
+import Immutable from 'Immutable'
 import RenderLayers from './RenderLayers'
 import ColorsButton from '../ColorsButton'
 import CheckButton from '../CheckButton'
@@ -15,7 +16,8 @@ export default React.createClass({
   getDataBindings() {
     return {
       design: Store.getters.currentDesign,
-      currentLayer: Store.getters.currentLayer
+      currentLayer: Store.getters.currentLayer,
+      numEnabledLayers: Store.getters.numEnabledLayers
     }
   },
 
@@ -37,7 +39,7 @@ export default React.createClass({
   attemptLoadResources() {
     this._interval = setInterval(() => {
       var svgs = document.querySelectorAll('.canvas svg')
-      if (svgs.length === 3) {
+      if (svgs.length === this.state.numEnabledLayers) {
         clearInterval(this._interval)
         Store.actions.loadCurrentDesignEditResources()
       }
@@ -66,7 +68,8 @@ export default React.createClass({
     this.transitionTo('designEdit', {designId: this.state.design.get('id'), layerId: layer.get('id')})
   },
 
-  toggleCurrentLayer() {
+  toggleCurrentLayer(e) {
+    e.preventDefault()
     Store.actions.toggleCurrentLayer()
   },
 
@@ -74,25 +77,27 @@ export default React.createClass({
     this.transitionTo('designEditDetail', {designId: this.state.design.get('id'), layerId: this.state.currentLayer.get('id'), imagesOrColors: 'images'})
   },
 
+  editDesignSurface() {
+    this.transitionTo('designEditSurface', {designId: this.state.design.get('id')})
+  },
+
   render() {
-    console.log('render')
     if (this.state.design == null || this.state.currentLayer == null) { return null }
-    console.log('render2')
     var imgSize = 60
     var layers = this.state.design.get('layers').reverse().map(layer => {
     var isSelected = this.state.currentLayer.get('id') === layer.get('id')
+    var isEnabled = this.state.currentLayer.get('isEnabled')
       return (
-        <div className="layer-selector"
-             onClick={this.selectLayer.bind(null, layer)}>
+        <div className="layer-selector">
           <img src={imageUrlForLayer(layer)} width={imgSize} height={imgSize}
-               className={classNames({selected: isSelected})}/> 
-          
+               className={classNames({selected: isSelected})}
+               onClick={this.selectLayer.bind(null, layer)}/> 
           {isSelected ?
-            <span onClick={this.toggleCurrentLayer()}>eye</span>
+            <span className={isEnabled ? '' : 'disabled'} onClick={this.toggleCurrentLayer}>eye</span>
           : null}
 
           {isSelected ?
-            <span onClick={this.editLayerDetail()}>more</span>
+            <span onClick={this.editLayerDetail}>more</span>
           : null}
         </div>
       )
@@ -112,7 +117,7 @@ export default React.createClass({
             <ColorsButton isSmall={false}
                           onLeftClick={Store.actions.previousDesignColors}
                           onRightClick={Store.actions.nextDesignColors}/>
-            <CheckButton isSmall={false}/>
+            <CheckButton onClick={this.editDesignSurface} isSmall={false}/>
             {layers}
           </div>
         </div>

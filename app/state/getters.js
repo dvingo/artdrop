@@ -12,6 +12,16 @@ getters.currentDesign = [
   (currentDesignId, designsMap) => designsMap.get(currentDesignId)
 ]
 
+getters.numEnabledLayers = [
+  getters.currentDesign,
+  (currentDesign) => {
+    return ( currentDesign ?
+      currentDesign.get('layers').filter(l => l.get('isEnabled')).count()
+      : -1
+    )
+  }
+]
+
 getters.colorPalettes = [['colorPalettes'],
   palettes => palettes.toList().sort((colorOne, colorTwo) => colorTwo.get('createdAt') - colorOne.get('createdAt'))]
 
