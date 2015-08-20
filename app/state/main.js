@@ -44,6 +44,7 @@ module.exports = {
     selectLayerId(id)  { reactor.dispatch('selectLayerId', id) },
     selectLayerImage(layerImage) { reactor.dispatch('selectLayerImage', layerImage) },
     deleteLayerImage(layerImage) { reactor.dispatch('deleteLayerImage', layerImage) },
+    toggleCurrentLayer() { reactor.dispatch('toggleCurrentLayer')},
     layerReplacementStarted() { reactor.dispatch('layerReplacementStarted') },
     layerReplacementComplete() { reactor.dispatch('layerReplacementComplete') },
     uploadLayerImageToS3(file) { reactor.dispatch('uploadLayerImageToS3', file) },
@@ -86,10 +87,21 @@ firebaseRef.onAuth(authData => {
           name: authData.google.displayName,
           email: authData.google.email,
           isAdmin: false}
-        reactor.dispatch('createNewUserAndSetAsCurrent', userData)
+        var interval = setInterval(() => {
+          if (!reactor.__isDispatching) {
+            clearInterval(interval)
+            reactor.dispatch('createNewUserAndSetAsCurrent', userData)
+          }
+        }, 100)
+       
       } else {
         existingUser.id = s.key()
-        reactor.dispatch('setCurrentUser', existingUser)
+        var interval = setInterval(() => {
+          if (!reactor.__isDispatching) {
+            clearInterval(interval)
+            reactor.dispatch('setCurrentUser', existingUser)
+          }
+        }, 100)
       }
     })
   } else {

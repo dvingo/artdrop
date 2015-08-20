@@ -13,26 +13,18 @@ export default React.createClass({
   mixins: [reactor.ReactMixin, Router.State, Router.Navigation],
 
   getDataBindings() {
-    return {design: Store.getters.currentDesign}
-  },
-
-  getInitialState() {
-    return {selectedLayer: null}
+    return {
+      design: Store.getters.currentDesign,
+      currentLayer: Store.getters.currentLayer
+    }
   },
 
   componentWillMount() {
     Store.actions.selectDesignAndLayerId({designId: this.props.params.designId, layerId: this.props.params.layerId})
-    this._selectedLayerInterval = setInterval(() => {
-      if (this.state.design) {
-        clearInterval(this._selectedLayerInterval)
-        this.setState({selectedLayer: this.state.design.getIn(['layers', 0])})
-      }
-    }, 50)
   },
 
   componentWillUnmount() {
     clearInterval(this._interval)
-    clearInterval(this._selectedLayerInterval)
   },
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -70,29 +62,37 @@ export default React.createClass({
   },
 
   selectLayer(layer) {
-    this.setState({selectedLayer:layer})
+    Store.actions.selectLayerId(layer.get('id'))
     this.transitionTo('designEdit', {designId: this.state.design.get('id'), layerId: layer.get('id')})
   },
 
-  editLayerDetail(layer) {
-    this.transitionTo('designEditDetail', {designId: this.state.design.get('id'), layerId: layer.get('id'), imagesOrColors: 'images'})
+  toggleCurrentLayer() {
+    Store.actions.toggleCurrentLayer()
+  },
+
+  editLayerDetail() {
+    this.transitionTo('designEditDetail', {designId: this.state.design.get('id'), layerId: this.state.currentLayer.get('id'), imagesOrColors: 'images'})
   },
 
   render() {
-    if (this.state.design == null || this.state.selectedLayer == null) { return null }
+    console.log('render')
+    if (this.state.design == null || this.state.currentLayer == null) { return null }
+    console.log('render2')
     var imgSize = 60
     var layers = this.state.design.get('layers').reverse().map(layer => {
-    var isSelected = this.state.selectedLayer.get('id') === layer.get('id')
+    var isSelected = this.state.currentLayer.get('id') === layer.get('id')
       return (
         <div className="layer-selector"
              onClick={this.selectLayer.bind(null, layer)}>
           <img src={imageUrlForLayer(layer)} width={imgSize} height={imgSize}
                className={classNames({selected: isSelected})}/> 
+          
           {isSelected ?
-            <span>eye</span>
+            <span onClick={this.toggleCurrentLayer()}>eye</span>
           : null}
+
           {isSelected ?
-            <span onClick={this.editLayerDetail.bind(null, layer)}>more</span>
+            <span onClick={this.editLayerDetail()}>more</span>
           : null}
         </div>
       )
