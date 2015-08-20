@@ -15,6 +15,17 @@ import getters from './getters'
 import {usersRef, firebaseRef} from './firebaseRefs'
 var Nuclear = require('nuclear-js')
 
+
+var dispatchHelper = function() {
+  var args = arguments
+  var interval = setInterval(() => {
+    if (!reactor.__isDispatching) {
+      clearInterval(interval)
+      reactor.dispatch.apply(reactor, args)
+    }
+  }, 100)
+}
+
 reactor.registerStores({
   users: usersStore,
   currentUser: currentUserStore,
@@ -37,43 +48,43 @@ reactor.registerStores({
 module.exports = {
   getters: getters,
   actions: {
-    selectDesignId(id) { reactor.dispatch('selectDesignId', id) },
-    selectDesignAndLayerId(ids) { reactor.dispatch('selectDesignAndLayerId', ids) },
-    previousDesignColors() { reactor.dispatch('previousDesignColors') },
-    nextDesignColors() { reactor.dispatch('nextDesignColors') },
-    selectLayerId(id)  { reactor.dispatch('selectLayerId', id) },
-    selectLayerImage(layerImage) { reactor.dispatch('selectLayerImage', layerImage) },
-    deleteLayerImage(layerImage) { reactor.dispatch('deleteLayerImage', layerImage) },
-    toggleCurrentLayer() { reactor.dispatch('toggleCurrentLayer')},
-    layerReplacementStarted() { reactor.dispatch('layerReplacementStarted') },
-    layerReplacementComplete() { reactor.dispatch('layerReplacementComplete') },
-    uploadLayerImageToS3(file) { reactor.dispatch('uploadLayerImageToS3', file) },
-    uploadLayerImageWithCompositeToS3(files) { reactor.dispatch('uploadLayerImageWithCompositeToS3', files) },
-    selectColorPalette(colorPalette) { reactor.dispatch('selectColorPalette', colorPalette) },
-    deleteColorPalette(colorPalette) { reactor.dispatch('deleteColorPalette', colorPalette) },
-    selectSurfaceId(id) { reactor.dispatch('selectSurfaceId', id) },
-    makeDesignCopy(newId) { reactor.dispatch('makeDesignCopy', newId) },
-    createNewDesign(newDesign) { reactor.dispatch('createNewDesign', newDesign) },
-    saveDesign(design) { reactor.dispatch('saveDesign', design) },
-    updateDesign(designData) { reactor.dispatch('updateDesign', designData) },
-    deleteDesign(design) { reactor.dispatch('deleteDesign', design) },
-    loadAdminCreateDesignData() { reactor.dispatch('loadAdminCreateDesignData') },
-    loadAdminCreatedDesigns() { reactor.dispatch('loadAdminCreatedDesigns') },
-    loadAdminColorPalettes() { reactor.dispatch('loadAdminColorPalettes') },
-    loadAdminLayerImages() { reactor.dispatch('loadAdminLayerImages') },
-    loadCurrentDesignEditResources() { reactor.dispatch('loadCurrentDesignEditResources') },
-    createNewUser(userProps) { reactor.dispatch('createNewUser', userProps) },
-    createNewUserAndSetAsCurrent(userProps) { reactor.dispatch('createNewUserAndSetAsCurrent', userProps) },
-    setCurrentUser(currentUser) { reactor.dispatch('setCurrentUser', currentUser) },
-    logoutCurrentUser() { reactor.dispatch('logoutCurrentUser') },
-    saveColorPalette(colorPalette) { reactor.dispatch('saveColorPalette', colorPalette) },
-    createNewColorPalette(colorPalette) { reactor.dispatch('createNewColorPalette', colorPalette) },
-    rotateCurrentLayerColorPalette() { reactor.dispatch('rotateCurrentLayerColorPalette') },
-    createTag(newTagName) { reactor.dispatch('createTag', newTagName) },
-    loadAdminTags() { reactor.dispatch('loadAdminTags') },
-    addDesignsToTag(data) { reactor.dispatch('addDesignsToTag', data) },
-    addManyTags(tags) { reactor.dispatch('addManyTags', tags) },
-    addManyDesigns(designs) { reactor.dispatch('addManyDesigns', designs) }
+    selectDesignId(id) { dispatchHelper('selectDesignId', id) },
+    selectDesignAndLayerId(ids) { dispatchHelper('selectDesignAndLayerId', ids) },
+    previousDesignColors() { dispatchHelper('previousDesignColors') },
+    nextDesignColors() { dispatchHelper('nextDesignColors') },
+    selectLayerId(id)  { dispatchHelper('selectLayerId', id) },
+    selectLayerImage(layerImage) { dispatchHelper('selectLayerImage', layerImage) },
+    deleteLayerImage(layerImage) { dispatchHelper('deleteLayerImage', layerImage) },
+    toggleCurrentLayer() { dispatchHelper('toggleCurrentLayer')},
+    layerReplacementStarted() { dispatchHelper('layerReplacementStarted') },
+    layerReplacementComplete() { dispatchHelper('layerReplacementComplete') },
+    uploadLayerImageToS3(file) { dispatchHelper('uploadLayerImageToS3', file) },
+    uploadLayerImageWithCompositeToS3(files) { dispatchHelper('uploadLayerImageWithCompositeToS3', files) },
+    selectColorPalette(colorPalette) { dispatchHelper('selectColorPalette', colorPalette) },
+    deleteColorPalette(colorPalette) { dispatchHelper('deleteColorPalette', colorPalette) },
+    selectSurfaceId(id) { dispatchHelper('selectSurfaceId', id) },
+    makeDesignCopy(newId) { dispatchHelper('makeDesignCopy', newId) },
+    createNewDesign(newDesign) { dispatchHelper('createNewDesign', newDesign) },
+    saveDesign(design) { dispatchHelper('saveDesign', design) },
+    updateDesign(designData) { dispatchHelper('updateDesign', designData) },
+    deleteDesign(design) { dispatchHelper('deleteDesign', design) },
+    loadAdminCreateDesignData() { dispatchHelper('loadAdminCreateDesignData') },
+    loadAdminCreatedDesigns() { dispatchHelper('loadAdminCreatedDesigns') },
+    loadAdminColorPalettes() { dispatchHelper('loadAdminColorPalettes') },
+    loadAdminLayerImages() { dispatchHelper('loadAdminLayerImages') },
+    loadCurrentDesignEditResources() { dispatchHelper('loadCurrentDesignEditResources') },
+    createNewUser(userProps) { dispatchHelper('createNewUser', userProps) },
+    createNewUserAndSetAsCurrent(userProps) { dispatchHelper('createNewUserAndSetAsCurrent', userProps) },
+    setCurrentUser(currentUser) { dispatchHelper('setCurrentUser', currentUser) },
+    logoutCurrentUser() { dispatchHelper('logoutCurrentUser') },
+    saveColorPalette(colorPalette) { dispatchHelper('saveColorPalette', colorPalette) },
+    createNewColorPalette(colorPalette) { dispatchHelper('createNewColorPalette', colorPalette) },
+    rotateCurrentLayerColorPalette() { dispatchHelper('rotateCurrentLayerColorPalette') },
+    createTag(newTagName) { dispatchHelper('createTag', newTagName) },
+    loadAdminTags() { dispatchHelper('loadAdminTags') },
+    addDesignsToTag(data) { dispatchHelper('addDesignsToTag', data) },
+    addManyTags(tags) { dispatchHelper('addManyTags', tags) },
+    addManyDesigns(designs) { dispatchHelper('addManyDesigns', designs) }
   }
 }
 
@@ -87,21 +98,10 @@ firebaseRef.onAuth(authData => {
           name: authData.google.displayName,
           email: authData.google.email,
           isAdmin: false}
-        var interval = setInterval(() => {
-          if (!reactor.__isDispatching) {
-            clearInterval(interval)
-            reactor.dispatch('createNewUserAndSetAsCurrent', userData)
-          }
-        }, 100)
-       
+        reactor.dispatch('createNewUserAndSetAsCurrent', userData)
       } else {
         existingUser.id = s.key()
-        var interval = setInterval(() => {
-          if (!reactor.__isDispatching) {
-            clearInterval(interval)
-            reactor.dispatch('setCurrentUser', existingUser)
-          }
-        }, 100)
+        reactor.dispatch('setCurrentUser', existingUser)
       }
     })
   } else {
