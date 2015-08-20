@@ -10,7 +10,7 @@ var classNames = require('classnames')
 var Hammer = require('react-hammerjs')
 
 export default React.createClass({
-  mixins: [reactor.ReactMixin, Router.State],
+  mixins: [reactor.ReactMixin, Router.State, Router.Navigation],
 
   getDataBindings() {
     return {design: Store.getters.currentDesign}
@@ -71,17 +71,29 @@ export default React.createClass({
 
   selectLayer(layer) {
     this.setState({selectedLayer:layer})
+    this.transitionTo('designEdit', {designId: this.state.design.get('id'), layerId: layer.get('id')})
+  },
+
+  editLayerDetail(layer) {
+    this.transitionTo('designEditDetail', {designId: this.state.design.get('id'), layerId: layer.get('id'), imagesOrColors: 'images'})
   },
 
   render() {
     if (this.state.design == null || this.state.selectedLayer == null) { return null }
     var imgSize = 60
     var layers = this.state.design.get('layers').reverse().map(layer => {
+    var isSelected = this.state.selectedLayer.get('id') === layer.get('id')
       return (
         <div className="layer-selector"
              onClick={this.selectLayer.bind(null, layer)}>
           <img src={imageUrlForLayer(layer)} width={imgSize} height={imgSize}
-               className={classNames({selected: this.state.selectedLayer.get('id') === layer.get('id')})}/>
+               className={classNames({selected: isSelected})}/> 
+          {isSelected ?
+            <span>eye</span>
+          : null}
+          {isSelected ?
+            <span onClick={this.editLayerDetail.bind(null, layer)}>more</span>
+          : null}
         </div>
       )
     })
