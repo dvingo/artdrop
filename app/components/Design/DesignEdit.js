@@ -2,15 +2,10 @@ import React from 'react'
 import reactor from '../../state/reactor'
 import Router from 'react-router'
 import Store from '../../state/main'
-import SVGInlineLayer  from '../SVGInlineLayer'
-import Start from './EditSteps/Start'
 import RenderLayers from './RenderLayers'
-import Container from './EditSteps/Container'
-import EditFooter from './EditFooter'
-import {imageUrlForLayer} from '../../state/utils'
-import {isInvalidEditStep} from '../../utils'
 import ColorsButton from '../ColorsButton'
 import CheckButton from '../CheckButton'
+import {imageUrlForLayer} from '../../state/utils'
 var classNames = require('classnames')
 var Hammer = require('react-hammerjs')
 
