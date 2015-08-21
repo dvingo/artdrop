@@ -1,11 +1,10 @@
 .layer-selector-wrapper {
   @include display(flex);
-  @include flex-grow(0.2);
-  @include flex-shrink(0);
-  @include flex-basis(0);
+  @include flex(1 0 0);
+  @include justify-content(center);
+  @include align-items(flex-start);
   overflow: hidden;
   margin: 0;
-  padding: 0 4px 0 0;
 
   .container {
     @include display(flex);
@@ -16,13 +15,33 @@
   }
 }
 .layer-selector {
+  margin: 10px;
+  padding: 5px;
+  box-sizing: box;
+  border-radius: 10px;
+
   @include display(flex);
-  @include flex-grow(1);
+  // @include flex-grow(1);
   @include align-items(center);
-  @include justify-content(center);
+  @include justify-content(flex-start);
+  @include flex-direction(column);
+
+  &.selected {
+    background: $button-color;
+    -webkit-box-shadow: 2px 2px 6px 0px rgba(150,150,150,0.75);
+    -moz-box-shadow: 2px 2px 6px 0px rgba(150,150,150,0.75);
+    box-shadow: 2px 2px 6px 0px rgba(150,150,150,0.75);
+  }
+
   img {
+    background: white;
     border-radius: 10px;
-    opacity: 0.4;
+    opacity: 1;
+    -webkit-box-shadow: 2px 2px 6px 0px rgba(150,150,150,0.75);
+    -moz-box-shadow: 2px 2px 6px 0px rgba(150,150,150,0.75);
+    box-shadow: 2px 2px 6px 0px rgba(150,150,150,0.75);
+    cursor: pointer;
+
     @media (max-width: 360px) {
       width: 50px;
       height: 50px;
@@ -31,16 +50,27 @@
       width: 40px;
       height: 40px;
     }
-    &.selected {
-      opacity: 1;
-      border: 2px solid $color5;
-    }
   }
   span {
-    background: lightgray;
-    border-radius: 20px;
-    padding: 5px;
-    border: 1px solid black;
+    background: white;
+    border-radius: 10px;
+    width: 100%;
+    margin-top: 10px;
+    color: $nav-bar-color;
+    text-align: center;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    cursor: pointer;
+    @include display(flex);
+    @include justify-content(center);
+    @include align-items(center);
+
+    img {
+      height: 15px;
+      box-shadow: none;
+      margin: 2px;
+    }
 
     &.disabled {
       opacity: 0.3;

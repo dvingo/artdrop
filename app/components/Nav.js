@@ -18,9 +18,19 @@ export default React.createClass({
         <div className="nav-bar-container">
 
           <div className="left-side">
-            <Link to="designs" className="logo">
-              <img className="space" src={iconPath('drop.svg')} height={40} width={30}/>
-            </Link>
+            {onDesigns ?
+              <Link to="designs" className="logo">
+                <img className="space" src={iconPath('drop.svg')} height={40} width={30}/>
+              </Link>:
+              null
+            }   
+
+            {onDesigns ? null:
+              (<img src={iconPath('cancel-x-white.svg')}
+                   className="cancel-x space"
+                   height={30} width={30}/>)
+            }
+
             {onDesigns ? null:
               (<img src={iconPath('back.svg')}
                   className="space"
@@ -41,20 +51,21 @@ export default React.createClass({
               <img src={iconPath('share-icon.svg')} height={25} width={25}
                    style={{marginTop:4}}/>
             </div>
-
-            {onDesigns ? null:
-              (<span className="space price">$75</span>)
-            }
-
-            {onDesigns ? null:
-              (<img src={iconPath('buy.svg')}
-                   className="buy"
-                   height={50} width={70}
-                   onClick={this.handleBuy}/>)
-            }
           </div>
         </div>
       </div>
     )
   }
 })
+
+
+// {onDesigns ? null:
+//   (<span className="space price">$75</span>)
+// }
+
+// {onDesigns ? null:
+//   (<img src={iconPath('buy.svg')}
+//        className="buy"
+//        height={50} width={70}
+//        onClick={this.handleBuy}/>)
+// }

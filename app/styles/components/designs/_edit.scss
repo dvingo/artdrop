@@ -5,13 +5,22 @@
   @include justify-content(center);
   width: 100%;
   height: 100%;
-  background: white;
 
   .edit-ui {
     @include display(flex);
     @include flex-direction(column);
     @include flex(1 0 0);
     width: 100%;
+
+    .edit-steps {
+      .edit-ui-top {
+        @include display(flex);
+        @include flex-direction(row);
+        @include flex(1 0 0);
+        @include align-items(center);
+        @include justify-content(space-around);
+      }
+    }
   }
 }
 

@@ -7,7 +7,7 @@ export default React.createClass({
     var isSmall = this.props.isSmall
     return (
       <div onClick={this.props.onClick} className={classNames("check-button" , {small:isSmall})} >
-        &#916;
+        <img src={iconPath("check.svg")}/>
       </div>
     )
   }
