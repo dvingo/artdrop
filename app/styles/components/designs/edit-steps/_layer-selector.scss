@@ -88,6 +88,10 @@
     @include flex-direction(row);
     @include align-items(center);
 
+    &.portrait {
+      @include flex-direction(column);
+    }
+
     .layer-selector {
       @include flex-direction(row);
 
@@ -96,6 +100,4 @@
       }
     }
   }
-
-  
 }

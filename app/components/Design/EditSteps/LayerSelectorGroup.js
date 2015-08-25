@@ -2,6 +2,7 @@ import React from 'react'
 import reactor from '../../../state/reactor'
 import Store from '../../../state/main'
 import LayerSelector from './LayerSelector'
+var classNames = require('classnames')
 
 export default React.createClass({
   mixins: [reactor.ReactMixin],
@@ -18,7 +19,7 @@ export default React.createClass({
     if (this.state.design == null || this.state.currentLayer == null ) { return null }
 
     return (
-      <article className="layer-selector-wrapper small">
+      <article className={classNames("layer-selector-wrapper", {portrait: this.props.isPortrait})}>
           {this.state.design.get('layers').reverse().map(layer => {
             return (
               <LayerSelector currentLayer={this.state.currentLayer} layer={layer}/>

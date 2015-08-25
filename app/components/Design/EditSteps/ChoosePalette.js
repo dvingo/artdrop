@@ -2,7 +2,6 @@ import React from 'react'
 import Store from '../../../state/main'
 import reactor from '../../../state/reactor'
 import ColorPalette from '../../ColorPalette'
-var classNames = require('classnames')
 
 export default React.createClass({
   mixins: [reactor.ReactMixin],
@@ -26,7 +25,7 @@ export default React.createClass({
     })
 
     return (
-      <section className={classNames('choose-palette', {visible: this.props.isActive})}>
+      <section className='choose-palette'>
         <div className="palettes-container">
           {palettes}
         </div>
