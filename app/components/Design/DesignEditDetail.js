@@ -6,30 +6,24 @@ import Immutable from 'Immutable'
 import RenderLayers from './RenderLayers'
 import LayerSelectorGroup from './EditSteps/LayerSelectorGroup'
 import ColorsButtonRotate from '../ColorsButtonRotate'
+import LayerImage from './LayerImage'
 import CheckButton from '../CheckButton'
-import {imageUrlForLayer} from '../../state/utils'
-import {iconPath} from '../../utils'
-var classNames = require('classnames')
 
 export default React.createClass({
-  mixins: [
-    reactor.ReactMixin, 
-    Router.State, 
-    Router.Navigation
-  ],
+  mixins: [reactor.ReactMixin, Router.State, Router.Navigation],
 
   getDataBindings() {
     return {
-      design: Store.getters.currentDesign,
-      currentLayer: Store.getters.currentLayer,
+      design:           Store.getters.currentDesign,
+      currentLayer:     Store.getters.currentLayer,
       numEnabledLayers: Store.getters.numEnabledLayers,
-      layerImages: Store.getters.layerImages
+      layerImages:      Store.getters.layerImages
     }
   },
 
   componentWillMount() {
     Store.actions.selectDesignAndLayerId({
-      designId: this.props.params.designId, 
+      designId: this.props.params.designId,
       layerId: this.props.params.layerId
     })
 
@@ -68,50 +62,35 @@ export default React.createClass({
   render() {
     if (this.state.design == null || this.state.currentLayer == null || this.state.layerImages == null ) { return null }
 
-    var layerNum = 0;
-    var designLayers = this.state.layerImages.map(layer => {
-
-      layerNum++;
-      if (layerNum > 30) {
-        console.log(layerNum);
-        return;
-      } else {
-        return (
-          <div className="layer-image" key={layer.get('id')}>
-            <img src={layer.get('imageUrl')}/>
-          </div>
-        )
-      } 
-    });
-
-    console.log(this.state.layerImages.toJS())
+    var layerImages = this.state.layerImages.slice(0,30).map(layerImage => {
+      return <LayerImage layerImage={layerImage} key={layerImage.get('id')}/>
+    })
 
     return (
       <section className="main design-edit-detail">
         <div className="edit-ui">
-            <div className="edit-ui-canvas">
-              <div className="canvas-flex-wrapper">
-                <span>
-                  <RenderLayers layers={this.state.design.get('layers')}/>
-                </span>
-              </div>
+          <div className="edit-ui-canvas">
+            <div className="canvas-flex-wrapper">
+              <span>
+                <RenderLayers layers={this.state.design.get('layers')}/>
+              </span>
+            </div>
+          </div>
+
+          <div className="edit-ui-detailed">
+            <LayerSelectorGroup/>
+            <div className="edit-ui-mid">
+              <ColorsButtonRotate className="rotate-colors" isSmall={false}/>
+              <div className="art-button button">Art</div>
+              <div className="color-button button">Color</div>
+              <CheckButton onClick={this.returnToDesignEdit} isSmall={false}/>
             </div>
 
-            <div className="edit-ui-detailed">
-              <LayerSelectorGroup/> 
-              <div className="edit-ui-mid">
-                <ColorsButtonRotate className="rotate-colors" isSmall={false}/>
-                <div className="art-button button">Art</div>
-                <div className="color-button button">Color</div>
-                <CheckButton onClick={this.returnToDesignEdit} isSmall={false}/>
-              </div>
-
-              <div className="edit-ui-bottom">
-                {designLayers}
-              </div>
+            <div className="edit-ui-bottom">
+              {layerImages}
             </div>
+          </div>
         </div>
-        
       </section>
     )
   }
