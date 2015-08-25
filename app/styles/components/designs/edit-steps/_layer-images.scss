@@ -1,25 +1,19 @@
-.check-button {
-	background: $button-color;
-	border-radius: 50% 50%;
-	width: 100px;
-	height: 100px;
+.layer-image {
 	@include display(flex);
 	@include align-items(center);
 	@include justify-content(center);
+	min-width: 100px;
+	min-height: 100px;
+	max-width: 100px;
+	max-height: 100px;
+	margin: 5px;
 	-webkit-box-shadow: 2px 2px 6px 0px rgba(150,150,150,0.75);
 	-moz-box-shadow: 2px 2px 6px 0px rgba(150,150,150,0.75);
 	box-shadow: 2px 2px 6px 0px rgba(150,150,150,0.75);
-	cursor: pointer;
+	border-radius: 6px;
 
 	img {
-		width: 70%;
+		width: 100%;
 		height: auto;
-	}
-}
-
-.design-edit-detail {
-	.check-button {
-		height: 30px;
-		width: 30px;
 	}
 }

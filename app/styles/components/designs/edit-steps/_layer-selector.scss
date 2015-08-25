@@ -5,14 +5,19 @@
   @include align-items(flex-start);
   overflow: hidden;
   margin: 0;
+  // position: relative;
+  // width: 30%;
+  // background: cyan;
+  // float: left;
+  // display: inline-block;
 
-  .container {
-    @include display(flex);
-    @include flex-direction(column);
-    @include flex(1 0 0);
-    margin: 0;
-    padding: 0;
-  }
+  // .container {
+  //   @include display(flex);
+  //   @include flex-direction(column);
+  //   @include flex(1 0 0);
+  //   margin: 0;
+  //   padding: 0;
+  // }
 }
 .layer-selector {
   margin: 10px;
@@ -76,4 +81,21 @@
       opacity: 0.3;
     }
   }
+}
+
+.design-edit-detail {
+  .layer-selector-wrapper {
+    @include flex-direction(row);
+    @include align-items(center);
+
+    .layer-selector {
+      @include flex-direction(row);
+
+      span {
+        margin: 0 0 0 10px;
+      }
+    }
+  }
+
+  
 }

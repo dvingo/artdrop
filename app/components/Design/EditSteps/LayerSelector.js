@@ -1,55 +1,63 @@
 import React from 'react'
-import {imageUrlForLayer, imageUrlForSurface} from '../../../state/utils'
+import Router from 'react-router'
 import reactor from '../../../state/reactor'
 import Store from '../../../state/main'
-import {Navigation, State} from 'react-router'
+import {imageUrlForLayer} from '../../../state/utils'
+import {iconPath} from '../../../utils'
 var classNames = require('classnames')
-var imgSize = 60
+var imgSize = 40
 
 export default React.createClass({
-  mixins: [reactor.ReactMixin, Navigation, State],
+  mixins: [reactor.ReactMixin, Router.Navigation, Router.State],
 
   getDataBindings() {
-    return {currentLayerId: ['currentLayerId'],
-            design: Store.getters.currentDesign}
+    return {
+      design: Store.getters.currentDesign,
+      currentLayer: Store.getters.currentLayer
+    }
   },
 
-  selectLayer(layerId) {
-    Store.actions.selectLayerId(layerId)
-    var imagesOrColors = this.getParams().imagesOrColors
-    imagesOrColors = (imagesOrColors ? imagesOrColors : 'images')
-    this.transitionTo('layerEdit', {designId: this.state.design.get('id'), layerId: layerId,
-                                    imagesOrColors: imagesOrColors})
+  selectLayer() {
+    Store.actions.selectLayerId(this.props.layer.get('id'))
+    this.transitionTo('designEdit', {
+      designId: this.state.design.get('id'), 
+      layerId: layer.get('id')
+    })
   },
 
-  editSurface() {
-    Store.actions.selectLayerId('')
-    this.transitionTo('designEdit', {designId: this.state.design.get('id'), step: 'surface'})
+  toggleCurrentLayer(e) {
+    e.preventDefault()
+    Store.actions.toggleCurrentLayer()
+  },
+
+  editLayerDetail() {
+    this.transitionTo('designEditDetail', {
+      designId: this.state.design.get('id'), 
+      layerId: this.state.currentLayer.get('id'), 
+      imagesOrColors: 'images'
+    })
   },
 
   render() {
-    var editingSurface = this.getParams().step === 'surface'
+    var layer = this.props.layer
+    var isSelected = this.state.currentLayer.get('id') === layer.get('id')
+    var showMoreButton = (this.isActive('designEdit') && isSelected)
+    var isEnabled = this.state.currentLayer.get('isEnabled')
+
+
     return (
-      <article className="layer-selector-wrapper small">
-        <div className="container">
-          {this.state.design.get('layers').reverse().map(layer => {
-            return (
-              <div className="layer-selector"
-                   onClick={this.selectLayer.bind(null, layer.get('id'))}>
-                <img src={imageUrlForLayer(layer)} width={imgSize} height={imgSize}
-                     className={classNames({selected: this.state.currentLayerId === layer.get('id')})}/>
-              </div>
-            )
-           })
-          }
-          <div className="layer-selector surface">
-            <img src={imageUrlForSurface(this.state.design.get('surface'))}
-                 className={classNames({selected: editingSurface})}
-                 onClick={this.editSurface}
-                 width={imgSize} height={imgSize}/>
-          </div>
-        </div>
-      </article>
+      <div className={classNames({selected: isSelected}, 'layer-selector')}>
+        <img src={imageUrlForLayer(layer)} width={imgSize} height={imgSize}
+             onClick={this.selectLayer}/> 
+        {isSelected ?
+          <span className={isEnabled ? '' : 'disabled'} onClick={this.toggleCurrentLayer}>
+            <img src={iconPath("eyeball.svg")}/></span>
+        : null}
+
+        {showMoreButton ?
+          <span onClick={this.editLayerDetail}>more</span>
+        : null}
+      </div>
     )
   }
 })
