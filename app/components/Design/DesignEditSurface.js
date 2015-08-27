@@ -10,6 +10,7 @@ export default React.createClass({
     return {
       design: Store.getters.currentDesign,
       currentLayer: Store.getters.currentLayer,
+      surfaces: Store.getters.surfaces
     }
   },
 
@@ -18,6 +19,8 @@ export default React.createClass({
   },
 
   render() {
+    if (this.state.design == null) return null
+
     return (
       <section className="main design-edit">
 
@@ -28,8 +31,7 @@ export default React.createClass({
         </div>
 
         <div className="edit-ui">
-          <div className="edit-steps">
-          </div>
+          
         </div>
 
       </section>
