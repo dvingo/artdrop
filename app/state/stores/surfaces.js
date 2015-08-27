@@ -32,12 +32,15 @@ export default new Nuclear.Store({
     this.on('resetSurfacesFromFixture', state => {
       surfacesRef.set(surfaceFixtures.surfaces)
       surfaceOptionsRef.set(surfaceFixtures.surfaceOptions)
-
       designsRef.once('value', snapshot => {
         var allDesigns = snapshot.val()
         var surfaceId = Object.keys(surfaceFixtures.surfaces)[0]
+        var surfaceOptionId = Object.keys(surfaceFixtures.surfaces[surfaceId].options)[0]
         Object.keys(allDesigns).forEach( id => {
-          designsRef.child(id).update({surface: surfaceId})
+          designsRef.child(id).update({
+            surface: surfaceId,
+            surfaceOption: surfaceOptionId
+          })
         })
       });
 

@@ -1,5 +1,6 @@
 import {layersRef, layerImagesRef,
-colorPalettesRef,surfacesRef, tagsRef} from './firebaseRefs'
+colorPalettesRef,surfacesRef, 
+surfaceOptionsRef, tagsRef} from './firebaseRefs'
 import reactor from './reactor'
 var RSVP = require('RSVP')
 
@@ -31,8 +32,16 @@ exports.hydrateDesign = (design) => {
   })
   return RSVP.all(layers).then(layers => {
     design.layers = layers;
-    hydrateSurface(design.surface).then(surface => {
+    return hydrateSurface(design.surface)
+  }).then(surface => {
+    RSVP.all(Object.keys(surface.options).map(optionId => {
+      hydrateSurfaceOption(optionId).then(surfaceOption => {
+        surfaceOption.id = optionId
+        return surfaceOption
+      })
+    })).then(surfaceOptions => {
       surface.id = design.surface
+      surface.options = surfaceOptions
       design.surface = surface
       reactor.dispatch('addSurface', surface)
       reactor.dispatch('addDesign', design)
@@ -42,7 +51,7 @@ exports.hydrateDesign = (design) => {
 
 var hydrateObj = (ref, id) => {
   return new RSVP.Promise(resolve => {
-    ref.child(id).on('value', o => resolve(o.val()))
+    ref.child(id).once('value', o => resolve(o.val()))
   })
 }
 
@@ -67,6 +76,7 @@ var hydrateLayer = hydrateObj.bind(null, layersRef)
 var hydrateLayerImage = hydrateObj.bind(null, layerImagesRef)
 var hydrateColorPalette = hydrateObj.bind(null, colorPalettesRef)
 var hydrateSurface = hydrateObj.bind(null, surfacesRef)
+var hydrateSurfaceOption = hydrateObj.bind(null, surfaceOptionsRef)
 
 exports.hydrateLayer = hydrateLayer
 exports.hydrateLayerImage = hydrateLayerImage

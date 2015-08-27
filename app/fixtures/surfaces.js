@@ -21,7 +21,6 @@ exports.surfaces = {
 // Surface options
 exports.surfaceOptions = {
   '-JxeU2bWpEZcBH7MxVgm': {
-    surface: '-JxeTsvNRvsJWBQVtCwh',
     width: 8,
     height: 8,
     depth: 1,
@@ -30,7 +29,6 @@ exports.surfaceOptions = {
     price: 4966
   },
   '-JxeU8r-tY7szqJSe9DC': {
-    surface: '-JxeTsvNRvsJWBQVtCwh',
     width: 6,
     height: 6,
     depth: 1,
@@ -39,7 +37,6 @@ exports.surfaceOptions = {
     price: 3507
   },
   '-JxeUD8QUgohgijyTsyd': {
-    surface: '-JxeTsvNRvsJWBQVtCwh',
     width: 5,
     height: 5,
     depth: 0.75,
