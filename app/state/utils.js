@@ -190,8 +190,6 @@ export default {
       return design.get('smallImageUrl')
     }
     if (size === 'large') {
-      console.log('GETTING large image url for design: ', design.toJS())
-        console.log('url is: ', design.get('largeImageUrl'))
       return design.get('largeImageUrl')
     }
     var filename = (design.has('title')

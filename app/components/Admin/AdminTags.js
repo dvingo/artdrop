@@ -16,16 +16,7 @@ export default React.createClass({
  },
 
   componentWillMount() {
-    this._interval = setInterval(() => {
-      if (!reactor.__isDispatching) {
-        clearInterval(this._interval)
-        Store.actions.loadAdminTags()
-      }
-    }, 10)
-  },
-
-  componentWillUnmount() {
-    clearInterval(this._interval)
+    Store.actions.loadAdminTags()
   },
 
   handleNewTagNameChange(e) {

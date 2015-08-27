@@ -10,20 +10,19 @@ export default React.createClass({
   componentWillMount() {
     document.addEventListener('DOMContentLoaded', () => FastClick.attach(document.body))
   },
+
   render() {
-    var onDesigns = (this.isActive('designs'))
     return (
-        onDesigns ? (
-          <div>
-            <Nav/>
-            <RouteHandler/>
-          </div> 
-        ) : (
-          <div>
-            <RouteHandler/>
-            <Nav/>
-          </div>
-        ) 
+      (this.isActive('designs') || this.isActive('/') || this.isActive('admin')) ?
+        (<div>
+           <Nav/>
+           <RouteHandler/>
+         </div>)
+        :
+        (<div>
+           <RouteHandler/>
+           <Nav/>
+         </div>)
     )
   }
 })

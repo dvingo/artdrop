@@ -1,6 +1,8 @@
 var Nuclear = require('nuclear-js');
 var Immutable = Nuclear.Immutable
 import {hydrateAndDispatchSurfaces} from '../helpers'
+import {surfacesRef, surfaceOptionsRef} from '../firebaseRefs'
+import surfaceFixtures from '../../fixtures/surfaces'
 
 export default new Nuclear.Store({
   getInitialState() { return Nuclear.toImmutable({}) },
@@ -24,6 +26,12 @@ export default new Nuclear.Store({
 
     this.on('loadCurrentDesignEditResources', state => {
       hydrateAndDispatchSurfaces(state)
+      return state
+    })
+
+    this.on('resetSurfacesFromFixture', state => {
+      surfacesRef.set(surfaceFixtures.surfaces)
+      surfaceOptionsRef.set(surfaceFixtures.surfaceOptions)
       return state
     })
 

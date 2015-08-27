@@ -1,10 +1,8 @@
 import React from 'react'
-import Router from 'react-router'
+import {Link, RouteHandler} from 'react-router'
 import reactor from '../state/reactor'
 import Store from '../state/main'
 import {firebaseRef} from '../state/firebaseRefs'
-var Link = Router.Link
-var RouteHandler = Router.RouteHandler
 
 export default React.createClass({
   mixins: [reactor.ReactMixin],
@@ -40,10 +38,11 @@ export default React.createClass({
             {/*<Link to="adminUsers" style={navLinkStyle}>Edit Users</Link>*/}
             <Link to="adminTags" style={navLinkStyle}>Tags</Link>
             <Link to="adminColorPalettes" style={navLinkStyle}>Color Palettes</Link>
-            <Link to="adminDesigns" style={navLinkStyle}>Edit Designs</Link>
+            <Link to="adminDesigns" style={navLinkStyle}>Designs</Link>
             <Link to="adminCreateDesign" style={navLinkStyle}>Create Design</Link>
             <Link to="adminCreateLayerImage" style={navLinkStyle}>Upload Layer Image</Link>
-            <Link to="adminLayerImages" style={navLinkStyle}>Edit Layer Images</Link>
+            <Link to="adminLayerImages" style={navLinkStyle}>Layer Images</Link>
+            <Link to="adminSurfaces" style={navLinkStyle}>Surfaces</Link>
             <button onClick={this.logoutCurrentUser}>Logout</button>
           </div>
           <RouteHandler/>
