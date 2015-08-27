@@ -31,7 +31,7 @@ export default React.createClass({
   },
 
   componentWillMount() {
-    setTimeout(() => Store.actions.loadAdminCreateDesignData(), 50)
+    Store.actions.loadAdminCreateDesignData()
   },
 
   clearMessages() {
@@ -71,8 +71,9 @@ export default React.createClass({
 
   saveDesign(e) {
     e.preventDefault()
-    var title = this.state.newDesign.get('title')
-    var surface = this.state.newDesign.get('surface')
+    var newDesign = this.state.newDesign
+    var title = newDesign.get('title')
+    var surface = newDesign.get('surface')
     var errors = []
     var messages = []
     if (!title || title.length === 0) {
@@ -80,9 +81,8 @@ export default React.createClass({
     }
     if (!surface) { errors.push('You must select a surface') }
     var layersValid = (
-      this.state.newDesign.get('layers')
-      .map(l => l.has('colorPalette') && l.has('selectedLayerImage'))
-      .every(v => v)
+      newDesign.get('layers')
+      .every(l => l.has('colorPalette') && l.has('selectedLayerImage'))
     )
     if (!layersValid) {
       errors.push('You must select a color palette and image for every layer.')
@@ -90,7 +90,7 @@ export default React.createClass({
 
     if (errors.length === 0) {
       let svgEls = document.querySelectorAll('.canvas .layer svg')
-      Store.actions.createNewDesign({design: this.state.newDesign, svgEls: svgEls})
+      Store.actions.createNewDesign({design: newDesign, svgEls: svgEls})
       messages.push('Design successfully created.')
     }
     this.setState({errors: errors, messages: messages})
@@ -98,7 +98,7 @@ export default React.createClass({
 
   render() {
     var surfaces = this.state.surfaces.map(s => {
-      var border = (this.state.newDesign.get('surface') === s ? '2px solid' : 'none')
+      var border = (this.state.newDesign.getIn(['surface', 'id']) === s.get('id') ? '2px solid' : 'none')
       return <img src={imageUrlForSurface(s)}
                   onClick={this.selectSurface.bind(null, s)}
                   width={40} height={40} key={s.get('id')}

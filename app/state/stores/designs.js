@@ -1,6 +1,6 @@
 var Nuclear = require('nuclear-js');
 var Immutable = Nuclear.Immutable
-import {designPropsToIds} from '../helpers'
+import {designPropsToIds, defaultSurfaceOptionIdForSurface} from '../helpers'
 import getters from '../getters'
 import reactor from '../reactor'
 import {uploadDesignPreview, newId, rotateColorPalette} from '../utils'
@@ -172,6 +172,7 @@ export default new Nuclear.Store({
         design.smallImageUrl = imgUrls.small
         design.largeImageUrl = imgUrls.large
         design.layers = layerIds
+        design.surfaceOption = defaultSurfaceOptionIdForSurface(surface)
         design.surface = design.surface.id
         design.price = 2000
         design.createdAt = now

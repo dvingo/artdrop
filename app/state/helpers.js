@@ -1,10 +1,17 @@
 import {layersRef, layerImagesRef,
-colorPalettesRef,surfacesRef, 
+colorPalettesRef,surfacesRef,
 surfaceOptionsRef, tagsRef} from './firebaseRefs'
 import reactor from './reactor'
 var RSVP = require('RSVP')
 
 var exports = {}
+
+exports.defaultSurfaceOptionIdForSurface = (surfaceObj) => {
+  if (Array.isArray(surfaceObj.options)) {
+    return surfaceObj.options[0].id
+  }
+  return Object.keys(surfaceObj.options)[0]
+}
 
 exports.designPropsToIds = (design) => {
   var layerIds = design.get('layers').map(l => l.get('id'))
@@ -34,8 +41,8 @@ exports.hydrateDesign = (design) => {
     design.layers = layers;
     return hydrateSurface(design.surface)
   }).then(surface => {
-    RSVP.all(Object.keys(surface.options).map(optionId => {
-      hydrateSurfaceOption(optionId).then(surfaceOption => {
+    return RSVP.all(Object.keys(surface.options).map(optionId => {
+      return hydrateSurfaceOption(optionId).then(surfaceOption => {
         surfaceOption.id = optionId
         return surfaceOption
       })
@@ -43,6 +50,7 @@ exports.hydrateDesign = (design) => {
       surface.id = design.surface
       surface.options = surfaceOptions
       design.surface = surface
+      design.surfaceOption = surface.options.filter(o => o.id === design.surfaceOption)[0]
       reactor.dispatch('addSurface', surface)
       reactor.dispatch('addDesign', design)
     }).catch(e => console.error('Got surface error: ', e))

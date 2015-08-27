@@ -42,7 +42,7 @@ export default new Nuclear.Store({
             surfaceOption: surfaceOptionId
           })
         })
-      });
+      })
 
       return state
     })

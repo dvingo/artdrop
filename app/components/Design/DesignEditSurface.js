@@ -2,6 +2,7 @@ import React from 'react'
 import reactor from '../../state/reactor'
 import Store from '../../state/main'
 import RenderLayers from './RenderLayers'
+import {imageUrlForSurface} from '../../state/utils'
 
 export default React.createClass({
   mixins: [reactor.ReactMixin],
@@ -19,8 +20,7 @@ export default React.createClass({
   },
 
   render() {
-    if (this.state.design == null) return null
-
+    if (this.state.design == null) { return null }
     return (
       <section className="main design-edit">
 
@@ -31,7 +31,7 @@ export default React.createClass({
         </div>
 
         <div className="edit-ui">
-          
+          {this.state.surfaces.map(s => <img src={imageUrlForSurface(s)} width={200} height={200}/>)}
         </div>
 
       </section>
