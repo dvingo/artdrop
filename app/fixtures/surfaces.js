@@ -372,7 +372,39 @@ exports.surfaces = {
       '-Jxpn_UQBfFe3L__v5Aq': true,
       '-Jxpn_UQBfFe3L__v5Ar': true
     }
+  },
+
+  '-JxpxVJzDtX9zW_hVH7Z': {
+    name: 'Poster',
+    vendor: 'print.io',
+    type: 'print',
+    description: "Versatile and affordable poster delivers sharp, clean images with stunning color and vibrancy.",
+    imageUrl: 'https://az412349.vo.msecnd.net/temp/39-25aa-Posters_All3_Front_296x307.png',
+    images: [
+      'https://az412349.vo.msecnd.net/temp/39-6af2-Poster_GrandCentrai_Front_544x355.png',
+      'https://az412349.vo.msecnd.net/temp/39-02a2-Poster_Wedding_LayAngle_544x355.png'
+    ],
+    options: {
+      '-JxpyiDXW68eyZJVnn27': true,
+      '-JxpyiDXW68eyZJVnn28': true,
+      '-JxpyiDXW68eyZJVnn29': true,
+      '-JxpyiDXW68eyZJVnn2A': true,
+      '-JxpyiDXW68eyZJVnn2B': true,
+      '-JxpyiDXW68eyZJVnn2C': true,
+      '-JxpyiDXW68eyZJVnn2D': true,
+      '-JxpyiDXW68eyZJVnn2E': true,
+      '-JxpyiDXW68eyZJVnn2F': true,
+      '-JxpyiDXW68eyZJVnn2G': true,
+      '-JxpyiDXW68eyZJVnn2H': true,
+      '-JxpyiDXW68eyZJVnn2I': true,
+      '-JxpyiDXW68eyZJVnn2J': true,
+      '-JxpyiDXW68eyZJVnn2K': true,
+      '-JxpyiDXW68eyZJVnn2L': true,
+      '-JxpyiDXW68eyZJVnn2M': true,
+      '-JxpyiDXW68eyZJVnn2N': true
+    }
   }
+
 }
 
 // Surface options
@@ -1776,5 +1808,158 @@ exports.surfaceOptions = {
      units: 'inches',
      printingPrice: 4510,
      salePrice: 5900
+   },
+   '-JxpyiDXW68eyZJVnn27': {
+     vendorId: 'Posters-8x8-Semi-Gloss',
+     paperType: 'semi-gloss',
+     width: 8,
+     height: 8,
+     units: 'inches',
+     printingPrice: 60,
+     salePrice: 79
+   },
+   '-JxpyiDXW68eyZJVnn28': {
+     vendorId: 'Posters-12x12-Semi-Gloss',
+     paperType: 'semi-gloss',
+     width: 12,
+     height: 12,
+     units: 'inches',
+     printingPrice: 135,
+     salePrice: 175
+   },
+   '-JxpyiDXW68eyZJVnn29': {
+     vendorId: 'Posters-16x16-Semi-Gloss',
+     paperType: 'semi-gloss',
+     width: 16,
+     height: 16,
+     units: 'inches',
+     printingPrice: 240,
+     salePrice: 312
+   },
+   '-JxpyiDXW68eyZJVnn2A': {
+     vendorId: 'Posters-20x20-Semi-Gloss',
+     paperType: 'semi-gloss',
+     width: 20,
+     height: 20,
+     units: 'inches',
+     printingPrice: 374,
+     salePrice: 487
+   },
+   '-JxpyiDXW68eyZJVnn2B': {
+     vendorId: 'Posters-24x24-Semi-Gloss',
+     paperType: 'semi-gloss',
+     width: 24,
+     height: 24,
+     units: 'inches',
+     printingPrice: 538,
+     salePrice: 700
+   },
+   '-JxpyiDXW68eyZJVnn2C': {
+     vendorId: 'Posters-30x30-Semi-Gloss',
+     paperType: 'semi-gloss',
+     width: 30,
+     height: 30,
+     units: 'inches',
+     printingPrice: 840,
+     salePrice: 1092
+   },
+   '-JxpyiDXW68eyZJVnn2D': {
+     vendorId: 'Posters-48x48-Semi-Gloss',
+     paperType: 'semi-gloss',
+     width: 48,
+     height: 48,
+     units: 'inches',
+     printingPrice: 2145,
+     salePrice: 2800
+   },
+   '-JxpyiDXW68eyZJVnn2E': {
+     vendorId: 'Posters-60x60-Semi-Gloss',
+     paperType: 'semi-gloss',
+     width: 60,
+     height: 60,
+     units: 'inches',
+     printingPrice: 3352,
+     salePrice: 4350
+   },
+   '-JxpyiDXW68eyZJVnn2F': {
+     vendorId: 'Posters-8x8-Matte',
+     paperType: 'matte',
+     width: 8,
+     height: 8,
+     units: 'inches',
+     printingPrice: 71,
+     salePrice: 90
+   },
+   '-JxpyiDXW68eyZJVnn2G': {
+     vendorId: 'Posters-10x10-Matte',
+     paperType: 'matte',
+     width: 10,
+     height: 10,
+     units: 'inches',
+     printingPrice: 111,
+     salePrice: 150
+   },
+   '-JxpyiDXW68eyZJVnn2H': {
+     vendorId: 'Posters-12x12-Matte',
+     paperType: 'matte',
+     width: 12,
+     height: 12,
+     units: 'inches',
+     printingPrice: 159,
+     salePrice: 209
+   },
+   '-JxpyiDXW68eyZJVnn2I': {
+     vendorId: 'Posters-16x16-Matte',
+     paperType: 'matte',
+     width: 16,
+     height: 16,
+     units: 'inches',
+     printingPrice: 281,
+     salePrice: 366
+   },
+   '-JxpyiDXW68eyZJVnn2J': {
+     vendorId: 'Posters-20x20-Matte',
+     paperType: 'matte',
+     width: 20,
+     height: 20,
+     units: 'inches',
+     printingPrice: 438,
+     salePrice: 570
+   },
+   '-JxpyiDXW68eyZJVnn2K': {
+     vendorId: 'Posters-24x24-Matte',
+     paperType: 'matte',
+     width: 24,
+     height: 24,
+     units: 'inches',
+     printingPrice: 632,
+     salePrice: 822
+   },
+   '-JxpyiDXW68eyZJVnn2L': {
+     vendorId: 'Posters-30x30-Matte',
+     paperType: 'matte',
+     width: 30,
+     height: 30,
+     units: 'inches',
+     printingPrice: 987,
+     salePrice: 1284
+   },
+   '-JxpyiDXW68eyZJVnn2M': {
+     vendorId: 'Posters-48x48-Matte',
+     paperType: 'matte',
+     width: 48,
+     height: 48,
+     units: 'inches',
+     printingPrice: 2524,
+     salePrice: 3282
+   },
+   '-JxpyiDXW68eyZJVnn2N':  {
+     vendorId: 'Posters-60x60-Matte',
+     paperType: 'matte',
+     width: 60,
+     height: 60,
+     units: 'inches',
+     printingPrice: 3944,
+     salePrice: 5128
    }
 }
