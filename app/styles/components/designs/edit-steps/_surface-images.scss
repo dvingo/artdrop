@@ -1,0 +1,16 @@
+.surface-image {
+	@include display(flex);
+	@include align-items(center);
+	@include justify-content(center);
+	min-width: 100px;
+	min-height: 100px;
+	max-height: 100px;
+	max-width: 100px;
+	margin: 5px;
+    @include prefixer(box-shadow, 2px 2px 6px 0px rgba(150,150,150,0.75), webkit ms moz spec o);
+	border-radius: 6px;
+    img {
+      width: 100%;
+      height: auto;
+    }
+}
