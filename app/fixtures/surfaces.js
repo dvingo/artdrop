@@ -225,7 +225,39 @@ exports.surfaces = {
       '-JxpQK--27Sh2_PzSDxK': true,
       '-JxpQL207uSIapUm28zb': true
     }
-  }
+  },
+  '-JxpS7fiT3os1R2a2sM3': {
+    name: 'Framed Canvas',
+    vendor: 'print.io',
+    type: 'print',
+    description: "Wall decoration draws the fine line between a plain living room and an interior design masterpiece. Treat yourself to top quality artist canvas framed with solid wood and digitally printed using advanced technology. Our framed canvas is scratch-resistant and ready to hang.",
+    imageUrl: 'https://az412349.vo.msecnd.net/temp/119-437e-FramedCanvasWrap_296x307.png',
+    images: [
+      'https://az412349.vo.msecnd.net/temp/119-b431-FramedCanvasWrap_Angle_544x355.png',
+      'https://az412349.vo.msecnd.net/temp/119-0020-FramedCanvasWrap_Detail_544x355.png',
+      'https://az412349.vo.msecnd.net/temp/119-0cdf-FramedCanvasWrap_Corner_544x355.png',
+      'https://az412349.vo.msecnd.net/temp/119-0ac0-FramedCanvas_Back_544x355.png'
+    ],
+    options: {
+      '-JxpSM7LSfpDDYhDvjFt': true,
+      '-JxpSNvG7thGsuZ_t33O': true,
+      '-JxpSP5u30HHOngzbcyx': true,
+      '-JxpSQ9v_npce16-ooZE': true,
+      '-JxpSRag62H8KUzjQear': true,
+      '-JxpSSxyJR5zZu_SCB_f': true,
+      '-JxpSU-UYIwQ0J8eXZrJ': true,
+      '-JxpSVEO14wBRf8JqsfA': true,
+      '-JxpSWDuak8mCB4i8r9r': true,
+      '-JxpSXDJENxeYv1ID_lE': true,
+      '-JxpSYE3q3WPyi9Ee6F6': true,
+      '-JxpSZIa61VFupc8DobU': true,
+      '-JxpS_LEScRpGnubJWkx': true,
+      '-JxpSaMs-67KnO4MXrHG': true,
+      '-JxpSbe1uYU7I16nVKNJ': true,
+      '-JxpSdGBNPcNfIeHIXhj': true,
+    }
+  },
+
 }
 
 // Surface options
@@ -790,5 +822,165 @@ exports.surfaceOptions = {
      paperType: '110# Finch Fine iD',
      printingPrice: 2880,
      salePrice: 3700
-   }
+   },
+   '-JxpSM7LSfpDDYhDvjFt': {
+     vendorId: 'FramedCanvs-6x6-Black',
+     color: 'black',
+     width: 6,
+     height: 6,
+     depth: 1.25,
+     units: 'inches',
+     printingPrice: 2045,
+     salePrice: 2700
+   },
+   '-JxpSNvG7thGsuZ_t33O': {
+     vendorId: 'FramedCanvs-6x6-Walnut',
+     color: 'walnut',
+     width: 6,
+     height: 6,
+     depth: 1.25,
+     units: 'inches',
+     printingPrice: 2045,
+     salePrice: 2700
+   },
+   '-JxpSP5u30HHOngzbcyx': {
+     vendorId: 'FramedCanvs-10x10-Black',
+     color: 'black',
+     width: 10,
+     height: 10,
+     depth: 1.25,
+     units: 'inches',
+     printingPrice: 2670,
+     salePrice: 3475
+   },
+   '-JxpSQ9v_npce16-ooZE': {
+     vendorId: 'FramedCanvs-10x10-Walnut',
+     color: 'walnut',
+     width: 10,
+     height: 10,
+     depth: 1.25,
+     units: 'inches',
+     printingPrice: 2670,
+     salePrice: 3475
+   },
+   '-JxpSRag62H8KUzjQear': {
+     vendorId: 'FramedCanvs-12x12-Black',
+     color: 'black',
+     width: 12,
+     height: 12,
+     depth: 1.25,
+     units: 'inches',
+     printingPrice: 2755,
+     salePrice: 3580
+   },
+   '-JxpSSxyJR5zZu_SCB_f': {
+     vendorId: 'FramedCanvs-12x12-Walnut',
+     color: 'walnut',
+     width: 12,
+     height: 12,
+     depth: 1.25,
+     units: 'inches',
+     printingPrice: 2755,
+     salePrice: 3580
+   },
+   '-JxpSU-UYIwQ0J8eXZrJ': {
+     vendorId: 'FramedCanvs-16x16-Black',
+     color: 'black',
+     width: 16,
+     height: 16,
+     depth: 1.25,
+     units: 'inches',
+     printingPrice: 3569,
+     salePrice: 4500
+   },
+   '-JxpSVEO14wBRf8JqsfA': {
+     vendorId: 'FramedCanvs-16x16-Walnut',
+     color: 'walnut',
+     width: 16,
+     height: 16,
+     depth: 1.25,
+     units: 'inches',
+     printingPrice: 3569,
+     salePrice: 4500
+   },
+   '-JxpSWDuak8mCB4i8r9r': {
+     vendorId: 'FramedCanvs-20x20-Black',
+     color: 'black',
+     width: 20,
+     height: 20,
+     depth: 1.25,
+     units: 'inches',
+     printingPrice: 4679 ,
+     salePrice: 6000
+   },
+   '-JxpSXDJENxeYv1ID_lE': {
+     vendorId: 'FramedCanvs-20x20-Walnut',
+     color: 'walnut',
+     width: 20,
+     height: 20,
+     depth: 1.25,
+     units: 'inches',
+     printingPrice: 4679 ,
+     salePrice: 6000
+   },
+   '-JxpSYE3q3WPyi9Ee6F6': {
+     vendorId: 'FramedCanvs-24x24-Black',
+     color: 'black',
+     width: 24,
+     height: 24,
+     depth: 1.25,
+     units: 'inches',
+     printingPrice: 5465,
+     salePrice: 7100
+   },
+   '-JxpSZIa61VFupc8DobU': {
+     vendorId: 'FramedCanvs-24x24-Walnut',
+     color: 'walnut',
+     width: 24,
+     height: 24,
+     depth: 1.25,
+     units: 'inches',
+     printingPrice: 5465,
+     salePrice: 7100
+   },
+   '-JxpS_LEScRpGnubJWkx': {
+     vendorId: 'FramedCanvs-30x30-Black',
+     color: 'black',
+     width: 30,
+     height: 30,
+     depth: 1.25,
+     units: 'inches',
+     printingPrice: 7665,
+     salePrice: 9499
+   },
+   '-JxpSaMs-67KnO4MXrHG': {
+     vendorId: 'FramedCanvs-30x30-Walnut',
+     color: 'walnut',
+     width: 30,
+     height: 30,
+     depth: 1.25,
+     units: 'inches',
+     printingPrice: 7665,
+     salePrice: 9499
+   },
+   '-JxpSbe1uYU7I16nVKNJ': {
+     vendorId: 'FramedCanvs-36x36-Black',
+     color: 'black',
+     width: 36,
+     height: 36,
+     depth: 1.25,
+     units: 'inches',
+     printingPrice: 9419,
+     salePrice: 12299
+   },
+   '-JxpSdGBNPcNfIeHIXhj': {
+     vendorId: 'FramedCanvs-36x36-Walnut',
+     color: 'walnut',
+     width: 36,
+     height: 36,
+     depth: 1.25,
+     units: 'inches',
+     printingPrice: 9419,
+     salePrice: 12299
+   },
 }
