@@ -305,6 +305,38 @@ exports.surfaces = {
       '-JxpX9KVv2u_fYxjZWEP': true
     }
   },
+
+  '-JxphlHlXVmjwHJIQ6P1': {
+    name: 'Giclee Art Print',
+    vendor: 'print.io',
+    type: 'print',
+    description: "If you’re looking for superior quality, the word for you is giclée. This printing technique is as refined as it sounds, giving you the opportunity to enjoy digitally printed artwork to the fullest thanks to the special method used to preserve original colors. All giclée art prints are produced on high quality paper and make printing masterpieces.",
+    imageUrl: 'https://az412349.vo.msecnd.net/temp/38-672d-GicleePrint_Front_LayAngle_544x355.png',
+    images: [
+      'https://az412349.vo.msecnd.net/temp/38-1555-GicleePrint_Front_296x307.png',
+      'https://az412349.vo.msecnd.net/temp/38-7c42-GicleePrint_Front_Corner_Lay_544x355.png'
+    ],
+    options: {
+      '-Jxpi58towitB0dWFWwl': true,
+      '-Jxpi6C9EsZug6z7QFXb': true,
+      '-Jxpi7Gft9rRuZdO__T2': true,
+      '-Jxpi8Y47H6jJnQZt7tO': true,
+      '-Jxpi9aCuycRrxRLV2pP': true,
+      '-JxpiBg7fYAQF1Ig5SjJ': true,
+      '-JxpiClHbGtz-_58iyhU': true,
+      '-JxpiEKYxpY3OtpjGDcv': true,
+      '-JxpiFJJUWqrqjS5dgZu': true,
+      '-JxpiGLSc450PgL5P_D9': true,
+      '-JxpiHQUleaEqBm6_WV3': true,
+      '-JxpiInshA3CLNktPAbf': true,
+      '-JxpiJo9rrvQwwdyh4ya': true,
+      '-JxpiKuw-vZPXM9b8ntK': true,
+      '-JxpiMDLoWlBqZJIALEZ': true,
+      '-JxpiNEic8smg58mheZu': true,
+      '-JxpiUZrGkFyPgv0ebv3': true,
+      '-JxpiVdsBfBcyoiA8_0Y': true
+    }
+  },
 }
 
 // Surface options
@@ -1326,5 +1358,167 @@ exports.surfaceOptions = {
      units: 'inches',
      printingPrice: 7580,
      salePrice: 9900
+   },
+   '-Jxpi58towitB0dWFWwl': {
+     vendorId: 'GicleeArtPrints-8x8-SmoothArtPaper',
+     paperType: 'Smooth Art Paper',
+     width: 8,
+     height: 8,
+     units: 'inches',
+     printingPrice: 114,
+     salePrice: 149
+   },
+   '-Jxpi6C9EsZug6z7QFXb': {
+     vendorId: 'GicleeArtPrints-10x10-SmoothArtPaper',
+     paperType: 'Smooth Art Paper',
+     width: 10,
+     height: 10,
+     units: 'inches',
+     printingPrice: 180,
+     salePrice: 234
+   },
+   '-Jxpi7Gft9rRuZdO__T2': {
+     vendorId: 'GicleeArtPrints-12x12-SmoothArtPaper',
+     paperType: 'Smooth Art Paper',
+     width: 12,
+     height: 12,
+     units: 'inches',
+     printingPrice: 260,
+     salePrice: 339
+   },
+   '-Jxpi8Y47H6jJnQZt7tO': {
+     vendorId: 'GicleeArtPrints-16x16-SmoothArtPaper',
+     paperType: 'Smooth Art Paper',
+     width: 16,
+     height: 16,
+     units: 'inches',
+     printingPrice: 460,
+     salePrice: 599
+   },
+   '-Jxpi9aCuycRrxRLV2pP': {
+     vendorId: 'GicleeArtPrints-20x20-SmoothArtPaper',
+     paperType: 'Smooth Art Paper',
+     width: 20,
+     height: 20,
+     units: 'inches',
+     printingPrice: 719,
+     salePrice: 935
+   },
+   '-JxpiBg7fYAQF1Ig5SjJ': {
+     vendorId: 'GicleeArtPrints-24x24-SmoothArtPaper',
+     paperType: 'Smooth Art Paper',
+     width: 24,
+     height: 25,
+     units: 'inches',
+     printingPrice: 1035,
+     salePrice: 1345
+   },
+   '-JxpiClHbGtz-_58iyhU': {
+     vendorId: 'GicleeArtPrints-30x30-SmoothArtPaper',
+     paperType: 'Smooth Art Paper',
+     width: 30,
+     height: 30,
+     units: 'inches',
+     printingPrice: 1618,
+     salePrice: 2104
+   },
+   '-JxpiEKYxpY3OtpjGDcv': {
+     vendorId: 'GicleeArtPrints-48x48-SmoothArtPaper',
+     paperType: 'Smooth Art Paper',
+     width: 48,
+     height: 48,
+     units: 'inches',
+     printingPrice: 4139,
+     salePrice: 5380
+   },
+   '-JxpiFJJUWqrqjS5dgZu': {
+     vendorId: 'GicleeArtPrints-60x60-SmoothArtPaper',
+     paperType: 'Smooth Art Paper',
+     width: 60,
+     height: 60,
+     units: 'inches',
+     printingPrice: 6468,
+     salePrice: 8000
+   },
+   '-JxpiGLSc450PgL5P_D9': {
+     vendorId: 'GicleeArtPrints-8x8-LustrePhotoPaper',
+     paperType: 'Lustre Photo Paper',
+     width: 8,
+     height: 8,
+     units: 'inches',
+     printingPrice: 89,
+     salePrice: 116
+   },
+   '-JxpiHQUleaEqBm6_WV3': {
+     vendorId: 'GicleeArtPrints-10x10-LustrePhotoPaper',
+     paperType: 'Lustre Photo Paper',
+     width: 10,
+     height: 10,
+     units: 'inches',
+     printingPrice: 140,
+     salePrice: 182
+   },
+   '-JxpiInshA3CLNktPAbf': {
+     vendorId: 'GicleeArtPrints-12x12-LustrePhotoPaper',
+     paperType: 'Lustre Photo Paper',
+     width: 12,
+     height: 12,
+     units: 'inches',
+     printingPrice: 200,
+     salePrice: 290
+   },
+   '-JxpiJo9rrvQwwdyh4ya': {
+     vendorId: 'GicleeArtPrints-16x16-LustrePhotoPaper',
+     paperType: 'Lustre Photo Paper',
+     width: 16,
+     height: 16,
+     units: 'inches',
+     printingPrice: 353,
+     salePrice: 459
+   },
+   '-JxpiKuw-vZPXM9b8ntK': {
+     vendorId: 'GicleeArtPrints-20x20-LustrePhotoPaper',
+     paperType: 'Lustre Photo Paper',
+     width: 20,
+     height: 20,
+     units: 'inches',
+     printingPrice: 552,
+     salePrice: 718
+   },
+   '-JxpiMDLoWlBqZJIALEZ': {
+     vendorId: 'GicleeArtPrints-24x24-LustrePhotoPaper',
+     paperType: 'Lustre Photo Paper',
+     width: 24,
+     height: 24,
+     units: 'inches',
+     printingPrice: 796,
+     salePrice: 1035
+   },
+   '-JxpiNEic8smg58mheZu': {
+     vendorId: 'GicleeArtPrints-30x30-LustrePhotoPaper',
+     paperType: 'Lustre Photo Paper',
+     width: 30,
+     height: 30,
+     units: 'inches',
+     printingPrice: 1244,
+     salePrice: 1618
+   },
+   '-JxpiUZrGkFyPgv0ebv3': {
+     vendorId: 'GicleeArtPrints-48x48-LustrePhotoPaper',
+     paperType: 'Lustre Photo Paper',
+     width: 48,
+     height: 48,
+     units: 'inches',
+     printingPrice: 3182,
+     salePrice: 4145
+   },
+   '-JxpiVdsBfBcyoiA8_0Y': {
+     vendorId: 'GicleeArtPrints-60x60-LustrePhotoPaper',
+     paperType: 'Lustre Photo Paper',
+     width: 60,
+     height: 60,
+     units: 'inches',
+     printingPrice: 4968,
+     salePrice: 6499
    }
 }
