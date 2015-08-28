@@ -71,7 +71,25 @@ exports.surfaces = {
       '-Jxor3K87PYBu__HnU41': true,
       '-Jxor4eYs7IIDbJRQPvC': true
     }
+  },
+  '-JxoropP8m0jgyiBScYB': {
+    name: 'Canvas Poster',
+    vendor: 'print.io',
+    type: 'print',
+    description: 'Do you like the look of a standard poster, but are looking for an alternative that will last a lifetime? Preserve your images with our durable canvas posters. These posters are slim, yet sturdy with a high-print quality and rich color. Enjoy the simplicity of a traditional poster, but with a more refined, one-of-a-kind look.',
+    imageUrl: 'https://az412349.vo.msecnd.net/temp/133-a2ab-CanvasPoster_FlowerGirl_CornerOver_296x307.png',
+    images: [
+      'https://az412349.vo.msecnd.net/temp/133-a061-CanvasPoster_LayAngle_CornerOver_544x355.png',
+      'https://az412349.vo.msecnd.net/temp/133-d61c-CanvasPoster_ArchwayCorner_544x355.png',
+      'https://az412349.vo.msecnd.net/temp/133-529d-CanvasPoster_Archway_LayAngle_544x355.png'
+    ],
+    options: {
+      '-Jxos-YjbOt1HmpanGSZ': true,
+      '-Jxos1bucV7BNaaYMQKb': true,
+      '-Jxos2WveAX_GyIJ_na_': true
+    }
   }
+
 }
 
 // Surface options
@@ -213,5 +231,29 @@ exports.surfaceOptions = {
     units: 'inches',
     printingPrice: 699,
     salePrice: 949
+  },
+  '-Jxos-YjbOt1HmpanGSZ': {
+    vendorId: 'CanvasPoster-12x12',
+    width: 12,
+    height: 12,
+    units: 'inches',
+    printingPrice: 529,
+    salePrice: 685
+  },
+  '-Jxos1bucV7BNaaYMQKb': {
+    vendorId: 'CanvasPoster-16x16',
+    width: 16,
+    height: 16,
+    units: 'inches',
+    printingPrice: 719,
+    salePrice: 935
+  },
+  '-Jxos2WveAX_GyIJ_na_': {
+    vendorId: 'CanvasPoster-20x20',
+    width: 20,
+    height: 20,
+    units: 'inches',
+    printingPrice: 960,
+    salePrice: 1249
   }
 }
