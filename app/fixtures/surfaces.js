@@ -194,8 +194,38 @@ exports.surfaces = {
       '-JxpFq0lqUgd2iwQcYOy': true,
       '-JxpFqyHMx7BD7b2KpRe': true
     }
+  },
+  '-JxpP7Fa-cGxZOxfNmLJ': {
+    name: 'Floormat',
+    vendor: 'print.io',
+    type: 'print',
+    description: "Greet every guest with a warm welcome right at your doorstep! Personalized floormats with funny quotes or welcome notes will bring a smile to everyone's face. Made from sturdy materials to show in and show out thousands of shoes.",
+    imageUrl: 'http://cdn.print.io/temp/1170-8850-Floormats-24x36-Preview.png',
+    images: [],
+    options: {
+      '-JxpPEJr0Kjiu9snA_B2': true
+    }
+  },
+  '-JxpPmrcw1apHk0_Ypju': {
+    name: 'Folded Cards',
+    vendor: 'print.io',
+    type: 'print',
+    description: "When almost everything is instant and digital, a card in the mail makes a meaningful gesture. Our folded cards are customized for any special event, announcement or holiday. As an added benefit, they can be stood up for clear display. Premium cardstock and high-quality prints complete the look to make for a truly distinctive message.",
+    imageUrl: 'https://az412349.vo.msecnd.net/product-imgs/-2fc6-WEBFeaturedProductFoldedCard_WEB.jpg',
+    images: [
+      'https://az412349.vo.msecnd.net/product-imgs/2614-2d82-WebDetails2_WEB.jpg',
+      'https://az412349.vo.msecnd.net/product-imgs/-a40a-WebDetails1.jpg',
+      'https://az412349.vo.msecnd.net/product-imgs/-b16d-WebDetails3_WEB.jpg'
+    ],
+    options: {
+      '-JxpQD48aAhHxY33Hg_t': true,
+      '-JxpQFaYJE-E_yKFOtyC': true,
+      '-JxpQH3g_L1a-iOXukQp': true,
+      '-JxpQIhqRXqIYq2W2Xkn': true,
+      '-JxpQK--27Sh2_PzSDxK': true,
+      '-JxpQL207uSIapUm28zb': true
+    }
   }
-
 }
 
 // Surface options
@@ -692,5 +722,73 @@ exports.surfaceOptions = {
      units: 'inches',
      printingPrice: 2160,
      salePrice: 2800
+   },
+   '-JxpPEJr0Kjiu9snA_B2': {
+     vendorId: 'Floormat-36x36-Nonslip',
+     width: 36,
+     height: 36,
+     units: 'inches',
+     printingPrice: 2160,
+     salePrice: 2800
+   },
+   '-JxpQD48aAhHxY33Hg_t': {
+     vendorId: 'Greet-Fold-5x5x10Pack',
+     width: 5,
+     height: 5,
+     paperType: 'Finch Fine iD',
+     quantity: 10,
+     units: 'inches',
+     printingPrice: 425,
+     salePrice: 800
+   },
+   '-JxpQFaYJE-E_yKFOtyC': {
+     vendorId: 'Greet-Fold-5x5-Finch-Single-5Pack',
+     width: 5,
+     height: 5,
+     units: 'inches',
+     quantity: 5,
+     paperType: '110# Finch Fine iD',
+     printingPrice: 144,
+     salePrice: 188
+   },
+   '-JxpQH3g_L1a-iOXukQp': {
+     vendorId: 'Greet-Fold-5x5-Finch-Single-10Pack',
+     width: 5,
+     height: 5,
+     units: 'inches',
+     quantity: 10,
+     paperType: '110# Finch Fine iD',
+     printingPrice: 288,
+     salePrice: 374
+   },
+   '-JxpQIhqRXqIYq2W2Xkn': {
+     vendorId: 'Greet-Fold-5x5-Finch-Single-25Pack',
+     width: 5,
+     height: 5,
+     units: 'inches',
+     quantity: 25,
+     paperType: '110# Finch Fine iD',
+     printingPrice: 720,
+     salePrice: 940
+   },
+   '-JxpQK--27Sh2_PzSDxK': {
+     vendorId: 'Greet-Fold-5x5-Finch-Single-50Pack',
+     width: 5,
+     height: 5,
+     units: 'inches',
+     quantity: 50,
+     paperType: '110# Finch Fine iD',
+     printingPrice: 1440,
+     salePrice: 1880
+   },
+   '-JxpQL207uSIapUm28zb': {
+     vendorId: 'Greet-Fold-5x5-Finch-Single-100Pack',
+     width: 5,
+     height: 5,
+     units: 'inches',
+     quantity: 100,
+     paperType: '110# Finch Fine iD',
+     printingPrice: 2880,
+     salePrice: 3700
    }
 }
