@@ -15,33 +15,120 @@ exports.surfaces = {
       '-JxeU8r-tY7szqJSe9DC': true,
       '-JxeUD8QUgohgijyTsyd': true
     }
+  },
+  '-JxojdqhZDg1V-gypKtm': {
+    name: "Acrylic Print",
+    vendor: "print.io",
+    type: "print",
+    description: "Do you love your photos enough to treat them to a little makeover? Acrylic prints will add a shiny, protective layer and create a stunning effect on any pic!",
+    imageUrl: 'https://az412349.vo.msecnd.net/temp/107-4d45-AcrylicPrint_BalloonGirl_Front_Angle_296x307.png',
+    images: [
+      'https://az412349.vo.msecnd.net/temp/107-b1c1-AcrylicPrint_BalloonGirl_Front_544x355.png',
+      'https://az412349.vo.msecnd.net/temp/107-5bc2-AcrylicPrint_BallonGirl_Back_Straight_544x355.png',
+      'https://az412349.vo.msecnd.net/temp/107-e99e-AcrylicPrint_Back_Angle_544x355.png'
+    ],
+    options: {
+      '-Jxokeo34YCldGekr0Xg': true,
+      '-Jxokk4eIUdJtB317Uqb': true,
+      '-Jxokn05CtNG7xSRr2aY': true,
+      '-JxokoXji3kYF8ROgcwL': true,
+      '-Jxokq7OUEKhIanvhxYU': true,
+      '-JxokrdesrsCiCDmJBqy': true,
+      '-JxoktDhmyORsk0vM71E': true
+    }
   }
 }
 
 // Surface options
 exports.surfaceOptions = {
-  '-JxeU2bWpEZcBH7MxVgm': {
-    width: 8,
-    height: 8,
-    depth: 1,
-    units: "inches",
-    vendorId: "AcrBlck-1in-8x8",
-    price: 4966
-  },
-  '-JxeU8r-tY7szqJSe9DC': {
-    width: 6,
-    height: 6,
-    depth: 1,
-    units: "inches",
-    vendorId: "AcrBlck-1in-6x6",
-    price: 3507
-  },
   '-JxeUD8QUgohgijyTsyd': {
+    vendorId: "AcrBlck-3/4in-5x5",
     width: 5,
     height: 5,
     depth: 0.75,
     units: "inches",
-    vendorId: "AcrBlck-3/4in-5x5",
-    price: 2556
+    printingPrice: 1770,
+    salePrice: 2301
+  },
+  '-JxeU8r-tY7szqJSe9DC': {
+    vendorId: "AcrBlck-1in-6x6",
+    width: 6,
+    height: 6,
+    depth: 1,
+    units: "inches",
+    printingPrice: 2070,
+    salePrice: 2691
+  },
+  '-JxeU2bWpEZcBH7MxVgm': {
+    vendorId: "AcrBlck-1in-8x8",
+    width: 8,
+    height: 8,
+    depth: 1,
+    units: "inches",
+    printingPrice: 3690,
+    salePrice: 4797
+  },
+  '-Jxokeo34YCldGekr0Xg': {
+    vendorId: 'AcrylicPrint_1/8in_10x10',
+    width: 10,
+    height: 10,
+    depth: 0.125,
+    units: "inches",
+    printingPrice: 2100,
+    salePrice: 2500
+  }
+  '-Jxokk4eIUdJtB317Uqb': {
+    vendorId: 'AcrylicPrint_1/8in_12x12',
+    width: 12,
+    height: 12,
+    depth: 0.125,
+    units: "inches",
+    printingPrice: 4320,
+    salePrice: 5616
+  },
+  '-Jxokn05CtNG7xSRr2aY': {
+    vendorId: 'AcrylicPrint_1/8in_16x16',
+    width: 16,
+    height: 16,
+    depth: 0.125,
+    units: "inches",
+    printingPrice: 4800,
+    salePrice: 5500
+  },
+  '-JxokoXji3kYF8ROgcwL': {
+    vendorId: 'AcrylicPrint_1/8in_20x20',
+    width: 20,
+    height: 20,
+    depth: 0.125,
+    units: "inches",
+    printingPrice: 7680,
+    salePrice: 9984
+  },
+  '-Jxokq7OUEKhIanvhxYU': {
+    vendorId: 'AcrylicPrint_1/8in_24x24',
+    width: 24,
+    height: 24,
+    depth: 0.125,
+    units: "inches",
+    printingPrice: 10000,
+    salePrice: 14500
+  },
+  '-JxokrdesrsCiCDmJBqy': {
+    vendorId: 'AcrylicPrint_1/8in_30x30',
+    width: 30,
+    height: 30,
+    depth: 0.125,
+    units: "inches",
+    printingPrice: 14040,
+    salePrice: 18252
+  },
+  '-JxoktDhmyORsk0vM71E': {
+    vendorId: 'AcrylicPrint_1/8in_36x36',
+    width: 36,
+    height: 36,
+    depth: 0.125,
+    units: "inches",
+    printingPrice: 22400,
+    salePrice: 27500
   }
 }
