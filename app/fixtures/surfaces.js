@@ -36,7 +36,7 @@ exports.surfaces = {
       '-JxokrdesrsCiCDmJBqy': true,
       '-JxoktDhmyORsk0vM71E': true
     }
-  }
+  },
   '-JxopDSBFf-73pfnQbNB': {
     name: "Art Poster",
     vendor: "print.io",
@@ -52,6 +52,24 @@ exports.surfaces = {
       '-JxopFtMergmW7WQ6n9L': true,
       '-JxopHy8MbH6bV_jLznY': true,
       '-JxopJNQJLO7lQFMNv3u': true
+    }
+  },
+
+  '-JxoqmyCWxzK-gYtT41c': {
+    name: 'Canvas Mini',
+    vendor: 'print.io',
+    type: 'print',
+    description: 'Our Canvas minis are an attractive and eye catching way to showcase images of special moments, friends and family.  The easel back makes it easy to display photographs on a desk, shelf or nightstand. No glare from glass. Only high quality, printed canvas for easy clear viewing. Artistic, fun and sophisticated, just like you.',
+    imageUrl: 'https://az412349.vo.msecnd.net/temp/132-0f44-CanvasMini_WinterScene_Front_Angle_544x355.png',
+    images: [
+      'https://az412349.vo.msecnd.net/temp/132-7232-CanvasMini_ChristmasFamily_Front_Angle_544x355.png',
+      'https://az412349.vo.msecnd.net/temp/132-2199-CanvasMini_Couple_Front_Angle_544x355.png',
+      'https://az412349.vo.msecnd.net/temp/132-790a-CanvasMini_RectangleBack_544x355.png'
+    ],
+    options: {
+      '-Jxor0tMtDVVOr4mhT2k': true,
+      '-Jxor3K87PYBu__HnU41': true,
+      '-Jxor4eYs7IIDbJRQPvC': true
     }
   }
 }
@@ -171,5 +189,29 @@ exports.surfaceOptions = {
     units: 'inches',
     printingPrice: 1712,
     salePrice: 2226
+  },
+  '-Jxor0tMtDVVOr4mhT2k': {
+    vendorId: 'CanvasMini-5x5',
+    width: 5,
+    height: 5,
+    units: 'inches',
+    printingPrice: 399,
+    salePrice: 499
+  },
+  '-Jxor3K87PYBu__HnU41': {
+    vendorId: 'CanvasMini-6x6',
+    width: 6,
+    height: 6,
+    units: 'inches',
+    printingPrice: 499,
+    salePrice: 649
+  },
+  '-Jxor4eYs7IIDbJRQPvC': {
+    vendorId: 'CanvasMini-9x9',
+    width: 9,
+    height: 9,
+    units: 'inches',
+    printingPrice: 699,
+    salePrice: 949
   }
 }
