@@ -88,6 +88,88 @@ exports.surfaces = {
       '-Jxos1bucV7BNaaYMQKb': true,
       '-Jxos2WveAX_GyIJ_na_': true
     }
+  },
+
+  '-JxosbtCt302L6XuorGa': {
+    name: 'Canvas Wrap',
+    vendor: 'print.io',
+    type: 'print',
+    description: 'Turn any photo or graphic into a work of art by using our sturdy, low-maintenance canvas with high quality print images. Our canvas wraps offer a more polished look than a standard print without the glare or heavy frame of a traditional wall hanging. Adds visual interest to any room with ease.',
+    imageUrl: 'https://az412349.vo.msecnd.net/temp/43-f26f-CanvasWrap_IceCreamGirls_Angle_296x307_copy.png',
+    images: [
+      'https://az412349.vo.msecnd.net/temp/43-a49f-CanvasWrap_TropicalIsland_LayAngle_544x355.png',
+      'https://az412349.vo.msecnd.net/temp/43-aa99-CanvasWrap_MomDaughter_Front_Angle_227x280.png',
+      'https://az412349.vo.msecnd.net/temp/43-128a-CanvasWrap_Tropical_544x355.png',
+      'https://az412349.vo.msecnd.net/temp/43-a1a4-CanvasWrap_BlackBack_544x355.png'
+    ],
+    options: {
+      '-Jxp0bvSQuqFNg0BcTw_': true,
+      '-Jxp0sKkB3NFB9SGYP2E': true,
+      '-Jxp1EPfrgu2QbtzJZm1': true,
+      '-Jxp1QP-RUT9G2-_0Mkz': true,
+      '-Jxp1aHCVfIQ5JjxGh-7': true,
+      '-Jxp1rCtew9uWbhPA5wA': true,
+      '-Jxp23btk2eX1KW2DaNf': true,
+      '-Jxp25dmDU4c2qKKd14u': true,
+      '-Jxp2A2NGW8XC7xNBfz5': true,
+      '-Jxp2xocf6s2arFfB4Cj': true,
+      '-Jxp30RfUmdzDqyK_tKG': true,
+      '-Jxp31hBWnS0MDHe0u0b': true,
+      '-Jxp333_tHbzElkqLReR': true,
+      '-Jxp348M5ph47CvXwc9H': true,
+      '-Jxp35BkpYaP6mzuxYnM': true,
+      '-JxpB0xBXm7F3bRcu7TM': true,
+      '-JxpB3NT6u-fiWSyv2KZ': true,
+      '-JxpB51Fr61f3QJ4jUR9': true
+    }
+  },
+  '-JxpCsrhWGznxE1yZOQ4': {
+    name: 'Cloth Napkin',
+    vendor: 'print.io',
+    type: 'print',
+    description: 'Turn ordinary cloth napkins into unique conversation pieces to liven up your place settings. Custom cloth napkins are an entertaining, imaginative and environmentally friendly alternative to disposable paper napkins. Match your décor or create holiday themes effortlessly. Add a personal touch to any meal.',
+    imageUrl: 'https://az412349.vo.msecnd.net/temp/1140-b5aa-Napkin_HawaiianPrint_Front_296x307.png',
+    images: [
+      'https://az412349.vo.msecnd.net/temp/1140-3c95-Napkin_HawaiianPrint_Front_Corner_544x355.png',
+      'https://az412349.vo.msecnd.net/temp/1140-8655-Napkin_HawaiianPrint_Back_Straight_544x355.png',
+      'https://az412349.vo.msecnd.net/temp/1140-46aa-Placemat_Coffee_Front_544x355.png'
+      'https://az412349.vo.msecnd.net/temp/1140-e578-Placemat_Coffe_Front_CornerOver_544x355.png'
+    ],
+    options: {
+      '-JxpCQVr9xbgI_6ICL1v': true,
+      '-JxpCS7lZBys5MeV54iP': true
+    }
+  },
+  '-JxpD1RVfFAG_eJrsnXK': {
+    name: 'Coaster',
+    vendor: 'print.io',
+    type: 'print',
+    description: "Coasters for every occasion!  Whether you're advertising, protecting the coffee table, or sharing fond memories: cork coasters designed by you are indeed a keepsake.",
+    imageUrl: 'https://az412349.vo.msecnd.net/temp/79-590d-CorkCoaster_EuropeStack_BigBen_544x355.png',
+    images: [
+      'https://az412349.vo.msecnd.net/temp/79-7237-Coaster_Girls_Front_StraightOn_544x355.png',
+      'https://az412349.vo.msecnd.net/temp/79-033e-Coaster_CorkBack_Angle_544x355.png',
+      'https://az412349.vo.msecnd.net/temp/79-5113-CorkCoaster_ParisArchway_Angle_544x355.png'
+    ],
+    options: {
+      '-JxpD8Xc979rZgFTQtu2': true
+    }
+  }
+  '-JxpE4Ii612o4Bg-hhX_': {
+    name: 'Duvet Cover',
+    vendor: 'print.io',
+    type: 'bedding',
+    description: "Do you dream of having the ideal bedroom décor?  With our printed duvet covers, your dreams can effortlessly become reality. Whether a photo of your favorite sunset or custom artwork, we make it simple to create bedding that is both beautiful and expresses who you are. Make your bedroom the place you love to be.",
+    imageUrl: 'https://az412349.vo.msecnd.net/product-imgs/-f4bb-WebFeatured_WEB_White.jpg',
+    images: [
+      'https://az412349.vo.msecnd.net/temp/76-ff7f-DuvetCover_Moon_Front_544x355.png',
+      'https://az412349.vo.msecnd.net/temp/76-1de5-DuvetCover_Moon_FrontCornerDetail_544x355.png',
+    ],
+    options: {
+      '-JxpEE1sWcPhCRdHnWbo': true,
+      '-JxpEGNPjNS0i03W9XV5': true,
+      '-JxpEHPJu0ZQWKWKdSUo': true
+    }
   }
 
 }
@@ -255,5 +337,216 @@ exports.surfaceOptions = {
     units: 'inches',
     printingPrice: 960,
     salePrice: 1249
+  },
+  '-Jxp0bvSQuqFNg0BcTw_': {
+    vendorId: 'CanvsWrp-ImgWrp-10x10',
+    width: 10,
+    height: 10,
+    wrapType: 'image',
+    units: 'inches',
+    printingPrice: 900,
+    salePrice: 1200
+  },
+  '-Jxp0sKkB3NFB9SGYP2E': {
+    vendorId: 'CanvsWrp-ImgWrp-12x12',
+    width: 12,
+    height: 12,
+    wrapType: 'image',
+    units: 'inches',
+    printingPrice: 1100,
+    salePrice: 1400
+  },
+  '-Jxp1EPfrgu2QbtzJZm1': {
+    vendorId: 'CanvsWrp-ImgWrp-16x16',
+    width: 16,
+    height: 16,
+    wrapType: 'image',
+    units: 'inches',
+    printingPrice: 1600,
+    salePrice: 1900
+  },
+  '-Jxp1QP-RUT9G2-_0Mkz': {
+    vendorId: 'CanvsWrp-ImgWrp-20x20',
+    width: 20,
+    height: 20,
+    wrapType: 'image',
+    units: 'inches',
+    printingPrice: 2300,
+    salePrice: 2800
+  },
+  '-Jxp1aHCVfIQ5JjxGh-7': {
+    vendorId: 'CanvsWrp-ImgWrp-24x24',
+    width: 24,
+    height: 24,
+    units: 'inches',
+    wrapType: 'image',
+    printingPrice: 2900,
+    salePrice: 3500
+  },
+  '-Jxp1rCtew9uWbhPA5wA': {
+    vendorId: 'CanvsWrp-BlkWrp-10x10',
+    width: 10,
+    height: 10,
+    units: 'inches',
+    wrapType: 'black',
+    printingPrice: 900,
+    salePrice: 1200
+  },
+  '-Jxp23btk2eX1KW2DaNf': {
+    vendorId: 'CanvsWrp-WhtWrp-16x16',
+    width: 16,
+    height: 16,
+    units: 'inches',
+    wrapType: 'white',
+    printingPrice: 1600,
+    salePrice: 1900
   }
+  '-Jxp25dmDU4c2qKKd14u': {
+    vendorId: 'CanvsWrp-WhtWrp-20x20',
+    width: 20,
+    height: 20,
+    units: 'inches',
+    wrapType: 'white',
+    printingPrice: 2300,
+    salePrice: 2800
+  },
+  '-Jxp2A2NGW8XC7xNBfz5': {
+    vendorId: 'CanvsWrp-WhtWrp-24x24',
+    width: 24,
+    height: 24,
+    units: 'inches',
+    wrapType: 'white',
+    printingPrice: 2900,
+    salePrice: 3500
+   }
+   '-Jxp2xocf6s2arFfB4Cj': {
+     vendorId: 'CanvsWrp-WhtWrp-30x30',
+     width: 30,
+     height: 30,
+     units: 'inches',
+     wrapType: 'white',
+     printingPrice: 4700,
+     salePrice: 6100
+   },
+   '-Jxp30RfUmdzDqyK_tKG': {
+     vendorId: 'CanvsWrp-BlkWrp-30x30',
+     width: 30,
+     height: 30,
+     units: 'inches',
+     wrapType: 'black',
+     printingPrice: 4700,
+     salePrice: 6100
+   },
+   '-Jxp31hBWnS0MDHe0u0b': {
+     vendorId: 'CanvsWrp-ImgWrp-30x30',
+     width: 30,
+     height: 30,
+     units: 'inches',
+     wrapType: 'image',
+     printingPrice: 4700,
+     salePrice: 6100
+   },
+   '-Jxp333_tHbzElkqLReR': {
+     vendorId: 'CanvsWrp-ImgWrp-36x36',
+     width: 36,
+     height: 36,
+     units: 'inches',
+     wrapType: 'image',
+     printingPrice: 6100,
+     salePrice: 7900
+   },
+   '-Jxp348M5ph47CvXwc9H': {
+     vendorId: 'CanvsWrp-BlkWrp-36x36',
+     width: 36,
+     height: 36,
+     units: 'inches',
+     wrapType: 'black',
+     printingPrice: 6100,
+     salePrice: 7900
+   },
+   '-Jxp35BkpYaP6mzuxYnM': {
+     vendorId: 'CanvsWrp-WhtWrp-36x36',
+     width: 36,
+     height: 36,
+     units: 'inches',
+     wrapType: 'white',
+     printingPrice: 6100,
+     salePrice: 7900
+   },
+   '-JxpB0xBXm7F3bRcu7TM': {
+     vendorId: 'CanvsWrp-BlkWrp-6x6',
+     width: 6,
+     height: 6,
+     units: 'inches',
+     wrapType: 'black',
+     printingPrice: 600,
+     salePrice: 900
+   },
+   '-JxpB3NT6u-fiWSyv2KZ': {
+     vendorId: 'CanvsWrp-WhtWrp-6x6',
+     width: 6,
+     height: 6,
+     units: 'inches',
+     wrapType: 'white',
+     printingPrice: 600,
+     salePrice: 900
+   },
+   '-JxpB51Fr61f3QJ4jUR9': {
+     vendorId: 'CanvsWrp-ImgWrp-6x6',
+     width: 6,
+     height: 6,
+     units: 'inches',
+     wrapType: 'image',
+     printingPrice: 600,
+     salePrice: 900
+   },
+   '-JxpCQVr9xbgI_6ICL1v': {
+     vendorId: 'ClothNapkin-CottonTwill-10x10',
+     width: 10,
+     height: 10,
+     units: 'inches',
+     printingPrice: 625,
+     salePrice: 900
+   },
+   '-JxpCS7lZBys5MeV54iP': {
+     vendorId: 'ClothNapkin-CottonTwill-22x22',
+     width: 22,
+     height: 22,
+     units: 'inches',
+     printingPrice: 1109,
+     salePrice: 1400
+   },
+   '-JxpD8Xc979rZgFTQtu2': {
+     vendorId: 'Coaster',
+     quantity: 4,
+     width: 3.25,
+     height: 3.25,
+     units: 'inches',
+     printingPrice: 1000,
+     salePrice: 1500
+   },
+   '-JxpEE1sWcPhCRdHnWbo': {
+     vendorId: 'DuvetCover-Q-Luxe-88x88-WhiteBack',
+     backColor: 'white',
+     bedType: 'queen',
+     material: 'luxe',
+     printingPrice: 9599,
+     salePrice: 12000
+   },
+   '-JxpEGNPjNS0i03W9XV5': {
+     vendorId: 'DuvetCover-Q-Luxe-88x88-GrayBack',
+     backColor: 'gray',
+     bedType: 'queen',
+     material: 'luxe',
+     printingPrice: 9599,
+     salePrice: 12000
+   },
+   '-JxpEHPJu0ZQWKWKdSUo': {
+     vendorId: 'DuvetCover-Q-LightWeight-88x88-CreamBack',
+     backColor: 'cream',
+     bedType: 'queen',
+     material: 'lightweight',
+     printingPrice: 8849,
+     salePrice: 10000
+   }
 }
