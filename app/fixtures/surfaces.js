@@ -37,6 +37,23 @@ exports.surfaces = {
       '-JxoktDhmyORsk0vM71E': true
     }
   }
+  '-JxopDSBFf-73pfnQbNB': {
+    name: "Art Poster",
+    vendor: "print.io",
+    type: "print",
+    description: "Our Art Posters are printed on a beautiful thick art paper using professional grade inks. These gallery quality prints are elegant for any setting.",
+    imageUrl: 'http://cdn.print.io/temp/148-f07c-ArtPoster_Wedding_Front_296x307.png',
+    images: [
+      'http://cdn.print.io/temp/148-b22b-ArtPoster_Wedding_LayAngle_544x355.png',
+      'http://cdn.print.io/temp/148-3a7c-ArtPoster_Wedding_PrintingDetail_544x355.png',
+      'http://cdn.print.io/temp/148-52bc-ArtPoster_Wedding_CornerDetail_544x355.png'
+    ],
+    options: {
+      '-JxopFtMergmW7WQ6n9L': true,
+      '-JxopHy8MbH6bV_jLznY': true,
+      '-JxopJNQJLO7lQFMNv3u': true
+    }
+  }
 }
 
 // Surface options
@@ -130,5 +147,29 @@ exports.surfaceOptions = {
     units: "inches",
     printingPrice: 22400,
     salePrice: 27500
+  },
+  '-JxopFtMergmW7WQ6n9L': {
+    vendorId: 'ArtPoster-12x12',
+    width: 12,
+    height: 12,
+    units: 'inches',
+    printingPrice: 668,
+    salePrice: 869
+  },
+  '-JxopHy8MbH6bV_jLznY': {
+    vendorId: 'ArtPoster-16x16',
+    width: 16,
+    height: 16,
+    units: 'inches',
+    printingPrice: 1190,
+    salePrice: 1548
+  },
+  '-JxopJNQJLO7lQFMNv3u': {
+    vendorId: 'ArtPoster-20x20',
+    width: 20,
+    height: 20,
+    units: 'inches',
+    printingPrice: 1712,
+    salePrice: 2226
   }
 }
