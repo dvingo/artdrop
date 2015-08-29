@@ -11,5 +11,5 @@ module.exports = {
   s3BucketName: 'com.artdrop.images2',
   //s3BucketName: 'test-dvingo-1',
   fireBaseUri: firebaseUri,
-  hostname: 'obscure-atoll-2694.herokuapp.com'
+  hostname: 'obscure-headland-1710.herokuapp.com'
 }
