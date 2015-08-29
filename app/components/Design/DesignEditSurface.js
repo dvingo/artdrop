@@ -36,6 +36,7 @@ export default React.createClass({
     return (
       <section className="main design-edit-surface">
         <div className="edit-ui">
+<<<<<<< HEAD
 
           <div className="edit-ui-canvas">
             <div className="canvas-flex-wrapper">
