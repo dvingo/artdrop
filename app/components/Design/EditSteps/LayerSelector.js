@@ -8,19 +8,12 @@ var classNames = require('classnames')
 var imgSize = 40
 
 export default React.createClass({
-  mixins: [reactor.ReactMixin, Router.Navigation, Router.State],
-
-  getDataBindings() {
-    return {
-      design: Store.getters.currentDesign,
-      currentLayer: Store.getters.currentLayer
-    }
-  },
+  mixins: [Router.Navigation, Router.State],
 
   selectLayer() {
     Store.actions.selectLayerId(this.props.layer.get('id'))
     this.transitionTo('designEdit', {
-      designId: this.state.design.get('id'), 
+      designId: this.props.design.get('id'), 
       layerId: layer.get('id')
     })
   },
@@ -32,17 +25,17 @@ export default React.createClass({
 
   editLayerDetail() {
     this.transitionTo('designEditDetail', {
-      designId: this.state.design.get('id'), 
-      layerId: this.state.currentLayer.get('id'), 
+      designId: this.props.design.get('id'), 
+      layerId: this.props.currentLayer.get('id'), 
       imagesOrColors: 'images'
     })
   },
 
   render() {
     var layer = this.props.layer
-    var isSelected = this.state.currentLayer.get('id') === layer.get('id')
+    var isSelected = this.props.currentLayer.get('id') === layer.get('id')
     var showMoreButton = (this.isActive('designEdit') && isSelected)
-    var isEnabled = this.state.currentLayer.get('isEnabled')
+    var isEnabled = this.props.currentLayer.get('isEnabled')
 
 
     return (

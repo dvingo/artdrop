@@ -97,6 +97,24 @@
   }
 }
 
+.main.design-edit-surface {
+  .edit-ui {
+    @include display(flex);
+    @include flex-direction(column);
+    @include flex(1 0 0);
+    width: 100%;
+    height: 100%;
+
+    .edit-ui-bottom {
+      @include display(flex);
+      @include flex(3 0 0);
+      @include flex-wrap(wrap);
+      @include justify-content(center);
+      overflow: scroll;
+    }
+  }
+}
+
 @media (min-width: $media-min-width), (orientation: landscape) {
   .main.design-edit {
     @include flex-direction(row);

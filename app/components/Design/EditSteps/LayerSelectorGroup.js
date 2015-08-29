@@ -17,12 +17,12 @@ export default React.createClass({
   render() {
 
     if (this.state.design == null || this.state.currentLayer == null ) { return null }
-
+      
     return (
       <article className={classNames("layer-selector-wrapper", {portrait: this.props.isPortrait})}>
           {this.state.design.get('layers').reverse().map(layer => {
             return (
-              <LayerSelector currentLayer={this.state.currentLayer} layer={layer}/>
+              <LayerSelector design={this.state.design} currentLayer={this.state.currentLayer} layer={layer}/>
             )
           })}
       </article>
