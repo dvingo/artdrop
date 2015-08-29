@@ -17,6 +17,7 @@ export default React.createClass({
 
   componentWillMount() {
     Store.actions.selectDesignId(this.props.params.designId)
+    Store.actions.loadCurrentDesignEditResources()
   },
 
   render() {
@@ -31,7 +32,11 @@ export default React.createClass({
         </div>
 
         <div className="edit-ui">
-          {this.state.surfaces.map(s => <img src={imageUrlForSurface(s)} width={200} height={200}/>)}
+          {this.state.surfaces.map(s => {
+            return (
+              <img src={imageUrlForSurface(s)} width={200} height={200}/>
+            )}
+          )}
         </div>
 
       </section>
