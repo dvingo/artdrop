@@ -73,17 +73,16 @@ export default React.createClass({
 
         <div className="edit-ui">
 
-          <div className="edit-ui-top">
-            <div style={{width:'100%'}}>
-              <div>
-                {selectBoxes}
-              </div>
-
-              <img style={{float:'right'}} src={surface.get('imageUrl')} height={100}/>
+          <div className="edit-ui-top surface-details">
+            <div className="left">
+              {selectBoxes}
               <div>
                 <p style={{fontWeight:'bold'}}>{surface.get('name')}</p>
                 <span style={{fontSize:'0.7em'}}>{surface.get('description')}</span>
               </div>
+            </div>
+            <div className="right">
+              <img src={surface.get('imageUrl')} height={200}/>
             </div>
           </div>
 
@@ -95,6 +94,7 @@ export default React.createClass({
           <div className="edit-ui-bottom">
             {surfaces}
           </div>
+
         </div>
 
       </section>

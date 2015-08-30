@@ -1,0 +1,6 @@
+.surface-details {
+  @include align-items(stretch);
+  .left  { @include flex(5 0 0); }
+  .right { @include flex(3 0 0); }
+  overflow-y: scroll;
+}

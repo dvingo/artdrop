@@ -8,7 +8,7 @@ export default React.createClass({
     replaceSvgImageWithText(this.refs.container, this.refs.imgRef, this.props.layer)
   },
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     var container = React.findDOMNode(this.refs.container)
     var svgEl = container.querySelector('svg')
     if (prevProps.layer.get('colorPalette') !== this.props.layer.get('colorPalette') ||
@@ -19,7 +19,7 @@ export default React.createClass({
     }
   },
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps) {
     return this.props !== nextProps
   },
 

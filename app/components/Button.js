@@ -2,7 +2,7 @@ import React from 'react'
 export default React.createClass({
 
   getInitialState() {
-     return { mouseIsDown: false }
+     return {mouseIsDown: false}
   },
 
   onMouseDown(e) {
