@@ -3,7 +3,7 @@ exports.surfaces = {
     name: "Acrylic Block",
     vendor: "print.io",
     type: "print",
-    description: "Are you looking for an imaginative way to display a beautiful image without putting holes in the wall or buying additional hardware? These long-lasting, sturdy acrylic blocks can stand up anywhere; no wall required.  In addition, the 3D aspect ads artistic, visual interest to any room. Make your most treasured moments timeless.",
+    description: "A sturdy acrylic block can stand up anywhere; no wall required",
     imageUrl: 'https://az412349.vo.msecnd.net/temp/47-dd57-AcrylicBlock_Kids_Back_Angle_544x355.png',
     images: [
       'https://az412349.vo.msecnd.net/temp/47-5691-AcrylicBlock_Stack3x_Angle_612Sq.png',

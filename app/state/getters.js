@@ -1,3 +1,6 @@
+var Set = require('nuclear-js').Immutable.Set
+var Map = require('nuclear-js').Immutable.Map
+import {setSizeOnSurfaceOption} from './utils'
 var getters = {}
 
 getters.designs = [['designs'], designsMap => designsMap.toList()]
@@ -60,6 +63,29 @@ getters.layerImageIds = [
 
 getters.surfaces = [
   ['surfaces'], surfaces => surfaces.toList()
+]
+
+getters.currentSurfaceOptionsMap = [
+  getters.currentDesign,
+  (design) => {
+    if (!design) { return null }
+    var surfaceOption = setSizeOnSurfaceOption(design.get('surfaceOption'))
+    var surfaceOptions = design.getIn(['surface', 'options']).map(setSizeOnSurfaceOption)
+    var nonOptionKeys = Set.of('id', 'printingPrice', 'salePrice', 'units',
+        'vendorId', 'height', 'width', 'depth')
+    var optionKeys = Set.fromKeys(surfaceOption).subtract(nonOptionKeys).toJS()
+    return optionKeys.reduce((retVal, key) => {
+      var index = optionKeys.indexOf(key)
+      var values = surfaceOptions.reduce((retSet, o) => {
+        var propsToFilterWith = optionKeys.slice(0, index)
+        if (propsToFilterWith.every(prop => o.get(prop) === surfaceOption.get(prop))) {
+          return retSet.add(o.get(key))
+        }
+        return retSet
+      }, Set())
+      return retVal.set(key, values.toList())
+    }, Map())
+  }
 ]
 
 getters.layerImageOptions = [

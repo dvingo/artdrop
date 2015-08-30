@@ -43,7 +43,6 @@ export default new Nuclear.Store({
           })
         })
       })
-
       return state
     })
 

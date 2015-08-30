@@ -263,5 +263,17 @@ export default {
           .set('updatedAt', now)
       })
     })
+  },
+
+  setSizeOnSurfaceOption(option) {
+    var units = option.get('units')
+    var height = option.get('height')
+    var width = option.get('width')
+    var depth = option.get('depth')
+    if (!(height && width)) { return option }
+    if (depth) {
+      return option.set('size: height, width, depth', `${height} x ${width} x ${depth} ${units}`)
+    }
+    return option.set('size: height, width', `${height} x ${width} ${units}`)
   }
 }
