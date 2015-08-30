@@ -1,7 +1,7 @@
 import React from 'react'
 import reactor from '../../state/reactor'
 import Store from '../../state/main'
-import {imageUrlForSurface} from '../../state/utils'
+import {imageUrlForSurface, setSizeOnSurfaceOption} from '../../state/utils'
 import SurfaceImage from './SurfaceImage'
 import RenderLayers from './RenderLayers'
 var Set = require('nuclear-js').Immutable.Set
@@ -14,7 +14,8 @@ export default React.createClass({
   getDataBindings() {
     return {
       design: Store.getters.currentDesign,
-      surfaces: Store.getters.surfaces
+      surfaces: Store.getters.surfaces,
+      currentSurfaceOptionsMap: Store.getters.currentSurfaceOptionsMap
     }
   },
 
@@ -36,9 +37,7 @@ export default React.createClass({
     var height = option.get('height')
     var width = option.get('width')
     var depth = option.get('depth')
-    if (!(height && width)) {
-      return option
-    }
+    if (!(height && width)) { return option }
     if (depth) {
       return option.set('size: height, width, depth', `${height} x ${width} x ${depth} ${units}`)
     }
@@ -47,49 +46,26 @@ export default React.createClass({
 
   render() {
     var design = this.state.design
-    if (!(design && this.state.surfaces && typeof design.get('surfaceOption') === 'object')) { return null }
-
+    if (!(design && this.state.surfaces && typeof design.get('surfaceOption') === 'object'
+        && this.state.currentSurfaceOptionsMap)) {
+          console.log('this.state.currentSurfaceOptionsMap: ',this.state.currentSurfaceOptionsMap)
+          return null }
     var surface = design.get('surface')
-    console.log('SELECTED SURFACE: ', surface.toJS())
     var surfaces = this.state.surfaces.map(s => {
-      console.log('surface type: ', s.get("type"))
       return <SurfaceImage surface={s} currentSurface={surface}
                            onClick={this.selectSurface.bind(null, s)}
                            key={s.get('id')}/>
     })
-    var surfaceOption = this.setSizeOnSurfaceOption(design.get('surfaceOption'))
+    var surfaceOption = setSizeOnSurfaceOption(design.get('surfaceOption'))
     var surfaceOptionPrice = design.getIn(['surfaceOption', 'salePrice']) / 100
-    var surfaceOptions = surface.get('options')
-    surfaceOptions = surfaceOptions.map(this.setSizeOnSurfaceOption)
-
-    console.log('surface option: ', surfaceOption.toJS())
-    console.log('ALL options: ', surfaceOptions.toJS())
-    var nonOptionKeys = Set.of('id', 'printingPrice', 'salePrice', 'units', 'vendorId', 'height',
-        'width', 'depth')
-    console.log('non options: ', nonOptionKeys.toJS())
-    var allOptionsSet = Set.fromKeys(surfaceOption)
-    var optionKeys = allOptionsSet.subtract(nonOptionKeys).toJS()
-    console.log('selectable option: set ', optionKeys)
-
-    var keyToValuesMap = optionKeys.reduce((retVal, key) => {
-      var index = optionKeys.indexOf(key)
-      var values = surfaceOptions.reduce((retSet, o) => {
-        var propsToFilterWith = optionKeys.slice(0, index)
-        if (propsToFilterWith.every(prop => o.get(prop) === surfaceOption.get(prop))) {
-          return retSet.add(o.get(key))
-        }
-        return retSet
-      }, Set())
-      return retVal.set(key, values.toList())
-    }, Map())
-
-    console.log('key to values map: ', keyToValuesMap.toJS())
-    var selectBoxes = keyToValuesMap.keySeq().map(key => {
+    var surfaceOptionsMap = this.state.currentSurfaceOptionsMap
+    console.log('key to values map: ', surfaceOptionsMap.toJS())
+    var selectBoxes = surfaceOptionsMap.keySeq().map(key => {
       return (
         <div key={key}>
           <span>{key}</span>
           <select value={surfaceOption.get(key)}>
-            {keyToValuesMap.get(key).sort().map(value => {
+            {surfaceOptionsMap.get(key).sort().map(value => {
               return <option value={value}>{value}</option>
             })}
           </select>
