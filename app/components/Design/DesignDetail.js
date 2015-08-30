@@ -1,16 +1,14 @@
 import React from 'react'
 import Modal from '../Modal'
 import reactor from '../../state/reactor'
-import getters from '../../state/getters'
 import Store from '../../state/main'
-import {imageUrlForDesign, imageUrlForLayer, newId} from '../../state/utils'
-import {Link, Navigation} from 'react-router';
+import {imageUrlForDesign} from '../../state/utils'
+import {Navigation} from 'react-router';
 import {iconPath} from '../../utils';
-import SVGInlineLayer  from '../SVGInlineLayer';
 import Button from '../Button'
 import {makeDesignCopy} from '../../state/utils'
-var appElement = document.getElementById('app');
-Modal.setAppElement(appElement);
+var appElement = document.getElementById('app')
+Modal.setAppElement(appElement)
 Modal.injectCSS()
 
 export default React.createClass({
@@ -59,9 +57,6 @@ export default React.createClass({
         design && this.props.params.designId !== design.get('id')) {
       return null
     }
-
-    var buttonShadow = {boxShadow: '1px 1px 1px black', overflow: 'hidden', borderRadius: 2}
-    var buttonDownShadow = {boxShadow: '1px 1px 4px black inset', overflow: 'hidden', borderRadius: 2}
 
     return (
       <Modal isOpen={true} key={design.get('id')}>

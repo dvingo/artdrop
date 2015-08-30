@@ -4,18 +4,19 @@ import {imageUrlForSurface} from '../../state/utils'
 
 export default React.createClass({
 
-  shouldComponentUpdate(nextProps, nextState) {
-    // TODO only update if previous currentSurface equal the props.surface
-    // or currentSurface equals props.surface and previous currentSurface != previous surface
-    // basically only if it used to be highlighted and now shouldn't be or if it should be and isn't already
-    if (nextProps !== this.props) {
+  shouldComponentUpdate(nextProps) {
+    var currentSurface = this.props.currentSurface.get('id')
+    var nextCurrentSurface = nextProps.currentSurface.get('id')
+    var surface = this.props.surface.get('id')
+    var nextSurface = nextProps.surface.get('id')
+    if ((nextCurrentSurface === nextSurface && currentSurface !== surface) ||
+        (currentSurface === surface && nextCurrentSurface !== nextSurface)) {
       return true
     }
     return false
   },
 
   render() {
-    console.log('rendering imag')
     var height = this.props.height || 100
     var width = this.props.width || 100
     var style = (

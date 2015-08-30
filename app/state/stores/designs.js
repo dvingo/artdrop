@@ -6,12 +6,15 @@ import reactor from '../reactor'
 import {uploadDesignPreview, newId, rotateColorPalette} from '../utils'
 import {designsRef, layersRef} from '../firebaseRefs'
 
-var persistDesign = (designId, fields) => {
+var persistWithRef = (firebaseRef, id, obj) => {
   if (DEBUG) {
-    console.log(`Saving design ${designId} to firebase.`)
+    console.log(`Saving to firebase ref ${firebaseRef} at id: ${id}.`)
   }
-  designsRef.child(designId).update(fields)
+  firebaseRef.child(id).update(obj)
 }
+
+var persistDesign = persistWithRef.bind(null, designsRef)
+var persistLayer = persistWithRef.bind(null, layersRef)
 
 var transitionDesignColors = (direction, state) => {
    var allPalettes = reactor.evaluate(getters.colorPalettes)
@@ -24,7 +27,7 @@ var transitionDesignColors = (direction, state) => {
      } else if (direction === 'backward') {
        newPalette = allPalettes.get((index - 1) % allPalettes.count())
      }
-     layersRef.child(layer.get('id')).update({'colorPalette':newPalette.get('id')})
+     persistLayer(layer.get('id'), {'colorPalette':newPalette.get('id')})
      return layer.set('colorPalette', newPalette)
    })
    var newDesign = currentDesign.set('layers', layers)
@@ -94,7 +97,7 @@ export default new Nuclear.Store({
       var i = layers.findIndex(l => l.get('id') === currentLayerId)
       var newLayers = layers.update(i, v => v.set('selectedLayerImage', layerImage))
       var newDesign = currentDesign.set('layers', newLayers)
-      layersRef.child(currentLayerId).update({'selectedLayerImage': layerImage.get('id')})
+      persistLayer(currentLayerId, {'selectedLayerImage': layerImage.get('id')})
       return state.set(newDesign.get('id'), newDesign)
     })
 
@@ -107,7 +110,7 @@ export default new Nuclear.Store({
         var newIsEnabled = !currentLayer.get('isEnabled');
         var newLayers = layers.update(i, v => v.set('isEnabled', newIsEnabled))
         var newDesign = currentDesign.set('layers', newLayers)
-        layersRef.child(currentLayerId).update({'isEnabled': newIsEnabled})
+        persistLayer(currentLayerId, {'isEnabled': newIsEnabled})
         return state.set(newDesign.get('id'), newDesign)
     })
 
@@ -118,7 +121,7 @@ export default new Nuclear.Store({
       var i = layers.findIndex(l => l.get('id') === currentLayerId)
       var newLayers = layers.update(i, v => v.set('colorPalette', colorPalette).set('paletteRotation', 0))
       var newDesign = currentDesign.set('layers', newLayers)
-      layersRef.child(currentLayerId).update({'colorPalette': colorPalette.get('id')})
+      persistLayer(currentLayerId, {'colorPalette': colorPalette.get('id')})
       return state.set(newDesign.get('id'), newDesign)
     })
 
@@ -160,7 +163,7 @@ export default new Nuclear.Store({
       var currentLayer = layers.get(i)
       var newDesign = rotateColorPalette(currentDesign, currentLayer)
       var newRotation = newDesign.getIn(['layers', i, 'paletteRotation'])
-      layersRef.child(currentLayerId).update({'paletteRotation': newRotation})
+      persistLayer(currentLayerId, {'paletteRotation': newRotation})
       return state.set(newDesign.get('id'), newDesign)
     })
 
@@ -231,7 +234,7 @@ export default new Nuclear.Store({
           layer.colorPalette = layer.colorPalette.id
           layer.selectedLayerImage = layer.selectedLayerImage.id
           layer.updatedAt = now
-          layersRef.child(id).update(layer)
+          persistLayer(id, layer)
           return id
         })
         var id = design.id

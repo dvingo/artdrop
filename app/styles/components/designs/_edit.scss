@@ -67,8 +67,8 @@
     width: 50px;
     padding: 5px;
   }
-
 }
+
 .edit-ui-bottom {
   @include display(flex);
   @include flex(3 0 0);
@@ -94,13 +94,11 @@
     .canvas-flex-wrapper {
       max-width: none;
     }
-
     .edit-ui {
       @include flex-direction(row);
-
-      .edit-ui-top {
-        @include flex-direction(column);
-      }
+    }
+    .edit-ui-top {
+      @include flex-direction(column);
     }
   }
 }
