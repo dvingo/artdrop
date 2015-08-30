@@ -32,13 +32,10 @@ export default React.createClass({
   },
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (typeof nextState.design.getIn(['layers', 0]) === 'string') {
+    if (nextProps !== this.props || nextState !== this.state) {
       return true
     }
-    if (nextState.design && this.state.design) {
-      return this.state.design !== nextState.design
-    }
-    return true
+    return false
   },
 
   transitionToEdit() {
@@ -56,9 +53,10 @@ export default React.createClass({
   },
 
   render() {
-    var currentDesign = reactor.evaluate(getters.currentDesign)
-    if (currentDesign == null ||
-        typeof currentDesign.getIn(['layers', 0]) === 'string') {
+    var design = this.state.design
+    if (design == null ||
+        typeof design.getIn(['layers', 0]) === 'string' ||
+        design && this.props.params.designId !== design.get('id')) {
       return null
     }
 
@@ -66,7 +64,7 @@ export default React.createClass({
     var buttonDownShadow = {boxShadow: '1px 1px 4px black inset', overflow: 'hidden', borderRadius: 2}
 
     return (
-      <Modal isOpen={true}>
+      <Modal isOpen={true} key={design.get('id')}>
         <section className="show-design">
 
           <div className="top-ui">

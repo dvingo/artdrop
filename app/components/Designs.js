@@ -16,7 +16,6 @@ export default React.createClass({
   },
 
   selectDesign(designId, e) {
-    Store.actions.selectDesignId(designId)
     this.transitionTo('designDetail', {designId: designId})
   },
 

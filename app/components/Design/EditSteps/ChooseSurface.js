@@ -11,8 +11,8 @@ export default React.createClass({
             surfaces: Store.getters.surfaces}
   },
 
-  selectSurface(surfaceId) {
-    Store.actions.selectSurfaceId(surfaceId)
+  selectSurface(surface) {
+    Store.actions.selectSurface(surface)
   },
 
   render() {
@@ -20,7 +20,7 @@ export default React.createClass({
     var surfaces = this.state.surfaces.map(surface => {
       var highlight = surface.get('id') === this.state.design.getIn(['surface','id'])
       return (
-        <li className="material" onClick={this.selectSurface.bind(null, surface.get('id'))}>
+        <li className="material" onClick={this.selectSurface.bind(null, surface)}>
           <span style={{fontWeight: highlight?'bold':'normal'}}>{surface.get('title')}</span>
           <img src={imageUrlForSurface(surface)} height={surfaceSize} width={surfaceSize}/>
         </li>

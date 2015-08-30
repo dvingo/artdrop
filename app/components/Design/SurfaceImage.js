@@ -1,22 +1,29 @@
 import React from 'react'
-import Store from '../../state/main'
 import reactor from '../../state/reactor'
 import {imageUrlForSurface} from '../../state/utils'
 
 export default React.createClass({
-  mixins: [reactor.ReactMixin],
 
-  selectSurfaceImage() {
-    var styles = [
-      'background: red'
-    ].join(';')
-    console.log("%c Surface Image Selected", styles)
+  shouldComponentUpdate(nextProps, nextState) {
+    // TODO only update if previous currentSurface equal the props.surface
+    // or currentSurface equals props.surface and previous currentSurface != previous surface
+    // basically only if it used to be highlighted and now shouldn't be or if it should be and isn't already
+    if (nextProps !== this.props) {
+      return true
+    }
+    return false
   },
 
   render() {
+    console.log('rendering imag')
+    var height = this.props.height || 100
+    var width = this.props.width || 100
+    var style = (
+      this.props.surface.get('id') === this.props.currentSurface.get('id') ?
+      {border: '3px solid'} : null)
     return (
-      <div className="surface-image">
-        <img src={imageUrlForSurface(this.props.surface)} width={100} height={100}/>
+      <div className="surface-image" onClick={this.props.onClick}>
+        <img src={imageUrlForSurface(this.props.surface)} width={width} height={height} style={style}/>
       </div>
     )
   }

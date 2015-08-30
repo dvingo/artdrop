@@ -1,15 +1,14 @@
 @import "mixins/prefixer.scss";
 @import "mixins/flex.scss";
 @import "mixins/small-button.scss";
+
 @import "colors.scss";
 @import "constants.scss";
 @import "typography.scss";
+
 @import "components/nav-bar.scss";
 @import "components/designs/index.scss";
 @import "components/designs/edit-steps/index.scss";
-@import "components/designs/edit-steps/footer.scss";
-@import "components/designs/edit-steps/layer-images.scss";
-@import "components/designs/edit-steps/surface-images.scss";
 @import "components/designs/edit.scss";
 @import "components/designs/cart.scss";
 @import "components/new-colors-button.scss";

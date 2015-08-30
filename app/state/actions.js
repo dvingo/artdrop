@@ -25,7 +25,7 @@ export default {
   uploadLayerImageWithCompositeToS3(files) { dispatchHelper('uploadLayerImageWithCompositeToS3', files) },
   selectColorPalette(colorPalette) { dispatchHelper('selectColorPalette', colorPalette) },
   deleteColorPalette(colorPalette) { dispatchHelper('deleteColorPalette', colorPalette) },
-  selectSurfaceId(id) { dispatchHelper('selectSurfaceId', id) },
+  selectSurface(surface) { dispatchHelper('selectSurface', surface) },
   resetSurfacesFromFixture() { dispatchHelper('resetSurfacesFromFixture') },
   makeDesignCopy(newId) { dispatchHelper('makeDesignCopy', newId) },
   createNewDesign(newDesign) { dispatchHelper('createNewDesign', newDesign) },

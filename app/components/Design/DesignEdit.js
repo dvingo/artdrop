@@ -26,7 +26,7 @@ export default React.createClass({
 
   componentWillMount() {
     Store.actions.selectDesignAndLayerId({
-      designId: this.props.params.designId, 
+      designId: this.props.params.designId,
       layerId: this.props.params.layerId})
   },
 

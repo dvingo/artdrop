@@ -28,7 +28,6 @@ export default React.createClass({
       designId: this.props.params.designId,
       layerId: this.props.params.layerId
     })
-
     Store.actions.loadAdminLayerImages()
   },
 
@@ -45,7 +44,6 @@ export default React.createClass({
 
   componentDidMount() {
     this.attemptLoadResources()
-
     var self = this
     window.addEventListener('resize', () => self.forceUpdate())
   },
@@ -62,14 +60,14 @@ export default React.createClass({
 
   returnToDesignEdit() {
     this.transitionTo('designEdit', {
-      designId: this.state.design.get('id'), 
+      designId: this.state.design.get('id'),
       layerId: this.state.currentLayer.get('id')
     })
   },
 
   selectImagesOrColors(imagesOrColors) {
     this.transitionTo('designEditDetail', {
-      designId: this.state.design.get('id'), 
+      designId: this.state.design.get('id'),
       layerId: this.state.currentLayer.get('id'),
       imagesOrColors: imagesOrColors
     })
@@ -81,7 +79,7 @@ export default React.createClass({
     var layerImages = this.state.layerImages.slice(0,30).map(layerImage => {
       return <LayerImage layerImage={layerImage} key={layerImage.get('id')}/>
     })
-  
+
     var isPortrait = window.innerHeight > window.innerWidth
     var selectingColors = this.getParams().imagesOrColors === 'colors'
 
@@ -102,10 +100,12 @@ export default React.createClass({
             { isPortrait ? null : <LayerSelectorGroup isPortrait={isPortrait}/> }
             <div className="edit-ui-mid">
               <ColorsButtonRotate className="rotate-colors" isSmall={false}/>
-              <div onClick={this.selectImagesOrColors.bind(null, 'images')} className={classNames("button", {off: selectingColors})}>Art</div>
-              <div onClick={this.selectImagesOrColors.bind(null, 'colors')} className={classNames("button", {off: !selectingColors})}>Color</div>
+              <div onClick={this.selectImagesOrColors.bind(null, 'images')}
+                   className={classNames("button", {off: selectingColors})}>Art</div>
+              <div onClick={this.selectImagesOrColors.bind(null, 'colors')}
+                   className={classNames("button", {off: !selectingColors})}>Color</div>
               <CheckButton onClick={this.returnToDesignEdit} isSmall={false}/>
-            </div> 
+            </div>
             <div className="edit-ui-bottom">
               { selectingColors ? <ChoosePalette/> : layerImages }
             </div>

@@ -1,10 +1,17 @@
 var Nuclear = require('nuclear-js');
 var Immutable = Nuclear.Immutable
-import {designPropsToIds, defaultSurfaceOptionIdForSurface} from '../helpers'
+import {designPropsToIds, defaultSurfaceOptionIdForSurface, hydrateSurfaceOptionsForSurface} from '../helpers'
 import getters from '../getters'
 import reactor from '../reactor'
 import {uploadDesignPreview, newId, rotateColorPalette} from '../utils'
 import {designsRef, layersRef} from '../firebaseRefs'
+
+var persistDesign = (designId, fields) => {
+  if (DEBUG) {
+    console.log(`Saving design ${designId} to firebase.`)
+  }
+  designsRef.child(designId).update(fields)
+}
 
 var transitionDesignColors = (direction, state) => {
    var allPalettes = reactor.evaluate(getters.colorPalettes)
@@ -97,7 +104,6 @@ export default new Nuclear.Store({
         var layers = currentDesign.get('layers')
         var i = layers.findIndex(l => l.get('id') === currentLayerId)
         var currentLayer = layers.get(i)
-        console.log('Current LayerID: ', currentLayer.get('id'))
         var newIsEnabled = !currentLayer.get('isEnabled');
         var newLayers = layers.update(i, v => v.set('isEnabled', newIsEnabled))
         var newDesign = currentDesign.set('layers', newLayers)
@@ -116,12 +122,34 @@ export default new Nuclear.Store({
       return state.set(newDesign.get('id'), newDesign)
     })
 
-    this.on('selectSurfaceId', (state, surfaceId) => {
+    this.on('selectSurface', (state, surface) => {
       var currentDesign = reactor.evaluate(getters.currentDesign)
-      var surfaces = reactor.evaluate(['surfaces'])
-      var newDesign = currentDesign.set('surface', surfaces.get(surfaceId))
-      designsRef.child(newDesign.get('id')).update({'surface':surfaceId})
-      return state.set(newDesign.get('id'), newDesign)
+      var surfaceOptions = surface.get('options')
+      if (!Array.isArray(surfaceOptions.toJS())) {
+        var surfaceObj = surface.toJS()
+        var designObj = currentDesign.toJS()
+        hydrateSurfaceOptionsForSurface(surfaceObj).then(surfaceOptions => {
+          surfaceObj.options = surfaceOptions
+          var surfaceOption = surfaceObj.options[0]
+          designObj.surface = surfaceObj
+          designObj.surfaceOption = surfaceOption
+          reactor.dispatch('addSurface', surfaceObj)
+          reactor.dispatch('addDesign', designObj)
+          persistDesign(designObj.id, {
+            surface: surfaceObj.id,
+            surfaceOption: surfaceOption.id
+          })
+        })
+        return state
+      } else {
+        var surfaceOption = surfaceOptions.get(0)
+        var newDesign = currentDesign.set('surface', surface).set('surfaceOption', surfaceOption)
+        persistDesign(newDesign.get('id'), {
+          surface: surface.get('id'),
+          surfaceOption: surfaceOption.get('id')
+        })
+        return state.set(newDesign.get('id'), newDesign)
+      }
     })
 
     this.on('rotateCurrentLayerColorPalette', (state) => {
@@ -212,6 +240,7 @@ export default new Nuclear.Store({
         design.largeImageUrl = imgUrls.large
         design.layers = layerIds
         design.surface = design.surface.id
+        design.surfaceOption = design.surfaceOption.id
         design.price = 2000
         design.updatedAt = now
         designsRef.child(id).update(design)

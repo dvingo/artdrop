@@ -16,8 +16,11 @@ exports.defaultSurfaceOptionIdForSurface = (surfaceObj) => {
 exports.designPropsToIds = (design) => {
   var layerIds = design.get('layers').map(l => l.get('id'))
   var surfaceId = design.get('surface') ? design.getIn(['surface', 'id']) : null
-  return surfaceId ? design.withMutations(d => d.set('layers', layerIds).set('surface', surfaceId))
-                   : design.set('layers', layerIds)
+  var surfaceOptionId = design.get('surfaceOption') ? design.getIn(['surfaceOption', 'id']) : null
+  return surfaceId ? design.withMutations(d => {
+   return d.set('layers', layerIds).set('surface', surfaceId).set('surfaceOption', surfaceOptionId)
+  })
+  : design.set('layers', layerIds)
 }
 
 exports.hydrateDesign = (design) => {
@@ -57,6 +60,15 @@ exports.hydrateDesign = (design) => {
   }).catch(e => console.error("Got Error: ", e))
 }
 
+exports.hydrateSurfaceOptionsForSurface = (surface) => {
+  return RSVP.all(Object.keys(surface.options).map(optionId => {
+    return hydrateSurfaceOption(optionId).then(surfaceOption => {
+      surfaceOption.id = optionId
+      return surfaceOption
+    })
+  }))
+}
+
 var hydrateObj = (ref, id) => {
   return new RSVP.Promise(resolve => {
     ref.child(id).once('value', o => resolve(o.val()))
@@ -86,9 +98,8 @@ var hydrateColorPalette = hydrateObj.bind(null, colorPalettesRef)
 var hydrateSurface = hydrateObj.bind(null, surfacesRef)
 var hydrateSurfaceOption = hydrateObj.bind(null, surfaceOptionsRef)
 
-exports.hydrateLayer = hydrateLayer
-exports.hydrateLayerImage = hydrateLayerImage
 exports.hydrateColorPalette = hydrateColorPalette
 exports.hydrateSurface = hydrateSurface
+exports.hydrateSurfaceOption = hydrateSurfaceOption
 exports.hydrateObj = hydrateObj
 export default exports

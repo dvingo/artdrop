@@ -14,7 +14,6 @@ import tagsStore from './stores/tags'
 import getters from './getters'
 import {usersRef, firebaseRef} from './firebaseRefs'
 import actions from './actions'
-var Nuclear = require('nuclear-js')
 
 reactor.registerStores({
   users: usersStore,
