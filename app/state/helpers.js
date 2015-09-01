@@ -6,6 +6,9 @@ var RSVP = require('RSVP')
 
 var exports = {}
 
+exports.nonOptionKeys = ['id', 'printingPrice', 'salePrice', 'units',
+  'vendorId', 'height', 'width', 'depth']
+
 exports.defaultSurfaceOptionIdForSurface = (surfaceObj) => {
   if (Array.isArray(surfaceObj.options)) {
     return surfaceObj.options[0].id

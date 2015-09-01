@@ -4,13 +4,20 @@ import {designPropsToIds, defaultSurfaceOptionIdForSurface, hydrateSurfaceOption
 import getters from '../getters'
 import reactor from '../reactor'
 import {uploadDesignPreview, newId, rotateColorPalette} from '../utils'
+import {nonOptionKeys} from '../helpers'
 import {designsRef, layersRef} from '../firebaseRefs'
+var Set = require('nuclear-js').Immutable.Set
+var List = require('nuclear-js').Immutable.List
 
 var persistWithRef = (firebaseRef, id, obj) => {
   if (DEBUG) {
     console.log(`Saving to firebase ref ${firebaseRef} at id: ${id}.`)
   }
   firebaseRef.child(id).update(obj)
+}
+
+var removeNonOptionProps = (surfaceOption) => {
+  return nonOptionKeys.reduce((r, k) => r.remove(k), surfaceOption)
 }
 
 var persistDesign = persistWithRef.bind(null, designsRef)
@@ -153,6 +160,27 @@ export default new Nuclear.Store({
         })
         return state.set(newDesign.get('id'), newDesign)
       }
+    })
+
+
+    this.on('selectSurfaceOptionFromKeyValue', (state, keyValObj) => {
+      var {key, value} = keyValObj
+      var currentDesign = reactor.evaluate(getters.currentDesign)
+      var allOptions = currentDesign.getIn(['surface', 'options']).map(removeNonOptionProps)
+      var currentOption = currentDesign.get('surfaceOption')
+      var toFind = removeNonOptionProps(currentOption).set(key, value)
+      toFind = toFind.keySeq().reduce((retVal, key) => {
+        var optionsThatMatch = retVal.filter(o => o.get(key) === toFind.get(key))
+        if (optionsThatMatch.count() === 0) {
+          return retVal
+        }
+        return optionsThatMatch
+      }, allOptions).get(0)
+      var found = currentDesign.getIn(['surface', 'options']).find(o => {
+        return toFind.every((val, key) => o.get(key) === val)
+      })
+
+      return state.set(currentDesign.get('id'), currentDesign.set('surfaceOption', found))
     })
 
     this.on('rotateCurrentLayerColorPalette', (state) => {

@@ -32,6 +32,11 @@ export default React.createClass({
     Store.actions.selectSurface(surface)
   },
 
+  onOptionChanged(key, e) {
+    var value = e.target.value
+    Store.actions.selectSurfaceOptionFromKeyValue(key, value)
+  },
+
   setSizeOnSurfaceOption(option) {
     var units = option.get('units')
     var height = option.get('height')
@@ -47,9 +52,8 @@ export default React.createClass({
   render() {
     var design = this.state.design
     if (!(design && this.state.surfaces && typeof design.get('surfaceOption') === 'object'
-        && this.state.currentSurfaceOptionsMap)) {
-          console.log('this.state.currentSurfaceOptionsMap: ',this.state.currentSurfaceOptionsMap)
-          return null }
+        && this.state.currentSurfaceOptionsMap)) { return null }
+
     var surface = design.get('surface')
     var surfaces = this.state.surfaces.map(s => {
       return <SurfaceImage surface={s} currentSurface={surface}
@@ -59,12 +63,11 @@ export default React.createClass({
     var surfaceOption = setSizeOnSurfaceOption(design.get('surfaceOption'))
     var surfaceOptionPrice = design.getIn(['surfaceOption', 'salePrice']) / 100
     var surfaceOptionsMap = this.state.currentSurfaceOptionsMap
-    console.log('key to values map: ', surfaceOptionsMap.toJS())
     var selectBoxes = surfaceOptionsMap.keySeq().map(key => {
       return (
         <div key={key}>
           <span>{key}</span>
-          <select value={surfaceOption.get(key)}>
+          <select value={surfaceOption.get(key)} onChange={this.onOptionChanged.bind(null, key)}>
             {surfaceOptionsMap.get(key).sort().map(value => {
               return <option value={value}>{value}</option>
             })}
