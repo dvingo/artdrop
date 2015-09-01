@@ -2,12 +2,35 @@ import {layersRef, layerImagesRef,
 colorPalettesRef,surfacesRef,
 surfaceOptionsRef, tagsRef} from './firebaseRefs'
 import reactor from './reactor'
+var Map = require('nuclear-js').Immutable.Map
 var RSVP = require('RSVP')
 
 var exports = {}
 
 exports.nonOptionKeys = ['id', 'printingPrice', 'salePrice', 'units',
   'vendorId', 'height', 'width', 'depth']
+
+function setSizeOnSurfaceOption(option) {
+  var units = option.get('units')
+  var height = option.get('height')
+  var width = option.get('width')
+  var depth = option.get('depth')
+  if (!(height && width)) { return option }
+  if (depth) {
+    return option.set('size: height, width, depth', `${height} x ${width} x ${depth} ${units}`)
+  }
+  return option.set('size: height, width', `${height} x ${width} ${units}`)
+}
+
+exports.dispatchHelper = function() {
+  var args = arguments
+  var interval = setInterval(() => {
+    if (!reactor.__isDispatching) {
+      clearInterval(interval)
+      reactor.dispatch.apply(reactor, args)
+    }
+  }, 100)
+}
 
 exports.defaultSurfaceOptionIdForSurface = (surfaceObj) => {
   if (Array.isArray(surfaceObj.options)) {
@@ -26,51 +49,57 @@ exports.designPropsToIds = (design) => {
   : design.set('layers', layerIds)
 }
 
-exports.hydrateDesign = (design) => {
-  var layers = design.layers.map(layerId => {
-    return hydrateLayer(layerId).then(layer => {
-      return hydrateLayerImage(layer.selectedLayerImage).then(layerImage => {
-        layerImage.id = layer.selectedLayerImage
-        layer.selectedLayerImage = layerImage
-        layer.id = layerId
-        return hydrateColorPalette(layer.colorPalette).then(colorPalette => {
-          colorPalette.id = layer.colorPalette
-          layer.colorPalette = colorPalette
-          reactor.dispatch('addColorPalette', colorPalette)
-          reactor.dispatch('addLayerImage', layerImage)
-          return layer
-        })
+function nestedHydrateLayer(layerId) {
+  return hydrateLayer(layerId).then(layer => {
+    return hydrateLayerImage(layer.selectedLayerImage).then(layerImage => {
+      layerImage.id = layer.selectedLayerImage
+      reactor.dispatch('addLayerImage', layerImage)
+      layer.selectedLayerImage = layerImage
+      layer.id = layerId
+      return hydrateColorPalette(layer.colorPalette).then(colorPalette => {
+        colorPalette.id = layer.colorPalette
+        layer.colorPalette = colorPalette
+        reactor.dispatch('addColorPalette', colorPalette)
+        return layer
       })
     })
   })
+}
+
+function hydrateSurfaceOption(surfaceOptionId) {
+  return (
+    hydrateObj(surfaceOptionsRef, surfaceOptionId)
+    .then(surfaceOption => {
+      surfaceOption.id = surfaceOptionId
+      return setSizeOnSurfaceOption(Map(surfaceOption)).toJS()
+    })
+  )
+}
+
+exports.hydrateDesign = (design) => {
+  var layers = design.layers.map(nestedHydrateLayer)
   return RSVP.all(layers).then(layers => {
     design.layers = layers;
     return hydrateSurface(design.surface)
   }).then(surface => {
-    return RSVP.all(Object.keys(surface.options).map(optionId => {
-      return hydrateSurfaceOption(optionId).then(surfaceOption => {
-        surfaceOption.id = optionId
-        return surfaceOption
+    return (
+      hydrateSurfaceOptionsForSurface(surface)
+      .then(surfaceOptions => {
+        surface.id = design.surface
+        surface.options = surfaceOptions
+        design.surface = surface
+        design.surfaceOption = surface.options.filter(o => o.id === design.surfaceOption)[0]
+        reactor.dispatch('addSurface', surface)
+        reactor.dispatch('addDesign', design)
       })
-    })).then(surfaceOptions => {
-      surface.id = design.surface
-      surface.options = surfaceOptions
-      design.surface = surface
-      design.surfaceOption = surface.options.filter(o => o.id === design.surfaceOption)[0]
-      reactor.dispatch('addSurface', surface)
-      reactor.dispatch('addDesign', design)
-    }).catch(e => console.error('Got surface error: ', e))
+    )
   }).catch(e => console.error("Got Error: ", e))
 }
 
-exports.hydrateSurfaceOptionsForSurface = (surface) => {
-  return RSVP.all(Object.keys(surface.options).map(optionId => {
-    return hydrateSurfaceOption(optionId).then(surfaceOption => {
-      surfaceOption.id = optionId
-      return surfaceOption
-    })
-  }))
+function hydrateSurfaceOptionsForSurface (surface) {
+  return RSVP.all(Object.keys(surface.options).map(hydrateSurfaceOption))
 }
+exports.hydrateSurfaceOptionsForSurface = hydrateSurfaceOptionsForSurface
 
 var hydrateObj = (ref, id) => {
   return new RSVP.Promise(resolve => {
@@ -99,10 +128,8 @@ var hydrateLayer = hydrateObj.bind(null, layersRef)
 var hydrateLayerImage = hydrateObj.bind(null, layerImagesRef)
 var hydrateColorPalette = hydrateObj.bind(null, colorPalettesRef)
 var hydrateSurface = hydrateObj.bind(null, surfacesRef)
-var hydrateSurfaceOption = hydrateObj.bind(null, surfaceOptionsRef)
 
 exports.hydrateColorPalette = hydrateColorPalette
 exports.hydrateSurface = hydrateSurface
-exports.hydrateSurfaceOption = hydrateSurfaceOption
 exports.hydrateObj = hydrateObj
 export default exports

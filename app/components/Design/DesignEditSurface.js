@@ -1,7 +1,7 @@
 import React from 'react'
 import reactor from '../../state/reactor'
 import Store from '../../state/main'
-import {imageUrlForSurface, setSizeOnSurfaceOption} from '../../state/utils'
+import {imageUrlForSurface} from '../../state/utils'
 import SurfaceImage from './SurfaceImage'
 import RenderLayers from './RenderLayers'
 var Set = require('nuclear-js').Immutable.Set
@@ -37,18 +37,6 @@ export default React.createClass({
     Store.actions.selectSurfaceOptionFromKeyValue(key, value)
   },
 
-  setSizeOnSurfaceOption(option) {
-    var units = option.get('units')
-    var height = option.get('height')
-    var width = option.get('width')
-    var depth = option.get('depth')
-    if (!(height && width)) { return option }
-    if (depth) {
-      return option.set('size: height, width, depth', `${height} x ${width} x ${depth} ${units}`)
-    }
-    return option.set('size: height, width', `${height} x ${width} ${units}`)
-  },
-
   render() {
     var design = this.state.design
     if (!(design && this.state.surfaces && typeof design.get('surfaceOption') === 'object'
@@ -60,7 +48,7 @@ export default React.createClass({
                            onClick={this.selectSurface.bind(null, s)}
                            key={s.get('id')}/>
     })
-    var surfaceOption = setSizeOnSurfaceOption(design.get('surfaceOption'))
+    var surfaceOption = design.get('surfaceOption')
     var surfaceOptionPrice = design.getIn(['surfaceOption', 'salePrice']) / 100
     var surfaceOptionsMap = this.state.currentSurfaceOptionsMap
     var selectBoxes = surfaceOptionsMap.keySeq().map(key => {

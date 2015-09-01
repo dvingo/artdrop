@@ -1,7 +1,6 @@
 var Set = require('nuclear-js').Immutable.Set
 var Map = require('nuclear-js').Immutable.Map
 import {nonOptionKeys} from './helpers'
-import {setSizeOnSurfaceOption} from './utils'
 var getters = {}
 
 getters.designs = [['designs'], designsMap => designsMap.toList()]
@@ -70,8 +69,8 @@ getters.currentSurfaceOptionsMap = [
   getters.currentDesign,
   (design) => {
     if (!design) { return null }
-    var surfaceOption = setSizeOnSurfaceOption(design.get('surfaceOption'))
-    var surfaceOptions = design.getIn(['surface', 'options']).map(setSizeOnSurfaceOption)
+    var surfaceOption = design.get('surfaceOption')
+    var surfaceOptions = design.getIn(['surface', 'options'])
     var nonOptionKeysSet = Set(nonOptionKeys)
     var optionKeys = Set.fromKeys(surfaceOption).subtract(nonOptionKeysSet).toList()
     return optionKeys.reduce((retVal, key) => {
