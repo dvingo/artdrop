@@ -26,6 +26,9 @@ export default {
   selectColorPalette(colorPalette) { dispatchHelper('selectColorPalette', colorPalette) },
   deleteColorPalette(colorPalette) { dispatchHelper('deleteColorPalette', colorPalette) },
   selectSurface(surface) { dispatchHelper('selectSurface', surface) },
+  selectSurfaceOptionFromKeyValue(key, value) {
+    dispatchHelper('selectSurfaceOptionFromKeyValue', {key:key, value:value})
+  },
   resetSurfacesFromFixture() { dispatchHelper('resetSurfacesFromFixture') },
   makeDesignCopy(newId) { dispatchHelper('makeDesignCopy', newId) },
   createNewDesign(newDesign) { dispatchHelper('createNewDesign', newDesign) },

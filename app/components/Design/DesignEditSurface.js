@@ -1,7 +1,7 @@
 import React from 'react'
 import reactor from '../../state/reactor'
 import Store from '../../state/main'
-import {imageUrlForSurface, setSizeOnSurfaceOption} from '../../state/utils'
+import {imageUrlForSurface} from '../../state/utils'
 import SurfaceImage from './SurfaceImage'
 import RenderLayers from './RenderLayers'
 var Set = require('nuclear-js').Immutable.Set
@@ -32,39 +32,30 @@ export default React.createClass({
     Store.actions.selectSurface(surface)
   },
 
-  setSizeOnSurfaceOption(option) {
-    var units = option.get('units')
-    var height = option.get('height')
-    var width = option.get('width')
-    var depth = option.get('depth')
-    if (!(height && width)) { return option }
-    if (depth) {
-      return option.set('size: height, width, depth', `${height} x ${width} x ${depth} ${units}`)
-    }
-    return option.set('size: height, width', `${height} x ${width} ${units}`)
+  onOptionChanged(key, e) {
+    var value = e.target.value
+    Store.actions.selectSurfaceOptionFromKeyValue(key, value)
   },
 
   render() {
     var design = this.state.design
     if (!(design && this.state.surfaces && typeof design.get('surfaceOption') === 'object'
-        && this.state.currentSurfaceOptionsMap)) {
-          console.log('this.state.currentSurfaceOptionsMap: ',this.state.currentSurfaceOptionsMap)
-          return null }
+        && this.state.currentSurfaceOptionsMap)) { return null }
+
     var surface = design.get('surface')
     var surfaces = this.state.surfaces.map(s => {
       return <SurfaceImage surface={s} currentSurface={surface}
                            onClick={this.selectSurface.bind(null, s)}
                            key={s.get('id')}/>
     })
-    var surfaceOption = setSizeOnSurfaceOption(design.get('surfaceOption'))
+    var surfaceOption = design.get('surfaceOption')
     var surfaceOptionPrice = design.getIn(['surfaceOption', 'salePrice']) / 100
     var surfaceOptionsMap = this.state.currentSurfaceOptionsMap
-    console.log('key to values map: ', surfaceOptionsMap.toJS())
     var selectBoxes = surfaceOptionsMap.keySeq().map(key => {
       return (
         <div key={key}>
           <span>{key}</span>
-          <select value={surfaceOption.get(key)}>
+          <select value={surfaceOption.get(key)} onChange={this.onOptionChanged.bind(null, key)}>
             {surfaceOptionsMap.get(key).sort().map(value => {
               return <option value={value}>{value}</option>
             })}

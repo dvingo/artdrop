@@ -4,13 +4,27 @@ import {designPropsToIds, defaultSurfaceOptionIdForSurface, hydrateSurfaceOption
 import getters from '../getters'
 import reactor from '../reactor'
 import {uploadDesignPreview, newId, rotateColorPalette} from '../utils'
+import {nonOptionKeys} from '../helpers'
 import {designsRef, layersRef} from '../firebaseRefs'
+
+function l() {
+  console.log.apply(console, Array.prototype.slice.call(arguments))
+}
+
+function persistNewDesign(design) {
+  var firebaseDesign = designPropsToIds(design)
+  designsRef.child(design.get('id')).set(firebaseDesign.toJS())
+}
 
 var persistWithRef = (firebaseRef, id, obj) => {
   if (DEBUG) {
     console.log(`Saving to firebase ref ${firebaseRef} at id: ${id}.`)
   }
   firebaseRef.child(id).update(obj)
+}
+
+var removeNonOptionProps = (surfaceOption) => {
+  return nonOptionKeys.reduce((r, k) => r.remove(k), surfaceOption)
 }
 
 var persistDesign = persistWithRef.bind(null, designsRef)
@@ -155,6 +169,28 @@ export default new Nuclear.Store({
       }
     })
 
+    this.on('selectSurfaceOptionFromKeyValue', (state, keyValObj) => {
+      var {key, value} = keyValObj
+      var currentDesign = reactor.evaluate(getters.currentDesign)
+      var allOptions = currentDesign.getIn(['surface', 'options']).map(removeNonOptionProps)
+      var currentOption = currentDesign.get('surfaceOption')
+      var toFind = removeNonOptionProps(currentOption).set(key, value)
+      toFind = toFind.keySeq().reduce((retVal, key) => {
+        var optionsThatMatch = retVal.filter(o => {
+          var prop = o.get(key)
+          if (typeof prop === 'number') {
+            return o.get(key) === parseInt(toFind.get(key))
+          }
+          return o.get(key) === toFind.get(key)
+        })
+        return (optionsThatMatch.count() === 0 ? retVal : optionsThatMatch)
+      }, allOptions).get(0)
+      var found = currentDesign.getIn(['surface', 'options']).find(o => {
+        return toFind.every((val, key) => o.get(key) === val)
+      })
+      return state.set(currentDesign.get('id'), currentDesign.set('surfaceOption', found))
+    })
+
     this.on('rotateCurrentLayerColorPalette', (state) => {
       var currentDesign = reactor.evaluate(getters.currentDesign)
       var currentLayerId = reactor.evaluate(['currentLayerId'])
@@ -174,8 +210,7 @@ export default new Nuclear.Store({
         l.selectedLayerImage = l.selectedLayerImage.id
         layersRef.child(l.id).set(l)
       })
-      var firebaseDesign = designPropsToIds(design)
-      designsRef.child(design.get('id')).set(firebaseDesign.toJS())
+      persistNewDesign(design)
       return state.set(design.get('id'), design)
     })
 
@@ -246,7 +281,7 @@ export default new Nuclear.Store({
         design.surfaceOption = design.surfaceOption.id
         design.price = 2000
         design.updatedAt = now
-        designsRef.child(id).update(design)
+        persistDesign(id, design)
         design.id = id
         reactor.dispatch('addDesign', design)
       })
