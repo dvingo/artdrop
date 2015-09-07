@@ -11,7 +11,7 @@ Clone the repo.
 Run:
 ```bash
 npm i
-npm start
+npm run dev
 ```
 
 # Running Tests
