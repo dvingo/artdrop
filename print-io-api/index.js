@@ -170,8 +170,8 @@ function constructProductFromPrintIo(p) {
 
 service.getProducts('us','us','usd', function(d) {
   async.map(
-    //d.Products.map(constructProductFromPrintIo),
-    d.Products.filter(function(x) { return x.Name === 'Floormat'}).map(constructProductFromPrintIo),
+    d.Products.map(constructProductFromPrintIo),
+    //d.Products.filter(function(x) { return x.Name === 'Floormat'}).map(constructProductFromPrintIo),
     function(product, cb) {
       service.getProductVariants('us', product.vendorId, function(variants) {
         product.options = variants.ProductVariants.map(setOptions)
@@ -185,18 +185,18 @@ service.getProducts('us','us','usd', function(d) {
           rv[o.id] = true
           return rv
         }, {})
-        retVal.productOptions = options.reduce(function(rv, co) {
+        options.reduce(function(rv, co) {
           var optionId = co.id
           delete co.id
           rv[optionId] = co
           return rv
-        }, {})
+        }, retVal.productOptions)
         cur.options = optionsObj
         var prodId = cur.id
         delete cur.id
         retVal.products[prodId] = cur
         return retVal
-      }, {products:{}})
+      }, {products:{}, productOptions:{}})
       fs.writeFile(outputFile, JSON.stringify(r, null, '  '), function(err) {
         if (err) { return console.log('Got error: ', err) }
         console.log('Output results to file: ', outputFile)
