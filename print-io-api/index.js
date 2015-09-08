@@ -179,30 +179,24 @@ service.getProducts('us','us','usd', function(d) {
       })
     },
     function(err, products) {
-      console.log('got prods: ', products)
-      console.log('got options: ', products[0].options)
       var r = products.reduce(function(retVal, cur) {
         var options = cur.options
         var optionsObj = options.reduce(function(rv, o) {
           rv[o.id] = true
           return rv
         }, {})
-        var newOptions = options.reduce(function(rv, co) {
+        retVal.productOptions = options.reduce(function(rv, co) {
           var optionId = co.id
           delete co.id
           rv[optionId] = co
           return rv
-        }, retVal.productOptions)
-
+        }, {})
         cur.options = optionsObj
         var prodId = cur.id
         delete cur.id
         retVal.products[prodId] = cur
         return retVal
-      }, {products:{},productOptions:{}})
-      //console.log('here is r: ', r)
-      //var x = Object.keys(r.products)[0]
-      //console.log("r.products: ", r.products[x])
+      }, {products:{}})
       fs.writeFile(outputFile, JSON.stringify(r, null, '  '), function(err) {
         if (err) { return console.log('Got error: ', err) }
         console.log('Output results to file: ', outputFile)
