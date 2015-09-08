@@ -1,4 +1,5 @@
 var Service = require('./print-io-api')
+var fs = require('fs')
 var async = require('async')
 var newId = require('./utils').generateFirebaseID
 var margin = 1.4
@@ -17,12 +18,13 @@ var genderOptions = productData.genderOptions
 var clothingSizeOptions = productData.clothingSizeOptions
 var brandOptions = productData.brandOptions
 
-if (process.argv.length === 2) {
-  console.log('You must provide a recipe ID as the only argument.')
+if (process.argv.length === 3) {
+  console.log('You must provide a recipe ID and output file as arguments.')
   process.exit(1)
 }
 
 var recipeId = process.argv[2]
+var outputFile = process.argv[3]
 var service = new Service({
   recipeId: recipeId,
   url: 'https://api.print.io/api/v/1/source/api/'
@@ -156,7 +158,7 @@ function constructProductFromPrintIo(p) {
   var images = p.Images.map(function(i) { return i.Url })
   var imageUrl = images.pop()
   return {
-    id: newId(),
+    id : newId(),
     name: p.Name,
     description: p.ShortDescription,
     vendor: 'print.io',
@@ -168,16 +170,43 @@ function constructProductFromPrintIo(p) {
 
 service.getProducts('us','us','usd', function(d) {
   async.map(
-  d.Products.map(constructProductFromPrintIo),
-  function(product, cb) {
-    console.log('getting variants for product: ', product.name)
-    service.getProductVariants('us', product.vendorId, function(variants) {
-      var newVariants = variants.ProductVariants.map(setOptions)
-      console.log('new variants: ', newVariants)
-      cb(null, newVariants)
-    })
-  },
-  function(err, results) {
-    console.log("got variants: ", results)
-  })
+    //d.Products.map(constructProductFromPrintIo),
+    d.Products.filter(function(x) { return x.Name === 'Floormat'}).map(constructProductFromPrintIo),
+    function(product, cb) {
+      service.getProductVariants('us', product.vendorId, function(variants) {
+        product.options = variants.ProductVariants.map(setOptions)
+        cb(null, product)
+      })
+    },
+    function(err, products) {
+      console.log('got prods: ', products)
+      console.log('got options: ', products[0].options)
+      var r = products.reduce(function(retVal, cur) {
+        var options = cur.options
+        var optionsObj = options.reduce(function(rv, o) {
+          rv[o.id] = true
+          return rv
+        }, {})
+        var newOptions = options.reduce(function(rv, co) {
+          var optionId = co.id
+          delete co.id
+          rv[optionId] = co
+          return rv
+        }, retVal.productOptions)
+
+        cur.options = optionsObj
+        var prodId = cur.id
+        delete cur.id
+        retVal.products[prodId] = cur
+        return retVal
+      }, {products:{},productOptions:{}})
+      //console.log('here is r: ', r)
+      //var x = Object.keys(r.products)[0]
+      //console.log("r.products: ", r.products[x])
+      fs.writeFile(outputFile, JSON.stringify(r, null, '  '), function(err) {
+        if (err) { return console.log('Got error: ', err) }
+        console.log('Output results to file: ', outputFile)
+      })
+    }
+  )
 })

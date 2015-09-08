@@ -47,7 +47,7 @@ PrintioService.prototype.getProducts = function(countryCode, languageCode, curre
 PrintioService.prototype.getProductVariants = function(countryCode, productId, cb){
   return this._get('productvariants', {
     countryCode: countryCode,
-    productid: productId,
+    productId: productId,
     all: false
   }, function(err, res, body){
     if(err) { throw err }
