@@ -87,7 +87,7 @@ export default React.createClass({
             <button className="button" onClick={this.transitionToBuyPage}>Buy it!</button>
           </div>
 
-          <div className="edit-ui-bottom">
+          <div className="edit-ui-bottom surface-details">
             {surfaces}
           </div>
 

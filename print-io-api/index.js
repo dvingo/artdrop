@@ -171,7 +171,7 @@ function constructProductFromPrintIo(p) {
 service.getProducts('us','us','usd', function(d) {
   async.map(
     //d.Products.map(constructProductFromPrintIo),
-    d.Products.filter(function(x) { return x.Name === 'Floormat'}).map(constructProductFromPrintIo),
+    d.Products.filter(function(x) { return x.Name === 'T-Shirts'}).map(constructProductFromPrintIo),
     function(product, cb) {
       service.getProductVariants('us', product.vendorId, function(variants) {
         product.options = variants.ProductVariants.map(setOptions)

@@ -1,6 +1,55 @@
-.surface-details {
-  @include align-items(stretch);
-  .left  { @include flex(5 0 0); }
-  .right { @include flex(3 0 0); }
-  overflow-y: scroll;
+.edit-ui-top.surface-details {
+	padding: 20px;
+	@include align-items(center);
+	@include justify-content(center);
+
+	.left  { 
+		@include display(flex);
+		@include flex(1 0 0);
+		@include flex-direction(column);
+		@include align-items(flex-end);
+		@include justify-content(flex-end);
+		text-align: right;
+		padding-right: 20px;
+		color: $button-color;
+		max-width: 250px;
+
+		div:first-child {
+			span { 
+				color: black;
+				display: block;
+			}}
+		div:nth-child(2) {
+			span { 
+				color: black;
+				display: block;
+			}}
+		div:nth-child(3) {
+			span { 
+				color: black;
+				display: block;
+			}}
+		div:nth-child(4) {
+			p { 
+				color: black;
+				display: block;
+			}}
+	}
+	.right {
+		@include display(flex);
+		@include flex(1 0 0);
+		@include align-items(center);
+		@include justify-content(center);
+		max-width: 250px;
+
+		img {
+			width: 100%;
+			height: auto;
+		}
+	}
+}
+
+.edit-ui-bottom.surface-details {
+	@include display(flex);
+	@include flex(1 0 0);
 }
