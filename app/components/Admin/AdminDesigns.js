@@ -77,9 +77,6 @@ export default React.createClass({
 
   onFormChange(e) {
     this.setState({editMode: e.target.value})
-    return {
-      projects: Store.getters.projects
-    }
   },
 
   handleTagChange(e) {
