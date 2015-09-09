@@ -7,14 +7,21 @@ var PrintioService = function(config) {
 }
 
 PrintioService.prototype._get = function(endpoint, obj, cb) {
-  var url = this._config.url,
-     final = '';
+  var url = this._config.url
+  var final = '';
   obj = obj || {};
   obj.recipeId = this._config.recipeId;
   final = url + endpoint;
-  console.log('making req to: ', final)
+  console.log('Making get req to: ', final)
   return req.get(final, {qs:obj, json:true}, cb);
-};
+}
+
+PrintioService.prototype._post = function(endpoint, obj, cb) {
+  obj = obj || {}
+  var url = this._config.url + endpoint + '/?recipeId=' + this._config.recipeId
+  console.log('Making post req to: ', url)
+  return req.post(url, {body: obj, json:true}, cb)
+}
 
 PrintioService.prototype.getUserInfo = function(ip,cb){
   var defaults = {
@@ -56,7 +63,7 @@ PrintioService.prototype.getProductVariants = function(countryCode, productId, c
 }
 
 PrintioService.prototype.getShipEstimate = function(productId, countryCode, currencyCode, cb){
-  return this._get("shippriceestimate",{
+  return this._get("shippriceestimate", {
     countryCode:countryCode,
     productId:productId,
     currencyCode:currencyCode
@@ -65,6 +72,25 @@ PrintioService.prototype.getShipEstimate = function(productId, countryCode, curr
     return cb(body);
   });
 };
+
+PrintioService.prototype.getShipPrice = function(sku, cb){
+  console.log('sku is: ', sku)
+  return this._post('shippingprices', {
+    "ShipToPostalCode": "10003",
+    "ShipToCountry": "US",
+    "ShipToState": "NY",
+    "CurrencyCode": "USD",
+    "LanguageCode": "en",
+    "Items": [
+      { "SKU": sku,
+        "Quantity": 1
+      }
+    ]
+  }, function(err,res,body){
+    if(err) throw err
+    return cb(body)
+  })
+}
 
 PrintioService.prototype.getProduct = function(name,countryCode,languageCode,currencyCode,cb){
   return this.getProducts(countryCode,languageCode,currencyCode,function(prods){

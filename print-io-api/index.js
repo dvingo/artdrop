@@ -168,39 +168,57 @@ function constructProductFromPrintIo(p) {
   }
 }
 
-service.getProducts('us','us','usd', function(d) {
+function firebaseListFromArray(arr) {
+  return arr.reduce(function(rv, o) {
+    rv[o.id] = true
+    return rv
+  }, {})
+}
+
+function setOptionsInFirebaseFormat(returnObj, options) {
+  return options.reduce(function(rv, co) {
+    var optionId = co.id
+    delete co.id
+    rv[optionId] = co
+    return rv
+  }, returnObj)
+}
+
+function transformProducts(data, cback) {
   async.map(
-    d.Products.map(constructProductFromPrintIo),
-    //d.Products.filter(function(x) { return x.Name === 'Floormat'}).map(constructProductFromPrintIo),
+    data.Products.map(constructProductFromPrintIo),
+    //data.Products.filter(function(x) { return x.Name === 'Floormat'}).map(constructProductFromPrintIo),
     function(product, cb) {
       service.getProductVariants('us', product.vendorId, function(variants) {
-        product.options = variants.ProductVariants.map(setOptions)
-        cb(null, product)
+        //var sku = variants.ProductVariants[0].Sku
+        //service.getShipPrice(sku, function(shipEstimate) {
+          //console.log('GOT SHIP ESTIMATE: ', shipEstimate)
+          product.options = variants.ProductVariants.map(setOptions)
+          cb(null, product)
+        //})
       })
     },
     function(err, products) {
       var r = products.reduce(function(retVal, cur) {
         var options = cur.options
-        var optionsObj = options.reduce(function(rv, o) {
-          rv[o.id] = true
-          return rv
-        }, {})
-        options.reduce(function(rv, co) {
-          var optionId = co.id
-          delete co.id
-          rv[optionId] = co
-          return rv
-        }, retVal.productOptions)
+        var optionsObj = firebaseListFromArray(options)
         cur.options = optionsObj
+        retVal.productOptions = setOptionsInFirebaseFormat(retVal.productOptions, options)
         var prodId = cur.id
         delete cur.id
         retVal.products[prodId] = cur
         return retVal
       }, {products:{}, productOptions:{}})
-      fs.writeFile(outputFile, JSON.stringify(r, null, '  '), function(err) {
-        if (err) { return console.log('Got error: ', err) }
-        console.log('Output results to file: ', outputFile)
-      })
+      cback(r)
     }
   )
+}
+
+service.getProducts('us','us','usd', function(d) {
+  transformProducts(d, function(results) {
+    fs.writeFile(outputFile, JSON.stringify(results, null, '  '), function(err) {
+      if (err) { return console.log('Got error: ', err) }
+      console.log('Output results to file: ', outputFile)
+    })
+  })
 })
