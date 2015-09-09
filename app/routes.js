@@ -43,6 +43,5 @@ export default (
       <Route name="adminTags" handler={AdminTags} path="tags/?"/>
       <Route name="adminUsers" handler={AdminUsers} path="users/?"/>
     </Route>
-
   </Route>
 )
