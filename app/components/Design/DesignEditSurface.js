@@ -1,7 +1,6 @@
 import React from 'react'
 import reactor from '../../state/reactor'
 import Store from '../../state/main'
-import {imageUrlForSurface} from '../../state/utils'
 import SurfaceImage from './SurfaceImage'
 import RenderLayers from './RenderLayers'
 var Set = require('nuclear-js').Immutable.Set

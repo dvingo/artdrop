@@ -4,6 +4,10 @@ import {hydrateAndDispatchSurfaces} from '../helpers'
 import {surfacesRef, designsRef, surfaceOptionsRef} from '../firebaseRefs'
 import surfaceFixtures from '../../fixtures/surfaces'
 
+function loadSurfaces(state) {
+  hydrateAndDispatchSurfaces(state)
+  return state
+}
 export default new Nuclear.Store({
   getInitialState() { return Nuclear.toImmutable({}) },
 
@@ -19,15 +23,9 @@ export default new Nuclear.Store({
       }, state)
     })
 
-    this.on('loadAdminCreateDesignData', state => {
-      hydrateAndDispatchSurfaces(state)
-      return state
-    })
-
-    this.on('loadCurrentDesignEditResources', state => {
-      hydrateAndDispatchSurfaces(state)
-      return state
-    })
+    this.on('loadAdminCreateDesignData', loadSurfaces)
+    this.on('loadCurrentDesignEditResources', loadSurfaces)
+    this.on('loadSurfaces', loadSurfaces)
 
     this.on('resetSurfacesFromFixture', state => {
       surfacesRef.set(surfaceFixtures.surfaces)

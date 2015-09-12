@@ -1,5 +1,6 @@
 var Set = require('nuclear-js').Immutable.Set
 var Map = require('nuclear-js').Immutable.Map
+var List = require('nuclear-js').Immutable.List
 import {nonOptionKeys} from './helpers'
 var getters = {}
 
@@ -62,7 +63,7 @@ getters.layerImageIds = [
 ]
 
 getters.surfaces = [
-  ['surfaces'], surfaces => surfaces.toList()
+  ['surfaces'], surfaces => surfaces ? surfaces.toList() : List()
 ]
 
 getters.currentSurfaceOptionsMap = [
@@ -101,6 +102,10 @@ getters.layerImageOptions = [
 
 getters.tags = [
   ['tags'], tags => tags ? tags.toList() : []
+]
+
+getters.errors = [
+  ['errors'], errors => List(errors)
 ]
 
 export default getters

@@ -7,13 +7,14 @@ exports.fireBaseUri = fireBaseUri
 // Test for internet connectivity and branch on that
 // to decide whether or not to use Firebase or fixtures.
 exports.firebaseRef       = new Firebase(fireBaseUri)
-exports.usersRef          = new Firebase(fireBaseUri + "/users")
+exports.colorPalettesRef  = new Firebase(fireBaseUri + "/colorPalettes")
+exports.credsRef          = new Firebase(fireBaseUri + "/creds")
 exports.designsRef        = new Firebase(fireBaseUri + "/designs")
+exports.errorsRef         = new Firebase(fireBaseUri + "/errors")
 exports.layersRef         = new Firebase(fireBaseUri + "/layers")
 exports.layerImagesRef    = new Firebase(fireBaseUri + "/layerImages")
 exports.surfacesRef       = new Firebase(fireBaseUri + "/surfaces")
 exports.surfaceOptionsRef = new Firebase(fireBaseUri + "/surfaceOptions")
-exports.colorPalettesRef  = new Firebase(fireBaseUri + "/colorPalettes")
 exports.tagsRef           = new Firebase(fireBaseUri + "/tags")
-exports.credsRef          = new Firebase(fireBaseUri + "/creds")
+exports.usersRef          = new Firebase(fireBaseUri + "/users")
 export default exports

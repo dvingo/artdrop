@@ -11,6 +11,7 @@ import layerImageUploadedStore from './stores/layerImageUploaded'
 import layerIsBeingReplacedStore from './stores/layerIsBeingReplaced'
 import currentLayerIdStore from './stores/currentLayerId'
 import tagsStore from './stores/tags'
+import errorsStore from './stores/errors'
 import getters from './getters'
 import {usersRef, firebaseRef} from './firebaseRefs'
 import actions from './actions'
@@ -27,7 +28,8 @@ reactor.registerStores({
   surfaces: surfacesStore,
   validEditSteps: validEditStepsStore,
   layerIsBeingReplaced: layerIsBeingReplacedStore,
-  tags: tagsStore
+  tags: tagsStore,
+  errors: errorsStore
 })
 
 firebaseRef.onAuth(authData => {
