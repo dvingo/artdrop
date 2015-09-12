@@ -3,6 +3,7 @@ import reactor from '../../state/reactor'
 import Store from '../../state/main'
 import SurfaceImage from './SurfaceImage'
 import RenderLayers from './RenderLayers'
+import {imageUrlForSurface} from '../../state/utils'
 var Set = require('nuclear-js').Immutable.Set
 var Map = require('nuclear-js').Immutable.Map
 var classNames = require('classnames')
@@ -77,7 +78,7 @@ export default React.createClass({
               </div>
             </div>
             <div className="right">
-              <img src={surface.get('imageUrl')} height={200}/>
+              <img src={imageUrlForSurface(surface)} height={200}/>
             </div>
           </div>
 

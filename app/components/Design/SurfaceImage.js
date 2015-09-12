@@ -19,12 +19,23 @@ export default React.createClass({
   render() {
     var height = this.props.height || 100
     var width = this.props.width || 100
-    var style = (
-      this.props.surface.get('id') === this.props.currentSurface.get('id') ?
-      {border: '3px solid'} : null)
+    var selectedSurface = this.props.currentSurface
+    var surface = this.props.surface
+    var overlayStyle = (
+      selectedSurface.get('id') === surface.get('id') ?
+      { position: 'absolute',
+        background: '#27002B',
+        opacity: 0.7,
+        top: 0,
+        left: 0,
+        height: '100%',
+        width: '100%',
+        borderRadius: 6 }
+      : { display: 'none' })
     return (
       <div className="surface-image" onClick={this.props.onClick}>
-        <img src={imageUrlForSurface(this.props.surface)} width={width} height={height} style={style}/>
+        <div style={overlayStyle}/>
+        <img src={imageUrlForSurface(this.props.surface)} width={width} height={height}/>
       </div>
     )
   }

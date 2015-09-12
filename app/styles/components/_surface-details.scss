@@ -3,7 +3,7 @@
 	@include align-items(center);
 	@include justify-content(center);
 
-	.left  { 
+	.left  {
 		@include display(flex);
 		@include flex(1 0 0);
 		@include flex-direction(column);
@@ -15,22 +15,22 @@
 		max-width: 250px;
 
 		div:first-child {
-			span { 
+			span {
 				color: black;
 				display: block;
 			}}
 		div:nth-child(2) {
-			span { 
+			span {
 				color: black;
 				display: block;
 			}}
 		div:nth-child(3) {
-			span { 
+			span {
 				color: black;
 				display: block;
 			}}
 		div:nth-child(4) {
-			p { 
+			p {
 				color: black;
 				display: block;
 			}}
@@ -50,6 +50,5 @@
 }
 
 .edit-ui-bottom.surface-details {
-	@include display(flex);
 	@include flex(1 0 0);
 }

@@ -1,5 +1,6 @@
+@import "surfaces.scss";
 .admin {
-  @import "../designs/edit-steps/choose-palette.scss";
+@import "../designs/edit-steps/choose-palette.scss";
   .choose-palette {
     @include flex-wrap(wrap);
   }
