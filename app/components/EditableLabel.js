@@ -3,6 +3,7 @@ var classNames = require('classnames')
 var Keypress = require("react-keypress")
 
 export default React.createClass({
+
   getDefaultProps() {
     return {
       labelTag: 'span',
@@ -15,83 +16,67 @@ export default React.createClass({
     return {
       isEditing: false,
       isMouseOver: false,
-      isMouseDown: false
+      isMouseDown: false,
+      updatedValue: null,
     }
   },
 
-  onDoubleClick() {
-    if (!this.state.isEditing) {
-      this.setState({isEditing:true})
-    }
-  },
+  onDoubleClick() { this.setState({isEditing:true}) },
 
-  onMouseOver() {
-    this.setState({isMouseOver:true})
-  },
+  onMouseOver() { this.setState({isMouseOver:true}) },
 
-  onMouseOut() {
-    this.setState({isMouseOver:false})
-  },
+  onMouseOut() { this.setState({isMouseOver:false}) },
 
-  onMouseDown() {
-    this.setState({isMouseDown:true})
-  },
+  onMouseDown() { this.setState({isMouseDown:true}) },
 
-  onMouseUp() {
-    this.setState({isMouseDown:false})
-  },
+  onMouseUp() { this.setState({isMouseDown:false}) },
 
   onChange(e) {
     // In the future we can add validation here so you can specify different
     // types of inputs, geared toward common needs, money, address, email address,
     // phone etc.
-    //this.props.onChange(e)
-  },
-
-  onkeyUp(e) {
-    console.log('e.key: ', e.key)
-    if (e.key === 'Escape') {
-      console.log('esc')
-      this.setState({isEditing:false})
-    } else if (e.key === 'Enter') {
-      console.log('enter')
-      this.setState({isEditing:false})
-    }
+    this.setState({updatedValue: e.target.value})
   },
 
   onKeyUp(e) {
+    // TODO should probably use Keypress lib here.
     var key = e.keyCode
     var input = (this.refs.input ? React.findDOMNode(this.refs.input) : null)
-    if (input === e.target) {
-      if (key === 27) {
-        console.log('esc')
-      }
-      else if (key === 13) {
-        console.log('enter')
-      }
-      console.log(' GOT KEY: ', key)
+    if (input !== e.target) { return }
+    if (key === 27) {
+      this.setState({isEditing:false})
+    } else if (key === 13) {
+      this.props.onChange(this.state.updatedValue)
+      this.setState({isEditing:false})
     }
   },
 
   componentDidMount() {
+    this.setState({updatedValue: this.props.value})
     window.addEventListener('keyup', this.onKeyUp)
+  },
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.updatedValue == null && this.props.value != null) {
+      this.setState({updatedValue: this.props.value})
+    }
+    if (this.state.isEditing && !prevState.isEditing) {
+      this.setState({updatedValue: this.props.value})
+    }
+    var input = (this.refs.input ? React.findDOMNode(this.refs.input) : null)
+    if (input != null) { input.focus() }
   },
 
   render() {
     var { editTag, labelTag, editType } = this.props
     var isEditing = this.state.isEditing
-    console.log('ismouseover: ', this.state.isMouseOver)
     var boxShadow = (this.state.isMouseDown ?'2px 2px 10px 2px rgba(0,0,0,0.8) inset' :
        (this.state.isMouseOver ? '2px 2px 10px 2px rgba(0,0,0,0.6) inset' : ''))
 
-    var labelStyle = {
-      //background: (this.state.isMouseOver ? 'red' : 'none'),
-      boxShadow: boxShadow
-    }
-
+    var labelStyle = { boxShadow: boxShadow }
     var self = this
     var editProps = {
-      value: this.props.value,
+      value: this.state.updatedValue,
       className: '',
       onMouseOver: this.onMouseOver,
       onMouseOut: this.onMouseOut,

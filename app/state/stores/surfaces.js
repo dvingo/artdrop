@@ -1,6 +1,7 @@
 var Nuclear = require('nuclear-js');
 var Immutable = Nuclear.Immutable
-import {hydrateAndDispatchSurfaces} from '../helpers'
+import {persistSurface, hydrateAndDispatchSurfaces} from '../helpers'
+console.log("persist surface is: ", persistSurface)
 import {surfacesRef, designsRef, surfaceOptionsRef} from '../firebaseRefs'
 import surfaceFixtures from '../../fixtures/surfaces'
 
@@ -8,6 +9,14 @@ function loadSurfaces(state) {
   hydrateAndDispatchSurfaces(state)
   return state
 }
+
+function persistSurfaceImm(surface) {
+  var s = surface.toJS()
+  var surfaceId = s.id
+  delete s.id
+  persistSurface(surfaceId, s)
+}
+
 export default new Nuclear.Store({
   getInitialState() { return Nuclear.toImmutable({}) },
 
@@ -21,6 +30,11 @@ export default new Nuclear.Store({
       return surfaces.reduce((retVal, surface) => {
         return retVal.set(surface.id, Immutable.fromJS(surface))
       }, state)
+    })
+
+    this.on('updateSurface', (state, newSurface) => {
+      persistSurfaceImm(newSurface)
+      return state.set(newSurface.get('id'), newSurface)
     })
 
     this.on('loadAdminCreateDesignData', loadSurfaces)

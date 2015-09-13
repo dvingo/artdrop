@@ -40,6 +40,7 @@ export default (
       <Route name="adminEditDesign" handler={AdminEditDesign} path="designs/:designId/edit/?"/>
       <Route name="adminLayerImages" handler={AdminLayerImages} path="layerImages/?"/>
       <Route name="adminSurfaces" handler={AdminSurfaces} path="surfaces/?"/>
+      <Route name="adminSurface" handler={AdminSurfaces} path="surfaces/:surfaceId/?"/>
       <Route name="adminTags" handler={AdminTags} path="tags/?"/>
       <Route name="adminUsers" handler={AdminUsers} path="users/?"/>
     </Route>

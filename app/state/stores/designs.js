@@ -4,7 +4,7 @@ import {designPropsToIds, defaultSurfaceOptionIdForSurface, hydrateSurfaceOption
 import getters from '../getters'
 import reactor from '../reactor'
 import {uploadDesignPreview, newId, rotateColorPalette} from '../utils'
-import {nonOptionKeys} from '../helpers'
+import {persistWithRef, nonOptionKeys} from '../helpers'
 import {designsRef, layersRef} from '../firebaseRefs'
 
 function l() {
@@ -16,19 +16,10 @@ function persistNewDesign(design) {
   designsRef.child(design.get('id')).set(firebaseDesign.toJS())
 }
 
-var persistWithRef = (firebaseRef, id, obj) => {
-  if (DEBUG) {
-    console.log(`Saving to firebase ref ${firebaseRef} at id: ${id}.`)
-  }
-  firebaseRef.child(id).update(obj)
-}
-
 var removeNonOptionProps = (surfaceOption) => {
   return nonOptionKeys.reduce((r, k) => r.remove(k), surfaceOption)
 }
 
-var persistDesign = persistWithRef.bind(null, designsRef)
-var persistLayer = persistWithRef.bind(null, layersRef)
 
 var transitionDesignColors = (direction, state) => {
    var allPalettes = reactor.evaluate(getters.colorPalettes)

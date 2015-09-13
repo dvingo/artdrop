@@ -1,5 +1,5 @@
-import {layersRef, layerImagesRef,
-colorPalettesRef,surfacesRef,
+import {designsRef, layersRef, layerImagesRef,
+colorPalettesRef, surfacesRef,
 surfaceOptionsRef, tagsRef} from './firebaseRefs'
 import reactor from './reactor'
 var Map = require('nuclear-js').Immutable.Map
@@ -132,4 +132,15 @@ var hydrateSurface = hydrateObj.bind(null, surfacesRef)
 exports.hydrateColorPalette = hydrateColorPalette
 exports.hydrateSurface = hydrateSurface
 exports.hydrateObj = hydrateObj
+
+var persistWithRef = (firebaseRef, id, obj) => {
+  if (DEBUG) {
+    console.log(`Saving to firebase ref ${firebaseRef} at id: ${id}.`)
+  }
+  firebaseRef.child(id).update(obj)
+}
+exports.persistWithRef = persistWithRef
+var persistDesign = persistWithRef.bind(null, designsRef)
+var persistLayer = persistWithRef.bind(null, layersRef)
+exports.persistSurface = persistWithRef.bind(null, surfacesRef)
 export default exports
