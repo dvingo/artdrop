@@ -5,6 +5,7 @@ import Store from '../../state/main'
 import Immutable from 'Immutable'
 import SurfaceImage from '../Design/SurfaceImage'
 import {imageUrlForSurface} from '../../state/utils'
+import EditableLabel from '../EditableLabel'
 
 export default React.createClass({
   mixins: [reactor.ReactMixin],
@@ -20,15 +21,24 @@ export default React.createClass({
 
   componentWillMount() { Store.actions.loadSurfaces() },
 
-  componentDidUpdate() {
-   // attempt set default selected surface
-  },
   componentDidMount() {
     window.addEventListener('resize', () => this.forceUpdate())
   },
 
+  componentDidUpdate() {
+    if (this.state.selectedSurface.get('id') == null &&
+        this.state.surfaces.count() > 0) {
+      this.setState({selectedSurface:this.state.surfaces.first()})
+    }
+  },
+
   selectSurface(surface) {
     this.setState({selectedSurface: surface})
+  },
+
+  onSurfaceNameChange(e) {
+    var newSurface = this.state.selectedSurface.set('name', e.target.value)
+    Store.actions.updateSurface(newSurface)
   },
 
   render() {
@@ -42,13 +52,14 @@ export default React.createClass({
     })
     var selectedSurfaceDetails = (surface ?
       <div className="admin-surface-details">
-        <div className="text-container">
-          <h1>{surface.get('name')}</h1>
-          <span style={{fontSize:'0.7em'}}>{surface.get('description')}</span>
-        </div>
+
+        <EditableLabel value={surface.get('name')}
+          labelTag='h1' onChange={this.onSurfaceNameChange}/>
+
         <div className="image-container">
           <img src={imgUrl}/>
         </div>
+
       </div>
       : null)
     return (
