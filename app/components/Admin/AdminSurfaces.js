@@ -72,12 +72,14 @@ export default React.createClass({
     var selectedSurfaceDetails = (surface ?
       <div className="admin-surface-details">
 
+      <div className="surface-text-container">
         <EditableLabel value={surface.get('name')}
           labelTag='h1' onChange={this.onSurfaceNameChange}/>
 
         <EditableLabel value={surface.get('description')}
            editTag='textarea'
            onChange={this.onSurfaceDescriptionChange}/>
+      </div>
 
         <div className="image-container">
           <img src={imgUrl}/>

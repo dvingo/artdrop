@@ -26,6 +26,11 @@
     @include flex(1 0 0);
   }
 
+  .surface-text-container {
+    @include display(flex);
+    @include flex-direction(column);
+  }
+
   .image-container {
     display: inline-block;
     img {
