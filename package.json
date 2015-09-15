@@ -52,6 +52,7 @@
     "pako": "^0.2.7",
     "react": "^0.13.0",
     "react-hammerjs": "^0.2.2",
+    "react-keypress": "^0.1.5",
     "react-router": "^0.13.3",
     "request": "^2.60.0",
     "rsvp": "^3.0.18",

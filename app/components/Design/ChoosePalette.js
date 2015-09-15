@@ -1,7 +1,7 @@
 import React from 'react'
-import Store from '../../../state/main'
-import reactor from '../../../state/reactor'
-import ColorPalette from '../../ColorPalette'
+import Store from '../../state/main'
+import reactor from '../../state/reactor'
+import ColorPalette from '../ColorPalette'
 
 export default React.createClass({
   mixins: [reactor.ReactMixin],

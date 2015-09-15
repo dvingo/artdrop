@@ -1,9 +1,9 @@
 import React from 'react'
 import Router from 'react-router'
-import reactor from '../../../state/reactor'
-import Store from '../../../state/main'
-import {imageUrlForLayer} from '../../../state/utils'
-import {iconPath} from '../../../utils'
+import reactor from '../../state/reactor'
+import Store from '../../state/main'
+import {imageUrlForLayer} from '../../state/utils'
+import {iconPath} from '../../utils'
 var classNames = require('classnames')
 var imgSize = 40
 

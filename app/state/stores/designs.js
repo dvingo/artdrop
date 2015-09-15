@@ -4,7 +4,7 @@ import {designPropsToIds, defaultSurfaceOptionIdForSurface, hydrateSurfaceOption
 import getters from '../getters'
 import reactor from '../reactor'
 import {uploadDesignPreview, newId, rotateColorPalette} from '../utils'
-import {persistWithRef, nonOptionKeys} from '../helpers'
+import {persistLayer, nonOptionKeys} from '../helpers'
 import {designsRef, layersRef} from '../firebaseRefs'
 
 function l() {
