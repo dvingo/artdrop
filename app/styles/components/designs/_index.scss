@@ -8,12 +8,3 @@
 //
 // Index page showing all designs in a grid.
 //
-.designs {
-  @include display(flex);
-  @include flex-direction(row);
-  @include justify-content(center);
-  @include flex-wrap(wrap);
-  width: 100%;
-  margin: 0;
-  padding: 0;
-}

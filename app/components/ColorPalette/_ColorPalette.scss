@@ -1,0 +1,24 @@
+.ColorPalette {}
+
+//
+// Draw a circle of the four colors in a color palette.
+//
+.color-palette {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin: 5px;
+  overflow: hidden;
+  @media (min-width: 650px) {
+    margin: 10px 20px;
+  }
+}
+
+.single-color {
+  min-width: 30px;
+  min-height: 30px;
+  display: inline-block;
+  float: left;
+  border-radius: 0;
+  margin: 0;
+}

@@ -1,6 +1,6 @@
-import React from 'react';
-import SVGInlineLayer  from '../SVGInlineLayer'
-import {imageUrlForDesign} from '../../state/utils';
+import React from 'react'
+import SVGInlineLayer  from 'components/SVGInlineLayer/SVGInlineLayer'
+import {imageUrlForDesign} from 'state/utils'
 
 export default React.createClass({
 

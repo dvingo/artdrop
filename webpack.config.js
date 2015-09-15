@@ -20,6 +20,7 @@ module.exports = {
     new webpack.DefinePlugin({DEBUG:true,TEST:false,DEV:true})
   ],
   resolve: {
+    root: __dirname + '/app',
     extensions: ['', '.js', '.jsx']
   },
   module: {

@@ -1,5 +1,5 @@
-import {credsRef} from './firebaseRefs'
-var config = require('../../config')
+import {credsRef} from 'state/firebaseRefs'
+var config = require('config')
 var pako = require('pako')
 var srcDir = config.srcDir
 var s3Endpoint = config.s3Endpoint

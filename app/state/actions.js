@@ -1,4 +1,4 @@
-import reactor from './reactor'
+import reactor from 'state/reactor'
 
 var dispatchHelper = function() {
   var args = arguments

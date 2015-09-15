@@ -1,0 +1,91 @@
+@mixin lowTier { z-index: 100; }
+@mixin midTier { z-index: 500; }
+@mixin highTier { z-index: 1000; }
+
+@mixin fadeOut { opacity: 0; }
+@mixin fadeHalf { opacity: 0.5; }
+@mixin fadeIn { opacity: 1; }
+
+@mixin btn {
+	height: units(4);
+	width: units(4);
+	line-height: units(4);
+	text-align: center;
+	cursor: pointer;
+}
+
+html {
+	font-weight: 100;
+	font-size: 1em;
+	font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+	line-height: 1.375;
+}
+
+body {
+  width: 100%;
+  margin: 0;
+  height: 100vh;
+  position: relative;
+  float: left;
+	font-size: 16px;
+}
+
+
+h1,
+h2,
+h3 {
+  margin-top: 24px;
+  margin-bottom: 12px;
+}
+
+
+#app {
+  height: 100%;
+  width: 100%;
+  .___iso-html___,
+  .app-html,
+  .app-wrapper {
+    height: inherit;
+    width: inherit;
+    @include transition;
+  }
+}
+
+.___iso-html___ > div {
+	float: left;
+  width: 100%;
+  height: 100%;
+}
+
+.app-wrapper {
+  &.fullscreen {
+	  transform: scale(1.15)
+	}
+}
+
+.main-content {
+	width: 1280px;
+	margin: 0 auto;
+	padding: 0;
+}
+
+.container {
+	width: 1280px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+hr.style {
+	border: 0;
+	height: 1px;
+	background-image: linear-gradient(to right, rgba(255, 255, 255, 0),
+	rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0));
+}
+
+.menus-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}

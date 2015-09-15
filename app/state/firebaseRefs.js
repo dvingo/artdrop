@@ -1,4 +1,4 @@
-var config = require('../../config')
+var config = require('config')
 var Firebase = require('firebase')
 var exports = {}
 var fireBaseUri = config.fireBaseUri

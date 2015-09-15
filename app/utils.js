@@ -1,6 +1,6 @@
 import React from 'react'
-import Store from './state/main'
-var srcDir = require('../config').srcDir
+import Store from 'state/main'
+var srcDir = require('config').srcDir
 var SVGInjector = require('svg-injector')
 var svgLayerIds = ['Layer1', 'Layer2', 'Layer3', 'Layer4']
 

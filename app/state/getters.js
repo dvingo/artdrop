@@ -1,7 +1,7 @@
 var Set = require('nuclear-js').Immutable.Set
 var Map = require('nuclear-js').Immutable.Map
 var List = require('nuclear-js').Immutable.List
-import {nonOptionKeys} from './helpers'
+import {nonOptionKeys} from 'state/helpers'
 var getters = {}
 
 getters.designs = [['designs'], designsMap => designsMap.toList()]

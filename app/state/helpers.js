@@ -1,7 +1,7 @@
 import {designsRef, layersRef, layerImagesRef,
 colorPalettesRef, surfacesRef,
-surfaceOptionsRef, tagsRef} from './firebaseRefs'
-import reactor from './reactor'
+surfaceOptionsRef, tagsRef} from 'state/firebaseRefs'
+import reactor from 'state/reactor'
 var Map = require('nuclear-js').Immutable.Map
 var RSVP = require('RSVP')
 

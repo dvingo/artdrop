@@ -1,9 +1,9 @@
 var Nuclear = require('nuclear-js');
 var Immutable = Nuclear.Immutable
-import reactor from '../reactor'
-import getters from '../getters'
-import {colorPalettesRef, layersRef} from '../firebaseRefs'
-import {hydrateAndDispatchColorPalettes} from '../helpers'
+import reactor from 'state/reactor'
+import getters from 'state/getters'
+import {colorPalettesRef, layersRef} from 'state/firebaseRefs'
+import {hydrateAndDispatchColorPalettes} from 'state/helpers'
 
 export default new Nuclear.Store({
   getInitialState() {

@@ -1,0 +1,180 @@
+.DesignEdit {}
+
+.design-edit {
+  @include display(flex);
+  @include flex-direction(column);
+  @include align-items(center);
+  @include justify-content(center);
+  width: 100%;
+  height: 100%;
+
+  .edit-ui-top {
+    @include justify-content(space-around);
+  }
+}
+
+.edit-ui {
+  @include display(flex);
+  @include flex-direction(column);
+  @include flex(1 0 0);
+  width: 100%;
+  height: 100%;
+
+  .button {
+    @include display(flex);
+    @include justify-content(center);
+    background: $button-color;
+    padding: 5px;
+    width: 100px;
+    border-radius: 40px 40px;
+    margin: 0 10px;
+    @include prefixer(box-shadow, 2px 2px 6px 0px rgba(150,150,150,0.75), webkit moz spec);
+    cursor: pointer;
+
+    &.off {
+      opacity: 0.3;
+    }
+  }
+}
+
+.edit-ui-canvas {
+  @include display(flex);
+  @include flex(1 0 0);
+  @include align-items(center);
+  @include justify-content(center);
+}
+
+.edit-ui-detailed {
+  @include display(flex);
+  @include flex(1 0 0);
+  @include flex-direction(column);
+}
+
+.edit-ui-top {
+  @include display(flex);
+  @include flex(1 0 0);
+  @include align-items(center);
+}
+
+.edit-ui-mid {
+  @include display(flex);
+  @include align-items(center);
+  @include justify-content(center);
+  background: $nav-bar-color;
+  min-height: 40px;
+
+  .rotate-colors {
+    width: 50px;
+    padding: 5px;
+  }
+}
+
+.edit-ui-bottom {
+  @include display(flex);
+  @include flex(3 0 0);
+  @include flex-wrap(wrap);
+  @include justify-content(center);
+  overflow: scroll;
+}
+
+@media (min-width: $media-min-width), (orientation: landscape) {
+  .main.design-edit {
+    @include flex-direction(row);
+    .canvas-flex-wrapper {
+      max-width: none;
+    }
+
+    .edit-ui {
+      height: 100%;
+    }
+  }
+
+  .main.design-edit-detail {
+    @include flex-direction(row);
+    .canvas-flex-wrapper {
+      max-width: none;
+    }
+    .edit-ui {
+      @include flex-direction(row);
+    }
+    .edit-ui-top {
+      @include flex-direction(column);
+    }
+  }
+}
+
+@media (width: 768) and (height: 1024) and (orientation: portrait) {
+  .main.design-edit {
+    @include flex-direction(column);
+    .canvas-flex-wrapper { max-width: auto; }
+    .edit-ui { height: auto; }
+  }
+}
+
+//
+// Displays the layers of the image to show what the final result will
+// look like.
+//
+
+.canvas-flex-wrapper {
+  @include display(flex);
+  @include flex(1 0 0);
+  @include align-items(center);
+  @include justify-content(center);
+  width: 100%;
+  height: 100%;
+  max-width: 475px;
+  overflow: hidden;
+  span {
+    width: 75%;
+    padding-bottom: 75%;
+    position: relative;
+  }
+
+  // &.portrait {
+  //   background: red;
+  //   width: 30%;
+  //   float: left;
+  // }
+}
+
+.canvas {
+  top: 0;
+  left: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.layer {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+
+  img {
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    visibility: hidden;
+    display: none;
+  }
+
+  .off {
+    visibility: hidden;
+    opacity: 0;
+    display: none;
+  }
+}
+
+@media (min-width: 650px) {
+  .canvas-flex-wrapper {
+    span {
+      width: 90%;
+      padding-bottom: 90%;
+    }
+  }
+}
+

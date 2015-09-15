@@ -1,0 +1,39 @@
+@import "./mixins/flex";
+@import "./mixins/prefixer";
+@import "./mixins/small-button";
+@import "./_Colors";
+@import "./_Constants";
+@import "./_Animation";
+@import "./_Base";
+@import "./_Reset";
+@import "./_Components";
+@import "./_Typography";
+
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+body {
+  background: white;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+ul, ol {
+  list-style: none;
+}
+.main {
+  height: 93%;
+  @include display(flex);
+  @include flex(1 0 0);
+  @include flex-direction(column);
+}
+#app {
+  height: 100%;
+  > div {
+    height: 100%;
+  }
+}
