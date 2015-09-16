@@ -4,19 +4,19 @@ var async = require('async')
 var newId = require('./utils').generateFirebaseID
 var margin = 1.4
 var productData = require('./productData')
-var optionsMap = productData.optionsMap
-var sizeProperties = productData.sizeProperties
-var thicknessProperties = productData.thicknessProperties
-var materialOptions = productData.materialOptions
-var paperTypeOptions = productData.paperTypeOptions
-var packSizeOptions = productData.packSizeOptions
-var colorOptions = productData.colorOptions
-var typeOptions = productData.typeOptions
-var paperFinishOptions = productData.paperFinishOptions
+var optionsMap           = productData.optionsMap
+var sizeProperties       = productData.sizeProperties
+var thicknessProperties  = productData.thicknessProperties
+var materialOptions      = productData.materialOptions
+var paperTypeOptions     = productData.paperTypeOptions
+var packSizeOptions      = productData.packSizeOptions
+var colorOptions         = productData.colorOptions
+var typeOptions          = productData.typeOptions
+var paperFinishOptions   = productData.paperFinishOptions
 var printLocationOptions = productData.printLocationOptions
-var genderOptions = productData.genderOptions
-var clothingSizeOptions = productData.clothingSizeOptions
-var brandOptions = productData.brandOptions
+var genderOptions        = productData.genderOptions
+var clothingSizeOptions  = productData.clothingSizeOptions
+var brandOptions         = productData.brandOptions
 
 if (process.argv.length === 3) {
   console.log('You must provide a recipe ID and output file as arguments.')
@@ -161,6 +161,8 @@ function constructProductFromPrintIo(p) {
     id : newId(),
     name: p.Name,
     description: p.ShortDescription,
+    vendorName: p.Name,
+    vendorDescription: p.ShortDescription,
     vendor: 'print.io',
     vendorId: p.Id,
     images: images,
@@ -190,12 +192,8 @@ function transformProducts(data, cback) {
     //data.Products.filter(function(x) { return x.Name === 'Floormat'}).map(constructProductFromPrintIo),
     function(product, cb) {
       service.getProductVariants('us', product.vendorId, function(variants) {
-        //var sku = variants.ProductVariants[0].Sku
-        //service.getShipPrice(sku, function(shipEstimate) {
-          //console.log('GOT SHIP ESTIMATE: ', shipEstimate)
-          product.options = variants.ProductVariants.map(setOptions)
-          cb(null, product)
-        //})
+        product.options = variants.ProductVariants.map(setOptions)
+        cb(null, product)
       })
     },
     function(err, products) {

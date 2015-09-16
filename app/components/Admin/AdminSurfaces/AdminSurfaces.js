@@ -40,10 +40,8 @@ export default React.createClass({
   },
 
   selectSurface(surface) {
-    console.log('got surface: ', surface)
     this.setState({selectedSurface: surface})
     this.transitionTo('adminSurface', {surfaceId: surface.get('id')})
-    // update route here
   },
   onSurfaceDescriptionChange(newDescription) {
     var newSurface = this.state.selectedSurface.set('description', newDescription)
@@ -58,7 +56,6 @@ export default React.createClass({
   },
 
   render() {
-    console.log('here')
     var surface = this.state.selectedSurface
     if (!surface) { return null }
     var imgUrl = imageUrlForSurface(surface)
@@ -68,23 +65,24 @@ export default React.createClass({
                            onClick={this.selectSurface.bind(null, s)}
                            key={s.get('id')}/>
     })
-    console.log('after sufraces')
     var selectedSurfaceDetails = (surface ?
       <div className="admin-surface-details">
+        <p>Vendor Name: <em>{surface.get('vendorName')}</em></p>
+        <p>Vendor Description: <em>{surface.get('vendorDescription')}</em></p>
 
-      <div className="surface-text-container">
-        <EditableLabel value={surface.get('name')}
-          labelTag='h1' onChange={this.onSurfaceNameChange}/>
+        <div className="surface-text-container">
+          <EditableLabel value={surface.get('name')}
+            labelTag='h1' onChange={this.onSurfaceNameChange}/>
 
-        <EditableLabel value={surface.get('description')}
-           editTag='textarea'
-           onChange={this.onSurfaceDescriptionChange}/>
-      </div>
+
+          <EditableLabel value={surface.get('description')}
+             editTag='textarea'
+             onChange={this.onSurfaceDescriptionChange}/>
+        </div>
 
         <div className="image-container">
           <img src={imgUrl}/>
         </div>
-
       </div>
       : null)
     return (
