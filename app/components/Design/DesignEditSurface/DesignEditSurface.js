@@ -1,4 +1,5 @@
 import React from 'react'
+import Router from 'react-router'
 import reactor from 'state/reactor'
 import Store from 'state/main'
 import SurfaceImage from 'components/Design/SurfaceImage/SurfaceImage'
@@ -9,7 +10,7 @@ var Map = require('nuclear-js').Immutable.Map
 var classNames = require('classnames')
 
 export default React.createClass({
-  mixins: [reactor.ReactMixin],
+  mixins: [reactor.ReactMixin, Router.Navigation],
 
   getDataBindings() {
     return {
@@ -25,7 +26,7 @@ export default React.createClass({
   },
 
   transitionToBuyPage() {
-    console.log('transition to buy page')
+    this.transitionTo('cart', {designId: this.props.params.designId})
   },
 
   selectSurface(surface) {

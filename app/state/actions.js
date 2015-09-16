@@ -30,7 +30,6 @@ export default {
     dispatchHelper('selectSurfaceOptionFromKeyValue', {key:key, value:value})
   },
   updateSurface(surface) { dispatchHelper('updateSurface', surface) },
-  resetSurfacesFromFixture() { dispatchHelper('resetSurfacesFromFixture') },
   loadSurfaces() { dispatchHelper('loadSurfaces') },
   makeDesignCopy(newId) { dispatchHelper('makeDesignCopy', newId) },
   createNewDesign(newDesign) { dispatchHelper('createNewDesign', newDesign) },
