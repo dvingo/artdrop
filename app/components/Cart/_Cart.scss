@@ -1,1 +1,342 @@
 .Cart {}
+.cart {
+  @include display(flex);
+  @include flex-direction(column);
+  @include justify-content(flex-start);
+  @include align-items(center);
+  @include flex(1 0 0);
+  height: auto;
+  overflow: scroll;
+
+  @media (min-width: 650px) {
+     @include flex-direction(row);
+     @include align-items(center);
+  }
+  @media (min-width: 900px) {
+    @include flex-direction(row);
+    @include align-items(center);
+  }
+}
+  .cart .canvas-flex-wrapper {
+    @include display(flex);
+    @include flex(1 0 0);
+    margin: 10px;
+    min-height: 350px;
+  }
+  .cart ul {
+    height: auto;
+    margin: 0;
+    padding: 0;
+  }
+  .cart .form-container {
+    padding-top: 20px;
+    height: auto;
+    @include display(flex);
+    @include flex(1 0 0);
+    @include align-items(center);
+    @include justify-content(center);
+    width: 100%;
+    min-height: 450px;
+
+    form {
+      width: 50%;
+    }
+
+    .envelope {
+      border-radius: 4px;
+      background: url(https://static-1.gumroad.com/res/gumroad/assets/product/patterns-9e4d975b7eb5ea88246307029a043a8b.png) 8px -11px repeat-x, -webkit-linear-gradient(top left, #fafafa, whitesmoke);
+      background: url(https://static-1.gumroad.com/res/gumroad/assets/product/patterns-9e4d975b7eb5ea88246307029a043a8b.png) 8px -11px repeat-x, linear-gradient(to bottom right, #fafafa, whitesmoke);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      border: 1px solid #ccc;
+      margin-bottom: 20px;
+      padding-top: 4px;
+
+      p, #custom-fields {
+        box-sizing: border-box;
+        padding: 10px 10px 0;
+        margin: 0;
+        font-size: 13px;
+        line-height: 21px;
+        width: 100%;
+        position: relative;
+
+      }
+    }
+  }
+      .credit_card_holder .credit_card input[type=tel], .credit_card_holder .credit_card input[type=text], .credit_card_holder .credit_card input[type=number] {
+        box-sizing: border-box;
+        border-radius: 4px;
+        margin-top: 4px;
+        width: 100%;
+        max-width: 100%;
+        padding: 8px 10px;
+        margin-right: 0;
+        height: 38px;
+      }
+      .credit_card_holder .credit_card input.expiry_date {
+        width: 70px !important;
+      }
+      .credit_card_holder .credit_card .full-name-p input {
+        width: 120px;
+      }
+      .credit_card_holder .credit_card input.cv_code, .credit_card_holder .credit_card input.expiry_date {
+        width: 31px;
+        height: 19px;
+        box-sizing: content-box;
+      }
+      .credit_card_holder .credit_card .cc_number_security_indicator {
+        position: absolute;
+        background: url(https://static-1.gumroad.com/res/gumroad/assets/icons-c464cf1980f8ee1739261cf34d735e7d.png) -294px 4px no-repeat;
+        width: 16px;
+        height: 28px;
+        right: 20px;
+        margin-top: 4px;
+      }
+      .envelope p input {
+        border-radius: 4px;
+        box-sizing: border-box;
+        display: block;
+        height: 38px;
+        width: 100%;
+        max-width: 100%;
+        padding: 8px 10px;
+        box-shadow: 0 1px 1px rgba(255, 255, 255, 0.15);
+        float: none;
+      }
+      .envelope p input:focus, .envelope p textarea:focus, .envelope p select:focus, .envelope p .input:focus, .envelope #custom-fields input:focus, .envelope #custom-fields textarea:focus, .envelope #custom-fields select:focus, .envelope #custom-fields .input:focus {
+        border-color: #aaa;
+      }
+      .credit_card_holder .credit_card .stripe-card-info .or-pay-with {
+        float: right;
+        color: #9a9a9a;
+        margin: 12px 0 0;
+        padding: 0;
+      }
+      .credit_card_holder .credit_card .stripe-card-info i {
+        float: left;
+        margin: 0 0 0 5px;
+        width: 35px;
+        margin-top: 11px;
+      }
+      .credit_card_holder .credit_card .stripe-card-info i img {
+        width: 100%;
+        font-size: 0;
+      }
+      input[type=text], input[type=url], input[type=tel], input[type=number], input[type=password], textarea, .textarea, .input {
+        border-radius: 4px;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 17px;
+        line-height: 20px;
+        background: #fff;
+        border: 1px solid #ddd;
+        color: #aaa;
+        padding: 10px;
+        box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.02);
+        background-position: top right;
+        background-repeat: no-repeat;
+        text-rendering: optimizeLegibility;
+        font-smoothing: antialiased;
+        -webkit-appearance: none;
+        -moz-appearance: caret;
+      }
+      .gift-trigger {
+        position: absolute;
+        right: 20px;
+        top: 19px;
+        width: 20px;
+        height: 20px;
+
+        span {
+          display: none;
+          background: palegoldenrod;
+          width: 100px;
+          height: auto;
+          border-radius: 4px;
+          position: absolute;
+          top: 30px;
+          right: -40px;
+          z-index: 10;
+          text-align: center;
+          padding: 5px 0;
+        }
+        &:hover {
+          span {
+            display: block;
+          }
+        }
+      }
+      .credit_card_holder {
+        position: relative;
+        margin-bottom: 20px;
+        height: 213px;
+        -webkit-perspective: 1000px;
+        perspective: 1000px;
+        -webkit-transition: height 0.5s cubic-bezier(0.23, 1.5, 0.32, 1);
+        transition: height 0.5s cubic-bezier(0.23, 1.5, 0.32, 1);
+      }
+        .credit_card_holder .card_error_popup {
+          border-radius: 4px;
+          background: #fff;
+          left: 10px;
+          right: 10px;
+          padding: 10px;
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+          position: absolute;
+          z-index: 2;
+          top: -54px;
+          font-size: 15px;
+          font-weight: bold;
+          color: #c04355;
+          text-align: center;
+        }
+        .credit_card_holder .flipper {
+          -webkit-transition: .6s;
+          transition: .6s;
+          -webkit-transform-style: preserve-3d;
+          transform-style: preserve-3d;
+          position: relative;
+        }
+          .credit_card_holder .credit_card {
+            border-radius: 4px;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            height: 213px;
+            border: 1px solid #ccc;
+            background: -webkit-linear-gradient(top, #fff, #f5f5f5);
+            background: linear-gradient(top, #fff, #f5f5f5);
+            padding-bottom: 10px;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            -webkit-transform: rotateY(0deg);
+            transform: rotateY(0deg);
+          }
+            .credit_card_holder .credit_card .stripe-card-info .paypal {
+              border: 1px solid #c9c9c9;
+              background: #e5e5e5;
+              border-radius: 4px;
+              width: 66px;
+              height: 30px;
+              float: right;
+              position: relative;
+              margin: 6px 10px;
+              font-size: 50px;
+              color: #9a9a9a;
+              -webkit-transition: all .2s ease-in-out;
+              transition: all .2s ease-in-out;
+              text-align: center;
+              background: white;
+            }
+            .cc_security_blurb {
+              background: red;
+              display: none;
+            }
+            .credit_card_holder .credit_card label {
+              text-transform: uppercase;
+              color: rgba(0, 0, 0, 0.3);
+              display: block;
+              font-size: 12px;
+              margin: 0;
+              float: none;
+              text-overflow: ellipsis;
+              height: 21px;
+            }
+            .credit_card_holder .credit_card .stripe-card-info {
+              background: #e5e5e5;
+              margin-top: 10px;
+              color: #252a2e;
+              overflow: hidden;
+              height: 44px;
+            }
+            .credit_card_holder .credit_card .stripe-card-info h4 {
+              font-weight: 600;
+              font-size: 17px;
+              padding: 12px 10px 0;
+              line-height: 21px;
+              margin: 0;
+              float: left;
+            }
+              .credit_card_holder .gi-credit-card {
+                float: left;
+                margin: 1px 0 0 5px;
+                font-size: 0;
+                width: 30px;
+                margin-top: 7px;
+                border-radius: 2px;
+                overflow: hidden;
+              }
+                .gi-paypal {
+                  background: white;
+                }
+                .gi-paypal:hover {
+                  background: white;
+                  cursor: pointer;
+                }
+                .gi-paypal img {
+                  width: 80%;
+                  top: 8px;
+                  position: absolute;
+                  left: 0;
+                  right: 0;
+                  margin: 0 auto;
+                }
+
+
+            .credit_card_holder .credit_card p {
+              padding: 10px 10px 0;
+              margin: 0;
+              font-size: 13px;
+              line-height: 21px;
+            }
+            .credit_card_holder .credit_card .expiry-date-p, .credit_card_holder .credit_card .full-name-p {
+              float: left;
+              clear: none;
+            }
+            .credit_card_holder .credit_card .cv_code_p {
+              float: right;
+              max-width: 145px;
+              clear: none;
+              padding-left: 0;
+            }
+            .credit_card_holder .pay-by-paypal {
+              height: 155px;
+              -webkit-transform: rotateY(180deg);
+              transform: rotateY(180deg);
+            }
+            button, .button {
+              border-radius: 4px;
+              box-shadow: 0 1px 1px rgba(0, 0, 0, 0.12);
+              -webkit-transition: all .05s ease-in-out;
+              transition: all .05s ease-in-out;
+              display: inline-block;
+              padding: 11px 15px 12px;
+              cursor: pointer;
+              color: #fff;
+              font-size: 17px;
+              line-height: 100%;
+              font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            }
+
+    .form-container .submit {
+      border : solid 0px #ffffff;
+      border-radius : 5px;
+      moz-border-radius : 5px;
+      font-size : 20px;
+      color : #ffffff;
+      padding : 4px 20px;
+      background-color : #00a2ff;
+    }
+    .pay_button_container .pay_button {
+      margin: 0 auto;
+      width: 100%;
+      font-size: 17px;
+      display: block;
+    }
+    .i-want-this-container button, .pay_button_container button, .follow-user-form button, .follow-user-button, .unfollow-user-button, .billing-options-list .billing-option-right .gi-check {
+      background: #a30e00 !important;
+      filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='@{#c93426}', endColorstr='@{#970d00}', GradientType=0)" !important;
+      background: -webkit-gradient(linear, left top, left bottom, from(#c93426), to(#970d00)) !important;
+      background: -moz-linear-gradient(top, #c93426, #970d00) !important;
+      background: -o-linear-gradient(top, #c93426, #970d00) !important;
+      border: 1px solid #930d00 !important;
+    }

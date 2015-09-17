@@ -274,23 +274,14 @@
               margin: 0;
               float: left;
             }
-              .credit_card_holder .gi-credit-card {
-                float: left;
-                margin: 1px 0 0 5px;
-                font-size: 0;
-                width: 30px;
-                margin-top: 7px;
-                border-radius: 2px;
-                overflow: hidden;
-              }
-                i.gi.gi-paypal {
+                .gi-paypal {
                   background: white;
                 }
-                i.gi.gi-paypal:hover {
+                .gi-paypal:hover {
                   background: white;
                   cursor: pointer;
                 }
-                i.gi.gi-paypal img {
+                .gi-paypal img {
                   width: 80%;
                   top: 8px;
                   position: absolute;

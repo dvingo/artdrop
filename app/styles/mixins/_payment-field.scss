@@ -1,0 +1,16 @@
+@mixin inputField() {
+  border-radius: 4px;
+  font-size: 17px;
+  line-height: 20px;
+  background: #fff;
+  border: 1px solid #ddd;
+  color: #aaa;
+  padding: 10px;
+  box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.02);
+  background-position: top right;
+  background-repeat: no-repeat;
+  text-rendering: optimizeLegibility;
+  font-smoothing: antialiased;
+  -webkit-appearance: none;
+  -moz-appearance: caret;
+}
