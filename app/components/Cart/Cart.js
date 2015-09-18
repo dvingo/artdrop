@@ -53,7 +53,7 @@ export default React.createClass({
     var value = this.state.value;
     return (
       <div className="cart">
-        <div className="canvas-flex-wrapper">
+        <div className="Cart-canvas-flex-wrapper">
           <span>
             <RenderLayers layers={this.state.design.get('layers')}/>
           </span>

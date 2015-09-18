@@ -1,0 +1,4 @@
+.ZipcodeField {
+  @include paymentField();
+  width: 70px;
+}

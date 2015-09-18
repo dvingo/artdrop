@@ -14,9 +14,9 @@ export default React.createClass({
     var value = this.state.value;
     return (
       <span>
-        <label>Address</label>
-        <input placeholder="123 Fake Street Apt 2" type="text"
-               className="NameField"
+        <label>Zipcode</label>
+        <input placeholder="90210" type="text"
+               className="ZipcodeField"
                onChange={this.handleChange}
                value={this.state.value}
                onBlur={this.checkIfValid} />

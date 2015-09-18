@@ -1,4 +1,11 @@
-.Cart {}
+.Cart {
+}
+.Cart-canvas-flex-wrapper {
+  @include design-render();
+  margin: 10px;
+  min-height: 350px;
+}
+
 .cart {
   @include display(flex);
   @include flex-direction(column);

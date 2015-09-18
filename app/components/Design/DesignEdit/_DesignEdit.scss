@@ -35,19 +35,7 @@
   @include align-items(center);
 }
 .DesignEdit-canvas-flex-wrapper {
-  @include display(flex);
-  @include flex(1 0 0);
-  @include align-items(center);
-  @include justify-content(center);
-  width: 100%;
-  height: 100%;
-  max-width: 475px;
-  overflow: hidden;
-  span {
-    width: 75%;
-    padding-bottom: 75%;
-    position: relative;
-  }
+  @include design-render();
 }
 
 @media (min-width: $media-min-width), (orientation: landscape) {

@@ -14,8 +14,10 @@ import ExpiryDateField  from './ExpiryDateField/ExpiryDateField'
 import NameField  from './NameField/NameField'
 import AddressField  from './AddressField/AddressField'
 import CityField from './CityField/CityField'
+import ZipcodeField from './ZipcodeField/ZipcodeField'
 import PayPalButton from './PayPalButton/PayPalButton'
 import CVCodeField from './CVCodeField/CVCodeField'
+import StateField from './StateField/StateField'
 
 export default React.createClass({
 
@@ -42,11 +44,11 @@ export default React.createClass({
             </div>
             <p><NameField /></p>
             <p><AddressField /></p>
-            <p><CityField /></p>
             <p className="exp-cv-container">
-              ZipCodeField
-              StateField
+              <CityField />
+              <StateField />
             </p>
+            <p> <ZipcodeField /> </p>
           </div>
 
           <div className="credit_card_holder">
