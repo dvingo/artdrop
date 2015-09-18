@@ -1,18 +1,17 @@
-@import "../components/App/_App";
-@import "../components/Cart/_Cart";
-@import "../components/PaymentForm/EmailField/EmailField";
-@import "../components/PaymentForm/OfferCodeField/OfferCodeField";
+@import "../components/App/App";
+@import "../components/Cart/Cart";
+@import "../components/PaymentForm/PaymentForm";
 
-@import "../components/Admin/_Admin";
-@import "../components/Admin/AdminColorPalettes/_AdminColorPalettes";
-@import "../components/Admin/AdminCreateDesign/_AdminCreateDesign";
-@import "../components/Admin/AdminCreateLayerImage/_AdminCreateLayerImage";
-@import "../components/Admin/AdminDesigns/_AdminDesigns";
-@import "../components/Admin/AdminEditDesign/_AdminEditDesign";
-@import "../components/Admin/AdminLayerImages/_AdminLayerImages";
-@import "../components/Admin/AdminSurfaces/_AdminSurfaces";
-@import "../components/Admin/AdminTags/_AdminTags";
-@import "../components/Admin/AdminUsers/_AdminUsers";
+@import "../components/Admin/Admin";
+@import "../components/Admin/AdminColorPalettes/AdminColorPalettes";
+@import "../components/Admin/AdminCreateDesign/AdminCreateDesign";
+@import "../components/Admin/AdminCreateLayerImage/AdminCreateLayerImage";
+@import "../components/Admin/AdminDesigns/AdminDesigns";
+@import "../components/Admin/AdminEditDesign/AdminEditDesign";
+@import "../components/Admin/AdminLayerImages/AdminLayerImages";
+@import "../components/Admin/AdminSurfaces/AdminSurfaces";
+@import "../components/Admin/AdminTags/AdminTags";
+@import "../components/Admin/AdminUsers/AdminUsers";
 
 @import "../components/Button/_Button";
 @import "../components/CheckButton/_CheckButton";

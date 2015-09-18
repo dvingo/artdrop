@@ -1,4 +1,5 @@
 import React from 'react'
+import {iconPath} from 'utils'
 export default React.createClass({
   getInitialState() {
     return { value: '' }
@@ -13,10 +14,12 @@ export default React.createClass({
   render() {
     var value = this.state.value;
     return (
-      <input className="OfferCodeField"
-       placeholder="Offer code (optional)" type="text" onChange={this.handleChange}
-       value={this.state.value}
-       onBlur={this.checkIfValid} />
+      <div className="PayPalButton">
+        <i className="gi-paypal">
+          <img src={iconPath("paypal_color_icon.png")}/>
+        </i>
+        <span>or pay with</span>
+      </div>
     )
   }
 })

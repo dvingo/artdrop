@@ -13,10 +13,14 @@ export default React.createClass({
   render() {
     var value = this.state.value;
     return (
-      <input className="OfferCodeField"
-       placeholder="Offer code (optional)" type="text" onChange={this.handleChange}
-       value={this.state.value}
-       onBlur={this.checkIfValid} />
+      <span>
+        <label>CV Code</label>
+        <input autocomplete="off"
+               className="CVCodeField cv_code"
+               maxLength="4" pattern="\d*"
+               placeholder="123"
+               type="tel"/>
+      </span>
     )
   }
 })

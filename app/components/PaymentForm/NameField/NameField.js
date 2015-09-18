@@ -13,10 +13,14 @@ export default React.createClass({
   render() {
     var value = this.state.value;
     return (
-      <input className="OfferCodeField"
-       placeholder="Offer code (optional)" type="text" onChange={this.handleChange}
-       value={this.state.value}
-       onBlur={this.checkIfValid} />
+      <span>
+        <label>Full Name</label>
+        <input placeholder="John Doe" type="text"
+               className="NameField"
+               onChange={this.handleChange}
+               value={this.state.value}
+               onBlur={this.checkIfValid} />
+      </span>
     )
   }
 })

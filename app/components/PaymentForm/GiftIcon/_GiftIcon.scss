@@ -1,0 +1,24 @@
+$size: 20px;
+.GiftIcon {
+  position: absolute;
+  right: $size;
+  top: $size - 11;
+  width: $size;
+  height: $size;
+
+  &:hover {
+    span { display: block; }
+  }
+  span {
+    display: none;
+    background: palegoldenrod;
+    width: 100px;
+    border-radius: 4px;
+    position: absolute;
+    top: 30px;
+    right: -40px;
+    z-index: 2;
+    text-align: center;
+    padding: 5px 0;
+  }
+}

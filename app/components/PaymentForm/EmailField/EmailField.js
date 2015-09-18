@@ -23,11 +23,11 @@ export default React.createClass({
   },
 
   checkIfValid() {
-    if (isValidEmail(this.state.value)) {
-      this.props.onChange(this.state.value)
-    } else {
-      this.props.onInvalidInput(this.state.value)
-    }
+    //if (isValidEmail(this.state.value)) {
+      //this.props.onChange(this.state.value)
+    //} else {
+      //this.props.onInvalidInput(this.state.value)
+    //}
   },
 
   render() {
