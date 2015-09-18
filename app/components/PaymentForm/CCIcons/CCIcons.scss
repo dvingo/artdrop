@@ -5,4 +5,5 @@
   height: 100%;
   @include justify-content(space-around);
   @include align-items(center);
+  img { width: 100%; }
 }

@@ -35,20 +35,16 @@ export default React.createClass({
           </div>
 
           <div className="credit_card_holder">
-            <div className="credit_card">
-              <div className="stripe-card-info">
-                <CCIcons />
-                <PayPalButton />
-              </div>
-              <p>
-                <CreditCardField />
-              </p>
-              <p><NameField /></p>
-              <p className="exp-cv-container">
-                <ExpiryDateField />
-                <CVCodeField />
-              </p>
+            <div className="stripe-card-info">
+              <CCIcons />
+              <PayPalButton />
             </div>
+            <p><CreditCardField /></p>
+            <p><NameField /></p>
+            <p className="exp-cv-container">
+              <ExpiryDateField />
+              <CVCodeField />
+            </p>
           </div>
 
           <p><button className="pay-button">Pay</button></p>
