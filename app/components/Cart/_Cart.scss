@@ -51,70 +51,34 @@
       padding: 4px 10px 0 10px;
     }
   }
-      .envelope p input:focus, .envelope p textarea:focus, .envelope p select:focus, .envelope p .input:focus, .envelope #custom-fields input:focus, .envelope #custom-fields textarea:focus, .envelope #custom-fields select:focus, .envelope #custom-fields .input:focus {
-        border-color: #aaa;
-      }
 
-      .credit_card_holder .credit_card .stripe-card-info i {
-        float: left;
-        margin: 0 0 0 5px;
-        width: 35px;
-        margin-top: 11px;
-      }
       .credit_card_holder .credit_card .stripe-card-info i img {
         width: 100%;
-        font-size: 0;
       }
-        .credit_card_holder .card_error_popup {
-          border-radius: 4px;
-          background: #fff;
-          left: 10px;
-          right: 10px;
-          padding: 10px;
-          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-          position: absolute;
-          z-index: 2;
-          top: -54px;
-          font-size: 15px;
-          font-weight: bold;
-          color: #c04355;
-          text-align: center;
-        }
 
-            button, .button {
-              border-radius: 4px;
-              box-shadow: 0 1px 1px rgba(0, 0, 0, 0.12);
-              -webkit-transition: all .05s ease-in-out;
-              transition: all .05s ease-in-out;
-              display: inline-block;
-              padding: 11px 15px 12px;
-              cursor: pointer;
-              color: #fff;
-              font-size: 17px;
-              line-height: 100%;
-              font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-            }
+      button, .button {
+        border-radius: 4px;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.12);
+        -webkit-transition: all .05s ease-in-out;
+        transition: all .05s ease-in-out;
+        display: inline-block;
+        padding: 11px 15px 12px;
+        cursor: pointer;
+        color: #fff;
+        font-size: 17px;
+        line-height: 100%;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      }
 
-    .form-container .submit {
-      border : solid 0px #ffffff;
-      border-radius : 5px;
-      moz-border-radius : 5px;
-      font-size : 20px;
-      color : #ffffff;
-      padding : 4px 20px;
-      background-color : #00a2ff;
-    }
-    .pay_button_container .pay_button {
+    .pay-button {
       margin: 0 auto;
       width: 100%;
       font-size: 17px;
       display: block;
-    }
-    .i-want-this-container button, .pay_button_container button, .follow-user-form button, .follow-user-button, .unfollow-user-button, .billing-options-list .billing-option-right .gi-check {
-      background: #a30e00 !important;
-      filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='@{#c93426}', endColorstr='@{#970d00}', GradientType=0)" !important;
-      background: -webkit-gradient(linear, left top, left bottom, from(#c93426), to(#970d00)) !important;
-      background: -moz-linear-gradient(top, #c93426, #970d00) !important;
-      background: -o-linear-gradient(top, #c93426, #970d00) !important;
-      border: 1px solid #930d00 !important;
+
+      background: #a30e00;
+      background: -webkit-gradient(linear, left top, left bottom, from(#c93426), to(#970d00));
+      background: -moz-linear-gradient(top, #c93426, #970d00);
+      background: -o-linear-gradient(top, #c93426, #970d00);
+      border: 1px solid #930d00;
     }

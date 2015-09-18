@@ -60,8 +60,7 @@ export default React.createClass({
         </div>
 
         <ul>
-          <li>Total:</li>
-          <li>${this.state.design.getIn(['surfaceOption', 'salePrice']) / 100}</li>
+          <li>Total:${this.state.design.getIn(['surfaceOption', 'salePrice']) / 100}</li>
         </ul>
 
         <PaymentForm />

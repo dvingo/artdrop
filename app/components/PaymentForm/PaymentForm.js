@@ -51,9 +51,7 @@ export default React.createClass({
             </div>
           </div>
 
-          <div className="pay_button_container">
-            <button className="button button-primary pay_button">Pay</button>
-          </div>
+          <p><button className="pay-button">Pay</button></p>
         </form>
       </div>
     )
