@@ -36,6 +36,21 @@ export default React.createClass({
 
           <div className="credit_card_holder">
             <div className="stripe-card-info">
+              <h2>Shipping Address</h2>
+            </div>
+            <p><NameField /></p>
+            <p>AddressField </p>
+            <p>CityField </p>
+            <p className="exp-cv-container">
+              ZipCodeField
+              StateField
+            </p>
+          </div>
+
+
+
+          <div className="credit_card_holder">
+            <div className="stripe-card-info">
               <CCIcons />
               <PayPalButton />
             </div>

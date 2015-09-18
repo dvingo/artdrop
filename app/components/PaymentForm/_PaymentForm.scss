@@ -39,11 +39,14 @@
 
 .credit_card_holder .stripe-card-info {
   background: #e5e5e5;
-  margin-top: 10px;
   color: #252a2e;
   overflow: hidden;
   height: 44px;
   box-shadow: 0px 1px 5px rgba(0,0,0,0.3), 0 -1px 5px rgba(0,0,0,0.2);
+  h2 {
+    margin: 6px 10px 5px;
+    color: rgba(0,0,0,0.5);
+  }
 }
 
 .credit_card_holder label {
@@ -64,4 +67,29 @@
   width: 16px;
   height: 28px;
   right: 20px;
+}
+
+.envelope {
+  border-radius: 4px;
+  background: url(https://static-1.gumroad.com/res/gumroad/assets/product/patterns-9e4d975b7eb5ea88246307029a043a8b.png)
+    8px -11px repeat-x, -webkit-linear-gradient(top left, #fafafa, whitesmoke);
+  background: url(https://static-1.gumroad.com/res/gumroad/assets/product/patterns-9e4d975b7eb5ea88246307029a043a8b.png)
+    8px -11px repeat-x, linear-gradient(to bottom right, #fafafa, whitesmoke);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
+  padding: 4px 10px 0 10px;
+}
+
+.pay-button {
+  margin: 0 auto;
+  width: 100%;
+  font-size: 17px;
+  display: block;
+
+  background: #a30e00;
+  background: -webkit-gradient(linear, left top, left bottom, from(#c93426), to(#970d00));
+  background: -moz-linear-gradient(top, #c93426, #970d00);
+  background: -o-linear-gradient(top, #c93426, #970d00);
+  border: 1px solid #930d00;
 }

@@ -17,63 +17,44 @@
     @include align-items(center);
   }
 }
-  .cart .canvas-flex-wrapper {
-    @include display(flex);
-    @include flex(1 0 0);
-    margin: 10px;
-    min-height: 350px;
+
+.cart .canvas-flex-wrapper {
+  @include display(flex);
+  @include flex(1 0 0);
+  margin: 10px;
+  min-height: 350px;
+}
+
+.cart ul {
+  height: auto;
+  margin: 0;
+  padding: 0;
+}
+
+.cart .form-container {
+  padding-top: 20px;
+  @include display(flex);
+  @include align-items(flex-start);
+  @include justify-content(center);
+  width: 100%;
+  min-height: 450px;
+
+  form {
+    width: 50%;
+    min-width: 300px;
   }
-  .cart ul {
-    height: auto;
-    margin: 0;
-    padding: 0;
-  }
-  .cart .form-container {
-    padding-top: 20px;
-    @include display(flex);
-    @include align-items(flex-start);
-    @include justify-content(center);
-    width: 100%;
-    min-height: 450px;
+}
 
-    form {
-      width: 50%;
-      min-width: 300px;
-    }
-
-    .envelope {
-      border-radius: 4px;
-      background: url(https://static-1.gumroad.com/res/gumroad/assets/product/patterns-9e4d975b7eb5ea88246307029a043a8b.png) 8px -11px repeat-x, -webkit-linear-gradient(top left, #fafafa, whitesmoke);
-      background: url(https://static-1.gumroad.com/res/gumroad/assets/product/patterns-9e4d975b7eb5ea88246307029a043a8b.png) 8px -11px repeat-x, linear-gradient(to bottom right, #fafafa, whitesmoke);
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-      border: 1px solid #ccc;
-      margin-bottom: 20px;
-      padding: 4px 10px 0 10px;
-    }
-  }
-      button, .button {
-        border-radius: 4px;
-        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.12);
-        -webkit-transition: all .05s ease-in-out;
-        transition: all .05s ease-in-out;
-        display: inline-block;
-        padding: 11px 15px 12px;
-        cursor: pointer;
-        color: #fff;
-        font-size: 17px;
-        line-height: 100%;
-        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      }
-
-    .pay-button {
-      margin: 0 auto;
-      width: 100%;
-      font-size: 17px;
-      display: block;
-
-      background: #a30e00;
-      background: -webkit-gradient(linear, left top, left bottom, from(#c93426), to(#970d00));
-      background: -moz-linear-gradient(top, #c93426, #970d00);
-      background: -o-linear-gradient(top, #c93426, #970d00);
-      border: 1px solid #930d00;
-    }
+button, .button {
+  border-radius: 4px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.12);
+  -webkit-transition: all .05s ease-in-out;
+  transition: all .05s ease-in-out;
+  display: inline-block;
+  padding: 11px 15px 12px;
+  cursor: pointer;
+  color: #fff;
+  font-size: 17px;
+  line-height: 100%;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
