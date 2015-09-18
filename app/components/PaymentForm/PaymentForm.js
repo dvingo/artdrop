@@ -12,6 +12,8 @@ import CCIcons from './CCIcons/CCIcons'
 import CreditCardField  from './CreditCardField/CreditCardField'
 import ExpiryDateField  from './ExpiryDateField/ExpiryDateField'
 import NameField  from './NameField/NameField'
+import AddressField  from './AddressField/AddressField'
+import CityField from './CityField/CityField'
 import PayPalButton from './PayPalButton/PayPalButton'
 import CVCodeField from './CVCodeField/CVCodeField'
 
@@ -36,18 +38,16 @@ export default React.createClass({
 
           <div className="credit_card_holder">
             <div className="stripe-card-info">
-              <h2>Shipping Address</h2>
+              <h2>Shipping Info</h2>
             </div>
             <p><NameField /></p>
-            <p>AddressField </p>
-            <p>CityField </p>
+            <p><AddressField /></p>
+            <p><CityField /></p>
             <p className="exp-cv-container">
               ZipCodeField
               StateField
             </p>
           </div>
-
-
 
           <div className="credit_card_holder">
             <div className="stripe-card-info">
