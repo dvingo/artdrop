@@ -66,11 +66,11 @@ export default React.createClass({
     })
 
     return (
-      <section className="main design-edit">
+      <section className="main DesignEditSurface design-edit">
 
-        <div className="edit-ui">
+        <div className="DesignEditSurface-ui edit-ui">
 
-          <div className="edit-ui-top surface-details">
+          <div className="DesignEditSurface-ui-top">
             <div className="left">
               {selectBoxes}
               <div>
@@ -83,12 +83,12 @@ export default React.createClass({
             </div>
           </div>
 
-          <div className="edit-ui-mid">
+          <div className="DesignEditSurface-ui-mid edit-ui-mid">
             <span style={{fontSize:'3em', color:'#fff'}}>${surfaceOptionPrice}</span>
             <button className="button" onClick={this.transitionToBuyPage}>Buy it!</button>
           </div>
 
-          <div className="edit-ui-bottom surface-details">
+          <div className="DesignEditSurface-surfaces">
             {surfaces}
           </div>
 

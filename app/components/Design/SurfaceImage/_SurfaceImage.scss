@@ -1,11 +1,16 @@
-.SurfaceImage {}
+.SurfaceImage {
+	min-width: 100px;
+	min-height: 100px;
+	max-height: 100px;
+	max-width: 100px;
+	margin: 5px;
+	border-radius: 6px;
+	position: relative;
+	@include prefixer(box-shadow, 2px 2px 6px 0px rgba(150,150,150,0.5), webkit ms moz spec o);
+	img { border-radius: 6px; }
 
-.surface-image {
-  width: 100px;
-  height: 100px;
-  margin: 5px;
-  border-radius: 6px;
-  position: relative;
-  @include prefixer(box-shadow, 2px 2px 6px 0px rgba(150,150,150,0.75), webkit ms moz spec o);
-  img { border-radius: 6px; }
+	&:hover {
+		cursor: pointer;
+		@include prefixer(box-shadow, 2px 2px 6px 0px rgba(150,150,150,1), webkit ms moz spec o);
+	}
 }

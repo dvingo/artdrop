@@ -1,1 +1,72 @@
-.DesignEditSurface {}
+.DesignEditSurface {
+}
+.DesignEditSurface-ui {
+	@include display(flex);
+	@include flex-direction(column);
+	@include align-items(center);
+	@include flex(1 0 0);
+}
+.DesignEditSurface-ui-top {
+	padding: 20px;
+	@include display(flex);
+	@include align-items(center);
+	@include justify-content(center);
+	@include flex-direction(row);
+	// max-width: 500px;
+
+	.left  {
+		@include display(flex);
+		@include flex(1 0 0);
+		@include flex-direction(column);
+		@include align-items(flex-end);
+		@include justify-content(flex-end);
+		text-align: right;
+		padding-right: 20px;
+		color: $button-color;
+
+		div:first-child {
+			span {
+				color: black;
+				display: block;
+			}}
+		div:nth-child(2) {
+			span {
+				color: black;
+				display: block;
+			}}
+		div:nth-child(3) {
+			span {
+				color: black;
+				display: block;
+			}}
+		div:nth-child(4) {
+			p {
+				color: black;
+				display: block;
+			}}
+	}
+	.right {
+		@include display(flex);
+		@include flex(1 0 0);
+		@include align-items(center);
+		@include justify-content(center);
+		position: relative;
+
+		img {
+			width: 100%;
+			height: auto;
+		}
+	}
+}
+.DesignEditSurface-ui-mid {
+	@include display(flex);
+	@include justify-content(center);
+	background: $nav-bar-color;
+	width: 100%;
+}
+.DesignEditSurface-surfaces {
+	@include display(flex);
+	@include flex-wrap(wrap);
+	@include flex(1 0 0);
+	@include justify-content(center);
+}

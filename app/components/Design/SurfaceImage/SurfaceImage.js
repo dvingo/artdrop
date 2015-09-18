@@ -33,7 +33,7 @@ export default React.createClass({
         borderRadius: 6 }
       : { display: 'none' })
     return (
-      <div className="surface-image" onClick={this.props.onClick}>
+      <div className="SurfaceImage" onClick={this.props.onClick}>
         <div style={overlayStyle}/>
         <img src={imageUrlForSurface(this.props.surface)} width={width} height={height}/>
       </div>
