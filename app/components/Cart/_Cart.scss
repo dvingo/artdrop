@@ -1,1 +1,60 @@
 .Cart {}
+.cart {
+  @include display(flex);
+  @include flex-direction(column);
+  @include justify-content(flex-start);
+  @include align-items(center);
+  @include flex(1 0 0);
+  height: auto;
+  overflow: scroll;
+
+  @media (min-width: 650px) {
+     @include flex-direction(row);
+     @include align-items(center);
+  }
+  @media (min-width: 900px) {
+    @include flex-direction(row);
+    @include align-items(center);
+  }
+}
+
+.cart .canvas-flex-wrapper {
+  @include display(flex);
+  @include flex(1 0 0);
+  margin: 10px;
+  min-height: 350px;
+}
+
+.cart ul {
+  height: auto;
+  margin: 0;
+  padding: 0;
+}
+
+.cart .form-container {
+  padding-top: 20px;
+  @include display(flex);
+  @include align-items(flex-start);
+  @include justify-content(center);
+  width: 100%;
+  min-height: 450px;
+
+  form {
+    width: 50%;
+    min-width: 300px;
+  }
+}
+
+button, .button {
+  border-radius: 4px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.12);
+  -webkit-transition: all .05s ease-in-out;
+  transition: all .05s ease-in-out;
+  display: inline-block;
+  padding: 11px 15px 12px;
+  cursor: pointer;
+  color: #fff;
+  font-size: 17px;
+  line-height: 100%;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}

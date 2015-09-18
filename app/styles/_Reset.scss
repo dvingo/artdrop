@@ -14,9 +14,7 @@ html {
 button {
   border: 0;
   cursor: pointer;
-	&:focus {
-		outline: none;
-	}
+  &:focus { outline: none; }
 }
 
 input {

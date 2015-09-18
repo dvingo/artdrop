@@ -1,0 +1,32 @@
+.PayPalButton {
+  position: relative;
+  border: 1px solid #c9c9c9;
+  border-radius: 4px;
+  width: 66px;
+  height: 30px;
+  float: right;
+  margin: 6px 10px;
+  color: #9a9a9a;
+  -webkit-transition: all .2s ease-in-out;
+  transition: all .2s ease-in-out;
+  text-align: center;
+  background: white;
+  &:hover {
+    cursor: pointer;
+  }
+  img {
+    width: 80%;
+    top: 8px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+  }
+  span {
+    font-size: 0.8em;
+    position: absolute;
+    top: 6px;
+    left: -72px;
+    white-space: nowrap;
+  }
+}

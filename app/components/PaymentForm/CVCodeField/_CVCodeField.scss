@@ -1,0 +1,4 @@
+.CVCodeField {
+  @include paymentField();
+  width: 52px;
+}

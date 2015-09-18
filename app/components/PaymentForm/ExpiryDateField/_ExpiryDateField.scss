@@ -1,0 +1,4 @@
+.ExpiryDateField {
+  @include paymentField();
+  width: 85px;
+}
