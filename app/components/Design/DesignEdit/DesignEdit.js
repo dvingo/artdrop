@@ -89,16 +89,16 @@ export default React.createClass({
     if (this.state.design == null || this.state.currentLayer == null) { return null }
 
     return (
-      <section className="main design-edit">
+      <section className="DesignEdit">
 
-        <div className="canvas-flex-wrapper">
+        <div className="DesignEdit-canvas-flex-wrapper">
           <Hammer onSwipe={this.handleSwipe} onPan={this.handlePan}>
             <RenderLayers layers={this.state.design.get('layers')}/>
           </Hammer>
         </div>
 
-        <div className="edit-ui">
-            <div className="edit-ui-top">
+        <div className="DesignEdit-ui">
+            <div className="DesignEdit-ui-top">
               <ColorsButton isSmall={false}
                 onLeftClick={Store.actions.previousDesignColors}
                 onRightClick={Store.actions.nextDesignColors}/>

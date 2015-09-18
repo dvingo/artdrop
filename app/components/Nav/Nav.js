@@ -14,40 +14,40 @@ export default React.createClass({
   render() {
     var onDesigns = (this.isActive('designs'))
     return (
-      <div className="Nav nav-bar ">
-        <div className="nav-bar-container">
+      <div className="Nav">
+        <div className="Nav-container">
 
-          <div className="left-side">
+          <div className="Nav-left-side">
             {onDesigns ?
               <Link to="designs" className="logo">
-                <img className="space" src={iconPath('drop.svg')} height={40} width={30}/>
+                <img className="Nav-button" src={iconPath('drop.svg')} height={40} width={30}/>
               </Link>:
               null
             }   
 
             {onDesigns ? null:
               (<img src={iconPath('cancel-x-white.svg')}
-                   className="cancel-x space"
+                   className="cancel-x Nav-button"
                    height={30} width={30}/>)
             }
 
             {onDesigns ? null:
               (<img src={iconPath('back.svg')}
-                  className="space"
+                  className="Nav-button"
                   height={30} width={30}
                   onClick={this.handleGoBack}/>)
             }
             
             {onDesigns ? null:
               (<img src={iconPath('refresh.svg')}
-                   className="space"
+                   className="Nav-button"
                    height={30} width={30}
                    onClick={this.handleReset}/>)
             }
           </div>
 
-          <div className="right-side">
-            <div className="space">
+          <div className="Nav-right-side">
+            <div className="Nav-button">
               <img src={iconPath('share-icon.svg')} height={25} width={25}
                    style={{marginTop:4}}/>
             </div>
@@ -57,15 +57,3 @@ export default React.createClass({
     )
   }
 })
-
-
-// {onDesigns ? null:
-//   (<span className="space price">$75</span>)
-// }
-
-// {onDesigns ? null:
-//   (<img src={iconPath('buy.svg')}
-//        className="buy"
-//        height={50} width={70}
-//        onClick={this.handleBuy}/>)
-// }

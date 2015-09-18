@@ -4,12 +4,12 @@ import {iconPath} from 'utils'
 export default React.createClass({
 	render() {
 		return (
-			<article className="edit-footer">
+			<article className="EditFooter edit-footer">
 
-				<div className="lower-ui">
-					<span className="reset">Reset</span>
-					<span className="save">Save</span>
-					<div className="share">
+				<div className="EditFooter-lower-ui lower-ui">
+					<span className="EditFooter-reset reset">Reset</span>
+					<span className="EditFooter-save save">Save</span>
+					<div className="EditFooter-share share">
 						<span>
 							<img src={iconPath('twitter_logo.svg')}/>
 						</span>
@@ -22,9 +22,9 @@ export default React.createClass({
 					</div>
 				</div>
 
-				<div className="lower-ui purchase">
-					<span className="price">$75</span>
-					<span className="buy" type="submit">BUY</span>
+				<div className="EditFooter-lower-ui-purchase lower-ui purchase">
+					<span className="EditFooter-price price">$75</span>
+					<span className="Icon-buy" type="submit">BUY</span>
 				</div>
 			</article>
 		)

@@ -6,7 +6,7 @@
   height: 7%;
 }
 
-.nav-bar-container {
+.Nav-container {
   @include display(flex);
   @include flex-direction(row);
   @include justify-content(flex-start);
@@ -20,24 +20,9 @@
   color: white;
   max-width: 960px;
   margin: 0 auto;
-
-  .space {
-    margin-right: 20px;
-    @media (max-width: 360px) {
-      margin-right: 10px;
-    }
-  }
-  .buy {
-    @include flex-shrink(0);
-  }
 }
 
-.price {
-  color: $color5;
-  font-size: 32px;
-}
-
-.left-side {
+.Nav-left-side {
   @include display(flex);
   @include flex(3 0 0);
   @include justify-content(flex-start);
@@ -46,10 +31,26 @@
   margin-left: 5px;
 }
 
-.right-side {
+.Nav-right-side {
   @include display(flex);
   @include flex(3 0 0);
   @include justify-content(flex-end);
   @include align-items(center);
   margin-right: 5px;
+}
+
+.Nav-button {
+  margin-right: 20px;
+  @media (max-width: 360px) {
+    margin-right: 10px;
+  }
+}
+
+.Nav-button-buy {
+  @include flex-shrink(0);
+}
+
+.Nav-price {
+  color: $color5;
+  font-size: 32px;
 }

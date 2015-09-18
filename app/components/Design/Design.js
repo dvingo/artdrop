@@ -24,9 +24,9 @@ export default React.createClass({
     }())
 
     return (
-      <section className="show-design">
-        <div className="canvas-container">
-          <div className="canvas" onClick={this.props.onClick}>
+      <section className="Design">
+        <div className="Design-container">
+          <div className="Design-canvas" onClick={this.props.onClick}>
             <img src={imageUrlForDesign(this.props.design, 'small')} width={imgSize} height={imgSize}/>
           </div>
         </div>

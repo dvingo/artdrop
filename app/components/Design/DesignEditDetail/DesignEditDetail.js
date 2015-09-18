@@ -84,12 +84,12 @@ export default React.createClass({
     var selectingColors = this.getParams().imagesOrColors === 'colors'
 
     return (
-      <section className="main design-edit-detail">
-        <div className="edit-ui">
+      <section className="DesignEditDetail main">
+        <div className="DesignEditDetail-edit-ui">
 
-          <div className="edit-ui-canvas">
+          <div className="DesignEditDetail-edit-ui-canvas">
             { isPortrait ? <LayerSelectorGroup isPortrait={isPortrait}/> : null}
-            <div className="canvas-flex-wrapper">
+            <div className="DesignEditDetail-canvas-flex-wrapper">
               <span>
                 <RenderLayers layers={this.state.design.get('layers')}/>
               </span>

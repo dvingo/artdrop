@@ -9,7 +9,6 @@
 		outline: 2px solid;
 		cursor: pointer;
 	}
-
 	@media (min-width: 650px) {
 		height: $design-medium-size;
 		width: $design-medium-size;
@@ -18,4 +17,17 @@
 		height: $design-large-size;
 		width: $design-large-size;
 	}
+}
+.Design-container {
+	height: 0;
+	width: 100%;
+	padding-bottom: 100%;
+	position: relative;
+}
+.Design-canvas {
+	top: 0;
+	left: 0;
+	position: absolute;
+	width: 100%;
+	height: 100%;
 }

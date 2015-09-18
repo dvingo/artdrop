@@ -10,17 +10,16 @@
 
 */
 
-.sprite {display:inline-block; overflow:hidden; background-repeat: no-repeat;background-image:url(artdrop-logo.png);}
-
-.back {width:200px; height:200px; background-position: -2px -2px}
-.buy {width:200px; height:200px; background-position: -2px -204px}
-.cancel-x {width:200px; height:200px; background-position: -204px -2px}
-.cart-icon-black {width:200px; height:200px; background-position: -204px -204px}
-.color-wheel {width:200px; height:200px; background-position: -406px -2px}
-.drop {width:200px; height:200px; background-position: -406px -204px}
-.edit-pencil {width:200px; height:200px; background-position: -608px -2px}
-.eyeball {width:200px; height:200px; background-position: -608px -204px}
-.refresh {width:200px; height:200px; background-position: -810px -2px}
-.share-icon {width:200px; height:200px; background-position: -810px -204px}
-.triangle-left {width:200px; height:200px; background-position: -1012px -2px}
-.triangle-right {width:200px; height:200px; background-position: -1012px -204px}
+.Icons-sprite {display:inline-block; overflow:hidden; background-repeat: no-repeat;background-image:url(artdrop-logo.png);}
+.Icons-back {width:200px; height:200px; background-position: -2px -2px}
+.Icons-buy {width:200px; height:200px; background-position: -2px -204px}
+.Icons-cancel-x {width:200px; height:200px; background-position: -204px -2px}
+.Icons-cart-icon-black {width:200px; height:200px; background-position: -204px -204px}
+.Icons-color-wheel {width:200px; height:200px; background-position: -406px -2px}
+.Icons-drop {width:200px; height:200px; background-position: -406px -204px}
+.Icons-edit-pencil {width:200px; height:200px; background-position: -608px -2px}
+.Icons-eyeball {width:200px; height:200px; background-position: -608px -204px}
+.Icons-refresh {width:200px; height:200px; background-position: -810px -2px}
+.Icons-share-icon {width:200px; height:200px; background-position: -810px -204px}
+.Icons-triangle-left {width:200px; height:200px; background-position: -1012px -2px}
+.Icons-triangle-right {width:200px; height:200px; background-position: -1012px -204px}

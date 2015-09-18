@@ -1,25 +1,17 @@
-.DesignEdit {}
-
-.design-edit {
+.DesignEdit {
   @include display(flex);
   @include flex-direction(column);
   @include align-items(center);
   @include justify-content(center);
   width: 100%;
   height: 100%;
-
-  .edit-ui-top {
-    @include justify-content(space-around);
-  }
 }
-
-.edit-ui {
+.DesignEdit-ui {
   @include display(flex);
   @include flex-direction(column);
   @include flex(1 0 0);
   width: 100%;
   height: 100%;
-
   .button {
     @include display(flex);
     @include justify-content(center);
@@ -36,87 +28,13 @@
     }
   }
 }
-
-.edit-ui-canvas {
-  @include display(flex);
-  @include flex(1 0 0);
-  @include align-items(center);
-  @include justify-content(center);
-}
-
-.edit-ui-detailed {
-  @include display(flex);
-  @include flex(1 0 0);
-  @include flex-direction(column);
-}
-
-.edit-ui-top {
+.DesignEdit-ui-top {
+  @include justify-content(space-around);
   @include display(flex);
   @include flex(1 0 0);
   @include align-items(center);
 }
-
-.edit-ui-mid {
-  @include display(flex);
-  @include align-items(center);
-  @include justify-content(center);
-  background: $nav-bar-color;
-  min-height: 40px;
-
-  .rotate-colors {
-    width: 50px;
-    padding: 5px;
-  }
-}
-
-.edit-ui-bottom {
-  @include display(flex);
-  @include flex(3 0 0);
-  @include flex-wrap(wrap);
-  @include justify-content(center);
-  overflow: scroll;
-}
-
-@media (min-width: $media-min-width), (orientation: landscape) {
-  .main.design-edit {
-    @include flex-direction(row);
-    .canvas-flex-wrapper {
-      max-width: none;
-    }
-
-    .edit-ui {
-      height: 100%;
-    }
-  }
-
-  .main.design-edit-detail {
-    @include flex-direction(row);
-    .canvas-flex-wrapper {
-      max-width: none;
-    }
-    .edit-ui {
-      @include flex-direction(row);
-    }
-    .edit-ui-top {
-      @include flex-direction(column);
-    }
-  }
-}
-
-@media (width: 768) and (height: 1024) and (orientation: portrait) {
-  .main.design-edit {
-    @include flex-direction(column);
-    .canvas-flex-wrapper { max-width: auto; }
-    .edit-ui { height: auto; }
-  }
-}
-
-//
-// Displays the layers of the image to show what the final result will
-// look like.
-//
-
-.canvas-flex-wrapper {
+.DesignEdit-canvas-flex-wrapper {
   @include display(flex);
   @include flex(1 0 0);
   @include align-items(center);
@@ -130,13 +48,50 @@
     padding-bottom: 75%;
     position: relative;
   }
-
-  // &.portrait {
-  //   background: red;
-  //   width: 30%;
-  //   float: left;
-  // }
 }
+
+@media (min-width: $media-min-width), (orientation: landscape) {
+  .DesignEdit {
+    @include flex-direction(row);
+  }
+  .DesignEdit-canvas-flex-wrapper {
+    max-width: none;
+  }
+  .DesignEdit-ui {
+    height: 100%;
+  }
+}
+
+@media (width: 768) and (height: 1024) and (orientation: portrait) {
+  .DesignEdit {
+    @include flex-direction(column);
+  }
+  .DesignEdit-canvas-flex-wrapper {
+    max-width: auto;
+  }
+  .DesignEdit-edit-ui {
+    height: auto;
+  }
+}
+
+@media (min-width: 650px) {
+  .DesignEdit-canvas-flex-wrapper {
+    span {
+      width: 90%;
+      padding-bottom: 90%;
+    }
+  }
+}
+
+@media (width: 768) and (height: 1024) and (orientation: portrait) {
+  .DesignEdit { @include flex-direction(column); }
+  .DesignEdit-canvas-flex-wrapper { max-width: auto; }
+  .DesignEdit-edit-ui { height: auto; }
+}
+
+
+
+
 
 .canvas {
   top: 0;
@@ -168,13 +123,3 @@
     display: none;
   }
 }
-
-@media (min-width: 650px) {
-  .canvas-flex-wrapper {
-    span {
-      width: 90%;
-      padding-bottom: 90%;
-    }
-  }
-}
-
