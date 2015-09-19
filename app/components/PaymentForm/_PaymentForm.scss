@@ -17,7 +17,7 @@
   @include justify-content(space-between);
 }
 
-.credit_card_holder {
+.field-group {
   position: relative;
   margin-bottom: 20px;
   -webkit-transition: height 0.5s cubic-bezier(0.23, 1.5, 0.32, 1);
@@ -34,64 +34,43 @@
   width: 100%;
   -webkit-transform: rotateY(0deg);
   transform: rotateY(0deg);
-}
-.credit_card_holder p {
-  padding: 10px 10px 0;
-  margin: 0;
-  font-size: 13px;
-  line-height: 21px;
-}
+  p {
+    padding: 10px 10px 0;
+    margin: 0;
+    font-size: 13px;
+    line-height: 21px;
+  }
 
-.credit_card_holder .stripe-card-info {
-  background: #e5e5e5;
-  color: #252a2e;
-  overflow: hidden;
-  height: 44px;
-  box-shadow: 0px 1px 5px rgba(0,0,0,0.3), 0 -1px 5px rgba(0,0,0,0.2);
-  h2 {
-    margin: 6px 10px 5px;
-    color: rgba(0,0,0,0.5);
+  .header {
+    background: #e5e5e5;
+    color: #252a2e;
+    overflow: hidden;
+    height: 44px;
+    box-shadow: 0px 1px 5px rgba(0,0,0,0.3), 0 -1px 5px rgba(0,0,0,0.2);
+    h2 {
+      margin: 6px 10px 5px;
+      color: rgba(0,0,0,0.5);
+    }
+  }
+
+  label {
+    text-transform: uppercase;
+    color: rgba(0, 0, 0, 0.3);
+    display: block;
+    font-size: 12px;
+    margin: 0;
+    float: none;
+    text-overflow: ellipsis;
+    height: 21px;
   }
 }
-
-.credit_card_holder label {
-  text-transform: uppercase;
-  color: rgba(0, 0, 0, 0.3);
-  display: block;
-  font-size: 12px;
-  margin: 0;
-  float: none;
-  text-overflow: ellipsis;
-  height: 21px;
-}
-
-
-.cc_number_security_indicator {
-  position: absolute;
-  background: url(https://static-1.gumroad.com/res/gumroad/assets/icons-c464cf1980f8ee1739261cf34d735e7d.png) -294px 4px no-repeat;
-  width: 16px;
-  height: 28px;
-  right: 20px;
-}
-
-.envelope {
-  border-radius: 4px;
-  background: url(https://static-1.gumroad.com/res/gumroad/assets/product/patterns-9e4d975b7eb5ea88246307029a043a8b.png)
-    8px -11px repeat-x, -webkit-linear-gradient(top left, #fafafa, whitesmoke);
-  background: url(https://static-1.gumroad.com/res/gumroad/assets/product/patterns-9e4d975b7eb5ea88246307029a043a8b.png)
-    8px -11px repeat-x, linear-gradient(to bottom right, #fafafa, whitesmoke);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  border: 1px solid #ccc;
-  margin-bottom: 20px;
-  padding: 4px 10px 0 10px;
-}
-
 .pay-button {
   margin: 0 auto;
   width: 100%;
   display: block;
   padding: 11px 15px 12px;
 
+  color: #fff;
   background: #a30e00;
   background: -webkit-gradient(linear, left top, left bottom, from(#c93426), to(#970d00));
   background: -moz-linear-gradient(top, #c93426, #970d00);
@@ -102,14 +81,13 @@
 
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 17px;
+  line-height: 100%;
 
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.12);
   @include prefixer(transition, all .05s ease-in-out, webkit spec);
 
   cursor: pointer;
 
-  color: #fff;
-  line-height: 100%;
   &:hover {
     box-shadow: inset 1px 1px 6px 1px rgba(0,0,0,0.7);
   }

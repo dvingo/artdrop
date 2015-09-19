@@ -1,3 +1,11 @@
 .CreditCardField {
   @include paymentField();
 }
+
+.cc_number_security_indicator {
+  position: absolute;
+  background: url(https://static-1.gumroad.com/res/gumroad/assets/icons-c464cf1980f8ee1739261cf34d735e7d.png) -294px 4px no-repeat;
+  width: 16px;
+  height: 28px;
+  right: 20px;
+}

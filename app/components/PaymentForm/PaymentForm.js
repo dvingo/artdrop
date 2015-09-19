@@ -1,23 +1,21 @@
 import React from 'react'
-import Router from 'react-router'
-import RenderLayers from 'components/Design/RenderLayers/RenderLayers'
 import reactor from 'state/reactor'
 import Store from 'state/main'
 import getters from 'state/getters'
 import {iconPath} from 'utils'
-import EmailField from './EmailField/EmailField'
-import GiftIcon from './GiftIcon/GiftIcon'
-import OfferCodeField from './OfferCodeField/OfferCodeField'
-import CCIcons from './CCIcons/CCIcons'
-import CreditCardField  from './CreditCardField/CreditCardField'
-import ExpiryDateField  from './ExpiryDateField/ExpiryDateField'
-import NameField  from './NameField/NameField'
 import AddressField  from './AddressField/AddressField'
 import CityField from './CityField/CityField'
-import ZipcodeField from './ZipcodeField/ZipcodeField'
-import PayPalButton from './PayPalButton/PayPalButton'
+import CCIcons from './CCIcons/CCIcons'
+import CreditCardField  from './CreditCardField/CreditCardField'
 import CVCodeField from './CVCodeField/CVCodeField'
+import EmailField from './EmailField/EmailField'
+import ExpiryDateField  from './ExpiryDateField/ExpiryDateField'
+import GiftIcon from './GiftIcon/GiftIcon'
+import NameField  from './NameField/NameField'
+import OfferCodeField from './OfferCodeField/OfferCodeField'
+import PayPalButton from './PayPalButton/PayPalButton'
 import StateField from './StateField/StateField'
+import ZipcodeField from './ZipcodeField/ZipcodeField'
 
 export default React.createClass({
 
@@ -25,7 +23,7 @@ export default React.createClass({
     return (
       <div className="form-container">
         <form>
-          <div className="envelope">
+          <div className="field-group">
             <p style={{position:'relative'}}>
               <EmailField placeholder="Your email address" onChange={this.handleEmailChange}
                   onInvalidInput={this.onInvalidEmail}/>
@@ -38,8 +36,8 @@ export default React.createClass({
             </p>
           </div>
 
-          <div className="credit_card_holder">
-            <div className="stripe-card-info">
+          <div className="field-group">
+            <div className="header">
               <h2>Shipping Info</h2>
             </div>
             <p><NameField /></p>
@@ -51,8 +49,8 @@ export default React.createClass({
             <p> <ZipcodeField /> </p>
           </div>
 
-          <div className="credit_card_holder">
-            <div className="stripe-card-info">
+          <div className="field-group">
+            <div className="header">
               <CCIcons />
               <PayPalButton />
             </div>
