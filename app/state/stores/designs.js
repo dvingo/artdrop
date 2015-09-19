@@ -4,7 +4,7 @@ import {designPropsToIds, defaultSurfaceOptionIdForSurface, hydrateSurfaceOption
 import getters from '../getters'
 import reactor from '../reactor'
 import {uploadDesignPreview, newId, rotateColorPalette} from '../utils'
-import {persistLayer, nonOptionKeys} from '../helpers'
+import {persistDesign, persistLayer, nonOptionKeys} from '../helpers'
 import {designsRef, layersRef} from '../firebaseRefs'
 
 function l() {
@@ -19,7 +19,6 @@ function persistNewDesign(design) {
 var removeNonOptionProps = (surfaceOption) => {
   return nonOptionKeys.reduce((r, k) => r.remove(k), surfaceOption)
 }
-
 
 var transitionDesignColors = (direction, state) => {
    var allPalettes = reactor.evaluate(getters.colorPalettes)

@@ -140,7 +140,7 @@ var persistWithRef = (firebaseRef, id, obj) => {
   firebaseRef.child(id).update(obj)
 }
 exports.persistWithRef = persistWithRef
-var persistDesign = persistWithRef.bind(null, designsRef)
+exports.persistDesign = persistWithRef.bind(null, designsRef)
 exports.persistLayer = persistWithRef.bind(null, layersRef)
 exports.persistSurface = persistWithRef.bind(null, surfacesRef)
 export default exports

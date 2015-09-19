@@ -15,7 +15,7 @@ export default React.createClass({
     return (
       <span>
         <label>CV Code</label>
-        <input autocomplete="off"
+        <input autoComplete="off"
                className="CVCodeField cv_code"
                maxLength="4" pattern="\d*"
                placeholder="123"

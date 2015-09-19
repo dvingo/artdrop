@@ -89,12 +89,31 @@
 .pay-button {
   margin: 0 auto;
   width: 100%;
-  font-size: 17px;
   display: block;
+  padding: 11px 15px 12px;
 
   background: #a30e00;
   background: -webkit-gradient(linear, left top, left bottom, from(#c93426), to(#970d00));
   background: -moz-linear-gradient(top, #c93426, #970d00);
   background: -o-linear-gradient(top, #c93426, #970d00);
+
+  border-radius: 4px;
   border: 1px solid #930d00;
+
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 17px;
+
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.12);
+  @include prefixer(transition, all .05s ease-in-out, webkit spec);
+
+  cursor: pointer;
+
+  color: #fff;
+  line-height: 100%;
+  &:hover {
+    box-shadow: inset 1px 1px 6px 1px rgba(0,0,0,0.7);
+  }
+  &:active {
+    background: #a30e00;
+  }
 }
