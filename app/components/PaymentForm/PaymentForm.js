@@ -19,20 +19,40 @@ import ZipcodeField from './ZipcodeField/ZipcodeField'
 
 export default React.createClass({
 
+  getInitialState() {
+    return {
+      email: '',
+      offerCode: '',
+      shippingName: '',
+      shippingAddress: '',
+      shippingCity: '',
+      shippingState: '',
+      shippingZipcode: '',
+      ccNumber: '',
+      ccName: '',
+      ccExpiryDate: '',
+      ccCvCode: ''
+    }
+  },
+
+  onFieldChange(field, e) {
+    var newState = {}
+    newState[field] = e.target.value
+    this.setState(newState)
+  },
+
   render() {
     return (
       <div className="form-container">
         <form>
           <div className="field-group">
             <p style={{position:'relative'}}>
-              <EmailField placeholder="Your email address" onChange={this.handleEmailChange}
-                  onInvalidInput={this.onInvalidEmail}/>
+              <EmailField onChange={this.onFieldChange.bind(null, 'email')} value={this.state.email}/>
               <GiftIcon />
             </p>
 
             <p>
-              <OfferCodeField placeholder="PLace" onChange={this.handleEmailChange}
-                  onInvalidInput={this.onInvalidEmail}/>
+              <OfferCodeField  onChange={this.onFieldChange.bind(null, 'offerCode')} value={this.state.offerCode}/>
             </p>
           </div>
 
@@ -40,13 +60,13 @@ export default React.createClass({
             <div className="header">
               <h2>Shipping Info</h2>
             </div>
-            <p><NameField /></p>
-            <p><AddressField /></p>
+            <p><NameField onChange={this.onFieldChange.bind(null, 'shippingName')} value={this.state.shippingName}/></p>
+            <p><AddressField onChange={this.onFieldChange.bind(null, 'shippingAddress')} value={this.state.shippingAddress}/></p>
             <p className="exp-cv-container">
-              <CityField />
-              <StateField />
+              <CityField onChange={this.onFieldChange.bind(null, 'shippingCity')} value={this.state.shippingCity}/>
+              <StateField onChange={this.onFieldChange.bind(null, 'shippingState')} value={this.state.shippingState}/>
             </p>
-            <p> <ZipcodeField /> </p>
+            <p> <ZipcodeField onChange={this.onFieldChange.bind(null, 'shippingZipcode')} value={this.state.shippingZipcode}/> </p>
           </div>
 
           <div className="field-group">
@@ -54,11 +74,11 @@ export default React.createClass({
               <CCIcons />
               <PayPalButton />
             </div>
-            <p><CreditCardField /></p>
-            <p><NameField /></p>
+            <p><CreditCardField onChange={this.onFieldChange.bind(null, 'ccNumber')} value={this.state.ccNumber}/></p>
+            <p><NameField  onChange={this.onFieldChange.bind(null, 'ccName')} value={this.state.ccName}/></p>
             <p className="exp-cv-container">
-              <ExpiryDateField />
-              <CVCodeField />
+              <ExpiryDateField onChange={this.onFieldChange.bind(null, 'ccExpiryDate')} value={this.state.ccExpiryDate}/>
+              <CVCodeField onChange={this.onFieldChange.bind(null, 'ccCvCode')} value={this.state.ccCvCode}/>
             </p>
           </div>
 

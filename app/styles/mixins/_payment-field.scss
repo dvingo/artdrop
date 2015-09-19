@@ -28,4 +28,11 @@
                 0 1px 1px #808080,
                 1px 0 1px #808080;
   }
+  &.error {
+    border: 1px solid $error-color;
+    box-shadow: 1px 1px 1px $error-color,
+                -1px -1px 1px $error-color,
+                0 1px 1px $error-color,
+                1px 0 1px $error-color;
+  }
 }

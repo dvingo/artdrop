@@ -1,22 +1,16 @@
 import React from 'react'
 export default React.createClass({
-  getInitialState() {
-    return { value: '' }
-  },
-
-  handleChange(e) {
-    this.setState({value: e.target.value})
-  },
-
   checkIfValid() {},
 
   render() {
-    var value = this.state.value;
+    var placeholder = this.props.placeholder || "Offer code (optional)"
     return (
       <input className="OfferCodeField"
-       placeholder="Offer code (optional)" type="text" onChange={this.handleChange}
-       value={this.state.value}
-       onBlur={this.checkIfValid} />
+        placeholder={placeholder}
+        type="text"
+        onChange={this.props.onChange}
+        value={this.props.value}
+        onBlur={this.checkIfValid} />
     )
   }
 })

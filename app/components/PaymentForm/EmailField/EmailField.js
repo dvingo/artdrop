@@ -5,6 +5,7 @@ import reactor from 'state/reactor'
 import Store from 'state/main'
 import getters from 'state/getters'
 import {iconPath} from 'utils'
+import classNames from 'classnames'
 var Route = Router.Route;
 
 function isValidEmail(val) {
@@ -15,32 +16,41 @@ function isValidEmail(val) {
 export default React.createClass({
 
   getInitialState() {
-    return { value: '' }
-  },
-
-  handleChange(e) {
-    this.setState({value: e.target.value})
+    return { hasError: false, errorMsg: ''}
   },
 
   checkIfValid() {
-    //if (isValidEmail(this.state.value)) {
-      //this.props.onChange(this.state.value)
-    //} else {
-      //this.props.onInvalidInput(this.state.value)
-    //}
+    if (this.props.value.length === 0) {
+      this.setState({hasError:true, errorMsg:'You must provide an email'})
+    } else if (!isValidEmail(this.props.value)) {
+      this.setState({hasError:true, errorMsg:'The email you entered is invalid'})
+    } else {
+      this.setState({hasError:false, errorMsg:''})
+    }
+  },
+
+  onChange(e) {
+    // Todo when you type you should remove any errors, then onBlur will check again.
+    // Otherwise the message will still be there while you're fixing it.
+    this.props.onChange(e)
   },
 
   render() {
-    var currentDesign = reactor.evaluate(getters.currentDesign)
-    if (currentDesign == null) { return null }
-
     var value = this.state.value;
+    var placeholder = this.props.placeholder || "Your email address"
+    var errorMessage = <span className="errorMsg">{this.state.errorMsg}</span>
+    var inputField = (
+      <input className={classNames("EmailField",{error:this.state.hasError})}
+               type="email"
+               value={this.props.value}
+               onBlur={this.checkIfValid}
+               placeholder={placeholder}
+               onChange={this.onChange}/>)
     return (
-      <input className="EmailField"
-             name="email" type="email" value={this.state.value}
-             onBlur={this.checkIfValid}
-             placeholder={this.props.placeholder}
-             onChange={this.handleChange}/>
+      <span>
+        {this.state.hasError ? errorMessage : null}
+        {inputField}
+      </span>
     )
   }
-});
+})
