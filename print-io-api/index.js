@@ -18,6 +18,32 @@ var genderOptions        = productData.genderOptions
 var clothingSizeOptions  = productData.clothingSizeOptions
 var brandOptions         = productData.brandOptions
 
+// - 'Acrylic Blocks'
+// - 'Acrylic Prints'
+// - 'Art Posters'
+// - 'Canvas Minis'
+// - 'Canvas Posters'
+// - 'Canvas Wraps'
+// - 'Cloth Napkins'
+// - 'Coasters'
+// - 'Duvet Covers'
+// - 'Flat Cards'
+// - 'Floormat'
+// - 'Folded Cards'
+// - 'Framed Canvas'
+// - 'Framed Prints'
+// - 'Giclee Art Prints'
+// - 'Hoodies'
+// - 'Layflat Photobooks'
+// - 'Metal Prints'
+// - 'Posters'
+// - 'Prints'
+// - 'Professional Prints'
+// - 'Throw Pillows'
+// - 'T-Shirts'
+// - 'Wash Cloths'
+// - 'Youth Apparel'
+
 if (process.argv.length === 3) {
   console.log('You must provide a recipe ID and output file as arguments.')
   process.exit(1)
@@ -124,35 +150,27 @@ function getBaseVals(v) {
   }
 }
 
+function setOptionsImageSize(options, cb) {
+  async.map(options,
+    function(option, callback) {
+      service.getProductTemplate(option.vendorId, function(data) {
+        if (!(data.Options && data.Options[0] && data.Options[0].Spaces)) {
+          option.printingImageWidth = 0
+          option.printingImageHeight = 0
+        } else {
+          option.printingImageWidth = data.Options[0].Spaces[0].Layers[0].X2
+          option.printingImageHeight = data.Options[0].Spaces[0].Layers[0].Y2
+        }
+        callback(null, option)
+      })
+    },
+    function(err, res) { cb(res) }
+  )
+}
+
 function setOptions(v) {
   return extractAndSetOptions(v.Options, getBaseVals(v))
 }
-
-// - 'Acrylic Blocks'
-// - 'Acrylic Prints'
-// - 'Art Posters'
-// - 'Canvas Minis'
-// - 'Canvas Posters'
-// - 'Canvas Wraps'
-// - 'Cloth Napkins'
-// - 'Coasters'
-// - 'Duvet Covers'
-// - 'Flat Cards'
-// - 'Floormat'
-// - 'Folded Cards'
-// - 'Framed Canvas'
-// - 'Framed Prints'
-// - 'Giclee Art Prints'
-// - 'Hoodies'
-// - 'Layflat Photobooks'
-// - 'Metal Prints'
-// - 'Posters'
-// - 'Prints'
-// - 'Professional Prints'
-// - 'Throw Pillows'
-// - 'T-Shirts'
-// - 'Wash Cloths'
-// - 'Youth Apparel'
 
 function constructProductFromPrintIo(p) {
   var images = p.Images.map(function(i) { return i.Url })
@@ -189,11 +207,13 @@ function setOptionsInFirebaseFormat(returnObj, options) {
 function transformProducts(data, cback) {
   async.map(
     data.Products.map(constructProductFromPrintIo),
-    //data.Products.filter(function(x) { return x.Name === 'Floormat'}).map(constructProductFromPrintIo),
+    //data.Products.filter(function(x) { return x.Name === 'Canvas Minis'}).map(constructProductFromPrintIo),
     function(product, cb) {
       service.getProductVariants('us', product.vendorId, function(variants) {
         product.options = variants.ProductVariants.map(setOptions)
-        cb(null, product)
+        setOptionsImageSize(product.options, function() {
+          cb(null, product)
+        })
       })
     },
     function(err, products) {

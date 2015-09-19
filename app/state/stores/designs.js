@@ -1,6 +1,7 @@
 var Nuclear = require('nuclear-js');
 var Immutable = Nuclear.Immutable
-import {designPropsToIds, defaultSurfaceOptionIdForSurface, hydrateSurfaceOptionsForSurface} from '../helpers'
+import {designPropsToIds, defaultSurfaceOptionIdForSurface,
+  hydrateSurfaceOptionsForSurface} from '../helpers'
 import getters from '../getters'
 import reactor from '../reactor'
 import {uploadDesignPreview, newId, rotateColorPalette} from '../utils'
@@ -167,11 +168,9 @@ export default new Nuclear.Store({
       var toFind = removeNonOptionProps(currentOption).set(key, value)
       toFind = toFind.keySeq().reduce((retVal, key) => {
         var optionsThatMatch = retVal.filter(o => {
-          var prop = o.get(key)
-          if (typeof prop === 'number') {
-            return o.get(key) === parseInt(toFind.get(key))
-          }
-          return o.get(key) === toFind.get(key)
+          return o.get(key) === (typeof o.get(key) === 'number'
+            ? parseInt(toFind.get(key))
+            : toFind.get(key))
         })
         return (optionsThatMatch.count() === 0 ? retVal : optionsThatMatch)
       }, allOptions).get(0)

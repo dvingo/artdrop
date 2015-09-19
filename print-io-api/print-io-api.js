@@ -74,7 +74,6 @@ PrintioService.prototype.getShipEstimate = function(productId, countryCode, curr
 };
 
 PrintioService.prototype.getShipPrice = function(sku, cb){
-  console.log('sku is: ', sku)
   return this._post('shippingprices', {
     "ShipToPostalCode": "10003",
     "ShipToCountry": "US",
@@ -87,6 +86,17 @@ PrintioService.prototype.getShipPrice = function(sku, cb){
       }
     ]
   }, function(err,res,body){
+    if(err) throw err
+    return cb(body)
+  })
+}
+
+PrintioService.prototype.getProductTemplate = function(sku, cb){
+  return this._get('producttemplates', {
+    countryCode:'US',
+    languageCode:'en',
+    sku:sku,
+  }, function(err, res, body) {
     if(err) throw err
     return cb(body)
   })

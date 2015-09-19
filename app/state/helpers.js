@@ -7,8 +7,9 @@ var RSVP = require('RSVP')
 
 var exports = {}
 
+
 exports.nonOptionKeys = ['id', 'printingPrice', 'salePrice', 'units',
-  'vendorId', 'height', 'width', 'depth']
+  'vendorId', 'height', 'width', 'depth', 'printingImageWidth', 'printingImageHeight']
 
 function setSizeOnSurfaceOption(option) {
   var units = option.get('units')
