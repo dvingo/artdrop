@@ -2,7 +2,11 @@ import React from 'react'
 import reactor from 'state/reactor'
 import Store from 'state/main'
 import getters from 'state/getters'
-import {isValidEmail, hasValidLength, isValidCreditCardNumber, iconPath} from 'utils'
+import {isValidExpiryDate, isExpiryInPast,
+  isValidEmail, hasValidLength,
+  isValidMonth,
+  isValidCreditCardNumber,
+  iconPath} from 'utils'
 import AddressField  from './AddressField/AddressField'
 import CityField from './CityField/CityField'
 import CCIcons from './CCIcons/CCIcons'
@@ -38,7 +42,13 @@ var validations = {
    return isValidCreditCardNumber(v) ? '' : 'The credit card number is not valid'
   },
   ccName: (v) => hasValidLength(v) ? '' : 'You must enter a name',
-  ccExpiryDate: (v) => hasValidLength(v) ? '' : 'You must enter an expiry date',
+  ccExpiryDate: (v) => {
+    if (!hasValidLength(v)) { return 'You must enter an expiry date' }
+    if (!isValidExpiryDate(v)) { return 'Invalid expiry date' }
+    if (isExpiryInPast(v)) { return 'The date you entered is in the past' }
+    if (!isValidMonth(v)) { return 'The month you entered is invalid' }
+    return ''
+  },
   ccCvCode: (v) => hasValidLength(v) ? '' : 'You must enter a CV Code'
 }
 

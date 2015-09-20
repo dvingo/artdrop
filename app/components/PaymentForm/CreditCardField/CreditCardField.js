@@ -3,11 +3,14 @@ import classNames from 'classnames'
 
 function formatCcNum(input) {
   var val = input.replace(/[^\d]/g, '')
-  var parts = [val.substr(0,4), val.substr(4,4), val.substr(8,4), val.substr(12,4)].filter(i => i.length)
-  return parts.join(' ')
+  return [
+    val.substr(0,4), val.substr(4,4),
+    val.substr(8,4), val.substr(12,4)
+  ].filter(i => i.length > 0).join(' ')
 }
 
 export default React.createClass({
+
   onChange(e) {
     var val = formatCcNum(e.target.value)
     this.props.onChange({target: {value:formatCcNum(e.target.value)}})
@@ -22,7 +25,7 @@ export default React.createClass({
         {hasError ? errorMessage : null}
         <label>Card Number</label>
         <span className="cc_number_security_indicator"></span>
-        <input className={classNames("CreditCardField",{error:hasError})}
+        <input className={classNames("CreditCardField", {error:hasError})}
           placeholder="1234 5679 9012 3456"
           pattern="\d*"
           type="tel"

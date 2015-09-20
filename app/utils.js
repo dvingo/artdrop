@@ -32,6 +32,16 @@ rotationToColorsMapping['3'][svgLayerIds[3]] = 'colorOne'
 
 var toA = (list) => Array.prototype.slice.call(list, 0)
 
+function currentYearTwoDigits() {
+  return parseInt(
+    String(new Date().getFullYear()).substr(2, 2)
+  )
+}
+
+function getCurrentMonth() {
+  return (new Date().getUTCMonth()) + 1
+}
+
 var svgTextToImage = (svgEl) => {
   var svgString = (new window.XMLSerializer()).serializeToString(svgEl)
   var imageString = 'data:image/svg+xml;base64,' + window.btoa(svgString)
@@ -197,5 +207,36 @@ export default {
 
   hasValidLength(val) {
    return val.length > 0
+  },
+
+  isValidExpiryDate(val) {
+    var [month, year] = val.split('/')
+    month = parseInt(month)
+    year = parseInt(year)
+    var currentYear = currentYearTwoDigits()
+    var currentMonth = getCurrentMonth()
+    if (isNaN(month) || isNaN(year)) {
+      return false
+    }
+    return true
+  },
+
+  isValidMonth(val) {
+    var [month, year] = val.split('/')
+    month = parseInt(month)
+    return (month === 0 || month > 12) ? false : true
+  },
+
+  isExpiryInPast(val) {
+    var [month, year] = val.split('/')
+    month = parseInt(month)
+    year = parseInt(year)
+    var currentYear = currentYearTwoDigits()
+    var currentMonth = getCurrentMonth()
+    if (year < currentYear) { return true }
+    if (year === currentYear && month < currentMonth) {
+      return true
+    }
+    return false
   }
 }
