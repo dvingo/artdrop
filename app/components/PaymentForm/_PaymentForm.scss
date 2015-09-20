@@ -15,6 +15,9 @@
 .exp-cv-container {
   @include display(flex);
   @include justify-content(space-between);
+  &.error {
+    @include flex-direction(column);
+  }
 }
 
 .field-group {

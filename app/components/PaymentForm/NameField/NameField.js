@@ -1,25 +1,32 @@
 import React from 'react'
+import classNames from 'classnames'
+
 export default React.createClass({
+
   getInitialState() {
-    return { value: '' }
+    return { hasError: false, errorMsg: ''}
   },
 
-  handleChange(e) {
-    this.setState({value: e.target.value})
+  checkIfValid() {
+    if (this.props.value.length === 0) {
+      this.setState({hasError:true, errorMsg:'You must provide a name'})
+    } else {
+      this.setState({hasError:false, errorMsg:''})
+    }
+    this.props.onBlur()
   },
-
-  checkIfValid() {},
 
   render() {
-    var value = this.state.value;
+    var errorMessage = <span className="errorMsg">{this.state.errorMsg}</span>
     return (
       <span>
+        {this.state.hasError ? errorMessage : null}
         <label>Full Name</label>
-        <input placeholder="John Doe" type="text"
-               className="NameField"
-               onChange={this.handleChange}
-               value={this.state.value}
-               onBlur={this.checkIfValid} />
+        <input className={classNames("NameField", {error:this.state.hasError})}
+          placeholder="John McCarthy" type="text"
+          onChange={this.props.onChange}
+          value={this.props.value}
+          onBlur={this.checkIfValid} />
       </span>
     )
   }

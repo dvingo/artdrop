@@ -180,6 +180,22 @@ export default {
       document.body.removeChild(oldImg)
     }
     document.body.appendChild(img)
-  }
+  },
 
+  isValidCreditCardNumber(num) {
+    num = num.replace(/\s/g, '')
+    if (num.length !== 16) {
+      return false
+    }
+    return true
+  },
+
+  isValidEmail(val) {
+    var re = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,30}/i
+    return re.test(val)
+  },
+
+  hasValidLength(val) {
+    return val.length > 0
+  }
 }

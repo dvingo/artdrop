@@ -1,13 +1,6 @@
 import React from 'react'
 import classNames from 'classnames'
-
-function isValidCreditCardNumber(num) {
-  num = num.replace(/\s/g, '')
-  if (num.length !== 16) {
-    return false
-  }
-  return true
-}
+import {isValidCreditCardNumber} from 'utils'
 
 export default React.createClass({
   getInitialState() {
@@ -30,26 +23,24 @@ export default React.createClass({
     } else {
       this.setState({hasError:false, errorMsg:''})
     }
+    this.props.onBlur()
   },
 
   render() {
-    var value = this.state.value;
     var errorMessage = <span className="errorMsg">{this.state.errorMsg}</span>
-    var inputField = (
-      <input className={classNames("CreditCardField",{error:this.state.hasError})}
-        placeholder="1234 5679 9012 3456"
-        pattern="\d*"
-        type="tel"
-        maxLength="19"
-        onChange={this.handleChange}
-        value={this.state.value}
-        onBlur={this.checkIfValid} />)
     return (
       <span>
         {this.state.hasError ? errorMessage : null}
         <label>Card Number</label>
         <span className="cc_number_security_indicator"></span>
-        {inputField}
+        <input className={classNames("CreditCardField",{error:this.state.hasError})}
+          placeholder="1234 5679 9012 3456"
+          pattern="\d*"
+          type="tel"
+          maxLength="19"
+          onChange={this.handleChange}
+          value={this.state.value}
+          onBlur={this.checkIfValid} />
       </span>
     )
   }

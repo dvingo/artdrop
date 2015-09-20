@@ -1,17 +1,6 @@
 import React from 'react'
-import Router from 'react-router'
-import RenderLayers from 'components/Design/RenderLayers/RenderLayers'
-import reactor from 'state/reactor'
-import Store from 'state/main'
-import getters from 'state/getters'
-import {iconPath} from 'utils'
 import classNames from 'classnames'
-var Route = Router.Route;
-
-function isValidEmail(val) {
-  var re = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,30}/i
-  return re.test(val)
-}
+import {isValidEmail} from 'utils'
 
 export default React.createClass({
 
@@ -27,6 +16,7 @@ export default React.createClass({
     } else {
       this.setState({hasError:false, errorMsg:''})
     }
+    this.props.onBlur()
   },
 
   onChange(e) {
@@ -36,20 +26,17 @@ export default React.createClass({
   },
 
   render() {
-    var value = this.state.value;
     var placeholder = this.props.placeholder || "Your email address"
     var errorMessage = <span className="errorMsg">{this.state.errorMsg}</span>
-    var inputField = (
-      <input className={classNames("EmailField",{error:this.state.hasError})}
-               type="email"
-               value={this.props.value}
-               onBlur={this.checkIfValid}
-               placeholder={placeholder}
-               onChange={this.onChange}/>)
     return (
       <span>
         {this.state.hasError ? errorMessage : null}
-        {inputField}
+        <input className={classNames("EmailField",{error:this.state.hasError})}
+          type="email"
+          value={this.props.value}
+          onBlur={this.checkIfValid}
+          placeholder={placeholder}
+          onChange={this.onChange}/>
       </span>
     )
   }

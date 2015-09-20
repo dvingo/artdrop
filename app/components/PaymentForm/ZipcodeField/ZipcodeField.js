@@ -1,25 +1,37 @@
 import React from 'react'
+import classNames from 'classnames'
+
 export default React.createClass({
+
   getInitialState() {
-    return { value: '' }
+    return { hasError: false, errorMsg: ''}
   },
 
   handleChange(e) {
-    this.setState({value: e.target.value})
+    this.props.onChange(e)
+    //this.setState({value: e.target.value})
   },
 
-  checkIfValid() {},
+  checkIfValid() {
+    if (this.props.value.length === 0) {
+      this.setState({hasError:true, errorMsg:'You must provide a Zipcode'})
+    } else {
+      this.setState({hasError:false, errorMsg:''})
+    }
+    this.props.onBlur()
+  },
 
   render() {
-    var value = this.state.value;
+    var errorMessage = <span className="errorMsg">{this.state.errorMsg}</span>
     return (
       <span>
+        {this.state.hasError ? errorMessage : null}
         <label>Zipcode</label>
-        <input placeholder="90210" type="text"
-               className="ZipcodeField"
-               onChange={this.handleChange}
-               value={this.state.value}
-               onBlur={this.checkIfValid} />
+        <input className={classNames("ZipcodeField", {error:this.state.hasError})}
+          placeholder="90210" type="text"
+          onChange={this.handleChange}
+          value={this.props.value}
+          onBlur={this.checkIfValid} />
       </span>
     )
   }
