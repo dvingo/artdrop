@@ -196,6 +196,6 @@ export default {
   },
 
   hasValidLength(val) {
-    return val.length > 0
+   return val.length > 0
   }
 }

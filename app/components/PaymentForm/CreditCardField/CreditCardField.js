@@ -1,46 +1,35 @@
 import React from 'react'
 import classNames from 'classnames'
-import {isValidCreditCardNumber} from 'utils'
+
+function formatCcNum(input) {
+  var val = input.replace(/[^\d]/g, '')
+  var parts = [val.substr(0,4), val.substr(4,4), val.substr(8,4), val.substr(12,4)].filter(i => i.length)
+  return parts.join(' ')
+}
 
 export default React.createClass({
-  getInitialState() {
-    return {value: '', hasError: false, errorMsg: ''}
-  },
-
-  handleChange(e) {
-    var val = e.target.value
-    val = val.replace(/[^\d]/g, '')
-    var parts = [val.substr(0,4), val.substr(4,4), val.substr(8,4), val.substr(12,4)].filter(i => i.length)
-    val = parts.join(' ')
-    this.setState({value: val})
-  },
-
-  checkIfValid() {
-    if (this.state.value.length === 0) {
-      this.setState({hasError:true, errorMsg:'You must enter a credit card number'})
-    } else if (!isValidCreditCardNumber(this.state.value)) {
-      this.setState({hasError:true, errorMsg:'The credit card number you entered is invalid'})
-    } else {
-      this.setState({hasError:false, errorMsg:''})
-    }
-    this.props.onBlur()
+  onChange(e) {
+    var val = formatCcNum(e.target.value)
+    this.props.onChange({target: {value:formatCcNum(e.target.value)}})
   },
 
   render() {
-    var errorMessage = <span className="errorMsg">{this.state.errorMsg}</span>
+    var errorMsg = this.props.errorMsg
+    var hasError = errorMsg.length > 0
+    var errorMessage = <span className="errorMsg">{errorMsg}</span>
     return (
       <span>
-        {this.state.hasError ? errorMessage : null}
+        {hasError ? errorMessage : null}
         <label>Card Number</label>
         <span className="cc_number_security_indicator"></span>
-        <input className={classNames("CreditCardField",{error:this.state.hasError})}
+        <input className={classNames("CreditCardField",{error:hasError})}
           placeholder="1234 5679 9012 3456"
           pattern="\d*"
           type="tel"
           maxLength="19"
-          onChange={this.handleChange}
-          value={this.state.value}
-          onBlur={this.checkIfValid} />
+          onChange={this.onChange}
+          value={this.props.value}
+          onBlur={this.props.onBlur} />
       </span>
     )
   }
