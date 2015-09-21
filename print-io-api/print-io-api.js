@@ -73,11 +73,11 @@ PrintioService.prototype.getShipEstimate = function(productId, countryCode, curr
   });
 };
 
-PrintioService.prototype.getShipPrice = function(sku, cb){
+PrintioService.prototype.getShipPrice = function(sku, zip, state, cb) {
   return this._post('shippingprices', {
-    "ShipToPostalCode": "10003",
+    "ShipToPostalCode": zip,
     "ShipToCountry": "US",
-    "ShipToState": "NY",
+    "ShipToState": state,
     "CurrencyCode": "USD",
     "LanguageCode": "en",
     "Items": [

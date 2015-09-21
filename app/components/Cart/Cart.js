@@ -11,7 +11,8 @@ export default React.createClass({
   getDataBindings() {
     return {
       design: Store.getters.currentDesign,
-      designPrice: Store.getters.currentDesignPrice
+      designPrice: Store.getters.currentDesignPrice,
+      shippingPrice: Store.getters.shippingPrice
     }
   },
 
@@ -39,7 +40,8 @@ export default React.createClass({
           </div>
 
           <div className="Cart-price-info">
-            <h2>Total:${this.state.designPrice}</h2>
+            <h2>Shipping: ${this.state.shippingPrice}</h2>
+            <h2>Total: ${this.state.designPrice}</h2>
           </div>
 
         </div>

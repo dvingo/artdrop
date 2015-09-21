@@ -1,18 +1,19 @@
 import reactor from 'state/reactor'
-import designsStore from 'state/stores/designs'
-import currentUserStore from 'state/stores/currentUser'
-import usersStore from 'state/stores/users'
-import validEditStepsStore from 'state/stores/validEditSteps'
-import currentDesignIdStore from 'state/stores/currentDesignId'
+import cartStore from 'state/stores/cart'
 import colorPalettesStore from 'state/stores/colorPalettes'
-import layerImagesStore from 'state/stores/layerImages'
-import surfacesStore from 'state/stores/surfaces'
-import layerImageUploadedStore from 'state/stores/layerImageUploaded'
-import layerIsBeingReplacedStore from 'state/stores/layerIsBeingReplaced'
+import currentUserStore from 'state/stores/currentUser'
 import currentLayerIdStore from 'state/stores/currentLayerId'
-import tagsStore from 'state/stores/tags'
+import currentDesignIdStore from 'state/stores/currentDesignId'
+import designsStore from 'state/stores/designs'
 import errorsStore from 'state/stores/errors'
 import getters from 'state/getters'
+import layerImagesStore from 'state/stores/layerImages'
+import layerImageUploadedStore from 'state/stores/layerImageUploaded'
+import layerIsBeingReplacedStore from 'state/stores/layerIsBeingReplaced'
+import surfacesStore from 'state/stores/surfaces'
+import tagsStore from 'state/stores/tags'
+import usersStore from 'state/stores/users'
+import validEditStepsStore from 'state/stores/validEditSteps'
 import {usersRef, firebaseRef} from 'state/firebaseRefs'
 import actions from 'state/actions'
 
@@ -29,7 +30,8 @@ reactor.registerStores({
   validEditSteps: validEditStepsStore,
   layerIsBeingReplaced: layerIsBeingReplacedStore,
   tags: tagsStore,
-  errors: errorsStore
+  errors: errorsStore,
+  cart: cartStore
 })
 
 firebaseRef.onAuth(authData => {

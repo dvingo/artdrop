@@ -91,6 +91,12 @@ export default React.createClass({
     this.setState(newState)
   },
 
+  getShipPrice(e) {
+    e.preventDefault()
+    var shipData = { zipcode: this.state.shippingZipcode.value, state: this.state.shippingState.value }
+    Store.actions.getShipPrice(shipData)
+  },
+
   render() {
     var cityField = (
       <CityField
@@ -187,6 +193,7 @@ export default React.createClass({
           </div>
 
           <p><button className="pay-button">Pay</button></p>
+          <p><button className="pay-button" onClick={this.getShipPrice}>Get Ship Price</button></p>
         </form>
       </div>
     )

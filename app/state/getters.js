@@ -26,6 +26,11 @@ getters.currentDesignPrice = [
   }
 ]
 
+getters.shippingPrice = [
+  ['cart'],
+  (cart) => cart.get('shippingPrice')
+]
+
 getters.numEnabledLayers = [
   getters.currentDesign,
   (currentDesign) => {

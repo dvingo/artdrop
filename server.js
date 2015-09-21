@@ -4,10 +4,44 @@ var request = require('request')
 var cors = require('cors')
 var compression = require('compression')
 var config = require('./server-config')
+var PrintioService = require('./print-io-api/print-io-api')
+
+var recipeId = process.env['ARTDROP_RECIPEID']
+
+if (recipeId == null) {
+  console.log('Printio recipe Id is not set, exiting...')
+  process.exit(1)
+}
+
+var printioService = new PrintioService({
+  recipeId: recipeId,
+  url: 'https://api.print.io/api/v/1/source/api/'
+})
 
 function s3Url(filename) {
   return [config.s3Endpoint, config.s3BucketName, filename].join('/')
 }
+
+app.get('/shippingPrice', cors(), function(req, res) {
+  console.log('got ship price req: ', req.query)
+  var query = req.query
+  if ('state' in query && 'zipcode' in query && 'sku' in query &&
+     query.state.length > 0 && query.zipcode.length > 0 && query.sku.length > 0) {
+    var state = query.state
+    var zipcode = query.zipcode
+    var sku = query.sku
+  console.log('in positive')
+    printioService.getShipPrice(sku, zipcode, state, function(data) {
+      console.log('got price data: ', data)
+      var price = data.Result[0].ShipOptions[0].Price.Price
+      var shippingMethodId = data.Result[0].ShipOptions[0].MethodId
+      res.json({price: price, shippingMethodId: shippingMethodId})
+    })
+  } else {
+    console.log('in negative')
+    res.json({"hello": "there"})
+  }
+})
 
 app.get('/images/:imageName', cors(), function(req, res) {
   request(s3Url(req.params.imageName)).pipe(res)

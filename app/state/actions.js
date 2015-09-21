@@ -52,5 +52,6 @@ export default {
   loadAdminTags() { dispatchHelper('loadAdminTags') },
   addDesignsToTag(data) { dispatchHelper('addDesignsToTag', data) },
   addManyTags(tags) { dispatchHelper('addManyTags', tags) },
-  addManyDesigns(designs) { dispatchHelper('addManyDesigns', designs) }
+  addManyDesigns(designs) { dispatchHelper('addManyDesigns', designs) },
+  getShipPrice(shipData) { dispatchHelper('getShipPrice', shipData) }
 }
