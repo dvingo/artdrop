@@ -16,6 +16,16 @@ getters.currentDesign = [
   (currentDesignId, designsMap) => designsMap.get(currentDesignId)
 ]
 
+getters.currentDesignPrice = [
+  getters.currentDesign,
+  (currentDesign) => {
+    return ( currentDesign ?
+      (currentDesign.getIn(['surfaceOption', 'salePrice']) / 100).toFixed(2)
+      : ''
+    )
+  }
+]
+
 getters.numEnabledLayers = [
   getters.currentDesign,
   (currentDesign) => {

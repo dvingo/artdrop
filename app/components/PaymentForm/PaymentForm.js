@@ -107,7 +107,7 @@ export default React.createClass({
         errorMsg={this.state.shippingState.errorMsg}
         key="stateField" />)
     return (
-      <div className="form-container">
+      <div className="PaymentForm">
         <form>
           <div className="field-group">
             <p style={{position:'relative'}}>

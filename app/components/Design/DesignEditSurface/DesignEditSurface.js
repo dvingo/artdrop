@@ -71,6 +71,7 @@ export default React.createClass({
         <div className="DesignEditSurface-ui edit-ui">
 
           <div className="DesignEditSurface-ui-top">
+
             <div className="left">
               {selectBoxes}
               <div>
@@ -78,6 +79,7 @@ export default React.createClass({
                 <span style={{fontSize:'0.7em'}}>{surface.get('description')}</span>
               </div>
             </div>
+
             <div className="right">
               <img src={imageUrlForSurface(surface)} height={200}/>
             </div>

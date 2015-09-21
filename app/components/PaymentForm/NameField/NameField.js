@@ -3,7 +3,7 @@ import classNames from 'classnames'
 export default React.createClass({
 
   onChange(e) {
-    var val = e.target.value.replace(/[^a-zA-Z]/g, '')
+    var val = e.target.value.replace(/[^a-zA-Z- ]/g, '')
     this.props.onChange({target: {value: val}})
   },
 

@@ -12,12 +12,14 @@
 @import "./AddressField/AddressField";
 @import "./StateField/StateField";
 
+.PaymentForm {
+  padding: 10px;
+  form { min-width: 300px; }
+}
+
 .exp-cv-container {
   @include display(flex);
   @include justify-content(space-between);
-  &.error {
-    @include flex-direction(column);
-  }
 }
 
 .field-group {
@@ -67,6 +69,7 @@
     height: 21px;
   }
 }
+
 .pay-button {
   margin: 0 auto;
   width: 100%;

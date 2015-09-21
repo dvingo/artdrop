@@ -1,70 +1,52 @@
 import React from 'react'
-import Router from 'react-router'
 import RenderLayers from 'components/Design/RenderLayers/RenderLayers'
 import reactor from 'state/reactor'
 import Store from 'state/main'
-import getters from 'state/getters'
-import {iconPath} from 'utils'
+import {imageUrlForSurface} from 'state/utils'
 import PaymentForm from 'components/PaymentForm/PaymentForm'
-var Route = Router.Route;
 
 export default React.createClass({
-  getInitialState() {
-    return {
-      email: '',
-      address: '',
-      city: '',
-      state: '',
-      zipCode: '',
-      country: '',
-      cardNumber: '',
-      fullName: '',
-      expiry: '',
-      cvc: ''
-    }
-  },
-
   mixins: [reactor.ReactMixin],
 
   getDataBindings() {
-    return {design: Store.getters.currentDesign}
+    return {
+      design: Store.getters.currentDesign,
+      designPrice: Store.getters.currentDesignPrice
+    }
   },
 
   componentWillMount() {
     Store.actions.selectDesignId(this.props.params.designId);
   },
 
-  handleChange(name, event) {
-    this.setState({name: event.target.value})
-  },
-
-  handleEmailChange(newEmail) {
-    console.log('got email: ', newEmail)
-  },
-
-  onInvalidEmail(val) {
-    console.log('got invalid email: ', val)
-  },
-
   render() {
-    var currentDesign = reactor.evaluate(getters.currentDesign)
-    if (currentDesign == null) { return null }
+    var design = this.state.design
+    if (design == null) { return null }
 
-    var value = this.state.value;
     return (
-      <div className="cart">
-        <div className="Cart-canvas-flex-wrapper">
-          <span>
-            <RenderLayers layers={this.state.design.get('layers')}/>
-          </span>
+      <div className="Cart cart">
+        <div className="Cart-left">
+
+          <div className="Cart-canvas-flex-wrapper">
+            <span>
+              <RenderLayers layers={design.get('layers')}/>
+            </span>
+          </div>
+
+          <div className="Cart-surface-info">
+            <h2>Printed on: {design.getIn(['surface', 'name'])}</h2>
+            <img src={imageUrlForSurface(design.get('surface'))}/>
+          </div>
+
+          <div className="Cart-price-info">
+            <h2>Total:${this.state.designPrice}</h2>
+          </div>
+
         </div>
 
-        <ul>
-          <li>Total:${this.state.design.getIn(['surfaceOption', 'salePrice']) / 100}</li>
-        </ul>
-
         <PaymentForm />
+
       </div>
     )
   }
-});
+})
