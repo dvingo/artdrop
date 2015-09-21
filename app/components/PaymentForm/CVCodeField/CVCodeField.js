@@ -1,6 +1,12 @@
 import React from 'react'
 import classNames from 'classnames'
 export default React.createClass({
+
+  onChange(e) {
+    var val = e.target.value.substr(0, 7).replace(/[^0-9]/g, '')
+    this.props.onChange({target: {value: val}})
+  },
+
   render() {
     var errorMsg = this.props.errorMsg
     var hasError = errorMsg.length > 0
@@ -15,7 +21,7 @@ export default React.createClass({
           pattern="\d*"
           placeholder="123"
           type="tel"
-          onChange={this.props.onChange}
+          onChange={this.onChange}
           value={this.props.value}
           onBlur={this.props.onBlur} />
       </span>

@@ -98,14 +98,14 @@ export default React.createClass({
         value={this.state.shippingCity.value}
         onBlur={this.onFieldBlur.bind(null, 'shippingCity')}
         errorMsg={this.state.shippingCity.errorMsg}
-        key="city" />)
+        key="cityField" />)
     var stateField = (
       <StateField
         onChange={this.onFieldChange.bind(null, 'shippingState')}
         value={this.state.shippingState.value}
         onBlur={this.onFieldBlur.bind(null, 'shippingState')}
         errorMsg={this.state.shippingState.errorMsg}
-        key="state" />)
+        key="stateField" />)
     return (
       <div className="form-container">
         <form>
@@ -113,6 +113,7 @@ export default React.createClass({
             <p style={{position:'relative'}}>
               <EmailField onChange={this.onFieldChange.bind(null, 'email')}
                           value={this.state.email.value}
+                          key="emailField"
                           onBlur={this.onFieldBlur.bind(null, 'email')}
                           errorMsg={this.state.email.errorMsg}/>
               <GiftIcon />
@@ -120,7 +121,7 @@ export default React.createClass({
 
             <p>
               <OfferCodeField onChange={this.onFieldChange.bind(null, 'offerCode')} value={this.state.offerCode.value}
-                          onBlur={this.onFieldBlur.bind(null, 'offerCode')}/>
+                       key="offerCodeField"   onBlur={this.onFieldBlur.bind(null, 'offerCode')}/>
             </p>
           </div>
 
@@ -131,11 +132,13 @@ export default React.createClass({
             <p><NameField onChange={this.onFieldChange.bind(null, 'shippingName')}
                           value={this.state.shippingName.value}
                           onBlur={this.onFieldBlur.bind(null, 'shippingName')}
+                          key="shippingNameField"
                           errorMsg={this.state.shippingName.errorMsg}
                           /></p>
             <p><AddressField onChange={this.onFieldChange.bind(null, 'shippingAddress')}
                           value={this.state.shippingAddress.value}
                              onBlur={this.onFieldBlur.bind(null, 'shippingAddress')}
+                             key="shippingAddressField"
                              errorMsg={this.state.shippingAddress.errorMsg}
                           /></p>
 
@@ -147,6 +150,7 @@ export default React.createClass({
               <ZipcodeField onChange={this.onFieldChange.bind(null, 'shippingZipcode')}
                           value={this.state.shippingZipcode.value}
                           onBlur={this.onFieldBlur.bind(null, 'shippingZipcode')}
+                          key="shippingZipcodeField"
                           errorMsg={this.state.shippingZipcode.errorMsg}
                           />
             </p>
@@ -159,20 +163,24 @@ export default React.createClass({
             </div>
             <p><CreditCardField onChange={this.onFieldChange.bind(null, 'ccNumber')} value={this.state.ccNumber.value}
                           onBlur={this.onFieldBlur.bind(null, 'ccNumber')}
+                          key="ccNumberField"
                           errorMsg={this.state.ccNumber.errorMsg}
                           /></p>
             <p><NameField onChange={this.onFieldChange.bind(null, 'ccName')}
                           value={this.state.ccName.value}
                           onBlur={this.onFieldBlur.bind(null, 'ccName')}
+                          key="ccNameField"
                           errorMsg={this.state.ccName.errorMsg}
                           /></p>
             <p className="exp-cv-container">
               <ExpiryDateField onChange={this.onFieldChange.bind(null, 'ccExpiryDate')} value={this.state.ccExpiryDate.value}
                           onBlur={this.onFieldBlur.bind(null, 'ccExpiryDate')}
+                          key="ccExpiryDateField"
                           errorMsg={this.state.ccExpiryDate.errorMsg}
                           />
               <CVCodeField onChange={this.onFieldChange.bind(null, 'ccCvCode')} value={this.state.ccCvCode.value}
                           onBlur={this.onFieldBlur.bind(null, 'ccCvCode')}
+                          key="ccCvCodeField"
                           errorMsg={this.state.ccCvCode.errorMsg}
                           />
             </p>

@@ -3,29 +3,28 @@ import classNames from 'classnames'
 export default React.createClass({
 
   onChange(e) {
-    var cursorPos = React.findDOMNode(this.refs.inputField).selectionStart
     var val = e.target.value.substr(0, 7).replace(/[^ 0-9\/]/g, '')
     var [month, year] = val.split('/')
-  // TODO could just substring month and year to 2 digits
-    month = (month || '').trim().substr(0,2)
-    year = (year || '').trim().substr(0,2)
-    console.log('month is: ', month)
-    console.log('year is: ', year)
+    month = (month || '').trim().substr(0, 2)
+    year = (year || '').trim().substr(0, 2)
     if (month.length === 2 && year.length === 0) {
-      cursorPos = 6
+      let inputField = React.findDOMNode(this.refs.inputField)
+      let cursorPos = inputField.selectionStart
+      cursorPos = (this.props.value.length === 6) ? 2 : 6
+      inputField.setSelectionRange(cursorPos, cursorPos)
     }
-console.log('cursor pos: ', cursorPos)
-    // TODO if month is length 2 then move cursor to year position
-    val = `${month} / ${year}`
-    this.setState({cursorPos: cursorPos})
-    this.props.onChange({target: {value:val}})
-  },
-
-  componentDidUpdate() {
-    var inputField = React.findDOMNode(this.refs.inputField)
-    if (inputField) {
-      inputField.setSelectionRange(this.state.cursorPos,this.state.cursorPos)
+    if (year.length === 0) {
+      if (month.length === 0) {
+        val = ''
+      } else if (month.length === 1) {
+        val = month
+      } else {
+        val = `${month} / `
+      }
+    } else {
+      val = `${month} / ${year}`
     }
+    this.props.onChange({target: {value: val}})
   },
 
   render() {

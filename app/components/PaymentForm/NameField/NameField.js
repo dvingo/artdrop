@@ -1,6 +1,12 @@
 import React from 'react'
 import classNames from 'classnames'
 export default React.createClass({
+
+  onChange(e) {
+    var val = e.target.value.replace(/[^a-zA-Z]/g, '')
+    this.props.onChange({target: {value: val}})
+  },
+
   render() {
     var errorMsg = this.props.errorMsg
     var hasError = errorMsg.length > 0
@@ -12,7 +18,7 @@ export default React.createClass({
         <input className={classNames("NameField", {error:hasError})}
           placeholder="John McCarthy"
           type="text"
-          onChange={this.props.onChange}
+          onChange={this.onChange}
           value={this.props.value}
           onBlur={this.props.onBlur} />
       </span>
