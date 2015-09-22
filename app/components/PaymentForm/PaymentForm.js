@@ -142,14 +142,14 @@ export default React.createClass({
         shippingAddress, shippingCity,
         shippingState, shippingZipcode, email } = this.state
       Store.actions.createOrder({
-        shippingFirstName: shippingFirstName.value,
-        shippingLastName: shippingLastName.value,
+        shippingFirstName:   shippingFirstName.value,
+        shippingLastName:    shippingLastName.value,
         shippingPhoneNumber: shippingPhoneNumber.value,
-        shippingAddress: shippingAddress.value,
-        shippingCity: shippingCity.value,
-        shippingState: shippingState.value,
-        shippingZipcode: shippingZipcode.value,
-        email: email.value })
+        shippingAddress:     shippingAddress.value,
+        shippingCity:        shippingCity.value,
+        shippingState:       shippingState.value,
+        shippingZipcode:     shippingZipcode.value,
+        email:               email.value })
     }
   },
 

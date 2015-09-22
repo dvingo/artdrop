@@ -4,4 +4,4 @@ import router from 'router';
 React.initializeTouchEvents(true)
 router.run(Root => {
   React.render(<Root/>, document.getElementById("app"));
-});
+})

@@ -15,6 +15,7 @@ module.exports = {
     new webpack.DefinePlugin({DEBUG:false,TEST:false,DEV:false})
   ],
   resolve: {
+    root: __dirname + '/' + srcDir,
     extensions: ['', '.js', '.jsx']
   },
   module: {

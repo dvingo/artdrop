@@ -1,6 +1,8 @@
 var Nuclear = require('nuclear-js');
 import reactor from 'state/reactor'
 import getters from 'state/getters'
+import {persistNewDesign} from '../helpers'
+import {makeDesignCopy} from 'state/utils'
 import request from 'superagent'
 import {serverHostname} from 'config'
 var shippingPriceUrl = `${window.location.protocol}//${serverHostname}/shippingPrice`
@@ -36,9 +38,13 @@ export default new Nuclear.Store({
       // Need to create a copy of the design that is forever
       // immutable so we can always reference it from the order
       // need to create an order object in firebase.
-      var sku = reactor.evaluate(getters.currentDesign)
-                       .getIn(['surfaceOption', 'vendorId'])
+      var design = makeDesignCopy(reactor.evaluate(getters.currentDesign)).set('isImmutable', true)
+      persistNewDesign(design)
+      var sku = design.getIn(['surfaceOption', 'vendorId'])
       orderData.sku = sku
+      orderData.designId = design.get('id')
+      orderData.shippingMethodId = state.get('shippingMethodId')
+
       request.post(createOrderUrl)
         .send(orderData)
         .end((err, res) => {
@@ -50,4 +56,3 @@ export default new Nuclear.Store({
     })
   }
 })
-

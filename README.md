@@ -26,3 +26,11 @@ When developing tests you can have them both watch for changes while you code:
 ./scripts/compile_tests.sh --watch
 mocha test-build/tests.js --watch
 ```
+
+# Prod build
+
+The following creates a new `build.js` file under the `hosted-dir` directory.
+
+```bash
+webpack --config webpack.prod.config.js
+```

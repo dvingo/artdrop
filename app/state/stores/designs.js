@@ -1,6 +1,7 @@
 var Nuclear = require('nuclear-js');
 var Immutable = Nuclear.Immutable
-import {designPropsToIds, defaultSurfaceOptionIdForSurface,
+import {persistNewDesign,
+  defaultSurfaceOptionIdForSurface,
   hydrateSurfaceOptionsForSurface} from '../helpers'
 import getters from '../getters'
 import reactor from '../reactor'
@@ -10,11 +11,6 @@ import {designsRef, layersRef} from '../firebaseRefs'
 
 function l() {
   console.log.apply(console, Array.prototype.slice.call(arguments))
-}
-
-function persistNewDesign(design) {
-  var firebaseDesign = designPropsToIds(design)
-  designsRef.child(design.get('id')).set(firebaseDesign.toJS())
 }
 
 var removeNonOptionProps = (surfaceOption) => {
@@ -193,12 +189,6 @@ export default new Nuclear.Store({
     })
 
     this.on('saveDesign', (state, design) => {
-      design.get('layers').forEach(layer => {
-        var l = layer.toJS()
-        l.colorPalette = l.colorPalette.id
-        l.selectedLayerImage = l.selectedLayerImage.id
-        layersRef.child(l.id).set(l)
-      })
       persistNewDesign(design)
       return state.set(design.get('id'), design)
     })

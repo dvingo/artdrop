@@ -75,14 +75,14 @@ PrintioService.prototype.getShipEstimate = function(productId, countryCode, curr
 
 PrintioService.prototype.getShipPrice = function(sku, zip, state, cb) {
   return this._post('shippingprices', {
-    "ShipToPostalCode": zip,
-    "ShipToCountry": "US",
-    "ShipToState": state,
-    "CurrencyCode": "USD",
-    "LanguageCode": "en",
-    "Items": [
-      { "SKU": sku,
-        "Quantity": 1
+    ShipToPostalCode: zip,
+    ShipToCountry: "US",
+    ShipToState: state,
+    CurrencyCode: "USD",
+    LanguageCode: "en",
+    Items: [
+      { SKU: sku,
+        Quantity: 1
       }
     ]
   }, function(err,res,body){

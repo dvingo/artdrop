@@ -192,7 +192,7 @@ export default {
     if (size === 'large') {
       return design.get('largeImageUrl')
     }
-    
+
     var filename = (design.has('title')
         ? design.get('title')
         : design.get('imageUrl').split('/').pop())
