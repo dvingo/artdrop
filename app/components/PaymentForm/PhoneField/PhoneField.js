@@ -2,15 +2,8 @@ import React from 'react'
 import classNames from 'classnames'
 export default React.createClass({
 
-  getDefaultProps() {
-    return {
-     label: 'Full Name',
-     placeholder: "John McCarthy"
-    }
-  },
-
   onChange(e) {
-    var val = e.target.value.replace(/[^a-zA-Z- ]/g, '')
+    var val = e.target.value.substr(0, 14).replace(/[^0-9-]/g, '')
     this.props.onChange({target: {value: val}})
   },
 
@@ -18,17 +11,13 @@ export default React.createClass({
     var errorMsg = this.props.errorMsg
     var hasError = errorMsg.length > 0
     var errorMessage = <span className="errorMsg">{errorMsg}</span>
-    var classNamesObj = {error: hasError}
-    if (this.props.className) {
-      classNamesObj[this.props.className] = true
-    }
     return (
       <span>
         {hasError ? errorMessage : null}
-        <label>{this.props.label}</label>
-        <input className={classNames("NameField", classNamesObj)}
-          placeholder={this.props.placeholder}
-          type="text"
+        <label>Phone number</label>
+        <input className={classNames("PhoneField", {error:hasError})}
+          placeholder="917-555-1234"
+          type="tel"
           onChange={this.onChange}
           value={this.props.value}
           onBlur={this.props.onBlur} />

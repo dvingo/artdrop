@@ -6,6 +6,7 @@
 @import "./GiftIcon/GiftIcon";
 @import "./OfferCodeField/OfferCodeField";
 @import "./NameField/NameField";
+@import "./PhoneField/PhoneField";
 @import "./PayPalButton/PayPalButton";
 @import "./CCIcons/CCIcons";
 @import "./CVCodeField/CVCodeField";
@@ -17,7 +18,7 @@
   form { min-width: 300px; }
 }
 
-.exp-cv-container {
+.multifield-line {
   @include display(flex);
   @include justify-content(space-between);
 }

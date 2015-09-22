@@ -17,6 +17,7 @@ import EmailField from './EmailField/EmailField'
 import ExpiryDateField  from './ExpiryDateField/ExpiryDateField'
 import GiftIcon from './GiftIcon/GiftIcon'
 import NameField  from './NameField/NameField'
+import PhoneField  from './PhoneField/PhoneField'
 import OfferCodeField from './OfferCodeField/OfferCodeField'
 import PayPalButton from './PayPalButton/PayPalButton'
 import StateField from './StateField/StateField'
@@ -31,7 +32,9 @@ var validations = {
     return isValidEmail(v) ? '' : 'The email you entered is not valid'
   },
   offerCode: () => {},
-  shippingName: (v) => hasValidLength(v) ? '' : 'You must enter a name',
+  shippingFirstName: (v) => hasValidLength(v) ? '' : 'You must enter a first name',
+  shippingLastName: (v) => hasValidLength(v) ? '' : 'You must enter a last name',
+  shippingPhoneNumber: (v) => hasValidLength(v) ? '' : 'You must enter a phone number',
   shippingAddress: (v) => hasValidLength(v) ? '' : 'You must enter an address',
   shippingCity: (v) => hasValidLength(v) ? '' : 'You must enter a city',
   shippingState: (v) => v.length === 2 ? '' : 'You must enter a state',
@@ -76,9 +79,10 @@ function calculateShippingIfUpdated(nextState, currentState) {
 }
 
 function areAllFieldsValid(state) {
-  var fields = ['email', 'shippingName', 'shippingAddress',
-      'shippingCity', 'shippingState', 'shippingZipcode', 'ccNumber', 'ccName',
-      'ccExpiryDate', 'ccCvCode' ]
+  var fields = ['email', 'shippingFirstName', ,'shippingLastName',
+    'shippingPhoneNumber', 'shippingAddress', 'shippingCity',
+    'shippingState', 'shippingZipcode', 'ccNumber', 'ccName', 'ccExpiryDate',
+    'ccCvCode' ]
   return fields.every(f => validations[f](state[f].value) === '')
 }
 
@@ -86,17 +90,19 @@ export default React.createClass({
 
   getInitialState() {
     return {
-      email:           {value: '', isValid: false, errorMsg: ''},
-      offerCode:       {value: '', isValid: false, errorMsg: ''},
-      shippingName:    {value: '', isValid: false, errorMsg: ''},
-      shippingAddress: {value: '', isValid: false, errorMsg: ''},
-      shippingCity:    {value: '', isValid: false, errorMsg: ''},
-      shippingState:   {value: '', isValid: false, errorMsg: ''},
-      shippingZipcode: {value: '', isValid: false, errorMsg: ''},
-      ccNumber:        {value: '', isValid: false, errorMsg: ''},
-      ccName:          {value: '', isValid: false, errorMsg: ''},
-      ccExpiryDate:    {value: '', isValid: false, errorMsg: ''},
-      ccCvCode:        {value: '', isValid: false, errorMsg: ''}
+      email:               {value: '', isValid: false, errorMsg: ''},
+      offerCode:           {value: '', isValid: false, errorMsg: ''},
+      shippingFirstName:   {value: '', isValid: false, errorMsg: ''},
+      shippingLastName:    {value: '', isValid: false, errorMsg: ''},
+      shippingPhoneNumber: {value: '', isValid: false, errorMsg: ''},
+      shippingAddress:     {value: '', isValid: false, errorMsg: ''},
+      shippingCity:        {value: '', isValid: false, errorMsg: ''},
+      shippingState:       {value: '', isValid: false, errorMsg: ''},
+      shippingZipcode:     {value: '', isValid: false, errorMsg: ''},
+      ccNumber:            {value: '', isValid: false, errorMsg: ''},
+      ccName:              {value: '', isValid: false, errorMsg: ''},
+      ccExpiryDate:        {value: '', isValid: false, errorMsg: ''},
+      ccCvCode:            {value: '', isValid: false, errorMsg: ''}
     }
   },
 
@@ -131,11 +137,20 @@ export default React.createClass({
 
   onPayButtonClick(e) {
     e.preventDefault()
-    var canPressPay = areAllFieldsValid(this.state)
-    //var orderData = {
-      //email:
-    //}
-    // Store.actions.createOrder(orderData)
+    if (areAllFieldsValid(this.state)) {
+      var { shippingFirstName, shippingLastName, shippingPhoneNumber,
+        shippingAddress, shippingCity,
+        shippingState, shippingZipcode, email } = this.state
+      Store.actions.createOrder({
+        shippingFirstName: shippingFirstName.value,
+        shippingLastName: shippingLastName.value,
+        shippingPhoneNumber: shippingPhoneNumber.value,
+        shippingAddress: shippingAddress.value,
+        shippingCity: shippingCity.value,
+        shippingState: shippingState.value,
+        shippingZipcode: shippingZipcode.value,
+        email: email.value })
+    }
   },
 
   render() {
@@ -165,12 +180,36 @@ export default React.createClass({
             <div className="header">
               <h2>Shipping Info</h2>
             </div>
-            <p><NameField onChange={this.onFieldChange.bind(null, 'shippingName')}
-                          value={this.state.shippingName.value}
-                          onBlur={this.onFieldBlur.bind(null, 'shippingName')}
-                          key="shippingNameField"
-                          errorMsg={this.state.shippingName.errorMsg}
-                          /></p>
+            <p className="multifield-line">
+            <NameField onChange={this.onFieldChange.bind(null, 'shippingFirstName')}
+                          label="first name"
+                          placeholder="John"
+                          className="firstName"
+                          value={this.state.shippingFirstName.value}
+                          onBlur={this.onFieldBlur.bind(null, 'shippingFirstName')}
+                          key="shippingFirstNameField"
+                          errorMsg={this.state.shippingFirstName.errorMsg}
+                          />
+
+            <NameField onChange={this.onFieldChange.bind(null, 'shippingLastName')}
+                          label="last name"
+                          placeholder="McCarthy"
+                          className="lastName"
+                          value={this.state.shippingLastName.value}
+                          onBlur={this.onFieldBlur.bind(null, 'shippingLastName')}
+                          key="shippingLastNameField"
+                          errorMsg={this.state.shippingLastName.errorMsg}
+                          />
+                            </p>
+
+            <p>
+              <PhoneField onChange={this.onFieldChange.bind(null, 'shippingPhoneNumber')}
+                            value={this.state.shippingPhoneNumber.value}
+                            onBlur={this.onFieldBlur.bind(null, 'shippingPhoneNumber')}
+                            key="shippingPhoneNumber"
+                            errorMsg={this.state.shippingPhoneNumber.errorMsg}
+                            />
+            </p>
             <p><AddressField onChange={this.onFieldChange.bind(null, 'shippingAddress')}
                           value={this.state.shippingAddress.value}
                              onBlur={this.onFieldBlur.bind(null, 'shippingAddress')}
@@ -187,7 +226,7 @@ export default React.createClass({
                   key="cityField" />
               </p>
 
-            <p className="exp-cv-container">
+            <p className="multifield-line">
               <StateField
                 onChange={this.onFieldChange.bind(null, 'shippingState')}
                 value={this.state.shippingState.value}
@@ -222,7 +261,7 @@ export default React.createClass({
                           key="ccNameField"
                           errorMsg={this.state.ccName.errorMsg}
                           /></p>
-            <p className="exp-cv-container">
+            <p className="multifield-line">
               <ExpiryDateField
                 onChange={this.onFieldChange.bind(null, 'ccExpiryDate')}
                 value={this.state.ccExpiryDate.value}

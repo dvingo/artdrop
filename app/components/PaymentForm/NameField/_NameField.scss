@@ -1,3 +1,6 @@
 .NameField {
   @include paymentField();
 }
+.firstName, .lastName {
+  width: 89%;
+}

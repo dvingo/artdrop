@@ -1,5 +1,6 @@
 var express = require('express')
 var app = express()
+var bodyParser = require('body-parser')
 var request = require('request')
 var cors = require('cors')
 var compression = require('compression')
@@ -12,6 +13,8 @@ if (recipeId == null) {
   console.log('Printio recipe Id is not set, exiting...')
   process.exit(1)
 }
+
+app.use(bodyParser.json())
 
 var printioService = new PrintioService({
   recipeId: recipeId,
@@ -48,6 +51,12 @@ app.get('/shippingPrice', cors(), function(req, res) {
     console.log('in negative')
     res.json({errors: [{ErrorMessage: 'Missing required parameters'}]})
   }
+})
+
+app.options('/orders', cors(), function(req, res) { res.json('hello') })
+app.post('/orders', cors(), function(req, res) {
+  console.log('got order data: ', req.body)
+  res.json({success: 'got u'})
 })
 
 app.get('/images/:imageName', cors(), function(req, res) {
