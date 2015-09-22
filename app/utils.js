@@ -209,6 +209,10 @@ export default {
    return val.length > 0
   },
 
+  hasValidZipcodeLength(val) {
+    return val.length >= 5
+  },
+
   isValidExpiryDate(val) {
     var [month, year] = val.split('/')
     month = parseInt(month)

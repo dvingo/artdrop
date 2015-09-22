@@ -5,6 +5,12 @@ import Store from 'state/main'
 import {imageUrlForSurface} from 'state/utils'
 import PaymentForm from 'components/PaymentForm/PaymentForm'
 
+function totalPrice(shippingPrice, itemPrice) {
+  return (shippingPrice != null
+    ? (Number(shippingPrice) + Number(itemPrice)).toFixed(2)
+    : itemPrice)
+}
+
 export default React.createClass({
   mixins: [reactor.ReactMixin],
 
@@ -23,6 +29,11 @@ export default React.createClass({
   render() {
     var design = this.state.design
     if (design == null) { return null }
+    var hasShippingPrice = this.state.shippingPrice != null
+    var shippingPrice = (this.state.shippingPrice
+      ? '$' + this.state.shippingPrice
+      : 'Shipping will be calculated after you enter an address.')
+    var total = totalPrice(this.state.shippingPrice, this.state.designPrice)
 
     return (
       <div className="Cart cart">
@@ -35,13 +46,14 @@ export default React.createClass({
           </div>
 
           <div className="Cart-surface-info">
-            <h2>Printed on: {design.getIn(['surface', 'name'])}</h2>
+            <h2>Printed on: <span className="val">{design.getIn(['surface', 'name'])}</span></h2>
             <img src={imageUrlForSurface(design.get('surface'))}/>
           </div>
 
           <div className="Cart-price-info">
-            <h2>Shipping: ${this.state.shippingPrice}</h2>
-            <h2>Total: ${this.state.designPrice}</h2>
+            <h2>Shipping Price: <span className="val">{shippingPrice}</span></h2>
+            <h2>Item Price: <span className="val">${this.state.designPrice}</span></h2>
+            <h2>Total: <span className="val">${total}</span></h2>
           </div>
 
         </div>

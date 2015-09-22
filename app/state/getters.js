@@ -28,7 +28,10 @@ getters.currentDesignPrice = [
 
 getters.shippingPrice = [
   ['cart'],
-  (cart) => cart.get('shippingPrice')
+  (cart) => {
+    var price = cart.get('shippingPrice')
+    return price ? Number(price).toFixed(2) : null
+  }
 ]
 
 getters.numEnabledLayers = [

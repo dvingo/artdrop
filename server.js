@@ -30,16 +30,23 @@ app.get('/shippingPrice', cors(), function(req, res) {
     var state = query.state
     var zipcode = query.zipcode
     var sku = query.sku
-  console.log('in positive')
-    printioService.getShipPrice(sku, zipcode, state, function(data) {
-      console.log('got price data: ', data)
-      var price = data.Result[0].ShipOptions[0].Price.Price
-      var shippingMethodId = data.Result[0].ShipOptions[0].MethodId
-      res.json({price: price, shippingMethodId: shippingMethodId})
+    console.log('in positive')
+    printioService.getShipPrice(sku, zipcode, state, function(pRes) {
+      if (pRes.HadError) {
+        res.json({errors: pRes.Errors})
+      } else {
+        console.log('got price data: ', pRes)
+        // TODO return all shipping options, with description (standard, expidited, etc) and let
+        // the user choose one.
+        var price = pRes.Result[0].ShipOptions[0].Price.Price
+      console.log('PRICE IS: ', price)
+        var shippingMethodId = pRes.Result[0].ShipOptions[0].MethodId
+        res.json({price: price, shippingMethodId: shippingMethodId})
+      }
     })
   } else {
     console.log('in negative')
-    res.json({"hello": "there"})
+    res.json({errors: [{ErrorMessage: 'Missing required parameters'}]})
   }
 })
 

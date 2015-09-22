@@ -2,20 +2,28 @@
   @include display(flex);
   @include flex-direction(column);
 
-  padding: 10px;
-
   @media (min-width: 650px) {
     @include flex-direction(row);
     @include justify-content(space-around);
   }
 
+  padding: 10px;
+
   h2 {
     margin: 6px 10px 5px;
     color: rgba(0,0,0,0.5);
   }
+
+  .val {
+    color: #353939;
+    font-size: smaller;
+  }
+
 }
 
 .Cart-surface-info {
+  margin: 0 auto;
+  max-width: 400px;
   img { width: 100%; }
 }
 
