@@ -57,6 +57,3 @@ export default React.createClass({
     )
   }
 });
-
-// if yo press the colors it rotates
-// if you press right or left it gets a previous or new color

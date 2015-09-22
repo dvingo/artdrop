@@ -31,36 +31,24 @@
 		span {     
 			overflow: hidden;
 			position: relative;
-			width: 350px;
-			height: 350px;
-			max-height: 350px;
-			max-width:350px;
-			min-height: 350px;
-			min-width: 350px;
+			width: 250px;
+			height: 250px;
 
-			@media (max-width: 360px) {
-				max-height: 250px;
-				max-width: 250px;
-				min-height: 250px;
-				min-width: 250px;
+			@media (min-width: 450px) {
+				width: 350px;
+				height: 350px;
 			}
-			@media (max-width: 500px) {
+			@media (min-width: 500px) {
 				max-height: 400px;
 				max-width: 400px;
-				min-height: 400px;
-				min-width: 400px;
 			}
-			@media (max-width: 1100px) {
-				// max-height: 600px;
-				// max-width: 600px;
-				// min-height: 600px;
-				// min-width: 600px;
+			@media (min-width: 1100px) {
+				max-height: 600px;
+				max-width: 600px;
 			}
-			@media (max-width: 1400px) {
-				// max-height: 700px;
-				// max-width: 700px;
-				// min-height: 700px;
-				// min-width: 700px;
+			@media (min-width: 1400px) {
+				max-height: 700px;
+				max-width: 700px;
 			}
 		}
 	}
@@ -137,53 +125,11 @@
 	}
 }
 
-@media (min-width: 900px ) {
-	.DesignEditDetail-canvas {
-		span {
-			// height: 400px;
-			// width: 400px;
-			// max-height: none;
-			// max-width: none;
-		} 
-	}
-}
-
-
 // @media (min-width: $media-min-width), (orientation: landscape) {
-//   .DesignEdit {
-//     @include flex-direction(row);
-//   }
-//   .DesignEdit-canvas-flex-wrapper {
-//     max-width: none;
-//   }
-//   .DesignEdit-ui {
-//     height: 100%;
-//   }
 // }
-
 // @media (width: 768) and (height: 1024) and (orientation: portrait) {
-//   .DesignEdit {
-//     @include flex-direction(column);
-//   }
-//   .DesignEdit-canvas-flex-wrapper {
-//     max-width: auto;
-//   }
-//   .DesignEdit-edit-ui {
-//     height: auto;
-//   }
 // }
-
 // @media (min-width: 650px) {
-//   .DesignEdit-canvas-flex-wrapper {
-//     span {
-//       width: 90%;
-//       padding-bottom: 90%;
-//     }
-//   }
 // }
-
 // @media (width: 768) and (height: 1024) and (orientation: portrait) {
-//   .DesignEdit { @include flex-direction(column); }
-//   .DesignEdit-canvas-flex-wrapper { max-width: auto; }
-//   .DesignEdit-edit-ui { height: auto; }
 // }
