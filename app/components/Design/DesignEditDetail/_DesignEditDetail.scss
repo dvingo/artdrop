@@ -1,62 +1,189 @@
-.DesignEditDetail {
-  @include flex-direction(row);
+.DesignEditDetail.main {
+	@include display(flex);
+	@include flex-direction(column);
+	@include flex(1 0 0);
 }
-.DesignEditDetail-canvas-flex-wrapper {
-  max-width: none;
+.DesignEditDetail-wrapper-1 {
+	@include display(flex);
+	@include flex-direction(row);
+	@include flex(1 0 0);
+	@include align-items(center);
+	@include justify-content(center);
 }
-.DesignEditDetail-edit-ui {
-  @include flex-direction(row); 
-}
-.DesignEditDetail-edit-ui-top {
-  @include flex-direction(column);
-}
-.DesignEditDetail-edit-ui-canvas {
-  @include display(flex);
-  @include flex(1 0 0);
-  @include align-items(center);
-  @include justify-content(center);
-}
-.DesignEditDetail-edit-ui-detailed {
-  @include display(flex);
-  @include flex(1 0 0);
-  @include flex-direction(column);
-}
-.DesignEditDetail-edit-ui-top {
-  @include display(flex);
-  @include flex(1 0 0);
-  @include align-items(center);
-}
-.DesignEditDetail-edit-ui-mid {
-  @include display(flex);
-  @include align-items(center);
-  @include justify-content(center);
-  background: $nav-bar-color;
-  min-height: 40px;
+	.DesignEditDetail-layers {
+		@include display(flex);
+		@include flex(1 0 0);
+		@include flex-direction(column);
+		width: 100%;
+		padding: 20px;
+		position: relative;
+	}
+	.DesignEditDetail-canvas {
+		@include display(flex);
+		@include flex(2 0 0);
+		@include align-items(center);
+		@include justify-content(center);
+		height: 100%;
+		width: 100%;
+		overflow: hidden;
+		position: relative;
 
-  .rotate-colors {
-    width: 50px;
-    padding: 5px;
-  }
+		span {     
+			overflow: hidden;
+			position: relative;
+			width: 350px;
+			height: 350px;
+			max-height: 350px;
+			max-width:350px;
+			min-height: 350px;
+			min-width: 350px;
+
+			@media (max-width: 360px) {
+				max-height: 250px;
+				max-width: 250px;
+				min-height: 250px;
+				min-width: 250px;
+			}
+			@media (max-width: 500px) {
+				max-height: 400px;
+				max-width: 400px;
+				min-height: 400px;
+				min-width: 400px;
+			}
+			@media (max-width: 1100px) {
+				// max-height: 600px;
+				// max-width: 600px;
+				// min-height: 600px;
+				// min-width: 600px;
+			}
+			@media (max-width: 1400px) {
+				// max-height: 700px;
+				// max-width: 700px;
+				// min-height: 700px;
+				// min-width: 700px;
+			}
+		}
+	}
+.DesignEditDetail-wrapper-2 {
+	@include display(flex);
+	@include flex(1 0 0);
+	@include flex-direction(column);
+	@include align-items(center);
 }
-.DesignEditDetail-edit-ui-bottom {
-  @include display(flex);
-  @include flex(3 0 0);
-  @include flex-wrap(wrap);
-  @include justify-content(center);
-  overflow: scroll;
+	.DesignEditDetail-mid {
+		@include display(flex);
+		@include align-items(center);
+		@include justify-content(center);
+		background: $nav-bar-color;
+		height: 60px;
+		width: 100%;
+		& > div {
+			margin: 0 10px;
+		}
+		.rotate-colors {
+			width: 50px;
+			cursor: pointer;
+			&:hover { cursor: pointer; }
+		}
+		.check-button {
+			width: 50px;
+			height: 50px;
+		}
+		.button {
+			@include display(flex);
+			@include align-items(center);
+			@include justify-content(center);
+			background: #6A8CC4;
+			border-radius: 15px 15px;
+			width: 100px;
+			height: 30px;
+			-webkit-box-shadow: 2px 2px 6px 0px rgba(150, 150, 150, 0.75);
+			-moz-box-shadow: 2px 2px 6px 0px rgba(150, 150, 150, 0.75);
+			box-shadow: 2px 2px 6px 0px rgba(150, 150, 150, 0.75);
+			cursor: pointer;
+			&.off { opacity: 0.5 }
+		}
+	}
+	.DesignEditDetail-layer-grid {
+		@include display(flex);
+		@include flex(3 0 0);
+		@include flex-wrap(wrap);
+		@include justify-content(center);
+		overflow: scroll;
+		background: white;
+	}
+
+@media (min-width: $media-min-width) {
+	.DesignEditDetail.main {
+		@include flex-direction(row);
+	}
+	.DesignEditDetail-wrapper-1 {
+		@include flex-direction(row);
+	}
+		.DesignEditDetail-canvas {
+			span {
+				height: 700px;
+				width: 700px;
+				max-height: none;
+				max-width: none;
+			} 
+		}
+	.DesignEditDetail-wrapper-2 {
+		.LayerSelectorGroup {
+			.LayerSelector {
+				img { width: 70px; height: 70px; }
+			}
+		}
+	}
 }
 
-@media (min-width: $media-min-width), (orientation: landscape) {
-  .DesignEditDetail {
-    @include flex-direction(row);
-  }
-  .DesignEditDetail-canvas-flex-wrapper {
-    max-width: none;
-  }
-  .DesignEditDetail-edit-ui {
-    @include flex-direction(row);
-  }
-  .DesignEdit-ui-top {
-    @include flex-direction(column);
-  }
+@media (min-width: 900px ) {
+	.DesignEditDetail-canvas {
+		span {
+			// height: 400px;
+			// width: 400px;
+			// max-height: none;
+			// max-width: none;
+		} 
+	}
 }
+
+
+// @media (min-width: $media-min-width), (orientation: landscape) {
+//   .DesignEdit {
+//     @include flex-direction(row);
+//   }
+//   .DesignEdit-canvas-flex-wrapper {
+//     max-width: none;
+//   }
+//   .DesignEdit-ui {
+//     height: 100%;
+//   }
+// }
+
+// @media (width: 768) and (height: 1024) and (orientation: portrait) {
+//   .DesignEdit {
+//     @include flex-direction(column);
+//   }
+//   .DesignEdit-canvas-flex-wrapper {
+//     max-width: auto;
+//   }
+//   .DesignEdit-edit-ui {
+//     height: auto;
+//   }
+// }
+
+// @media (min-width: 650px) {
+//   .DesignEdit-canvas-flex-wrapper {
+//     span {
+//       width: 90%;
+//       padding-bottom: 90%;
+//     }
+//   }
+// }
+
+// @media (width: 768) and (height: 1024) and (orientation: portrait) {
+//   .DesignEdit { @include flex-direction(column); }
+//   .DesignEdit-canvas-flex-wrapper { max-width: auto; }
+//   .DesignEdit-edit-ui { height: auto; }
+// }

@@ -19,7 +19,7 @@ export default React.createClass({
     if (this.state.design == null || this.state.currentLayer == null ) { return null }
       
     return (
-      <article className={classNames("layer-selector-wrapper", {portrait: this.props.isPortrait})}>
+      <article className={classNames("LayerSelectorGroup", {portrait: this.props.isPortrait})}>
           {this.state.design.get('layers').reverse().map(layer => {
             return (
               <LayerSelector design={this.state.design} currentLayer={this.state.currentLayer} layer={layer}/>

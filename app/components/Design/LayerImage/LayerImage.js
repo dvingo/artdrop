@@ -34,7 +34,7 @@ export default React.createClass({
     var style = isSelected ? {border: '2px solid black'} : null
 
     return (
-      <div className="layer-image" onClick={this.selectLayerImage} style={style}>
+      <div className="LayerImage" onClick={this.selectLayerImage} style={style}>
         <img src={imageUrlForLayerImage(this.props.layerImage)}/>
       </div>
     )

@@ -1,6 +1,8 @@
 import React from 'react'
 import {iconPath} from 'utils'
+import ColorsButtonRotate from 'components/ColorsButtonRotate/ColorsButtonRotate'
 var classNames = require('classnames')
+
 
 export default React.createClass({
   render() {
@@ -9,17 +11,18 @@ export default React.createClass({
     var onRightClick = this.props.onRightClick
     var label = this.props.label
 
+    // <span className="color-wheel"
+    //       onClick={onRightClick}>
+    //   <img src={iconPath('color-wheel.svg')}/>
+
     return (
-      <div className={classNames("new-colors-button" , {small:isSmall})} >
+      <div className={classNames("ColorsButton" , {small:isSmall})} >
         <div className="container">
           <span className="left"
                 onClick={onLeftClick}>
             <img src={iconPath('triangle-left.svg')}/>
           </span>
-          <span className="color-wheel"
-                onClick={onRightClick}>
-            <img src={iconPath('color-wheel.svg')}/>
-          </span>
+          <ColorsButtonRotate/>
           <span className="right"
                 onClick={onRightClick}>
             <img src={iconPath('triangle-right.svg')}/>

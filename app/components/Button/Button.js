@@ -27,7 +27,7 @@ export default React.createClass({
   render() {
     var style = {
       borderRadius: 2,
-      boxShadow: (this.state.mouseIsDown ? '1px 1px 4px black inset': '1px 1px 1px black')
+      boxShadow: (this.state.mouseIsDown ? '1px 1px 4px black inset': '')
     }
     var size = this.props.size || 30
     return (

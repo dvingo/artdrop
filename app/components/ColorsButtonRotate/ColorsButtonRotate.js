@@ -1,7 +1,7 @@
 import React from 'react'
 import reactor from 'state/reactor'
 import Store from 'state/main'
-import {iconPath, setSvgColors, replaceSvgImageWithText} from 'utils'
+import { iconPath, setSvgColors, replaceSvgImageWithText } from 'utils'
 
 export default React.createClass({
   mixins: [reactor.ReactMixin],
@@ -51,9 +51,12 @@ export default React.createClass({
 
   render() {
     return (
-      <span ref="container" style={{width: 60}} onClick={this.rotateColors}>
+      <span className="ColorsButtonRotate" ref="container" onClick={this.rotateColors}>
         <img style={{display:'none'}} src={iconPath('shuffle.svg')} ref="imgRef"/>
       </span>
     )
   }
 });
+
+// if yo press the colors it rotates
+// if you press right or left it gets a previous or new color

@@ -1,1 +1,69 @@
 .RenderLayers {}
+
+
+//
+// Displays the layers of the image to show what the final result will
+// look like.
+//
+
+.canvas-flex-wrapper {
+  @include display(flex);
+  @include flex(1 0 0);
+  @include align-items(center);
+  @include justify-content(center);
+  width: 100%;
+  height: 100%;
+  max-width: 475px;
+  overflow: hidden;
+  span {
+    width: 75%;
+    padding-bottom: 75%;
+    position: relative;
+  }
+
+  // &.portrait {
+  //   background: red;
+  //   width: 30%;
+  //   float: left;
+  // }
+}
+
+.canvas {
+  top: 0;
+  left: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.layer {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+
+  img {
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    visibility: hidden;
+    display: none;
+  }
+
+  .off {
+    visibility: hidden;
+    opacity: 0;
+    display: none;
+  }
+}
+
+@media (min-width: 650px) {
+  .canvas-flex-wrapper {
+    span {
+      width: 90%;
+      padding-bottom: 90%;
+    }
+  }
+}

@@ -39,8 +39,8 @@ export default React.createClass({
 
 
     return (
-      <div className={classNames({selected: isSelected}, 'layer-selector')}>
-        <img src={imageUrlForLayer(layer)} width={imgSize} height={imgSize}
+      <div className={classNames({selected: isSelected}, 'LayerSelector')}>
+        <img src={imageUrlForLayer(layer)}
              onClick={this.selectLayer}/> 
         {isSelected ?
           <span className={isEnabled ? '' : 'disabled'} onClick={this.toggleCurrentLayer}>

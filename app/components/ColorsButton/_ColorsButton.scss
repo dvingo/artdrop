@@ -1,6 +1,4 @@
-.ColorsButton {}
-
-.new-colors-button {
+.ColorsButton {
   -webkit-tap-highlight-color:  rgba(255, 255, 255, 0);
   @include display(flex);
   @include flex-direction(column);
@@ -42,28 +40,43 @@
     @include justify-content(center);
     @include flex(1 0 0);
     height: 100%;
-
     img {
       width: 100%;
       height: auto;
     }
     &:hover { cursor: pointer; }
   }
-  .color-wheel {
+  .ColorsButtonRotate {
     @include display(flex);
     @include align-items(center);
     @include flex(2 0 0);
     padding: 0 10px;
     max-height: 100%;
+    position: relative;
 
     img {
       width: 100%;
-      height: auto;
+      height: 100%;
+      padding: 10px;
+      border-radius: 50%;
+      -webkit-box-shadow: 1px 2px 6px 0px rgba(150,150,150,0.75);
+      -moz-box-shadow: 1px 2px 6px 0px rgba(150,150,150,0.75);
+      box-shadow: 1px 2px 6px 0px rgba(150,150,150,0.75);
+    }
+    svg { 
+      background: plum;
+      border-radius: 50%;
+      -webkit-box-shadow: 1px 2px 6px 0px rgba(150,150,150,0.75);
+      -moz-box-shadow: 1px 2px 6px 0px rgba(150,150,150,0.75);
+      box-shadow: 1px 2px 6px 0px rgba(150,150,150,0.75);
     }
     &:hover { cursor: pointer; }
   }
+  &.small { width: 80px; }
+}
 
-  &.small {
-    width: 80px;
+@media (min-width: $media-min-width) {
+  .ColorsButton {
+    max-width: 300px;
   }
 }
