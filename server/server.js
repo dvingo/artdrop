@@ -1,17 +1,20 @@
 var express = require('express')
-var Firebase = require('firebase')
+var firebaseRef = require('./firebase_refs').firebaseRef
+var RSVP = require('rsvp')
 var app = express()
 var bodyParser = require('body-parser')
 var request = require('request')
 var cors = require('cors')
 var compression = require('compression')
-var config = require('./server-config')
-var PrintioService = require('./print-io-api/print-io-api')
+var config = require('../server-config')
+var hydrateDesign = require('./hydrate_utils').hydrateDesign
+var PrintioService = require('../print-io-api/print-io-api')
 
 var recipeId = process.env['ARTDROP_RECIPE_ID']
 var firebaseUrl = process.env['ARTDROP_FIREBASE_URL']
 var firebaseUsername = process.env['ARTDROP_FIREBASE_USERNAME']
 var firebasePassword = process.env['ARTDROP_FIREBASE_PASSWORD']
+var designsRef = require('./firebase_refs').designsRef
 
 function exitIfValMissing(val, name) {
   if (val == null) {
@@ -27,7 +30,7 @@ exitIfValMissing(firebasePassword, 'Firebase password')
 
 app.use(bodyParser.json())
 
-var firebaseRef = new Firebase(firebaseUrl)
+
 firebaseRef.authWithPassword({
   email: firebaseUsername,
   password : firebasePassword
@@ -38,9 +41,13 @@ firebaseRef.authWithPassword({
   } else {
     console.log("Authenticated successfully with payload:", authData)
 
-    var designsRef = new Firebase(firebaseUrl + '/designs')
     designsRef.child('-JuwTLo8mMamQgZSeBF3').once('value', function(snapshot) {
-      console.log('got design snapshot: ', snapshot.val())
+      var d = snapshot.val()
+      console.log('got design snapshot: ', d)
+      d.id = '-JuwTLo8mMamQgZSeBF3'
+      hydrateDesign(d).then(function(design) {
+        console.log('hydrated: ', design.layers[0].selectedLayerImage)
+      })
     }, function(err) {
       console.log('got error: ', err)
     })
@@ -93,9 +100,10 @@ firebaseRef.authWithPassword({
     app.post('/orders', cors(), function(req, res) {
       console.log('got order data: ', req.body)
       var designId = req.body.designId
-      getDesign(designId, function(data) {
-        get the layer selected layer image and then pass them to a phantomjs script to render as jpeg or png
-      })
+      //hydrateDesign(designId, function(design) {
+        //var jpg = renderDesignToJpg(design)
+        //get the layer selected layer image and then pass them to a phantomjs script to render as jpeg or png
+      //})
       res.json({success: 'got u'})
     })
 
