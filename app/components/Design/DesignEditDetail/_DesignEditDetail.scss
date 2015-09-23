@@ -81,10 +81,11 @@
 			@include display(flex);
 			@include align-items(center);
 			@include justify-content(center);
-			background: #6A8CC4;
+			background: $button-color;
 			border-radius: 15px 15px;
 			width: 100px;
 			height: 30px;
+			color: white;
 			-webkit-box-shadow: 2px 2px 6px 0px rgba(150, 150, 150, 0.75);
 			-moz-box-shadow: 2px 2px 6px 0px rgba(150, 150, 150, 0.75);
 			box-shadow: 2px 2px 6px 0px rgba(150, 150, 150, 0.75);
