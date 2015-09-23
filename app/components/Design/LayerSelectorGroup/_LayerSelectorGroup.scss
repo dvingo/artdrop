@@ -26,11 +26,6 @@
 	  	width: 50px;
 	  	overflow: hidden;
 	  }
-	  &.selected {
-	  	height: 80px;
-	  	width: 140px;
-	  	background: $button-color;
-	  }
 	}
   }
 }
@@ -44,20 +39,6 @@
 	  	width: 400px;
 	  	&.portrait {
 	  	  @include flex-direction(column);
-	  	}
-	  	.LayerSelector {
-	  	  @include flex-direction(row);
-	  	  span { margin: 0 0 0 10px; }
-	  	  height: 90px;
-	  	  width: 160px;
-	  	  &.selected { 
-	  	  	background: $button-color; 
-	  	  	img { width: 70px; height: 70px; }
-	  	  	span img {
-	  	  		height: 25px;
-	  	  		width: 25px;
-	  	  	}
-	  	  }
 	  	}
     }
     .DesignEditDetail-mid { width: 100%; }

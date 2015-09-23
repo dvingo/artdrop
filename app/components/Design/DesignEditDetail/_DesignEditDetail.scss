@@ -38,7 +38,7 @@
 				width: 350px;
 				height: 350px;
 			}
-			@media (min-width: 500px) {
+			@media (min-width: 600px) {
 				max-height: 400px;
 				max-width: 400px;
 			}
@@ -117,13 +117,6 @@
 				max-width: none;
 			} 
 		}
-	.DesignEditDetail-wrapper-2 {
-		.LayerSelectorGroup {
-			.LayerSelector {
-				img { width: 70px; height: 70px; }
-			}
-		}
-	}
 }
 
 // @media (min-width: $media-min-width), (orientation: landscape) {
