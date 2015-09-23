@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      padding: 0;
+      background: white;
+      margin: 0;
+      height:  {{ height }}px;
+      width: {{ width }}px;
+    }
+    svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  </style>
+  <script src="svg-injector.min.js"></script>
+  <title>Test</title>
+  </head>
+  <body>
+    <img src="{{imgOneUrl}}" id="one">
+    <img src="{{imgTwoUrl}}" id="two">
+    <img src="{{imgThreeUrl}}" id="three">
+    <script>
+      var one = document.querySelector('#one')
+      var two = document.querySelector('#two')
+      var three = document.querySelector('#three')
+      var toA = function(list) { return Array.prototype.slice.call(list, 0) }
+
+      var setSvgColors = function(svgEl) {
+        var svgLayerIds = ['Layer1', 'Layer2', 'Layer3', 'Layer4']
+        var palette = {
+          Layer1: 'dimGrey',
+          Layer2: 'seaGreen',
+          Layer3: 'darkSlateGrey',
+          Layer4: 'darkRed'
+        }
+        svgLayerIds.forEach(function(id) {
+          toA(svgEl.querySelectorAll('#' + id + ' *')).forEach(function(el) {
+             el.style.fill = palette[id]
+          })
+        })
+      }
+
+      var replaceSvgImageWithText = function(imgEl, height, width) {
+        var opts = {
+          each: function(svgEl) {
+            if (typeof svgEl !== 'object') { return null }
+            svgEl.style.height = height + 'px'
+            svgEl.style.width = width + 'px'
+            svgEl.style.margin  = '0';
+            svgEl.style.padding = '0';
+            svgEl.style.display = 'block';
+            setSvgColors(svgEl)
+            return svgEl
+          },
+          evalScripts: 'never'
+        }
+        SVGInjector(imgEl, opts)
+      }
+      replaceSvgImageWithText(one, 2400, 2400)
+      replaceSvgImageWithText(two, 2400, 2400)
+      replaceSvgImageWithText(three, 2400, 2400)
+    </script>
+  </body>
+</html>

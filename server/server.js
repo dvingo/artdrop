@@ -1,6 +1,9 @@
+var phantom = require('phantom')
 var express = require('express')
-var firebaseRef = require('./firebase_refs').firebaseRef
-var RSVP = require('rsvp')
+var mustacheExpress = require('mustache-express')
+var firebaseRefs = require('./firebase_refs')
+var firebaseRef = firebaseRefs.firebaseRef
+var credsRef = firebaseRefs.credsRef
 var app = express()
 var bodyParser = require('body-parser')
 var request = require('request')
@@ -16,6 +19,8 @@ var firebaseUsername = process.env['ARTDROP_FIREBASE_USERNAME']
 var firebasePassword = process.env['ARTDROP_FIREBASE_PASSWORD']
 var designsRef = require('./firebase_refs').designsRef
 
+var webshot = require('webshot')
+
 function exitIfValMissing(val, name) {
   if (val == null) {
     console.log(name + ' is not set, exiting...')
@@ -29,7 +34,11 @@ exitIfValMissing(firebaseUsername, 'Firebase username')
 exitIfValMissing(firebasePassword, 'Firebase password')
 
 app.use(bodyParser.json())
-
+app.use(compression())
+app.use(express.static('../hosted-dir'))
+app.engine('mustache', mustacheExpress());
+app.set('view engine', 'mustache')
+app.set('views', './views');
 
 firebaseRef.authWithPassword({
   email: firebaseUsername,
@@ -41,18 +50,20 @@ firebaseRef.authWithPassword({
   } else {
     console.log("Authenticated successfully with payload:", authData)
 
-    designsRef.child('-JuwTLo8mMamQgZSeBF3').once('value', function(snapshot) {
+  var designId = '-JuwTLo8mMamQgZSeBF3'
+    designsRef.child(designId).once('value', function(snapshot) {
       var d = snapshot.val()
       console.log('got design snapshot: ', d)
-      d.id = '-JuwTLo8mMamQgZSeBF3'
+      d.id = designId
+
       hydrateDesign(d).then(function(design) {
         console.log('hydrated: ', design.layers[0].selectedLayerImage)
       })
+
     }, function(err) {
       console.log('got error: ', err)
     })
 
-    var credsRef = new Firebase(firebaseUrl + '/creds')
     credsRef.once('value', function(snapshot) {
       console.log('got creds: ', snapshot.val())
     }, function(err) {
@@ -111,11 +122,45 @@ firebaseRef.authWithPassword({
       request(s3Url(req.params.imageName)).pipe(res)
     })
 
-    app.use(compression())
-    app.use(express.static('hosted-dir'))
+    app.get('/svg-test', cors(), function(req, res) {
+      res.render('svg-test', {
+        height: 2400,
+        width: 2400,
+        imgOneUrl: "http://obscure-headland-1710.herokuapp.com/images/gz-Skyscraper_FG-01.svg",
+        imgTwoUrl: "http://obscure-headland-1710.herokuapp.com/images/gz-Pinapples2-01.svg",
+        imgThreeUrl: "http://obscure-headland-1710.herokuapp.com/images/gz-Pf3_FG-01.svg"
+      })
+    })
+
+    app.post('/produce-img', cors(), function(req, res) {
+      phantom.create(function(ph) {
+        ph.createPage(function(page) {
+          var url = 'http://localhost:3000/svg-test'
+          page.viewportSize = { width: 2400, height: 2400}
+          page.open(url, function(status) {
+            console.log('status: ' + status)
+            if (status === 'success') {
+              var interval = setInterval(function() {
+                page.evaluate(function() {
+                  return document.querySelectorAll('svg').length === 3
+                }, function(done) {
+                  if (done) {
+                    clearInterval(interval)
+                    page.render('example.jpeg', function() {
+                      res.json({success: true})
+                      ph.exit()
+                    })
+                  }
+                })
+              }, 800)
+            }
+          })
+        })
+      })
+    })
 
     app.get('/*', function(req, res) {
-      res.sendFile(__dirname + '/hosted-dir/index.html')
+      res.sendFile(__dirname + '../hosted-dir/index.html')
     })
 
     var port = process.env.PORT || config.devPort
