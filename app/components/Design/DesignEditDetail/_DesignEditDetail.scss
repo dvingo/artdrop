@@ -95,11 +95,11 @@
 	}
 	.DesignEditDetail-layer-grid {
 		@include display(flex);
-		@include flex(3 0 0);
+		@include flex(4 0 0);
 		@include flex-wrap(wrap);
 		@include justify-content(center);
+		width: 100%;
 		overflow: scroll;
-		background: white;
 	}
 
 @media (min-width: $media-min-width) {

@@ -25,10 +25,8 @@ export default React.createClass({
     })
 
     return (
-      <section className='choose-palette'>
-        <div className="palettes-container">
-          {palettes}
-        </div>
+      <section className="ChoosePalette">
+        {palettes}
       </section>
     )
   }
