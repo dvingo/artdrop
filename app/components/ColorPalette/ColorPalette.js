@@ -7,7 +7,7 @@ export default React.createClass({
 		var style = {}
 		
 		if ((currentPalette && palette) && currentPalette.get('id') === palette.get('id')) {
-			style = {boxShadow: '4px 4px 10px 4px #4E4D4D'}
+			style = {border: '4px solid black'}
 		}
 
 		return (
