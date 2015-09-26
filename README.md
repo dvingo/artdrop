@@ -1,4 +1,4 @@
-![Alt text](/artdrop-screenshot.png?raw=true "Screenshot")
+![Alt text](/docs/artdrop-screenshot.png?raw=true "Screenshot")
 
 Artdrop
 =======
