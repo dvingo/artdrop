@@ -1,33 +1,40 @@
+.Design-li {
+  position: relative;
+  height: $design-small-size;
+  width: $design-small-size;
+  margin: 2px;
+  padding: 0;
+  display: inline-block;
+  &:hover {
+    outline: 2px solid;
+    cursor: pointer;
+  }
+  @media (min-width: 650px) {
+    height: $design-medium-size;
+    width: $design-medium-size;
+  }
+  @media (min-width: 900px) {
+    height: $design-large-size;
+    width: $design-large-size;
+  }
+}
 .Design {
-	position: relative;
-	height: $design-small-size;
-	width: $design-small-size;
-	margin: 2px;
-	padding: 0;
-	display: inline-block;
-	&:hover {
-		outline: 2px solid;
-		cursor: pointer;
-	}
-	@media (min-width: 650px) {
-		height: $design-medium-size;
-		width: $design-medium-size;
-	}
-	@media (min-width: 900px) {
-		height: $design-large-size;
-		width: $design-large-size;
-	}
+  position: relative;
+  height: $design-small-size;
+  width: $design-small-size;
+  padding: 0;
+  display: inline-block;
 }
 .Design-container {
-	height: 0;
-	width: 100%;
-	padding-bottom: 100%;
-	position: relative;
+  height: 0;
+  width: 100%;
+  padding-bottom: 100%;
+  position: relative;
 }
 .Design-canvas {
-	top: 0;
-	left: 0;
-	position: absolute;
-	width: 100%;
-	height: 100%;
+  top: 0;
+  left: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }

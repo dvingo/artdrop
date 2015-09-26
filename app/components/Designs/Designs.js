@@ -22,7 +22,7 @@ export default React.createClass({
   render() {
     let designs = this.state.designs.map(d => {
       return (
-        <li className="Design" key={d.get('id')}>
+        <li className="Design-li" key={d.get('id')}>
           <Design design={d} onClick={this.selectDesign.bind(null, d.get('id'))}/>
         </li>
       )
