@@ -11,17 +11,20 @@ var cors = require('cors')
 var compression = require('compression')
 var config = require('../server-config')
 var hydrateDesign = require('./hydrate_utils').hydrateDesign
+var hydrateDesignId = require('./hydrate_utils').hydrateDesignId
 var PrintioService = require('../print-io-api/print-io-api')
+var querystring = require('querystring')
 try {
   var configVars = require('./.server_settings')
-} catch(e) {
-}
+} catch(e) { }
 
+configVars = configVars || {}
 var recipeId = configVars.recipeId || process.env['ARTDROP_RECIPE_ID']
 var firebaseUrl = configVars.firebaseUrl || process.env['ARTDROP_FIREBASE_URL']
 var firebaseUsername = configVars.firebaseUsername || process.env['ARTDROP_FIREBASE_USERNAME']
 var firebasePassword = configVars.firebasePassword || process.env['ARTDROP_FIREBASE_PASSWORD']
 var designsRef = require('./firebase_refs').designsRef
+var host, port;
 
 var webshot = require('webshot')
 
@@ -39,7 +42,7 @@ exitIfValMissing(firebasePassword, 'Firebase password')
 
 app.use(bodyParser.json())
 app.use(compression())
-app.use(express.static('../hosted-dir'))
+app.use(express.static(__dirname + '/../hosted-dir'))
 app.engine('mustache', mustacheExpress());
 app.set('view engine', 'mustache')
 app.set('views', './views');
@@ -111,35 +114,104 @@ firebaseRef.authWithPassword({
       }
     })
 
+    function renderDesignImage(design) {
+      console.log('render design: ', design.id)
+      phantom.create(function(ph) {
+        ph.createPage(function(page) {
+          var url = 'http://' + host + ':' + port + '/renderDesignImage'
+
+          var width = design.surfaceOption.printingImageWidth
+          var height = design.surfaceOption.printingImageHeight
+          var layerOneUrl = design.layers[0].selectedLayerImage.imageUrl
+          var layerTwoUrl = design.layers[1].selectedLayerImage.imageUrl
+          var layerThreeUrl = design.layers[2].selectedLayerImage.imageUrl
+          var query = { width:width, height:height, layerImgOne:layerImgOne,
+          layerImgTwo:layerImgTwo, layerImgThree:layerImgThree }
+          var qs = querystring.stringify(query)
+          page.viewportSize = { width: width, height: height }
+          var endpoint = url + '/?' + qs
+          console.log('making req to endpoint: ', endpoint)
+          page.open(endpoint, function(status) {
+            console.log('status: ' + status)
+            if (status === 'success') {
+              var interval = setInterval(function() {
+                page.evaluate(function() {
+                  return document.querySelectorAll('svg').length === 3
+                }, function(done) {
+                  console.log('not done')
+                  if (done) {
+                    clearInterval(interval)
+                    page.render('example.jpeg', function() {
+                      //res.json({success: true})
+                      ph.exit()
+                    })
+                  }
+                })
+              }, 800)
+            }
+          })
+        })
+      })
+    }
+
     app.options('/orders', cors(), function(req, res) { res.json('hello') })
     app.post('/orders', cors(), function(req, res) {
       console.log('got order data: ', req.body)
       var designId = req.body.designId
-      //hydrateDesign(designId, function(design) {
-        //var jpg = renderDesignToJpg(design)
-        //get the layer selected layer image and then pass them to a phantomjs script to render as jpeg or png
-      //})
-      res.json({success: 'got u'})
+      hydrateDesign(designId)
+        .then(renderDesignImage)
+        .then(uploadDesignImageToS3)
+        .then(createPrintOrder)
+        .then(persistDesign)
+        .then(function() {
+          res.json({success: 'Order created successfully'})
+        })
+        .catch(function() {
+          res.json({error: 'Error creating order'})
+        })
     })
 
     app.get('/images/:imageName', cors(), function(req, res) {
       request(s3Url(req.params.imageName)).pipe(res)
     })
 
-    app.get('/svg-test', cors(), function(req, res) {
+    // TODO app renderDesign endpoint that takes just a design id
+    app.post('/renderDesign/:designId', cors(), function(req, res) {
+      hydrateDesignId(req.params.designId).then(function(design) {
+        console.log('rendering')
+        renderDesignImage(design)
+        res.json('success')
+      })
+    })
+
+    app.get('/renderDesignImage', cors(), function(req, res) {
+      var layerOneUrl = req.query.layerOneUrl
+      var layerTwoUrl = req.query.layerTwoUrl
+      var layerThreeUrl = req.query.layerThreeUrl
+      var height = req.query.height
+      var width = req.query.width
+      console.log('layerOneUrl: ', layerOneUrl)
+      console.log('layerTwoUrl: ', layerTwoUrl)
+      console.log('layerThreeUrl: ', layerThreeUrl)
+      console.log('height : ', height)
+      console.log('width: ', width)
+      if (!(layerOneUrl && layerTwoUrl && layerThreeUrl && height && width)) {
+        res.json('Missing required parameters.')
+        return
+      }
       res.render('svg-test', {
-        height: 2400,
-        width: 2400,
-        imgOneUrl: "http://obscure-headland-1710.herokuapp.com/images/gz-Skyscraper_FG-01.svg",
-        imgTwoUrl: "http://obscure-headland-1710.herokuapp.com/images/gz-Pinapples2-01.svg",
-        imgThreeUrl: "http://obscure-headland-1710.herokuapp.com/images/gz-Pf3_FG-01.svg"
+        height: height,
+        width: width,
+        layerOneUrl: layerOneUrl,
+        layerTwoUrl: layerTwoUrl,
+        layerThreeUrl: layerThreeUrl
       })
     })
 
     app.post('/produce-img', cors(), function(req, res) {
       phantom.create(function(ph) {
         ph.createPage(function(page) {
-          var url = 'http://localhost:3000/svg-test'
+          var url = 'http://localhost:3000/renderDesignImage'
           page.viewportSize = { width: 2400, height: 2400}
           page.open(url, function(status) {
             console.log('status: ' + status)
@@ -164,13 +236,13 @@ firebaseRef.authWithPassword({
     })
 
     app.get('/*', function(req, res) {
-      res.sendFile(__dirname + '../hosted-dir/index.html')
+      res.sendFile('index.html', {root: __dirname + '/../hosted-dir/'})
     })
 
     var port = process.env.PORT || config.devPort
     var server = app.listen(port, function() {
-      var host = server.address().address;
-      var port = server.address().port;
+      host = server.address().address;
+      port = server.address().port;
       console.log('Application listening at http://%s:%s', host, port);
     })
   }

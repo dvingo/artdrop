@@ -16,13 +16,15 @@
       left: 0;
     }
   </style>
-  <script src="svg-injector.min.js"></script>
+  <script src="/svg-injector.min.js"></script>
   <title>Test</title>
   </head>
   <body>
-    <img src="{{imgOneUrl}}" id="one">
-    <img src="{{imgTwoUrl}}" id="two">
-    <img src="{{imgThreeUrl}}" id="three">
+    <p>"{{layerOneUrl}}"</p>
+    <img src="{{layerOneUrl}}" width="200">
+    <img src="{{layerOneUrl}}" id="one">
+    <img src="{{layerTwoUrl}}" id="two">
+    <img src="{{layerThreeUrl}}" id="three">
     <script>
       var one = document.querySelector('#one')
       var two = document.querySelector('#two')
@@ -60,9 +62,9 @@
         }
         SVGInjector(imgEl, opts)
       }
-      replaceSvgImageWithText(one, 2400, 2400)
-      replaceSvgImageWithText(two, 2400, 2400)
-      replaceSvgImageWithText(three, 2400, 2400)
+      replaceSvgImageWithText(one, {{height}}, {{width}})
+      replaceSvgImageWithText(two, {{height}}, {{width}})
+      replaceSvgImageWithText(three, {{height}}, {{width}})
     </script>
   </body>
 </html>

@@ -5,6 +5,8 @@ var layerImagesRef = firebaseRefs.layerImagesRef
 var colorPalettesRef = firebaseRefs.colorPalettesRef
 var surfaceOptionsRef = firebaseRefs.surfaceOptionsRef
 var surfacesRef = firebaseRefs.surfacesRef
+var designsRef = firebaseRefs.designsRef
+
 function hydrateObj(ref, id) {
   return new RSVP.Promise(function(resolve) {
     ref.child(id).once('value', function(o) { resolve(o.val()) })
@@ -15,6 +17,7 @@ var hydrateLayer = hydrateObj.bind(null, layersRef)
 var hydrateLayerImage = hydrateObj.bind(null, layerImagesRef)
 var hydrateColorPalette = hydrateObj.bind(null, colorPalettesRef)
 var hydrateSurface = hydrateObj.bind(null, surfacesRef)
+var hydrateDesignFromId = hydrateObj.bind(null, designsRef)
 
 function hydrateSurfaceOption(surfaceOptionId) {
   return (
@@ -30,6 +33,10 @@ function hydrateSurfaceOptionsForSurface (surface) {
   return RSVP.all(Object.keys(surface.options).map(hydrateSurfaceOption))
 }
 
+function hydrateDesignId(designId) {
+  return hydrateDesignFromId(designId).then(hydrateDesign)
+}
+
 function hydrateDesign(design) {
   var layers = design.layers.map(nestedHydrateLayer)
   return RSVP.all(layers).then(function(layers) {
@@ -43,7 +50,7 @@ function hydrateDesign(design) {
         surface.options = surfaceOptions
         design.surface = surface
         design.surfaceOption = surface.options.filter(function(o) {
-          o.id === design.surfaceOption
+          return o.id === design.surfaceOption
         })[0]
         return design
       })
@@ -76,5 +83,6 @@ module.exports = {
   hydrateLayerImage: hydrateLayerImage,
   hydrateColorPalette: hydrateColorPalette,
   hydrateSurface: hydrateSurface,
-  hydrateDesign: hydrateDesign
+  hydrateDesign: hydrateDesign,
+  hydrateDesignId: hydrateDesignId,
 }
