@@ -9,7 +9,7 @@ var bodyParser = require('body-parser')
 var request = require('request')
 var cors = require('cors')
 var compression = require('compression')
-var config = require('../server-config')
+var config = require('./server-config')
 var hydrateDesign = require('./hydrate_utils').hydrateDesign
 var hydrateDesignId = require('./hydrate_utils').hydrateDesignId
 var PrintioService = require('../print-io-api/print-io-api')
@@ -86,6 +86,11 @@ firebaseRef.authWithPassword({
       return [config.s3Endpoint, config.s3BucketName, filename].join('/')
     }
 
+    function imgUrl(awsFilename) {
+      var filename = awsFilename.split('/').pop()
+      return 'https://' + config.hostname + '/images/' + filename
+    }
+
     app.get('/shippingPrice', cors(), function(req, res) {
       console.log('got ship price req: ', req.query)
       var query = req.query
@@ -122,11 +127,11 @@ firebaseRef.authWithPassword({
 
           var width = design.surfaceOption.printingImageWidth
           var height = design.surfaceOption.printingImageHeight
-          var layerOneUrl = design.layers[0].selectedLayerImage.imageUrl
-          var layerTwoUrl = design.layers[1].selectedLayerImage.imageUrl
-          var layerThreeUrl = design.layers[2].selectedLayerImage.imageUrl
-          var query = { width:width, height:height, layerImgOne:layerImgOne,
-          layerImgTwo:layerImgTwo, layerImgThree:layerImgThree }
+          var layerOneUrl = imgUrl(design.layers[0].selectedLayerImage.imageUrl)
+          var layerTwoUrl = imgUrl(design.layers[1].selectedLayerImage.imageUrl)
+          var layerThreeUrl = imgUrl(design.layers[2].selectedLayerImage.imageUrl)
+          var query = { width:width, height:height, layerOneUrl:layerOneUrl,
+            layerTwoUrl:layerTwoUrl, layerThreeUrl:layerThreeUrl }
           var qs = querystring.stringify(query)
           page.viewportSize = { width: width, height: height }
           var endpoint = url + '/?' + qs
@@ -140,9 +145,9 @@ firebaseRef.authWithPassword({
                 }, function(done) {
                   console.log('not done')
                   if (done) {
+                    console.log('done')
                     clearInterval(interval)
                     page.render('example.jpeg', function() {
-                      //res.json({success: true})
                       ph.exit()
                     })
                   }
@@ -178,7 +183,6 @@ firebaseRef.authWithPassword({
     // TODO app renderDesign endpoint that takes just a design id
     app.post('/renderDesign/:designId', cors(), function(req, res) {
       hydrateDesignId(req.params.designId).then(function(design) {
-        console.log('rendering')
         renderDesignImage(design)
         res.json('success')
       })
@@ -190,11 +194,6 @@ firebaseRef.authWithPassword({
       var layerThreeUrl = req.query.layerThreeUrl
       var height = req.query.height
       var width = req.query.width
-      console.log('layerOneUrl: ', layerOneUrl)
-      console.log('layerTwoUrl: ', layerTwoUrl)
-      console.log('layerThreeUrl: ', layerThreeUrl)
-      console.log('height : ', height)
-      console.log('width: ', width)
       if (!(layerOneUrl && layerTwoUrl && layerThreeUrl && height && width)) {
         res.json('Missing required parameters.')
         return

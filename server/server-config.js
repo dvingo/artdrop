@@ -7,5 +7,5 @@ module.exports = {
   s3Endpoint: 'https://s3.amazonaws.com',
   s3BucketName: 'com.artdrop.images2',
   fireBaseUri: firebaseUri,
-  hostname: 'obscure-atoll-2694.herokuapp.com'
+  hostname: 'obscure-headland-1710.herokuapp.com'
 }
