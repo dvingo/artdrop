@@ -13,8 +13,8 @@ export default React.createClass({
   selectLayer() {
     Store.actions.selectLayerId(this.props.layer.get('id'))
     this.transitionTo('designEdit', {
-      designId: this.props.design.get('id'), 
-      layerId: layer.get('id')
+      designId: this.props.design.get('id'),
+      layerId: this.props.layer.get('id')
     })
   },
 
@@ -25,8 +25,8 @@ export default React.createClass({
 
   editLayerDetail() {
     this.transitionTo('designEditDetail', {
-      designId: this.props.design.get('id'), 
-      layerId: this.props.currentLayer.get('id'), 
+      designId: this.props.design.get('id'),
+      layerId: this.props.currentLayer.get('id'),
       imagesOrColors: 'images'
     })
   },
@@ -41,7 +41,7 @@ export default React.createClass({
     return (
       <div className={classNames({selected: isSelected}, 'LayerSelector')}>
         <img src={imageUrlForLayer(layer)}
-             onClick={this.selectLayer}/> 
+             onClick={this.selectLayer}/>
         {isSelected ?
           <span className={isEnabled ? '' : 'disabled'} onClick={this.toggleCurrentLayer}>
             <img src={iconPath("eyeball.svg")}/></span>

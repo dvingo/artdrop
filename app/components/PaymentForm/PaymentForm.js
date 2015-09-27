@@ -56,6 +56,25 @@ var validations = {
   ccCvCode: (v) => hasValidLength(v) ? '' : 'You must enter a CV Code'
 }
 
+function monthAndYearFromDate(date) {
+  var vals = date.match(/(\d{1,2})\s*\/\s*(\d{2})/)
+  if (!vals) { return }
+  return {month: vals[1], year: '20' + vals[2]}
+}
+
+function getStripeToken(state, onComplete) {
+  var { ccNumber, ccExpiryDate, ccCvCode } = state
+  var { month, year } = monthAndYearFromDate(ccExpiryDate.value)
+  var data = { number:ccNumber.value, cvc:ccCvCode.value, exp_month:month, exp_year: year }
+  Stripe.createToken(data, (status, resp) => {
+    if (resp.error) {
+      onComplete("Error submitting credit card.")
+    } else {
+      onComplete(null, resp.id)
+    }
+  })
+}
+
 var fieldsNeededToCalculateShipping = [
   'shippingState', 'shippingZipcode'
 ]
@@ -123,6 +142,10 @@ export default React.createClass({
     this.setState(newState)
   },
 
+  componentWillMount() {
+    Stripe.setPublishableKey('pk_test_Nj0djznRXsfYMTGYpoF4kbsT')
+  },
+
   componentWillUpdate(nextProps, nextState) {
     calculateShippingIfUpdated(nextState, this.state)
   },
@@ -137,10 +160,17 @@ export default React.createClass({
 
   onPayButtonClick(e) {
     e.preventDefault()
-    if (areAllFieldsValid(this.state)) {
-      var { shippingFirstName, shippingLastName, shippingPhoneNumber,
+    if (!areAllFieldsValid(this.state)) { return }
+
+    getStripeToken(this.state, (err, token) => {
+      let { shippingFirstName, shippingLastName, shippingPhoneNumber,
         shippingAddress, shippingCity,
         shippingState, shippingZipcode, email } = this.state
+
+      if (err) {
+        Store.actions.createError(err)
+        return
+      }
       Store.actions.createOrder({
         shippingFirstName:   shippingFirstName.value,
         shippingLastName:    shippingLastName.value,
@@ -149,8 +179,10 @@ export default React.createClass({
         shippingCity:        shippingCity.value,
         shippingState:       shippingState.value,
         shippingZipcode:     shippingZipcode.value,
-        email:               email.value })
-    }
+        ccToken:             token,
+        email:               email.value
+      })
+    })
   },
 
   render() {

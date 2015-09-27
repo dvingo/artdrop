@@ -54,5 +54,6 @@ export default {
   addManyTags(tags) { dispatchHelper('addManyTags', tags) },
   addManyDesigns(designs) { dispatchHelper('addManyDesigns', designs) },
   getShipPrice(shipData) { dispatchHelper('getShipPrice', shipData) },
-  createOrder(orderData) { dispatchHelper('createOrder', orderData) }
+  createOrder(orderData) { dispatchHelper('createOrder', orderData) },
+  createError(message) { dispatchHelper('createError', message) }
 }

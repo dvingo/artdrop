@@ -17,4 +17,5 @@ exports.surfacesRef       = new Firebase(fireBaseUri + "/surfaces")
 exports.surfaceOptionsRef = new Firebase(fireBaseUri + "/surfaceOptions")
 exports.tagsRef           = new Firebase(fireBaseUri + "/tags")
 exports.usersRef          = new Firebase(fireBaseUri + "/users")
+exports.ordersRef         = new Firebase(fireBaseUri + "/orders")
 export default exports

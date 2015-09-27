@@ -12,11 +12,15 @@ var compression = require('compression')
 var config = require('../server-config')
 var hydrateDesign = require('./hydrate_utils').hydrateDesign
 var PrintioService = require('../print-io-api/print-io-api')
+try {
+  var configVars = require('./.server_settings')
+} catch(e) {
+}
 
-var recipeId = process.env['ARTDROP_RECIPE_ID']
-var firebaseUrl = process.env['ARTDROP_FIREBASE_URL']
-var firebaseUsername = process.env['ARTDROP_FIREBASE_USERNAME']
-var firebasePassword = process.env['ARTDROP_FIREBASE_PASSWORD']
+var recipeId = configVars.recipeId || process.env['ARTDROP_RECIPE_ID']
+var firebaseUrl = configVars.firebaseUrl || process.env['ARTDROP_FIREBASE_URL']
+var firebaseUsername = configVars.firebaseUsername || process.env['ARTDROP_FIREBASE_USERNAME']
+var firebasePassword = configVars.firebasePassword || process.env['ARTDROP_FIREBASE_PASSWORD']
 var designsRef = require('./firebase_refs').designsRef
 
 var webshot = require('webshot')

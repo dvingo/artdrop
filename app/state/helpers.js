@@ -1,6 +1,6 @@
 import {designsRef, layersRef, layerImagesRef,
 colorPalettesRef, surfacesRef,
-surfaceOptionsRef, tagsRef} from 'state/firebaseRefs'
+surfaceOptionsRef, tagsRef, ordersRef} from 'state/firebaseRefs'
 import reactor from 'state/reactor'
 var Map = require('nuclear-js').Immutable.Map
 var RSVP = require('RSVP')
@@ -150,7 +150,21 @@ exports.hydrateObj = hydrateObj
 exports.persistNewDesign = (design) => {
   design.get('layers').forEach(persistNewLayer)
   var firebaseDesign = designPropsToIds(design)
-  designsRef.child(design.get('id')).set(firebaseDesign.toJS())
+  return new RSVP.Promise((resolve, reject) => {
+    designsRef.child(design.get('id')).set(firebaseDesign.toJS(), (err) => {
+      if (err) { reject() }
+      else     { resolve() }
+    })
+  })
+}
+
+exports.persistAndCreateNewOrder = (orderData) => {
+  return new RSVP.Promise((resolve, reject) => {
+    var newOrderRef = ordersRef.push(orderData, (err) => {
+      if (err) { reject() }
+      else     { resolve(newOrderRef.key()) }
+    })
+  })
 }
 
 exports.persistWithRef = persistWithRef

@@ -15,12 +15,12 @@ export default React.createClass({
 	mixins: [reactor.ReactMixin, Router.State, Router.Navigation],
 
 	getDataBindings() {
-	return {
+      return {
 		design:           Store.getters.currentDesign,
 		currentLayer:     Store.getters.currentLayer,
 		numEnabledLayers: Store.getters.numEnabledLayers,
 		layerImages:      Store.getters.layerImages
-	}
+      }
   },
 
 	componentWillMount() {
@@ -97,11 +97,15 @@ export default React.createClass({
 					{ isPortrait ? null : <LayerSelectorGroup isPortrait={isPortrait}/> }
 					<div className="DesignEditDetail-mid">
 						<ColorsButtonRotate className="rotate-colors" isSmall={false}/>
+
 						<div onClick={this.selectImagesOrColors.bind(null, 'images')}
-							className={classNames("button", {off: selectingColors})}>Art</div>
+							className={classNames("button", {off: !selectingColors})}>Art</div>
+
 						<div onClick={this.selectImagesOrColors.bind(null, 'colors')}
-							className={classNames("button", {off: !selectingColors})}>Color</div>
+							className={classNames("button", {off: selectingColors})}>Color</div>
+
 						<CheckButton onClick={this.returnToDesignEdit} isSmall={false}/>
+
 					</div>
 					<div className="DesignEditDetail-layer-grid">
 						{ selectingColors ? <ChoosePalette/> : layerImages }

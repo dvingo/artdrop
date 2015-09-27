@@ -32,5 +32,5 @@ mocha test-build/tests.js --watch
 The following creates a new `build.js` file under the `hosted-dir` directory.
 
 ```bash
-webpack --config webpack.prod.config.js
+./build.sh
 ```

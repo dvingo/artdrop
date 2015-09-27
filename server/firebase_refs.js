@@ -1,4 +1,5 @@
-var firebaseUrl = process.env['ARTDROP_FIREBASE_URL']
+try { var configVars = require('./.server_settings') } catch(e) { }
+var firebaseUrl = configVars.firebaseUrl || process.env['ARTDROP_FIREBASE_URL']
 if (firebaseUrl == null) {
   console.log('Firebase url not set in ' + __dirname + ', exiting...')
   process.exit(1)

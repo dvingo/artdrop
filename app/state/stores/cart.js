@@ -1,7 +1,7 @@
 var Nuclear = require('nuclear-js');
 import reactor from 'state/reactor'
 import getters from 'state/getters'
-import {persistNewDesign} from '../helpers'
+import {persistAndCreateNewOrder, persistNewDesign} from '../helpers'
 import {makeDesignCopy} from 'state/utils'
 import request from 'superagent'
 import {serverHostname} from 'config'
@@ -39,19 +39,27 @@ export default new Nuclear.Store({
       // immutable so we can always reference it from the order
       // need to create an order object in firebase.
       var design = makeDesignCopy(reactor.evaluate(getters.currentDesign)).set('isImmutable', true)
-      persistNewDesign(design)
-      var sku = design.getIn(['surfaceOption', 'vendorId'])
-      orderData.sku = sku
-      orderData.designId = design.get('id')
-      orderData.shippingMethodId = state.get('shippingMethodId')
-
-      request.post(createOrderUrl)
-        .send(orderData)
-        .end((err, res) => {
-          if (err || res.errors) { return state }
-          console.log('got creat order res: ', res)
-          reactor.dispatch('orderCreatedSuccessfully', res.body)
+      persistNewDesign(design).then(() => {
+        var sku = design.getIn(['surfaceOption', 'vendorId'])
+        orderData.sku = sku
+        orderData.designId = design.get('id')
+        orderData.shippingMethodId = state.get('shippingMethodId')
+        persistAndCreateNewOrder(orderData).then((orderId) => {
+          orderData.orderId = orderId
+          request.post(createOrderUrl)
+            .send(orderData)
+            .end((err, res) => {
+              if (err || res.errors) {
+                reactor.dispatch('createError', 'Error sending your order, please try again.')
+                return state
+              }
+              console.log('got creat order res: ', res)
+              reactor.dispatch('orderCreatedSuccessfully', res.body)
+          })
         })
+      }).catch(() => {
+        reactor.dispatch('createError', 'Error sending your order, please try again.')
+      })
       return state
     })
   }

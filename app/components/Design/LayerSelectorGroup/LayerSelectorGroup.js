@@ -1,6 +1,6 @@
 import React from 'react'
 import reactor from 'state/reactor'
-import Store from 'state/main'
+import getters from 'state/getters'
 import LayerSelector from 'components/Design/LayerSelector/LayerSelector'
 var classNames = require('classnames')
 
@@ -9,20 +9,20 @@ export default React.createClass({
 
   getDataBindings() {
     return {
-      design: Store.getters.currentDesign,
-      currentLayer: Store.getters.currentLayer
+      design: getters.currentDesign,
+      currentLayer: getters.currentLayer
     }
   },
 
   render() {
+    var {design, currentLayer} = this.state
+    if (design == null || currentLayer == null ) { return null }
 
-    if (this.state.design == null || this.state.currentLayer == null ) { return null }
-      
     return (
       <article className={classNames("LayerSelectorGroup", {portrait: this.props.isPortrait})}>
-          {this.state.design.get('layers').reverse().map(layer => {
+          {design.get('layers').reverse().map(layer => {
             return (
-              <LayerSelector design={this.state.design} currentLayer={this.state.currentLayer} layer={layer}/>
+              <LayerSelector design={design} currentLayer={currentLayer} layer={layer}/>
             )
           })}
       </article>

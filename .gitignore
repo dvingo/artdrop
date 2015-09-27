@@ -4,3 +4,4 @@ npm-debug.log
 /*.env
 .sw*
 test-build
+.server_settings.js
