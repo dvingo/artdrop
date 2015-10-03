@@ -39,6 +39,7 @@
     "webpack-dev-server": "^1.8.2"
   },
   "dependencies": {
+    "aws-sdk": "^2.2.6",
     "body-parser": "^1.14.0",
     "classnames": "^2.1.2",
     "compression": "^1.5.2",
