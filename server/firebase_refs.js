@@ -14,14 +14,16 @@ var layersRef         = new Firebase(firebaseUrl + "/layers")
 var layerImagesRef    = new Firebase(firebaseUrl + "/layerImages")
 var surfacesRef       = new Firebase(firebaseUrl + "/surfaces")
 var surfaceOptionsRef = new Firebase(firebaseUrl + "/surfaceOptions")
+var ordersRef         = new Firebase(firebaseUrl + "/orders")
 
 module.exports = {
   firebaseRef: firebaseRef,
    colorPalettesRef: colorPalettesRef,
-   credsRef:        credsRef,
-   designsRef:      designsRef,
-   layersRef:       layersRef,
-   layerImagesRef:  layerImagesRef,
-   surfacesRef:     surfacesRef,
-   surfaceOptionsRef: surfaceOptionsRef
+   credsRef: credsRef,
+   designsRef: designsRef,
+   layersRef: layersRef,
+   layerImagesRef: layerImagesRef,
+   surfacesRef: surfacesRef,
+   surfaceOptionsRef: surfaceOptionsRef,
+   ordersRef: ordersRef
 }

@@ -5,28 +5,36 @@ var RSVP = require('rsvp')
 var AWS = require('aws-sdk')
 var config = require('./server-config')
 var s3BucketName = config.s3BucketName
+var ordersRef = require('./firebase_refs').ordersRef
 
 function imgUrl(awsFilename) {
   var filename = awsFilename.split('/').pop()
   return 'https://' + config.hostname + '/images/' + filename
 }
 
+function colorPaletteColorsForLayer(layer) {
+  return [
+    layer.colorPalette.colorOne,
+    layer.colorPalette.colorTwo,
+    layer.colorPalette.colorThree,
+    layer.colorPalette.colorFour
+  ]
+}
+
 function renderDesignImageToFile(host, port, design) {
-  console.log('Rendering design to image: ', design)
   return new RSVP.Promise(function(resolve, reject) {
     phantom.create(function(ph) {
       ph.createPage(function(page) {
-        var url = 'http://' + host + ':' + port + '/renderDesignImage'
+        var url = 'http://' + host + ':' + port + '/designImageView'
         var width = design.surfaceOption.printingImageWidth
         var height = design.surfaceOption.printingImageHeight
         var qs = querystring.stringify({
           width: width,
           height: height,
-          layerOneUrl: imgUrl(design.layers[0].selectedLayerImage.imageUrl),
-          layerTwoUrl: imgUrl(design.layers[1].selectedLayerImage.imageUrl),
-          layerThreeUrl: imgUrl(design.layers[2].selectedLayerImage.imageUrl)
+          design: design.id
         })
         var endpoint = url + '/?' + qs
+        console.log('hitting endpoint: ', endpoint)
         page.viewportSize = { width: width, height: height }
         page.open(endpoint, function(status) {
           if (status === 'success') {
@@ -36,10 +44,12 @@ function renderDesignImageToFile(host, port, design) {
               }, function(done) {
                 if (done) {
                   clearInterval(interval)
+                  console.log('got 3 svgs')
                   var outputFilename = filenameForDesignId(design.id)
                   page.render(outputFilename, function() {
-                    resolve()
+                    console.log('done rendering')
                     ph.exit()
+                    resolve()
                   })
                 }
               })
@@ -54,8 +64,16 @@ function renderDesignImageToFile(host, port, design) {
   })
 }
 
+function s3Url(filename) {
+  return [config.s3Endpoint, config.s3BucketName, filename].join('/')
+}
+
 function filenameForDesignId(designId) {
   return designId + '.jpeg'
+}
+
+function orderImageName(orderId) {
+  return 'order' + orderId + '.jpg'
 }
 
 function uploadDesignImageToS3(s3Creds, designId, orderId) {
@@ -73,19 +91,22 @@ function uploadDesignImageToS3(s3Creds, designId, orderId) {
         reject(err)
         return
       }
-      var objectKey = 'order' + orderId + '.jpeg'
+      var objectKey = orderImageName(orderId)
       var params = {
-        Bucket: sourceBucket,
+        Bucket: s3BucketName,
         Key: objectKey,
         ACL: 'public-read',
         CacheControl: 'max-age: 45792000',
         ContentType: 'image/jpeg',
         Body: fileData
       }
+      console.log('uploading image to s3: ', objectKey)
       s3.putObject(params, function(err, success) {
         if (err) {
+          console.log("got error uploading to s3: ", err)
           reject(err)
         } else {
+          console.log('got success uploading to s3: ', success)
           resolve()
         }
       })
@@ -93,7 +114,23 @@ function uploadDesignImageToS3(s3Creds, designId, orderId) {
   })
 }
 
+function updateOrderWithPrintInfo(orderId, printerId) {
+  console.log('IN updateOrderWithPrintInfo, orderId: ', orderId)
+  return new RSVP.Promise(function(resolve, reject) {
+    ordersRef.child(orderId).update({
+      printImageUrl: s3Url(orderImageName(orderId))
+    }, function(err) {
+      if (err) {
+        console.log('error updaing order: ' + orderId + ', ' + err)
+        reject(err)
+      }
+      else { console.log('success updating order in Firebase '); resolve() }
+    })
+  })
+}
+
 module.exports = {
   renderDesignImageToFile: renderDesignImageToFile,
-  uploadDesignImageToS3: uploadDesignImageToS3
+  uploadDesignImageToS3: uploadDesignImageToS3,
+  updateOrderWithPrintInfo: updateOrderWithPrintInfo
 }

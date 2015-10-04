@@ -37,6 +37,13 @@ function hydrateDesignId(designId) {
   return hydrateDesignFromId(designId).then(hydrateDesign)
 }
 
+function hydrateDesignJustLayers(designId) {
+  return hydrateDesignFromId(designId).then(function(design) {
+    var layers = design.layers.map(nestedHydrateLayer)
+    return RSVP.all(layers)
+  })
+}
+
 function hydrateDesign(design) {
   var layers = design.layers.map(nestedHydrateLayer)
   return RSVP.all(layers).then(function(layers) {

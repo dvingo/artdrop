@@ -10,10 +10,14 @@ var compression = require('compression')
 var config = require('./server-config')
 var hydrateDesign = require('./hydrate_utils').hydrateDesign
 var hydrateDesignId = require('./hydrate_utils').hydrateDesignId
+var hydrateDesignJustLayers = require('./hydrate_utils').hydrateDesignJustLayers
 var PrintioService = require('../print-io-api/print-io-api')
 var shippingPriceRoute = require('./routes/shippingPrice')
-var renderDesignImageToFile = require('./utils').renderDesignImageToFile
-var uploadDesignImageToS3 = require('./utils').uploadDesignImageToS3
+var utils = require('./utils')
+var renderDesignImageToFile = utils.renderDesignImageToFile
+var uploadDesignImageToS3 = utils.uploadDesignImageToS3
+var updateOrderWithPrintInfo = utils.updateOrderWithPrintInfo
+var s3Url = utils.s3Url
 
 var app = express()
 
@@ -50,9 +54,6 @@ app.engine('mustache', mustacheExpress());
 app.set('view engine', 'mustache')
 app.set('views', './views');
 
-function s3Url(filename) {
-  return [config.s3Endpoint, config.s3BucketName, filename].join('/')
-}
 
 firebaseRef.authWithPassword({
   email: firebaseUsername,
@@ -81,11 +82,13 @@ firebaseRef.authWithPassword({
           .then(renderDesignImageToFile.bind(null, app.get('host'), app.get('port')))
           .then(uploadDesignImageToS3.bind(null, s3Creds, designId, orderId))
           //.then(createPrintOrder)
-          //.then(persistOrder)
+          .then(updateOrderWithPrintInfo.bind(null, orderId))
           .then(function() {
+            console.log('Got success when creating order')
             res.json({success: 'Order created successfully'})
           })
           .catch(function() {
+            console.log('Got error when creating order')
             res.json({error: 'Error creating order'})
           })
       })
@@ -102,22 +105,31 @@ firebaseRef.authWithPassword({
       })
 
       app.get('/designImageView', cors(), function(req, res) {
-        var layerOneUrl = req.query.layerOneUrl
-        var layerTwoUrl = req.query.layerTwoUrl
-        var layerThreeUrl = req.query.layerThreeUrl
+        var designId = req.query.designId
         var height = req.query.height
         var width = req.query.width
-        if (!(layerOneUrl && layerTwoUrl && layerThreeUrl && height && width)) {
+        if (!(designId && height && width)) {
           res.json('Missing required parameters.')
           return
         }
-        res.render('designImageView', {
-          height: height,
-          width: width,
-          layerOneUrl: layerOneUrl,
-          layerTwoUrl: layerTwoUrl,
-          layerThreeUrl: layerThreeUrl
+        hydrateDesignJustLayers(designId).then(function(design) {
+          res.render('designImageView', {
+            height: height,
+            width: width,
+            layerOneUrl: design.layers[0].selectedLayerImage.imageUrl,
+            layerTwoUrl: design.layers[1].selectedLayerImage.imageUrl,
+            layerThreeUrl: design.layers[2].selectedLayerImage.imageUrl,
+            // Refactor code from front end for using rotation as well and put into common file
+            colorPalettes: {
+              'Layer1': design.layers[0].colorPalette,
+              'Layer2': {},
+              'Layer3': {},
+              'Layer4': {}
+            }
+          })
+
         })
+
       })
 
       app.get('/*', function(req, res) {

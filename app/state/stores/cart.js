@@ -45,6 +45,7 @@ export default new Nuclear.Store({
         orderData.designId = design.get('id')
         orderData.shippingMethodId = state.get('shippingMethodId')
         persistAndCreateNewOrder(orderData).then((orderId) => {
+          reactor.dispatch('orderCreatedSuccessfully')
           orderData.orderId = orderId
           request.post(createOrderUrl)
             .send(orderData)
@@ -54,7 +55,6 @@ export default new Nuclear.Store({
                 return state
               }
               console.log('got creat order res: ', res)
-              reactor.dispatch('orderCreatedSuccessfully', res.body)
           })
         })
       }).catch(() => {
