@@ -10,9 +10,9 @@ var compression = require('compression')
 var config = require('./server-config')
 var hydrateDesign = require('./hydrate_utils').hydrateDesign
 var hydrateDesignId = require('./hydrate_utils').hydrateDesignId
-var hydrateDesignJustLayers = require('./hydrate_utils').hydrateDesignJustLayers
 var PrintioService = require('../print-io-api/print-io-api')
 var shippingPriceRoute = require('./routes/shippingPrice')
+var designImageViewRoute = require('./routes/designImageView')
 var utils = require('./utils')
 var renderDesignImageToFile = utils.renderDesignImageToFile
 var uploadDesignImageToS3 = utils.uploadDesignImageToS3
@@ -53,7 +53,6 @@ app.use(express.static(__dirname + '/../hosted-dir'))
 app.engine('mustache', mustacheExpress());
 app.set('view engine', 'mustache')
 app.set('views', './views');
-
 
 firebaseRef.authWithPassword({
   email: firebaseUsername,
@@ -104,33 +103,7 @@ firebaseRef.authWithPassword({
         })
       })
 
-      app.get('/designImageView', cors(), function(req, res) {
-        var designId = req.query.designId
-        var height = req.query.height
-        var width = req.query.width
-        if (!(designId && height && width)) {
-          res.json('Missing required parameters.')
-          return
-        }
-        hydrateDesignJustLayers(designId).then(function(design) {
-          res.render('designImageView', {
-            height: height,
-            width: width,
-            layerOneUrl: design.layers[0].selectedLayerImage.imageUrl,
-            layerTwoUrl: design.layers[1].selectedLayerImage.imageUrl,
-            layerThreeUrl: design.layers[2].selectedLayerImage.imageUrl,
-            // Refactor code from front end for using rotation as well and put into common file
-            colorPalettes: {
-              'Layer1': design.layers[0].colorPalette,
-              'Layer2': {},
-              'Layer3': {},
-              'Layer4': {}
-            }
-          })
-
-        })
-
-      })
+      app.get('/designImageView', cors(), designImageViewRoute)
 
       app.get('/*', function(req, res) {
         res.sendFile('index.html', {root: __dirname + '/../hosted-dir/'})

@@ -40,7 +40,10 @@ function hydrateDesignId(designId) {
 function hydrateDesignJustLayers(designId) {
   return hydrateDesignFromId(designId).then(function(design) {
     var layers = design.layers.map(nestedHydrateLayer)
-    return RSVP.all(layers)
+    return RSVP.all(layers).then(function(layers) {
+      design.layers = layers
+      return design
+    })
   })
 }
 
@@ -92,4 +95,5 @@ module.exports = {
   hydrateSurface: hydrateSurface,
   hydrateDesign: hydrateDesign,
   hydrateDesignId: hydrateDesignId,
+  hydrateDesignJustLayers: hydrateDesignJustLayers
 }

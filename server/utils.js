@@ -12,15 +12,6 @@ function imgUrl(awsFilename) {
   return 'https://' + config.hostname + '/images/' + filename
 }
 
-function colorPaletteColorsForLayer(layer) {
-  return [
-    layer.colorPalette.colorOne,
-    layer.colorPalette.colorTwo,
-    layer.colorPalette.colorThree,
-    layer.colorPalette.colorFour
-  ]
-}
-
 function renderDesignImageToFile(host, port, design) {
   return new RSVP.Promise(function(resolve, reject) {
     phantom.create(function(ph) {
@@ -62,6 +53,11 @@ function renderDesignImageToFile(host, port, design) {
       })
     })
   })
+}
+
+function imageUrlForLayer(layer) {
+  var filename = layer.selectedLayerImage.imageUrl.split('/').pop()
+  return 'https://' + config.hostname + '/images/' + filename
 }
 
 function s3Url(filename) {
@@ -132,5 +128,6 @@ function updateOrderWithPrintInfo(orderId, printerId) {
 module.exports = {
   renderDesignImageToFile: renderDesignImageToFile,
   uploadDesignImageToS3: uploadDesignImageToS3,
-  updateOrderWithPrintInfo: updateOrderWithPrintInfo
+  updateOrderWithPrintInfo: updateOrderWithPrintInfo,
+  imageUrlForLayer: imageUrlForLayer
 }

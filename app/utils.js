@@ -2,35 +2,9 @@ import React from 'react'
 import Store from 'state/main'
 var srcDir = require('config').srcDir
 var SVGInjector = require('svg-injector')
-var svgLayerIds = ['Layer1', 'Layer2', 'Layer3', 'Layer4']
-
-var rotationToColorsMapping = {}
-rotationToColorsMapping['0'] = {}
-rotationToColorsMapping['1'] = {}
-rotationToColorsMapping['2'] = {}
-rotationToColorsMapping['3'] = {}
-
-rotationToColorsMapping['0'][svgLayerIds[0]] = 'colorOne'
-rotationToColorsMapping['0'][svgLayerIds[1]] = 'colorTwo'
-rotationToColorsMapping['0'][svgLayerIds[2]] = 'colorThree'
-rotationToColorsMapping['0'][svgLayerIds[3]] = 'colorFour'
-
-rotationToColorsMapping['1'][svgLayerIds[0]] = 'colorFour'
-rotationToColorsMapping['1'][svgLayerIds[1]] = 'colorOne'
-rotationToColorsMapping['1'][svgLayerIds[2]] = 'colorTwo'
-rotationToColorsMapping['1'][svgLayerIds[3]] = 'colorThree'
-
-rotationToColorsMapping['2'][svgLayerIds[0]] = 'colorThree'
-rotationToColorsMapping['2'][svgLayerIds[1]] = 'colorFour'
-rotationToColorsMapping['2'][svgLayerIds[2]] = 'colorOne'
-rotationToColorsMapping['2'][svgLayerIds[3]] = 'colorTwo'
-
-rotationToColorsMapping['3'][svgLayerIds[0]] = 'colorTwo'
-rotationToColorsMapping['3'][svgLayerIds[1]] = 'colorThree'
-rotationToColorsMapping['3'][svgLayerIds[2]] = 'colorFour'
-rotationToColorsMapping['3'][svgLayerIds[3]] = 'colorOne'
-
-var toA = (list) => Array.prototype.slice.call(list, 0)
+var colorPaletteUtils = require('../common/colorPaletteUtils')
+var toA = colorPaletteUtils.toA
+var setSvgColors = colorPaletteUtils.setSvgColors
 
 function currentYearTwoDigits() {
   return parseInt(
@@ -52,21 +26,12 @@ var svgTextToImage = (svgEl) => {
   return img
 }
 
-var setSvgColors = (svgEl, layer) => {
-  var colorPalette = layer.get('colorPalette')
-  var layersToColorsMap = rotationToColorsMapping[layer.get('paletteRotation')]
-  svgLayerIds.forEach(id => {
-    var color = colorPalette.get(layersToColorsMap[id])
-    toA(svgEl.querySelectorAll(`#${id} *`)).forEach(el => el.style.fill = color)
-  })
-}
-
 export default {
 
   iconPath: (name) => `/${srcDir}/images/icons/${name}`,
   surfacePath: (name) => `/${srcDir}/images/surfaces/${name}`,
   toA: toA,
-  svgLayerIds: svgLayerIds,
+  svgLayerIds: colorPaletteUtils.svgLayerIds,
 
   isInvalidEditStep: (validSteps, step, layerStep) => {
     var retVal = false

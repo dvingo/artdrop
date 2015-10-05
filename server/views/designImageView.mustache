@@ -20,32 +20,30 @@
   <title>Test</title>
   </head>
   <body>
-    <img src="{{layerOneUrl}}" id="one">
-    <img src="{{layerTwoUrl}}" id="two">
-    <img src="{{layerThreeUrl}}" id="three">
+    <img src="{{{layerOneImageUrl}}}" id="one">
+    <img src="{{{layerTwoImageUrl}}}" id="two">
+    <img src="{{{layerThreeImageUrl}}}" id="three">
     <script>
       var one = document.querySelector('#one')
       var two = document.querySelector('#two')
       var three = document.querySelector('#three')
       var toA = function(list) { return Array.prototype.slice.call(list, 0) }
+      var rotationToColorsMapping = {{{rotationToColorsMapping}}}
+      var svgLayerIds = {{{svgLayerIds}}}
+      var layers = {{{layers}}}
 
-      var setSvgColors = function(svgEl) {
-        var svgLayerIds = ['Layer1', 'Layer2', 'Layer3', 'Layer4']
-        // TODO !!!! need to pass the color palette here.
-        var palette = {
-          Layer1: 'dimGrey',
-          Layer2: 'seaGreen',
-          Layer3: 'darkSlateGrey',
-          Layer4: 'darkRed'
-        }
+      var setSvgColors = function(svgEl, layer) {
+        var colorPalette = layer.colorPalette
+        var layersToColorsMap = rotationToColorsMapping[layer.paletteRotation]
         svgLayerIds.forEach(function(id) {
+          var color = colorPalette[layersToColorsMap[id]]
           toA(svgEl.querySelectorAll('#' + id + ' *')).forEach(function(el) {
-             el.style.fill = palette[id]
+            el.style.fill = color
           })
         })
       }
 
-      var replaceSvgImageWithText = function(imgEl, height, width) {
+      var replaceSvgImageWithText = function(imgEl, layer, height, width) {
         var opts = {
           each: function(svgEl) {
             if (typeof svgEl !== 'object') { return null }
@@ -54,16 +52,16 @@
             svgEl.style.margin  = '0';
             svgEl.style.padding = '0';
             svgEl.style.display = 'block';
-            setSvgColors(svgEl)
+            setSvgColors(svgEl, layer)
             return svgEl
           },
           evalScripts: 'never'
         }
         SVGInjector(imgEl, opts)
       }
-      replaceSvgImageWithText(one, {{height}}, {{width}})
-      replaceSvgImageWithText(two, {{height}}, {{width}})
-      replaceSvgImageWithText(three, {{height}}, {{width}})
+      replaceSvgImageWithText(one, layers[0], {{height}}, {{width}})
+      replaceSvgImageWithText(two, layers[1], {{height}}, {{width}})
+      replaceSvgImageWithText(three, layers[2], {{height}}, {{width}})
     </script>
   </body>
 </html>
