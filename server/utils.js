@@ -127,16 +127,23 @@ function updateOrderWithPrintInfo(orderId, printerId) {
   })
 }
 
-function chargeCreditCard(ccToken) {
-  stripe.charges.create({
-     amount: 1000, // amount in cents, again
-    currency: "usd",
-    source: stripeToken,
-    description: "Example charge"
-  }, function(err, charge) {
-    if (err && err.type === 'StripeCardError') {
-      // The card has been declined
-    }
+function chargeCreditCard(ccToken, amountInCents, design) {
+  return new RSVP.Promise((resolve, reject) => {
+    stripe.charges.create({
+      amount: amountInCents,
+      currency: "usd",
+      source: ccToken
+    }, function(err, charge) {
+      if (err) {
+        console.log("Got Stripe error: ", err)
+        var msg = (err.type === 'StripeCardError'
+          ? 'Your card was declined'
+          : 'Unable to charge your credit card.')
+          reject(new Error(msg))
+      } else {
+        resolve(design)
+      }
+    })
   })
 }
 
@@ -144,5 +151,6 @@ module.exports = {
   renderDesignImageToFile: renderDesignImageToFile,
   uploadDesignImageToS3: uploadDesignImageToS3,
   updateOrderWithPrintInfo: updateOrderWithPrintInfo,
-  imageUrlForLayer: imageUrlForLayer
+  imageUrlForLayer: imageUrlForLayer,
+  chargeCreditCard: chargeCreditCard
 }

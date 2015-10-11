@@ -43,7 +43,8 @@ firebaseRef.onAuth(authData => {
           id: authData.uid,
           name: authData.google.displayName,
           email: authData.google.email,
-          isAdmin: false}
+          isAdmin: false
+        }
         reactor.dispatch('createNewUserAndSetAsCurrent', userData)
       } else {
         existingUser.id = s.key()

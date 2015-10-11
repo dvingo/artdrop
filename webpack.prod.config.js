@@ -1,6 +1,11 @@
 var path = require('path')
 var webpack = require('webpack')
 var srcDir = 'app'
+var stripePublishableKey = '"' + process.env['ARTDROP_STRIPE_PUBLISHABLE_KEY'] + '"'
+
+if (!stripePublishableKey) {
+  console.log('Stripe publishable key is not set.\n')
+}
 
 module.exports = {
   entry: './' + srcDir + '/index',
@@ -12,7 +17,10 @@ module.exports = {
   plugins: [
     new webpack.optimize.UglifyJsPlugin(),
     new webpack.NoErrorsPlugin(),
-    new webpack.DefinePlugin({DEBUG:false,TEST:false,DEV:false})
+    new webpack.DefinePlugin({
+      DEBUG:false,TEST:false,DEV:false,
+      stripePublishableKey:stripePublishableKey
+    })
   ],
   resolve: {
     root: __dirname + '/' + srcDir,

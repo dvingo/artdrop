@@ -34,6 +34,26 @@ getters.shippingPrice = [
   }
 ]
 
+getters.cartTotalPrice = [
+  getters.shippingPrice,
+  getters.currentDesignPrice,
+  (shippingPrice, designPrice) => (
+    shippingPrice != null
+      ? (Number(shippingPrice) + Number(designPrice)).toFixed(2)
+      : designPrice
+  )
+]
+
+getters.cartTotalPriceInCents = [
+  getters.shippingPrice,
+  getters.currentDesignPrice,
+  (shippingPrice, designPrice) => (
+    shippingPrice != null
+      ? ( (Number(shippingPrice) * 100) + ((Number(designPrice)) * 100) )
+      : designPrice * 100
+  )
+]
+
 getters.numEnabledLayers = [
   getters.currentDesign,
   (currentDesign) => {
@@ -45,7 +65,10 @@ getters.numEnabledLayers = [
 ]
 
 getters.colorPalettes = [['colorPalettes'],
-  palettes => palettes.toList().sort((colorOne, colorTwo) => colorTwo.get('createdAt') - colorOne.get('createdAt'))]
+  palettes => palettes.toList().sort((colorOne, colorTwo) => (
+    colorTwo.get('createdAt') - colorOne.get('createdAt'))
+  )
+]
 
 getters.currentLayer = [
   ['currentLayerId'],

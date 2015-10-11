@@ -5,12 +5,6 @@ import Store from 'state/main'
 import {imageUrlForSurface} from 'state/utils'
 import PaymentForm from 'components/PaymentForm/PaymentForm'
 
-function totalPrice(shippingPrice, itemPrice) {
-  return (shippingPrice != null
-    ? (Number(shippingPrice) + Number(itemPrice)).toFixed(2)
-    : itemPrice)
-}
-
 export default React.createClass({
   mixins: [reactor.ReactMixin],
 
@@ -18,7 +12,8 @@ export default React.createClass({
     return {
       design: Store.getters.currentDesign,
       designPrice: Store.getters.currentDesignPrice,
-      shippingPrice: Store.getters.shippingPrice
+      shippingPrice: Store.getters.shippingPrice,
+      cartTotalPrice: Store.getters.cartTotalPrice
     }
   },
 
@@ -33,8 +28,7 @@ export default React.createClass({
     var shippingPrice = (this.state.shippingPrice
       ? '$' + this.state.shippingPrice
       : 'Shipping will be calculated after you enter an address.')
-    var total = totalPrice(this.state.shippingPrice, this.state.designPrice)
-
+    var total = this.state.cartTotalPrice
     return (
       <div className="Cart cart">
         <div className="Cart-left">

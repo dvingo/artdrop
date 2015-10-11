@@ -2,7 +2,6 @@ import React from 'react'
 import reactor from 'state/reactor'
 import Store from 'state/main'
 import getters from 'state/getters'
-import {iconPath} from 'utils'
 import AddressField  from './AddressField/AddressField'
 import CityField from './CityField/CityField'
 import CCIcons from './CCIcons/CCIcons'
@@ -19,8 +18,7 @@ import StateField from './StateField/StateField'
 import ZipcodeField from './ZipcodeField/ZipcodeField'
 import validations from './validations'
 import classNames from 'classnames'
-import config from 'config'
-var RSVP = require('rsvp')
+import {stripePublishableKey} from 'config'
 
 function monthAndYearFromDate(date) {
   var vals = date.match(/(\d{1,2})\s*\/\s*(\d{2})/)
@@ -109,7 +107,7 @@ export default React.createClass({
   },
 
   componentWillMount() {
-    Stripe.setPublishableKey(config.stripePublishableKey)
+    Stripe.setPublishableKey(stripePublishableKey)
   },
 
   componentWillUpdate(nextProps, nextState) {

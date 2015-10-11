@@ -2,6 +2,11 @@ var path = require('path')
 var webpack = require('webpack')
 var srcDir = 'app'
 
+var stripePublishableKey = process.env['ARTDROP_STRIPE_PUBLISHABLE_KEY']
+if (!stripePublishableKey) {
+  console.log('Stripe publishable key is not set.\n')
+}
+
 module.exports = {
   devtool: 'eval',
   entry: [
@@ -21,7 +26,7 @@ module.exports = {
       DEBUG: true,
       TEST: false,
       DEV: true,
-      stripePublishableKey: process.env['ARTDROP_STRIPE_PUBLISHABLE_KEY']
+      stripePublishableKey: '"' + stripePublishableKey + '"'
     })
   ],
   resolve: {

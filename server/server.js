@@ -59,20 +59,22 @@ firebaseRef.authWithPassword({
         var designId = req.body.designId
         var orderId = req.body.orderId
         var ccToken = req.body.ccToken
+        var orderTotalInCents = req.body.totalPrice
         hydrateDesignId(designId)
-          .then(chargeCreditCard.bind(null, ccToken))
+          .then(chargeCreditCard.bind(null, ccToken, orderTotalInCents))
           .catch(function(err) {
             console.log("Failed to charge credit card for order: " + orderId)
-            throw new Error('There was a problem charging your credit card.')
+            throw err
+          })
+          .then(function(design) {
+            console.log('Charged card successfully')
+            res.json({success: 'Order created successfully'})
+            return design
           })
           .then(renderDesignImageToFile.bind(null, app.get('host'), app.get('port')))
           .then(uploadDesignImageToS3.bind(null, s3Creds, designId, orderId))
           //.then(createPrintOrder)
           .then(updateOrderWithPrintInfo.bind(null, orderId))
-          .then(function() {
-            console.log('Got success when creating order')
-            res.json({success: 'Order created successfully'})
-          })
           .catch(function(err) {
             console.log('Got error when creating order')
             var msg = err.message || 'Error creating order'
