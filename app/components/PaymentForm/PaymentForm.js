@@ -2,12 +2,7 @@ import React from 'react'
 import reactor from 'state/reactor'
 import Store from 'state/main'
 import getters from 'state/getters'
-import {isValidExpiryDate, isExpiryInPast,
-  isValidEmail, hasValidLength,
-  isValidMonth,
-  isValidCreditCardNumber,
-  hasValidZipcodeLength,
-  iconPath} from 'utils'
+import {iconPath} from 'utils'
 import AddressField  from './AddressField/AddressField'
 import CityField from './CityField/CityField'
 import CCIcons from './CCIcons/CCIcons'
@@ -22,39 +17,10 @@ import OfferCodeField from './OfferCodeField/OfferCodeField'
 import PayPalButton from './PayPalButton/PayPalButton'
 import StateField from './StateField/StateField'
 import ZipcodeField from './ZipcodeField/ZipcodeField'
+import validations from './validations'
 import classNames from 'classnames'
-
-var validations = {
-  email: (v) => {
-    if (!hasValidLength(v)) {
-      return 'You must enter an email address'
-    }
-    return isValidEmail(v) ? '' : 'The email you entered is not valid'
-  },
-  offerCode: () => {},
-  shippingFirstName: (v) => hasValidLength(v) ? '' : 'You must enter a first name',
-  shippingLastName: (v) => hasValidLength(v) ? '' : 'You must enter a last name',
-  shippingPhoneNumber: (v) => hasValidLength(v) ? '' : 'You must enter a phone number',
-  shippingAddress: (v) => hasValidLength(v) ? '' : 'You must enter an address',
-  shippingCity: (v) => hasValidLength(v) ? '' : 'You must enter a city',
-  shippingState: (v) => v.length === 2 ? '' : 'You must enter a state',
-  shippingZipcode: (v) => hasValidZipcodeLength(v) ? '' : 'You must enter ZIP code',
-  ccNumber: (v) => {
-    if (!hasValidLength(v)) {
-      return 'You must enter a credit card number'
-    }
-   return isValidCreditCardNumber(v) ? '' : 'The credit card number is not valid'
-  },
-  ccName: (v) => hasValidLength(v) ? '' : 'You must enter a name',
-  ccExpiryDate: (v) => {
-    if (!hasValidLength(v)) { return 'You must enter an expiry date' }
-    if (!isValidExpiryDate(v)) { return 'Invalid expiry date' }
-    if (isExpiryInPast(v)) { return 'The date you entered is in the past' }
-    if (!isValidMonth(v)) { return 'The month you entered is invalid' }
-    return ''
-  },
-  ccCvCode: (v) => hasValidLength(v) ? '' : 'You must enter a CV Code'
-}
+import config from 'config'
+var RSVP = require('rsvp')
 
 function monthAndYearFromDate(date) {
   var vals = date.match(/(\d{1,2})\s*\/\s*(\d{2})/)
@@ -143,7 +109,7 @@ export default React.createClass({
   },
 
   componentWillMount() {
-    Stripe.setPublishableKey('pk_test_Nj0djznRXsfYMTGYpoF4kbsT')
+    Stripe.setPublishableKey(config.stripePublishableKey)
   },
 
   componentWillUpdate(nextProps, nextState) {
@@ -171,6 +137,7 @@ export default React.createClass({
         Store.actions.createError(err)
         return
       }
+
       Store.actions.createOrder({
         shippingFirstName:   shippingFirstName.value,
         shippingLastName:    shippingLastName.value,
@@ -198,7 +165,6 @@ export default React.createClass({
                           errorMsg={this.state.email.errorMsg}/>
               <GiftIcon />
             </p>
-
             <p>
               <OfferCodeField
                 onChange={this.onFieldChange.bind(null, 'offerCode')}
@@ -212,51 +178,55 @@ export default React.createClass({
             <div className="header">
               <h2>Shipping Info</h2>
             </div>
-            <p className="multifield-line">
-            <NameField onChange={this.onFieldChange.bind(null, 'shippingFirstName')}
-                          label="first name"
-                          placeholder="John"
-                          className="firstName"
-                          value={this.state.shippingFirstName.value}
-                          onBlur={this.onFieldBlur.bind(null, 'shippingFirstName')}
-                          key="shippingFirstNameField"
-                          errorMsg={this.state.shippingFirstName.errorMsg}
-                          />
 
-            <NameField onChange={this.onFieldChange.bind(null, 'shippingLastName')}
-                          label="last name"
-                          placeholder="McCarthy"
-                          className="lastName"
-                          value={this.state.shippingLastName.value}
-                          onBlur={this.onFieldBlur.bind(null, 'shippingLastName')}
-                          key="shippingLastNameField"
-                          errorMsg={this.state.shippingLastName.errorMsg}
-                          />
-                            </p>
+            <p className="multifield-line">
+              <NameField
+                onChange={this.onFieldChange.bind(null, 'shippingFirstName')}
+                label="first name"
+                placeholder="John"
+                className="firstName"
+                value={this.state.shippingFirstName.value}
+                onBlur={this.onFieldBlur.bind(null, 'shippingFirstName')}
+                key="shippingFirstNameField"
+                errorMsg={this.state.shippingFirstName.errorMsg} />
+
+              <NameField
+                onChange={this.onFieldChange.bind(null, 'shippingLastName')}
+                label="last name"
+                placeholder="McCarthy"
+                className="lastName"
+                value={this.state.shippingLastName.value}
+                onBlur={this.onFieldBlur.bind(null, 'shippingLastName')}
+                key="shippingLastNameField"
+                errorMsg={this.state.shippingLastName.errorMsg} />
+            </p>
 
             <p>
-              <PhoneField onChange={this.onFieldChange.bind(null, 'shippingPhoneNumber')}
-                            value={this.state.shippingPhoneNumber.value}
-                            onBlur={this.onFieldBlur.bind(null, 'shippingPhoneNumber')}
-                            key="shippingPhoneNumber"
-                            errorMsg={this.state.shippingPhoneNumber.errorMsg}
-                            />
+              <PhoneField
+                onChange={this.onFieldChange.bind(null, 'shippingPhoneNumber')}
+                value={this.state.shippingPhoneNumber.value}
+                onBlur={this.onFieldBlur.bind(null, 'shippingPhoneNumber')}
+                key="shippingPhoneNumber"
+                errorMsg={this.state.shippingPhoneNumber.errorMsg} />
             </p>
-            <p><AddressField onChange={this.onFieldChange.bind(null, 'shippingAddress')}
-                          value={this.state.shippingAddress.value}
-                             onBlur={this.onFieldBlur.bind(null, 'shippingAddress')}
-                             key="shippingAddressField"
-                             errorMsg={this.state.shippingAddress.errorMsg}
-                          /></p>
 
-              <p>
-                <CityField
-                  onChange={this.onFieldChange.bind(null, 'shippingCity')}
-                  value={this.state.shippingCity.value}
-                  onBlur={this.onFieldBlur.bind(null, 'shippingCity')}
-                  errorMsg={this.state.shippingCity.errorMsg}
-                  key="cityField" />
-              </p>
+            <p>
+              <AddressField
+                onChange={this.onFieldChange.bind(null, 'shippingAddress')}
+                value={this.state.shippingAddress.value}
+                onBlur={this.onFieldBlur.bind(null, 'shippingAddress')}
+                key="shippingAddressField"
+                errorMsg={this.state.shippingAddress.errorMsg} />
+            </p>
+
+            <p>
+              <CityField
+                onChange={this.onFieldChange.bind(null, 'shippingCity')}
+                value={this.state.shippingCity.value}
+                onBlur={this.onFieldBlur.bind(null, 'shippingCity')}
+                errorMsg={this.state.shippingCity.errorMsg}
+                key="cityField" />
+            </p>
 
             <p className="multifield-line">
               <StateField
@@ -265,34 +235,40 @@ export default React.createClass({
                 onBlur={this.onFieldBlur.bind(null, 'shippingState')}
                 errorMsg={this.state.shippingState.errorMsg}
                 key="stateField" />
-              <ZipcodeField onChange={this.onFieldChange.bind(null, 'shippingZipcode')}
-                          value={this.state.shippingZipcode.value}
-                          onBlur={this.onFieldBlur.bind(null, 'shippingZipcode')}
-                          key="shippingZipcodeField"
-                          errorMsg={this.state.shippingZipcode.errorMsg}
-                          />
+              <ZipcodeField
+                onChange={this.onFieldChange.bind(null, 'shippingZipcode')}
+                value={this.state.shippingZipcode.value}
+                onBlur={this.onFieldBlur.bind(null, 'shippingZipcode')}
+                key="shippingZipcodeField"
+                errorMsg={this.state.shippingZipcode.errorMsg} />
             </p>
           </div>
 
           <div className="field-group">
+
             <div className="header">
               <CCIcons />
               <PayPalButton />
             </div>
+
             <p>
-            <CreditCardField
-              onChange={this.onFieldChange.bind(null, 'ccNumber')}
-              value={this.state.ccNumber.value}
-              onBlur={this.onFieldBlur.bind(null, 'ccNumber')}
-              key="ccNumberField"
-              errorMsg={this.state.ccNumber.errorMsg}/>
+              <CreditCardField
+                onChange={this.onFieldChange.bind(null, 'ccNumber')}
+                value={this.state.ccNumber.value}
+                onBlur={this.onFieldBlur.bind(null, 'ccNumber')}
+                key="ccNumberField"
+                errorMsg={this.state.ccNumber.errorMsg}/>
             </p>
-            <p><NameField onChange={this.onFieldChange.bind(null, 'ccName')}
-                          value={this.state.ccName.value}
-                          onBlur={this.onFieldBlur.bind(null, 'ccName')}
-                          key="ccNameField"
-                          errorMsg={this.state.ccName.errorMsg}
-                          /></p>
+
+            <p>
+              <NameField
+                onChange={this.onFieldChange.bind(null, 'ccName')}
+                value={this.state.ccName.value}
+                onBlur={this.onFieldBlur.bind(null, 'ccName')}
+                key="ccNameField"
+                errorMsg={this.state.ccName.errorMsg} />
+            </p>
+
             <p className="multifield-line">
               <ExpiryDateField
                 onChange={this.onFieldChange.bind(null, 'ccExpiryDate')}
@@ -311,8 +287,8 @@ export default React.createClass({
 
           <p>
             <button className={classNames("pay-button",
-                {disabled: !areAllFieldsValid(this.state)})}
-                onClick={this.onPayButtonClick}>Pay</button>
+              {disabled: !areAllFieldsValid(this.state)})}
+              onClick={this.onPayButtonClick}>Pay</button>
           </p>
           { areShippingFieldsValid(this.state) ?
             <p><button className="pay-button" onClick={this.getShipPrice}>Update Shipping Price</button></p>

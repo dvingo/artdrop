@@ -1,10 +1,4 @@
-try { var configVars = require('./.server_settings') } catch(e) { }
-configVars = configVars || {}
-var firebaseUrl = configVars.firebaseUrl || process.env['ARTDROP_FIREBASE_URL']
-if (firebaseUrl == null) {
-  console.log('Firebase url not set in ' + __dirname + ', exiting...')
-  process.exit(1)
-}
+var firebaseUrl = require('./configWrapper').firebaseUrl
 var Firebase = require('firebase')
 var firebaseRef       = new Firebase(firebaseUrl)
 var colorPalettesRef  = new Firebase(firebaseUrl + "/colorPalettes")

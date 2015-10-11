@@ -15,5 +15,6 @@ module.exports = {
   //s3BucketName: 'test-dvingo-1',
   fireBaseUri: firebaseUri,
   hostname: 'obscure-headland-1710.herokuapp.com',
-  serverHostname: serverHostname
+  serverHostname: serverHostname,
+  stripePublishableKey: stripePublishableKey
 }

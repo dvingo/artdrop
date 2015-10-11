@@ -6,6 +6,8 @@ var AWS = require('aws-sdk')
 var config = require('./server-config')
 var s3BucketName = config.s3BucketName
 var ordersRef = require('./firebase_refs').ordersRef
+var stripeSecretKey = require('./configWrapper').stripeSecretKey
+var stripe = require('stripe')(stripeSecretKey)
 
 function imgUrl(awsFilename) {
   var filename = awsFilename.split('/').pop()
@@ -122,6 +124,19 @@ function updateOrderWithPrintInfo(orderId, printerId) {
       }
       else { console.log('success updating order in Firebase '); resolve() }
     })
+  })
+}
+
+function chargeCreditCard(ccToken) {
+  stripe.charges.create({
+     amount: 1000, // amount in cents, again
+    currency: "usd",
+    source: stripeToken,
+    description: "Example charge"
+  }, function(err, charge) {
+    if (err && err.type === 'StripeCardError') {
+      // The card has been declined
+    }
   })
 }
 

@@ -40,6 +40,7 @@
   },
   "dependencies": {
     "aws-sdk": "^2.2.6",
+    "babel": "^5.8.23",
     "body-parser": "^1.14.0",
     "classnames": "^2.1.2",
     "compression": "^1.5.2",
@@ -61,6 +62,7 @@
     "request": "^2.60.0",
     "rsvp": "^3.0.18",
     "sass-loader": "^1.0.2",
+    "stripe": "^4.0.0",
     "style-loader": "^0.12.3",
     "superagent": "^1.4.0",
     "svg-injector": "^1.1.2"

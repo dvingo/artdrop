@@ -17,7 +17,12 @@ module.exports = {
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
-    new webpack.DefinePlugin({DEBUG:true,TEST:false,DEV:true})
+    new webpack.DefinePlugin({
+      DEBUG: true,
+      TEST: false,
+      DEV: true,
+      stripePublishableKey: process.env['ARTDROP_STRIPE_PUBLISHABLE_KEY']
+    })
   ],
   resolve: {
     root: __dirname + '/app',

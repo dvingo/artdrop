@@ -17,35 +17,15 @@ var utils = require('./utils')
 var renderDesignImageToFile = utils.renderDesignImageToFile
 var uploadDesignImageToS3 = utils.uploadDesignImageToS3
 var updateOrderWithPrintInfo = utils.updateOrderWithPrintInfo
+var chargeCreditCard = utils.chargeCreditCard
 var s3Url = utils.s3Url
+var configVars = require('./configWrapper')
+var recipeId = configVars.recipeId
+var firebaseUrl = configVars.firebaseUrl
+var firebaseUsername = configVars.firebaseUsername
+var firebasePassword = configVars.firebasePassword
 
 var app = express()
-
-try {
-  var configVars = require('./.server_settings')
-} catch(e) { }
-
-configVars = configVars || {}
-var recipeId = configVars.recipeId || process.env['ARTDROP_RECIPE_ID']
-var firebaseUrl = configVars.firebaseUrl || process.env['ARTDROP_FIREBASE_URL']
-var firebaseUsername = configVars.firebaseUsername || process.env['ARTDROP_FIREBASE_USERNAME']
-var firebasePassword = configVars.firebasePassword || process.env['ARTDROP_FIREBASE_PASSWORD']
-var designsRef = require('./firebase_refs').designsRef
-var host, port;
-
-var webshot = require('webshot')
-
-function exitIfValMissing(val, name) {
-  if (val == null) {
-    console.log(name + ' is not set, exiting...')
-    process.exit(1)
-  }
-}
-
-exitIfValMissing(recipeId, 'Printio recipe Id')
-exitIfValMissing(firebaseUrl, 'Firebase URL')
-exitIfValMissing(firebaseUsername, 'Firebase username')
-exitIfValMissing(firebasePassword, 'Firebase password')
 
 app.use(bodyParser.json())
 app.use(compression())
@@ -73,11 +53,18 @@ firebaseRef.authWithPassword({
       app.get('/shippingPrice', cors(), shippingPriceRoute.bind(null, printioService))
 
       app.options('/orders', cors(), function(req, res) { res.json('hello') })
+
       app.post('/orders', cors(), function(req, res) {
         console.log('got order data: ', req.body)
         var designId = req.body.designId
         var orderId = req.body.orderId
+        var ccToken = req.body.ccToken
         hydrateDesignId(designId)
+          .then(chargeCreditCard.bind(null, ccToken))
+          .catch(function(err) {
+            console.log("Failed to charge credit card for order: " + orderId)
+            throw new Error('There was a problem charging your credit card.')
+          })
           .then(renderDesignImageToFile.bind(null, app.get('host'), app.get('port')))
           .then(uploadDesignImageToS3.bind(null, s3Creds, designId, orderId))
           //.then(createPrintOrder)
@@ -86,9 +73,10 @@ firebaseRef.authWithPassword({
             console.log('Got success when creating order')
             res.json({success: 'Order created successfully'})
           })
-          .catch(function() {
+          .catch(function(err) {
             console.log('Got error when creating order')
-            res.json({error: 'Error creating order'})
+            var msg = err.message || 'Error creating order'
+            res.json({error: msg})
           })
       })
 

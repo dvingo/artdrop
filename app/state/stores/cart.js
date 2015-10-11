@@ -40,8 +40,8 @@ export default new Nuclear.Store({
       // need to create an order object in firebase.
       var design = makeDesignCopy(reactor.evaluate(getters.currentDesign)).set('isImmutable', true)
       persistNewDesign(design).then(() => {
-        var sku = design.getIn(['surfaceOption', 'vendorId'])
-        orderData.sku = sku
+        orderData.surfaceId = design.getIn(['surface', 'id'])
+        orderData.surfaceOptionId = design.getIn(['surfaceOption', 'id'])
         orderData.designId = design.get('id')
         orderData.shippingMethodId = state.get('shippingMethodId')
         persistAndCreateNewOrder(orderData).then((orderId) => {
