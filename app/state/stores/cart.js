@@ -59,6 +59,7 @@ export default new Nuclear.Store({
         orderData.designId = design.get('id')
         orderData.shippingMethodId = state.get('shippingMethodId')
         orderData.totalPrice = orderTotal
+        orderData.state = 'created'
         persistAndCreateNewOrder(orderData).then((orderId) => {
           reactor.dispatch('orderCreatedSuccessfully', orderId)
           orderData.orderId = orderId

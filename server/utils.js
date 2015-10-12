@@ -112,11 +112,25 @@ function uploadDesignImageToS3(s3Creds, designId, orderId) {
   })
 }
 
-function updateOrderWithPrintInfo(orderId, printerId) {
-  console.log('IN updateOrderWithPrintInfo, orderId: ', orderId)
+function updateOrderWithChargeInfo(orderId, design) {
   return new RSVP.Promise(function(resolve, reject) {
     ordersRef.child(orderId).update({
-      printImageUrl: s3Url(orderImageName(orderId))
+      state: 'chargedCreditCard'
+    }, function(err) {
+      if (err) {
+        console.log('error updaing order: ' + orderId + ', ' + err)
+        reject(err)
+      }
+      else { console.log('success updating order in Firebase '); resolve(design) }
+    })
+  })
+}
+
+function updateOrderWithPrintInfo(orderId, printerId) {
+  return new RSVP.Promise(function(resolve, reject) {
+    ordersRef.child(orderId).update({
+      printImageUrl: s3Url(orderImageName(orderId)),
+      state: 'sentToPrinter'
     }, function(err) {
       if (err) {
         console.log('error updaing order: ' + orderId + ', ' + err)
@@ -151,6 +165,7 @@ module.exports = {
   renderDesignImageToFile: renderDesignImageToFile,
   uploadDesignImageToS3: uploadDesignImageToS3,
   updateOrderWithPrintInfo: updateOrderWithPrintInfo,
+  updateOrderWithChargeInfo: updateOrderWithChargeInfo,
   imageUrlForLayer: imageUrlForLayer,
   chargeCreditCard: chargeCreditCard
 }

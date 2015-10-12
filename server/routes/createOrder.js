@@ -3,6 +3,7 @@ var utils = require('../utils')
 var renderDesignImageToFile = utils.renderDesignImageToFile
 var uploadDesignImageToS3 = utils.uploadDesignImageToS3
 var updateOrderWithPrintInfo = utils.updateOrderWithPrintInfo
+var updateOrderWithChargeInfo = utils.updateOrderWithChargeInfo
 var chargeCreditCard = utils.chargeCreditCard
 
 module.exports = function(app, s3Creds, req, res) {
@@ -22,6 +23,7 @@ module.exports = function(app, s3Creds, req, res) {
       res.json({success: 'Order created successfully'})
       return design
     })
+    .then(updateOrderWithChargeInfo.bind(null, orderId))
     .then(renderDesignImageToFile.bind(null, app.get('host'), app.get('port')))
     .then(uploadDesignImageToS3.bind(null, s3Creds, designId, orderId))
     //.then(createPrintOrder)
