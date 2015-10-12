@@ -105,7 +105,7 @@ export default React.createClass({
         }()))
 
       return (
-        <li className="design" key={d.get('id')} style={{margin: 4}}>
+        <li className="design-li" key={d.get('id')} style={{margin: 4}}>
           <Design design={d} onClick={this.clickDesign.bind(null, d)}/>
           <div style={overlayStyles} onClick={this.clickDesign.bind(null, d)}></div>
         </li>
@@ -120,7 +120,7 @@ export default React.createClass({
 
     var selectedTag = this.state.selectedTag ? this.state.selectedTag.get('id') : ''
     return (
-      <div className="main">
+      <div className="main AdminDesigns">
 
         <form onChange={this.onFormChange}>
           <div>

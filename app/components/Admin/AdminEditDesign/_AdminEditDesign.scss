@@ -1,1 +1,8 @@
-.AdminEditDesign {}
+.AdminEditDesign {
+  .select-layer-image:after {
+    display: table;
+    content: '';
+    clear: both;
+  }
+
+}

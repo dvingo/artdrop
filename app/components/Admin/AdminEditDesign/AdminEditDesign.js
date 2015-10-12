@@ -161,7 +161,8 @@ export default React.createClass({
                   'selectedLayerImage', 'id']) === layerImage.get('id') ? 'yellow' : '#fff')
       return (
         <li onClick={this.selectLayerImage.bind(null, layerImage)}
-            style={{background:bg}}>
+            className="LayerImage"
+            style={{background:bg, float:"left"}}>
           <img src={imageUrlForLayerImage(layerImage)}/>
         </li>
       )
@@ -194,7 +195,7 @@ export default React.createClass({
     })
 
     return (
-      <div className="admin-create-design">
+      <div className="AdminEditDesign">
         {this.state.errors.length > 0 ? <div>{errors}</div> : null}
         {this.state.messages.length > 0 ? <div>{messages}</div> : null}
         <p>Edit Design:</p>
@@ -226,9 +227,12 @@ export default React.createClass({
           <input type="submit"></input>
         </form>
 
-        <section className='choose-palette'>
-          <ColorsButtonRotate layer={this.state.editingDesign.getIn(['layers', this.state.currentLayer])}
-            onClick={this.handleRotateColorPalette}/>
+        <p>Rotate palette</p>
+        <ColorsButtonRotate
+          layer={this.state.editingDesign.getIn(['layers', this.state.currentLayer])}
+          onClick={this.handleRotateColorPalette}/>
+
+        <section className='ChoosePalette'>
           {palettes}
         </section>
 

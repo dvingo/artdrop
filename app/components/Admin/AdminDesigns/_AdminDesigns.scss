@@ -1,1 +1,12 @@
-.AdminDesigns {}
+.AdminDesigns {
+  [type=radio] {
+    -webkit-appearance: radio;
+  }
+  .design-li {
+    position: relative;
+    height: 100px;
+    width: 100px;
+    padding: 0;
+    display: inline-block;
+  }
+}
