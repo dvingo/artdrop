@@ -55,5 +55,6 @@ export default {
   addManyDesigns(designs) { dispatchHelper('addManyDesigns', designs) },
   getShipPrice(shipData) { dispatchHelper('getShipPrice', shipData) },
   createOrder(orderData) { dispatchHelper('createOrder', orderData) },
-  createError(message) { dispatchHelper('createError', message) }
+  createError(message) { dispatchHelper('createError', message) },
+  removeError(error) { dispatchHelper('removeError', error) }
 }

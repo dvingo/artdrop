@@ -13,11 +13,9 @@ var hydrateDesignId = require('./hydrate_utils').hydrateDesignId
 var PrintioService = require('../print-io-api/print-io-api')
 var shippingPriceRoute = require('./routes/shippingPrice')
 var designImageViewRoute = require('./routes/designImageView')
+var createOrderRoute = require('./routes/createOrder')
 var utils = require('./utils')
 var renderDesignImageToFile = utils.renderDesignImageToFile
-var uploadDesignImageToS3 = utils.uploadDesignImageToS3
-var updateOrderWithPrintInfo = utils.updateOrderWithPrintInfo
-var chargeCreditCard = utils.chargeCreditCard
 var s3Url = utils.s3Url
 var configVars = require('./configWrapper')
 var recipeId = configVars.recipeId
@@ -53,34 +51,7 @@ firebaseRef.authWithPassword({
       app.get('/shippingPrice', cors(), shippingPriceRoute.bind(null, printioService))
 
       app.options('/orders', cors(), function(req, res) { res.json('hello') })
-
-      app.post('/orders', cors(), function(req, res) {
-        console.log('got order data: ', req.body)
-        var designId = req.body.designId
-        var orderId = req.body.orderId
-        var ccToken = req.body.ccToken
-        var orderTotalInCents = req.body.totalPrice
-        hydrateDesignId(designId)
-          .then(chargeCreditCard.bind(null, ccToken, orderTotalInCents))
-          .catch(function(err) {
-            console.log("Failed to charge credit card for order: " + orderId)
-            throw err
-          })
-          .then(function(design) {
-            console.log('Charged card successfully')
-            res.json({success: 'Order created successfully'})
-            return design
-          })
-          .then(renderDesignImageToFile.bind(null, app.get('host'), app.get('port')))
-          .then(uploadDesignImageToS3.bind(null, s3Creds, designId, orderId))
-          //.then(createPrintOrder)
-          .then(updateOrderWithPrintInfo.bind(null, orderId))
-          .catch(function(err) {
-            console.log('Got error when creating order')
-            var msg = err.message || 'Error creating order'
-            res.json({error: msg})
-          })
-      })
+      app.post('/orders', cors(), createOrderRoute.bind(null, app, s3Creds))
 
       app.get('/images/:imageName', cors(), function(req, res) {
         request(s3Url(req.params.imageName)).pipe(res)
@@ -101,7 +72,7 @@ firebaseRef.authWithPassword({
 
       var port = process.env.PORT || config.devPort
       var server = app.listen(port, function() {
-        host = server.address().address;
+        var host = server.address().address;
         port = server.address().port;
         app.set('host', host)
         app.set('port', port)

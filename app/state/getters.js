@@ -146,7 +146,19 @@ getters.tags = [
 ]
 
 getters.errors = [
-  ['errors'], errors => List(errors)
+  ['errors'], errors => errors ? errors.toList() : List()
+]
+
+getters.orderIsBeingCreated = [
+  ['cart'], cart => cart.get('orderIsBeingCreated')
+]
+
+getters.orderWasCreatedSuccessfuly = [
+  ['cart'], cart => cart.get('orderWasCreatedSuccessfully')
+]
+
+getters.orderCreatedId = [
+  ['cart'], cart => cart.get('orderId')
 ]
 
 export default getters

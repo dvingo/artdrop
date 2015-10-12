@@ -1,22 +1,21 @@
 var Nuclear = require('nuclear-js');
 var Immutable = Nuclear.Immutable
-import {errorsRef} from '../firebaseRefs'
-import reactor from '../reactor'
-
-function persistError(error) {
-  var errorId = error.id
-  delete error.id
-  errorsRef.child(errorId).set(error)
-}
+import {newId} from '../utils'
 
 export default new Nuclear.Store({
+
   getInitialState() { return Nuclear.toImmutable({}) },
 
   initialize() {
-    this.on('addError', (state, error) => {
-      var immutableError = Immutable.fromJS(error)
-      persistError(error)
-      return state.set(error.id, immutableError);
+
+    this.on('createError', (state, errorMessage) => {
+      var id = newId()
+      return state.set(id, Immutable.fromJS({id:id, message:errorMessage}))
     })
+
+    this.on('removeError', (state, error) => (
+      state.remove(error.get('id'))
+    ))
+
   }
 })

@@ -32,7 +32,8 @@ function getStripeToken(state, onComplete) {
   var data = { number:ccNumber.value, cvc:ccCvCode.value, exp_month:month, exp_year: year }
   Stripe.createToken(data, (status, resp) => {
     if (resp.error) {
-      onComplete("Error submitting credit card.")
+      var msg = resp.error.message || 'Error submitting credit card.'
+      onComplete(msg)
     } else {
       onComplete(null, resp.id)
     }
@@ -69,7 +70,20 @@ function areAllFieldsValid(state) {
   return fields.every(f => validations[f](state[f].value) === '')
 }
 
+function isPayButtonDisabled(state) {
+  var allFieldsAreValid = areAllFieldsValid(state)
+  return state.localOrderIsBeingCreated || state.orderIsBeingCreated || !allFieldsAreValid
+}
+
 export default React.createClass({
+  mixins: [reactor.ReactMixin],
+
+  getDataBindings() {
+    return {
+      orderWasCreatedSuccessfuly: Store.getters.orderWasCreatedSuccessfuly,
+      orderIsBeingCreated: Store.getters.orderIsBeingCreated
+    }
+  },
 
   getInitialState() {
     return {
@@ -85,7 +99,8 @@ export default React.createClass({
       ccNumber:            {value: '', isValid: false, errorMsg: ''},
       ccName:              {value: '', isValid: false, errorMsg: ''},
       ccExpiryDate:        {value: '', isValid: false, errorMsg: ''},
-      ccCvCode:            {value: '', isValid: false, errorMsg: ''}
+      ccCvCode:            {value: '', isValid: false, errorMsg: ''},
+      localOrderIsBeingCreated: false
     }
   },
 
@@ -112,6 +127,9 @@ export default React.createClass({
 
   componentWillUpdate(nextProps, nextState) {
     calculateShippingIfUpdated(nextState, this.state)
+    if (!nextState.orderIsBeingCreated && this.state.orderIsBeingCreated) {
+      this.setState({localOrderIsBeingCreated:false})
+    }
   },
 
   getShipPrice(e) {
@@ -124,7 +142,8 @@ export default React.createClass({
 
   onPayButtonClick(e) {
     e.preventDefault()
-    if (!areAllFieldsValid(this.state)) { return }
+    this.setState({localOrderIsBeingCreated:true})
+    if (isPayButtonDisabled(this.state)) { return }
 
     getStripeToken(this.state, (err, token) => {
       let { shippingFirstName, shippingLastName, shippingPhoneNumber,
@@ -132,6 +151,7 @@ export default React.createClass({
         shippingState, shippingZipcode, email } = this.state
 
       if (err) {
+        this.setState({localOrderIsBeingCreated:false})
         Store.actions.createError(err)
         return
       }
@@ -285,7 +305,7 @@ export default React.createClass({
 
           <p>
             <button className={classNames("pay-button",
-              {disabled: !areAllFieldsValid(this.state)})}
+              {disabled: isPayButtonDisabled(this.state)})}
               onClick={this.onPayButtonClick}>Pay</button>
           </p>
           { areShippingFieldsValid(this.state) ?

@@ -15,6 +15,7 @@ import DesignDetail from 'components/Design/DesignDetail/DesignDetail'
 import DesignEdit from 'components/Design/DesignEdit/DesignEdit'
 import DesignEditDetail from 'components/Design/DesignEditDetail/DesignEditDetail'
 import DesignEditSurface from 'components/Design/DesignEditSurface/DesignEditSurface'
+import PaymentConfirmation from 'components/PaymentConfirmation/PaymentConfirmation'
 import {Route, NotFoundRoute, DefaultRoute} from 'react-router'
 import React from 'react'
 
@@ -27,6 +28,7 @@ export default (
       <Route name="designDetail" handler={DesignDetail} path=":designId/?"/>
     </Route>
 
+    <Route name="paymentConfirmation" handler={PaymentConfirmation} path="orders/:orderId/confirmation/?"/>
     <Route name="cart" handler={Cart} path="/designs/:designId/cart/?"/>
     <Route name="designEditSurface" handler={DesignEditSurface} path="/designs/:designId/edit/surface/?"/>
     <Route name="designEdit" handler={DesignEdit} path="/designs/:designId/edit/:layerId/?"/>
