@@ -2,12 +2,11 @@ import React from 'react'
 import reactor from 'state/reactor'
 import Router from 'react-router'
 import Store from 'state/main'
-import Immutable from 'Immutable'
 import RenderLayers from 'components/Design/RenderLayers/RenderLayers'
 import LayerSelectorGroup from 'components/Design/LayerSelectorGroup/LayerSelectorGroup'
 import ColorsButton from 'components/ColorsButton/ColorsButton'
 import CheckButton from 'components/CheckButton/CheckButton'
-import {imageUrlForLayer} from 'state/utils'
+import {makeDesignCopy, imageUrlForLayer} from 'state/utils'
 import {iconPath} from 'utils'
 var classNames = require('classnames')
 var Hammer = require('react-hammerjs')
@@ -23,14 +22,48 @@ export default React.createClass({
     }
   },
 
-  componentWillMount() {
+  _designIsNotEditable() {
+    return (
+      this.state.design != null &&
+      this.state.design.get('isImmutable') &&
+      !this._isTransitioning
+    )
+  },
+
+  _makeEditableCopyAndTransition() {
+    this._isTransitioning = true
+    var newDesign = makeDesignCopy(this.state.design).set('isImmutable', false)
+    Store.actions.saveDesign(newDesign)
+    this.transitionTo('designEdit', {
+      designId: newDesign.get('id'),
+      layerId: newDesign.getIn(['layers', 0, 'id'])
+    })
     Store.actions.selectDesignAndLayerId({
-      designId: this.props.params.designId,
-      layerId: this.props.params.layerId})
+      designId: newDesign.get('id'),
+      layerId: newDesign.getIn(['layers', 0, 'id'])
+    })
+  },
+
+  componentWillMount() {
+    this._isTransitioning = false
+    if (this._designIsNotEditable()) {
+      this._makeEditableCopyAndTransition()
+    } else {
+      Store.actions.selectDesignAndLayerId({
+        designId: this.props.params.designId,
+        layerId: this.props.params.layerId
+      })
+    }
   },
 
   componentWillUnmount() {
     clearInterval(this._interval)
+  },
+
+  componentWillUpdate(nextProps, nextState) {
+    if (this._designIsNotEditable()) {
+      this._makeEditableCopyAndTransition()
+    }
   },
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -78,11 +111,15 @@ export default React.createClass({
   },
 
   editLayerDetail() {
-    this.transitionTo('designEditDetail', {designId: this.state.design.get('id'), layerId: this.state.currentLayer.get('id'), imagesOrColors: 'images'})
+    this.transitionTo('designEditDetail', {
+      designId: this.state.design.get('id'),
+      layerId: this.state.currentLayer.get('id'),
+      imagesOrColors: 'images'
+    })
   },
 
   editDesignSurface() {
-    this.transitionTo('designEditSurface', {designId: this.state.design.get('id')})
+    this.transitionTo('designEditSurface', { designId: this.state.design.get('id') })
   },
 
   render() {

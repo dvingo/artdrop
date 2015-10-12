@@ -8,7 +8,6 @@ var request = require('request')
 var cors = require('cors')
 var compression = require('compression')
 var config = require('./server-config')
-var hydrateDesign = require('./hydrate_utils').hydrateDesign
 var hydrateDesignId = require('./hydrate_utils').hydrateDesignId
 var PrintioService = require('../print-io-api/print-io-api')
 var shippingPriceRoute = require('./routes/shippingPrice')
