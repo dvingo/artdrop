@@ -122,16 +122,16 @@ export default new Nuclear.Store({
       console.log('layer: ', layer.toJS())
       var tagId = tag.get('id')
       var layerId = layer.get('id')
-      var layersIds = List(tag.get('layers')).push(layerId)
+      var layerIds = List(tag.get('layers')).push(layerId)
       console.log('layersIds: ', layerIds.toJS())
-      var layerIds = idListToFirebaseObj(layerIds)
-      var tags = List(layer.get('tags')).push(tag)
-      var tagIds = idListToFirebaseObj(tags.map(t => t.get('id')))
-      var updatedDesign = updateLayerOfDesign(layer, design, l => l.set('tags', tags))
-      persistTag(tagId, {layers: layerIds})
-      persistLayer(layerId, {tags: tagIds})
+      // TODO change to a set, so we don't have to care about pushing the same tag
+      // or layer twice....
+      var tagIds = List(layer.get('tags')).push(tagId)
+      var updatedDesign = updateLayerOfDesign(layer, design, l => l.set('tags', tagIds))
+      persistTag(tagId, {layers: idListToFirebaseObj(layerIds)})
+      persistLayer(layerId, {tags: idListToFirebaseObj(tagIds)})
       dispatchHelper('addDesign', updatedDesign.toJS())
-      return state.set(tagId, tag.set('layers', layers))
+      return state.set(tagId, tag.set('layers', layerIds))
     })
 
     this.on('removeTagFromLayer', (state, {tag, layer, design}) => {
