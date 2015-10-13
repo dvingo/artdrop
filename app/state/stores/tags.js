@@ -1,39 +1,43 @@
 var Nuclear = require('nuclear-js');
 var Immutable = Nuclear.Immutable
+var {Set, List} = Immutable
 import reactor from '../reactor'
 import {tagsRef, designsRef} from '../firebaseRefs'
-import {hydrateAndDispatchTags} from '../helpers'
+import {updateLayerOfDesign,
+  dispatchHelper, idListToFirebaseObj, persistTag,
+  persistLayer, hydrateAndDispatchTags} from '../helpers'
+
 var hydrateTags = (state) => {
   hydrateAndDispatchTags(state)
   return state
 }
 
 var addTagToDesign = (tagId, design) => {
-  var updatedTags = Immutable.Set(design.get('tags')).add(tagId).toKeyedSeq()
+  var updatedTags = Set(design.get('tags')).add(tagId).toKeyedSeq()
   return design.set('tags', updatedTags)
 }
 
 var removeTagFromDesign = (tagId, design) => {
   var designId = design.get('id')
-  var tagIds = Immutable.Set(design.get('tags')).remove(tagId)
+  var tagIds = Set(design.get('tags')).remove(tagId)
   return design.set('tags', tagIds.toKeyedSeq())
 }
 
 var removeDesignsFromTag = (tag, designsToRemove) => {
   designsToRemove = designsToRemove.map(d => d.get('id'))
-  var currentDesigns = Immutable.Set(tag.get('designs'))
+  var currentDesigns = Set(tag.get('designs'))
   return tag.set('designs', currentDesigns.subtract(designsToRemove))
 }
 
 var addDesignsToTag = (tag, designs) => {
-  var currentDesigns = Immutable.Set(tag.get('designs'))
+  var currentDesigns = Set(tag.get('designs'))
   return tag.set('designs', currentDesigns.union(designs))
 }
 
 var updateTagAndDesigns = (tag, selectedDesigns) => {
   var allDesignsMap = reactor.evaluate(['designs'])
-  var existingsDesigns = Immutable.Set(tag.get('designs'))
-  var selectedDesigns = Immutable.Set(selectedDesigns)
+  var existingsDesigns = Set(tag.get('designs'))
+  var selectedDesigns = Set(selectedDesigns)
   var designsToRemoveTagFrom = (
     existingsDesigns.subtract(selectedDesigns)
       .map(d => allDesignsMap.get(d))
@@ -47,7 +51,7 @@ var updateTagAndDesigns = (tag, selectedDesigns) => {
   var updatedDesigns = (
     designsToRemoveTagFrom.union(designsToAddTagTo
      .map(id => allDesignsMap.get(id))
-     .map(addTagToDesign.bind(null, tag.get('id')))))
+     .map(ddTagToDesign.bind(null, tag.get('id')))))
   tag = addDesignsToTag(tag, designsToAddTagTo)
   return { updatedTag: tag, updatedDesigns: updatedDesigns }
 }
@@ -71,7 +75,7 @@ export default new Nuclear.Store({
   getInitialState() { return Nuclear.toImmutable({}) },
 
   initialize() {
-    this.on('addTag', (state, tag) => {
+    this.on('setTag', (state, tag) => {
       return state.set(tag.id, Immutable.fromJS(tag))
     })
 
@@ -79,6 +83,9 @@ export default new Nuclear.Store({
       return tags.reduce((retVal, tag) => {
         if (tag.designs) {
           tag.designs = Object.keys(tag.designs)
+        }
+        if (tag.layers) {
+          tag.layers = Object.keys(tag.layers)
         }
         return retVal.set(tag.id, Immutable.fromJS(tag))
       }, state)
@@ -107,7 +114,31 @@ export default new Nuclear.Store({
       }
       var newTagRef = tagsRef.push(newTag)
       newTag.id = newTagRef.key()
-      setTimeout(() => reactor.dispatch('addTag', newTag), 50)
+      setTimeout(() => reactor.dispatch('setTag', newTag), 50)
+      return state
+    })
+
+    this.on('addTagToLayer', (state, {tag, layer, design}) => {
+      console.log('layer: ', layer.toJS())
+      var tagId = tag.get('id')
+      var layerId = layer.get('id')
+      var layersIds = List(tag.get('layers')).push(layerId)
+      console.log('layersIds: ', layerIds.toJS())
+      var layerIds = idListToFirebaseObj(layerIds)
+      var tags = List(layer.get('tags')).push(tag)
+      var tagIds = idListToFirebaseObj(tags.map(t => t.get('id')))
+      var updatedDesign = updateLayerOfDesign(layer, design, l => l.set('tags', tags))
+      persistTag(tagId, {layers: layerIds})
+      persistLayer(layerId, {tags: tagIds})
+      dispatchHelper('addDesign', updatedDesign.toJS())
+      return state.set(tagId, tag.set('layers', layers))
+    })
+
+    this.on('removeTagFromLayer', (state, {tag, layer, design}) => {
+      // remove layer id from tag.layers
+      // persist tag
+      // remove tag id from layer.tags
+      // persist layer
       return state
     })
   }

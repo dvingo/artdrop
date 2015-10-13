@@ -158,6 +158,18 @@ exports.persistNewDesign = (design) => {
   })
 }
 
+exports.updateLayerOfDesign = (layer, design, updateFn) => {
+  var layers = design.get('layers')
+  var i = layers.findIndex(l => l.get('id') === layer.get('id'))
+  return design.set('layers', layers.update(i, v => updateFn(v)))
+}
+
+exports.idListToFirebaseObj = (list) => {
+  var retVal = {}
+  list.forEach(i => retVal[i] = true)
+  return retVal
+}
+
 exports.persistAndCreateNewOrder = (orderData) => {
   return new RSVP.Promise((resolve, reject) => {
     var newOrderRef = ordersRef.push(orderData, (err) => {
@@ -171,4 +183,5 @@ exports.persistWithRef = persistWithRef
 exports.persistDesign = persistWithRef.bind(null, designsRef)
 exports.persistLayer = persistWithRef.bind(null, layersRef)
 exports.persistSurface = persistWithRef.bind(null, surfacesRef)
+exports.persistTag = persistWithRef.bind(null, tagsRef)
 export default exports

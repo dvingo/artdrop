@@ -6,6 +6,7 @@ import RenderLayers from 'components/Design/RenderLayers/RenderLayers'
 import RenderLayersCanvas from 'components/Design/RenderLayersCanvas/RenderLayersCanvas'
 import ColorsButtonRotate from 'components/ColorsButtonRotate/ColorsButtonRotate'
 import ColorPalette from 'components/ColorPalette/ColorPalette'
+import Tags from 'components/Tags/Tags'
 import Immutable from 'Immutable'
 import Notification from 'components/Notification/Notification'
 import Router from 'react-router'
@@ -19,19 +20,24 @@ export default React.createClass({
     return {existingDesign: Store.getters.currentDesign,
             layerImages: Store.getters.layerImages,
             colorPalettes: Store.getters.colorPalettes,
-            surfaces: Store.getters.surfaces}
+            surfaces: Store.getters.surfaces,
+            tags: Store.getters.tags,
+    }
   },
 
   getInitialState() {
-    return {editingDesign: null,
-            currentLayer: 0,
-            errors: [],
-            messages: [],
-            width: 400,
-            height: 400,
-            designJpgUrl: null,
-            showDeleteConfirmation: false,
-            confirmDeleteText: ''}
+    return {
+      editingDesign: null,
+      currentLayer: 0,
+      errors: [],
+      messages: [],
+      width: 400,
+      height: 400,
+      designJpgUrl: null,
+      showDeleteConfirmation: false,
+      confirmDeleteText: '',
+      selectedTag: null,
+    }
   },
 
   componentWillMount() {
@@ -117,7 +123,10 @@ export default React.createClass({
   designIsNotHydrated() {
     var editingDesign = this.state.editingDesign
     return !(editingDesign &&
-            editingDesign.get('layers').every(l => typeof l === 'object' && l.has('colorPalette') && l.has('selectedLayerImage')) &&
+            editingDesign.get('layers').every(l => (
+              typeof l === 'object' &&
+              l.has('colorPalette') &&
+              l.has('selectedLayerImage'))) &&
             (typeof editingDesign.get('surface') === 'object'))
   },
 
@@ -132,6 +141,22 @@ export default React.createClass({
   confirmedDeleteDesign() {
     Store.actions.deleteDesign(this.state.existingDesign)
     this.transitionTo('adminDesigns')
+  },
+
+  _selectedLayer() {
+    return this.state.editingDesign.getIn(['layers', this.state.currentLayer])
+  },
+
+  _selectedLayerTags() {
+    return this._selectedLayer().get('tags') || Immutable.List()
+  },
+
+  onAddTagToSelectedLayer(tagToAdd) {
+    Store.actions.addTagToLayer(tagToAdd, this._selectedLayer(), this.state.existingDesign)
+  },
+
+  onRemoveTag(tagToRemove) {
+    Store.actions.removeTagFromLayer(tagToRemove, this._selectedLayer(), this.state.existingDesign)
   },
 
   render() {
@@ -194,6 +219,13 @@ export default React.createClass({
         )
     })
 
+    var tagOptions = this.state.tags.map(tag => {
+      return (
+        <option value={tag.get('id')}>{tag.get('name')}</option>
+      )
+    })
+    var selectedTag = this.state.selectedTag ? this.state.selectedTag.get('id') : ''
+
     return (
       <div className="AdminEditDesign">
         {this.state.errors.length > 0 ? <div>{errors}</div> : null}
@@ -220,6 +252,10 @@ export default React.createClass({
         <div style={{padding:20}}>
           {selectLayers}
         </div>
+
+        <Tags selectedTags={this._selectedLayerTags()}
+              onRemoveTag={this.onRemoveTag}
+              onAddTag={this.onAddTagToSelectedLayer} />
 
         <form onSubmit={this.saveDesign}>
           <label>Title</label>

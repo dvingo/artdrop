@@ -3,7 +3,6 @@ import Router from 'react-router'
 import Design from 'components/Design/Design'
 import reactor from 'state/reactor'
 import Store from 'state/main'
-import ColorPalette from 'components/ColorPalette/ColorPalette'
 import Immutable from 'Immutable'
 import {imageUrlForLayerImage,imageUrlForSurface} from 'state/utils'
 
@@ -24,17 +23,8 @@ export default React.createClass({
   },
 
   componentWillMount() {
-    this._interval = setInterval(() => {
-      if (!reactor.__isDispatching) {
-        clearInterval(this._interval)
-        Store.actions.loadAdminCreatedDesigns()
-        Store.actions.loadAdminTags()
-      }
-    }, 100)
-  },
-
-  componentWillUnmount() {
-    clearInterval(this._interval)
+    Store.actions.loadAdminCreatedDesigns()
+    Store.actions.loadAdminTags()
   },
 
   componentDidUpdate(prevProps, prevState) {

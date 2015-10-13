@@ -234,6 +234,8 @@ export default new Nuclear.Store({
       var updatedDesign = designData.design
       var svgEls = designData.svgEls
       var title = updatedDesign.get('title')
+      // TODO should only upload the design image
+      // if the color palettes or layerImages have changed for any layer.
       uploadDesignPreview(title, svgEls, (err, imgUrls) => {
         if (err) {
           console.log('got error: ', err)

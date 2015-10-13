@@ -52,6 +52,8 @@ export default {
   loadAdminTags() { dispatchHelper('loadAdminTags') },
   addDesignsToTag(data) { dispatchHelper('addDesignsToTag', data) },
   addManyTags(tags) { dispatchHelper('addManyTags', tags) },
+  addTagToLayer(tag, layer, design) { dispatchHelper('addTagToLayer', {tag, layer, design}) },
+  removeTagFromLayer(tag, layer, design) { dispatchHelper('removeTagFromLayer', {tag,layer, design}) },
   addManyDesigns(designs) { dispatchHelper('addManyDesigns', designs) },
   getShipPrice(shipData) { dispatchHelper('getShipPrice', shipData) },
   createOrder(orderData) { dispatchHelper('createOrder', orderData) },

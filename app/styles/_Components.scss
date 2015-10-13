@@ -13,11 +13,13 @@
 @import "../components/Admin/AdminTags/AdminTags";
 @import "../components/Admin/AdminUsers/AdminUsers";
 
-@import "../components/Button/_Button";
-@import "../components/CheckButton/_CheckButton";
-@import "../components/ColorPalette/_ColorPalette";
-@import "../components/ColorsButton/_ColorsButton";
-@import "../components/ColorsButtonRotate/_ColorsButtonRotate";
+@import "../components/Button/Button";
+@import "../components/CheckButton/CheckButton";
+@import "../components/ColorPalette/ColorPalette";
+@import "../components/ColorsButton/ColorsButton";
+@import "../components/ColorsButtonRotate/ColorsButtonRotate";
+@import "../components/Tags/Tags";
+@import "../components/Tag/Tag";
 
 @import "../components/Design/_Design";
 @import "../components/Design/ChoosePalette/_ChoosePalette";
