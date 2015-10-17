@@ -1,4 +1,5 @@
 import reactor from 'state/reactor'
+import tagActions from 'state/stores/tags/tagsActions'
 
 var dispatchHelper = function() {
   var args = arguments
@@ -10,7 +11,24 @@ var dispatchHelper = function() {
   }, 100)
 }
 
-export default {
+function merge(target, source) {
+  if (typeof targe !== 'object') {
+    target = {}
+  }
+
+  for (var property in source) {
+    if (source.hasOwnProperty(property)) {
+      var sourceProp = source[property]
+      if (typeof sourceProp === 'object') {
+        target[property] = merge(target[property], sourceProp)
+        continue
+      }
+      target[property] = sourceProp
+    }
+  }
+}
+
+var actions = {
   selectDesignId(id) { dispatchHelper('selectDesignId', id) },
   selectDesignAndLayerId(ids) { dispatchHelper('selectDesignAndLayerId', ids) },
   previousDesignColors() { dispatchHelper('previousDesignColors') },
@@ -48,15 +66,12 @@ export default {
   saveColorPalette(colorPalette) { dispatchHelper('saveColorPalette', colorPalette) },
   createNewColorPalette(colorPalette) { dispatchHelper('createNewColorPalette', colorPalette) },
   rotateCurrentLayerColorPalette() { dispatchHelper('rotateCurrentLayerColorPalette') },
-  createTag(newTagName) { dispatchHelper('createTag', newTagName) },
-  loadAdminTags() { dispatchHelper('loadAdminTags') },
-  addDesignsToTag(data) { dispatchHelper('addDesignsToTag', data) },
-  addManyTags(tags) { dispatchHelper('addManyTags', tags) },
-  addTagToLayer(tag, layer, design) { dispatchHelper('addTagToLayer', {tag, layer, design}) },
-  removeTagFromLayer(tag, layer, design) { dispatchHelper('removeTagFromLayer', {tag,layer, design}) },
   addManyDesigns(designs) { dispatchHelper('addManyDesigns', designs) },
   getShipPrice(shipData) { dispatchHelper('getShipPrice', shipData) },
   createOrder(orderData) { dispatchHelper('createOrder', orderData) },
   createError(message) { dispatchHelper('createError', message) },
   removeError(error) { dispatchHelper('removeError', error) }
 }
+
+merge(actions, tagActions)
+export default actions

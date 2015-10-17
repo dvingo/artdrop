@@ -1,0 +1,24 @@
+.Tag {
+  display: inline-block;
+  margin: 10px;
+}
+
+.Tag-name {
+  padding: 0 10px;
+  border: 1px solid;
+  border-radius: 5px 0 0 5px;
+}
+
+.Tag-remove {
+  padding: 0 10px;
+  border: 1px solid;
+  border-radius: 0 5px 5px 0;
+  background-color: #C6C5C5;
+  &:hover {
+    cursor: pointer;
+    background-color: #747373;
+  }
+  &:active {
+    background-color: #363535;
+  }
+}

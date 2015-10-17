@@ -2,7 +2,9 @@ import {designsRef, layersRef, layerImagesRef,
 colorPalettesRef, surfacesRef,
 surfaceOptionsRef, tagsRef, ordersRef} from 'state/firebaseRefs'
 import reactor from 'state/reactor'
-var Map = require('nuclear-js').Immutable.Map
+import getters from 'state/getters'
+var Immutable = require('nuclear-js').Immutable
+var {Map, List} = Immutable
 var RSVP = require('RSVP')
 
 var exports = {}
@@ -56,6 +58,7 @@ function nestedHydrateLayer(layerId) {
       reactor.dispatch('addLayerImage', layerImage)
       layer.selectedLayerImage = layerImage
       layer.id = layerId
+      layer.tags = populateTags(layer)
       return hydrateColorPalette(layer.colorPalette).then(colorPalette => {
         colorPalette.id = layer.colorPalette
         layer.colorPalette = colorPalette
@@ -76,29 +79,66 @@ function hydrateSurfaceOption(surfaceOptionId) {
   )
 }
 
-exports.hydrateDesign = (design) => {
-  var layers = design.layers.map(nestedHydrateLayer)
-  return RSVP.all(layers).then(layers => {
-    design.layers = layers;
-    return hydrateSurface(design.surface)
-  }).then(surface => {
-    return (
-      hydrateSurfaceOptionsForSurface(surface)
-      .then(surfaceOptions => {
-        surface.id = design.surface
-        surface.options = surfaceOptions
-        design.surface = surface
-        design.surfaceOption = surface.options.filter(o => o.id === design.surfaceOption)[0]
-        reactor.dispatch('addSurface', surface)
-        reactor.dispatch('addDesign', design)
+function addIdsToData(data) {
+  return Object.keys(data).map(id => {
+    var obj = data[id]
+    obj.id = id
+    return obj
+  })
+}
+
+function hydrateTagsIfMissing() {
+  return new Promise((resolve, reject) => {
+    var existingTags = reactor.evaluate(getters.tags)
+    if (existingTags.count() > 0) { resolve() }
+    else {
+      tagsRef.once('value', snapshot => {
+        var data = snapshot.val()
+        var dataToDispatch = addIdsToData(data)
+        reactor.dispatch('addManyTags', dataToDispatch)
+        resolve()
       })
-    )
-  }).catch(e => console.error("Got Error: ", e))
+    }
+  })
+}
+
+function populateTags(obj) {
+  if (obj.hasOwnProperty('tags')) {
+    var tagsMap = reactor.evaluate(['tags'])
+    return List(Object.keys(obj.tags).map(id => {
+      return tagsMap.get(id)
+    }))
+  }
+  return List()
+}
+
+exports.hydrateDesign = (design) => {
+  return hydrateTagsIfMissing().then(() => {
+    var layers = design.layers.map(nestedHydrateLayer)
+    return RSVP.all(layers).then(layers => {
+      design.layers = layers;
+      return hydrateSurface(design.surface)
+    }).then(surface => {
+      return (
+        hydrateSurfaceOptionsForSurface(surface)
+        .then(surfaceOptions => {
+          surface.id = design.surface
+          surface.options = surfaceOptions
+          design.surface = surface
+          design.tags = populateTags(design)
+          design.surfaceOption = surface.options.filter(o => o.id === design.surfaceOption)[0]
+          reactor.dispatch('addSurface', surface)
+          reactor.dispatch('addDesign', design)
+        })
+      )
+    }).catch(e => console.error("Got Error: ", e))
+  })
 }
 
 function hydrateSurfaceOptionsForSurface (surface) {
   return RSVP.all(Object.keys(surface.options).map(hydrateSurfaceOption))
 }
+
 exports.hydrateSurfaceOptionsForSurface = hydrateSurfaceOptionsForSurface
 
 var hydrateObj = (ref, id) => {
@@ -110,11 +150,7 @@ var hydrateObj = (ref, id) => {
 var hydrateAndDispatchData = (dbRef, dispatchMsg, currentState) => {
   dbRef.once('value', snapshot => {
     var data = snapshot.val()
-    var dataToDispatch = Object.keys(data).map(id => {
-      var obj = data[id]
-      obj.id = id
-      return obj
-    })
+    var dataToDispatch = addIdsToData(data)
     reactor.dispatch(dispatchMsg, dataToDispatch)
   })
 }

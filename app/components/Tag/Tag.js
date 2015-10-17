@@ -15,10 +15,10 @@ export default React.createClass({
   render() {
     return (
       <div className="Tag">
-        <span>
+        <span className="Tag-name">
           {this.props.tag.get('name')}
         </span>
-        <span className="remove">X</span>
+        <span className="Tag-remove" onClick={this.props.onRemoveTag}>X</span>
       </div>
     )
   }

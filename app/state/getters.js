@@ -142,7 +142,7 @@ getters.layerImageOptions = [
 ]
 
 getters.tags = [
-  ['tags'], tags => tags ? tags.toList() : []
+  ['tags'], tags => tags ? tags.toList() : List()
 ]
 
 getters.errors = [

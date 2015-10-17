@@ -1,11 +1,11 @@
 var Nuclear = require('nuclear-js');
 var Immutable = Nuclear.Immutable
 var {Set, List} = Immutable
-import reactor from '../reactor'
-import {tagsRef, designsRef} from '../firebaseRefs'
+import reactor from 'state/reactor'
+import {tagsRef, designsRef} from 'state/firebaseRefs'
 import {updateLayerOfDesign,
   dispatchHelper, idListToFirebaseObj, persistTag,
-  persistLayer, hydrateAndDispatchTags} from '../helpers'
+  persistLayer, hydrateAndDispatchTags} from 'state/helpers'
 
 var hydrateTags = (state) => {
   hydrateAndDispatchTags(state)
@@ -120,16 +120,21 @@ export default new Nuclear.Store({
 
     this.on('addTagToLayer', (state, {tag, layer, design}) => {
       console.log('layer: ', layer.toJS())
+      console.log('tag: ', tag.toJS())
       var tagId = tag.get('id')
       var layerId = layer.get('id')
       var layerIds = List(tag.get('layers')).push(layerId)
       console.log('layersIds: ', layerIds.toJS())
-      // TODO change to a set, so we don't have to care about pushing the same tag
-      // or layer twice....
-      var tagIds = List(layer.get('tags')).push(tagId)
-      var updatedDesign = updateLayerOfDesign(layer, design, l => l.set('tags', tagIds))
+      var tags = Set(layer.get('tags')).add(tag)
+      console.log('new TAGS: ', tags.toJS())
+      var tagIds = tags.map(t => t.get('id'))
+      var updatedDesign = updateLayerOfDesign(layer, design, l => l.set('tags', tags))
+      console.log('addTagToLayer here1')
       persistTag(tagId, {layers: idListToFirebaseObj(layerIds)})
+      console.log('addTagToLayer here2')
       persistLayer(layerId, {tags: idListToFirebaseObj(tagIds)})
+      console.log('addTagToLayer here3')
+      console.log('addDesign: ', updatedDesign.toJS())
       dispatchHelper('addDesign', updatedDesign.toJS())
       return state.set(tagId, tag.set('layers', layerIds))
     })

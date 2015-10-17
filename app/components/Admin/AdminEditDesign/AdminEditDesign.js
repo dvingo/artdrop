@@ -7,11 +7,37 @@ import RenderLayersCanvas from 'components/Design/RenderLayersCanvas/RenderLayer
 import ColorsButtonRotate from 'components/ColorsButtonRotate/ColorsButtonRotate'
 import ColorPalette from 'components/ColorPalette/ColorPalette'
 import Tags from 'components/Tags/Tags'
-import Immutable from 'Immutable'
 import Notification from 'components/Notification/Notification'
 import Router from 'react-router'
 import {imageUrlForLayer,imageUrlForLayerImage,imageUrlForSurface} from 'state/utils'
 import {designPreviewSize} from 'config'
+
+function tagsUpdatedOnExistingDesign(prevState, state) {
+  var existingDesign = state.existingDesign
+  if (existingDesign == null || prevState.existingDesign == null) { return false }
+  var layers = existingDesign.get('layers')
+  var prevLayers = prevState.existingDesign.get('layers')
+  var retVal = layers.some((layer, i) => {
+    if (!layer) { return true }
+    console.log('Checking layer: ', layer.toJS())
+    console.log('  with i: ', i)
+    return layers.get(i).get('tags') !== prevLayers.get(i).get('tags')
+  })
+  console.log('all layers same?: ', retVal)
+  return retVal
+}
+
+function updateEditingDesignWithNewTags(state) {
+  console.log("updating editingDesign: ", state.editingDesign.toJS())
+  // Set all the tags for all the layers
+  state.editingDesign.updateIn(['layers'], layers => {
+    return layers.map((layer, i) => {
+      var newTags = state.existingDesign.getIn(['layers', i, 'tags'])
+      return layer.set('tags', newTags)
+    })
+  })
+
+}
 
 export default React.createClass({
   mixins: [reactor.ReactMixin, Router.State, Router.Navigation],
@@ -55,6 +81,10 @@ export default React.createClass({
   componentDidUpdate(prevProps, prevState) {
     if ((!this.state.editingDesign || this.designIsNotHydrated()) && this.state.existingDesign) {
       setTimeout(() => this.setState({editingDesign: this.state.existingDesign}), 200)
+    }
+    else if (tagsUpdatedOnExistingDesign(prevState, this.state)) {
+      var newDesign = updateEditingDesignWithNewTags(this.state)
+      setTimeout(() => this.setState({editingDesign: newDesign}), 200)
     }
   },
 
@@ -148,20 +178,23 @@ export default React.createClass({
   },
 
   _selectedLayerTags() {
-    return this._selectedLayer().get('tags') || Immutable.List()
+    return this._selectedLayer().get('tags')
   },
 
   onAddTagToSelectedLayer(tagToAdd) {
+    console.log('in onAddTagToSelectedLayer, tagToAdd: ', tagToAdd)
     Store.actions.addTagToLayer(tagToAdd, this._selectedLayer(), this.state.existingDesign)
   },
 
   onRemoveTag(tagToRemove) {
+    console.log('in onRemoveTag, tagToRemove: ', tagToRemove)
     Store.actions.removeTagFromLayer(tagToRemove, this._selectedLayer(), this.state.existingDesign)
   },
 
   render() {
     if (this.designIsNotHydrated()) { return null }
 
+    console.log('rendering admin edit design')
     var surfaces = this.state.surfaces.map(s => {
       var border = (this.state.editingDesign.get('surface').get('id') === s.get('id') ? '2px solid' : 'none')
       return <img src={imageUrlForSurface(s)}
