@@ -27,9 +27,7 @@ export default {
   removeTagFromLayer(tag, layer, design) {
     var tagId = tag.get('id')
     var layerId = layer.get('id')
-    console.log("layer ids before: ", Set(tag.get('layers')).toJS())
     var layerIds = Set(tag.get('layers')).remove(layerId)
-    console.log("layer ids after: ", layerIds.toJS())
     var tags = Set(layer.get('tags')).remove(tag)
     var tagIds = tags.map(t => t.get('id'))
     var updatedDesign = updateLayerOfDesign(layer, design, l => l.set('tags', tags))

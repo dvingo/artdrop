@@ -39,6 +39,18 @@ export default React.createClass({
     }
   },
 
+  componentDidUpdate(prevProps, prevState) {
+    var nonSelectedTags = this._nonSelectedTags(this.state)
+    if (this._tagNotInUnselectedTags(this.state.selectedTag, nonSelectedTags) &&
+        nonSelectedTags.count() > 0) {
+      this.setState({selectedTag: nonSelectedTags.first()})
+    }
+  },
+
+  _tagNotInUnselectedTags(tag, unSelectedTags) {
+    return !this._nonSelectedTags(this.state).includes(tag)
+  },
+
   _nonSelectedTags(state) {
     var selectedTagIds = this.props.selectedTags.map(t => t.get('id'))
     return state.tags.filter(t => !selectedTagIds.includes(t.get('id')))
@@ -70,17 +82,13 @@ export default React.createClass({
           {tags}
         </div>
         { tagOptions.count() > 0 ?
-          <select value={selectedTagId} style={{width:'50%'}} onChange={this.handleTagChange}>
-            {tagOptions}
-          </select>
-          : null
-        }
-        { tagOptions.count() > 0 ?
-          <div style={{padding:'10px 0'}}>
-            <button onClick={this.onAddTag}>+</button>
-          </div>
-          : null
-        }
+          [<select value={selectedTagId} style={{width:'50%'}} onChange={this.handleTagChange}>
+             {tagOptions}
+           </select>,
+           <div style={{padding:'10px 0'}}>
+             <button onClick={this.onAddTag}>+</button>
+           </div>]
+          : null }
       </div>
     )
   }

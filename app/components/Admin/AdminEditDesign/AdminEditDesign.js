@@ -15,16 +15,14 @@ function tagsUpdatedOnExistingDesign(prevState, state) {
   if (existingDesign == null || prevState.existingDesign == null) { return false }
   var layers = existingDesign.get('layers')
   var prevLayers = prevState.existingDesign.get('layers')
-  var retVal = layers.some((layer, i) => {
+  return layers.some((layer, i) => {
     if (!layer) { return true }
     return layers.get(i).get('tags') !== prevLayers.get(i).get('tags')
   })
-  return retVal
 }
 
 function updateEditingDesignWithNewTags(state) {
-  // Set all the tags for all the layers
-  state.editingDesign.updateIn(['layers'], layers => {
+  return state.editingDesign.updateIn(['layers'], layers => {
     return layers.map((layer, i) => {
       var newTags = state.existingDesign.getIn(['layers', i, 'tags'])
       return layer.set('tags', newTags)
