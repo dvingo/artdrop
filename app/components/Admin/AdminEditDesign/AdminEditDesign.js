@@ -3,14 +3,12 @@ import reactor from 'state/reactor'
 import Store from 'state/main'
 import {rotateColorPalette} from 'state/utils'
 import RenderLayers from 'components/Design/RenderLayers/RenderLayers'
-import RenderLayersCanvas from 'components/Design/RenderLayersCanvas/RenderLayersCanvas'
 import ColorsButtonRotate from 'components/ColorsButtonRotate/ColorsButtonRotate'
 import ColorPalette from 'components/ColorPalette/ColorPalette'
 import Tags from 'components/Tags/Tags'
 import Notification from 'components/Notification/Notification'
 import Router from 'react-router'
-import {imageUrlForLayer,imageUrlForLayerImage,imageUrlForSurface} from 'state/utils'
-import {designPreviewSize} from 'config'
+import {imageUrlForLayerImage, imageUrlForSurface} from 'state/utils'
 
 function tagsUpdatedOnExistingDesign(prevState, state) {
   var existingDesign = state.existingDesign
@@ -19,16 +17,12 @@ function tagsUpdatedOnExistingDesign(prevState, state) {
   var prevLayers = prevState.existingDesign.get('layers')
   var retVal = layers.some((layer, i) => {
     if (!layer) { return true }
-    console.log('Checking layer: ', layer.toJS())
-    console.log('  with i: ', i)
     return layers.get(i).get('tags') !== prevLayers.get(i).get('tags')
   })
-  console.log('all layers same?: ', retVal)
   return retVal
 }
 
 function updateEditingDesignWithNewTags(state) {
-  console.log("updating editingDesign: ", state.editingDesign.toJS())
   // Set all the tags for all the layers
   state.editingDesign.updateIn(['layers'], layers => {
     return layers.map((layer, i) => {
@@ -182,19 +176,15 @@ export default React.createClass({
   },
 
   onAddTagToSelectedLayer(tagToAdd) {
-    console.log('in onAddTagToSelectedLayer, tagToAdd: ', tagToAdd)
     Store.actions.addTagToLayer(tagToAdd, this._selectedLayer(), this.state.existingDesign)
   },
 
   onRemoveTag(tagToRemove) {
-    console.log('in onRemoveTag, tagToRemove: ', tagToRemove)
     Store.actions.removeTagFromLayer(tagToRemove, this._selectedLayer(), this.state.existingDesign)
   },
 
   render() {
     if (this.designIsNotHydrated()) { return null }
-
-    console.log('rendering admin edit design')
     var surfaces = this.state.surfaces.map(s => {
       var border = (this.state.editingDesign.get('surface').get('id') === s.get('id') ? '2px solid' : 'none')
       return <img src={imageUrlForSurface(s)}
@@ -251,13 +241,6 @@ export default React.createClass({
           onClick={this.selectLayer.bind(null, i)}>Layer {i}</div>
         )
     })
-
-    var tagOptions = this.state.tags.map(tag => {
-      return (
-        <option value={tag.get('id')}>{tag.get('name')}</option>
-      )
-    })
-    var selectedTag = this.state.selectedTag ? this.state.selectedTag.get('id') : ''
 
     return (
       <div className="AdminEditDesign">

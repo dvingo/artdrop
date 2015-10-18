@@ -12,7 +12,7 @@ var dispatchHelper = function() {
 }
 
 function merge(target, source) {
-  if (typeof targe !== 'object') {
+  if (typeof target !== 'object') {
     target = {}
   }
 
@@ -26,6 +26,11 @@ function merge(target, source) {
       target[property] = sourceProp
     }
   }
+
+  for (var i = 2, len = arguments.length; i < len; i++) {
+    merge(target, arguments[i])
+  }
+  return target
 }
 
 var actions = {

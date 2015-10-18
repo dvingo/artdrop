@@ -1,4 +1,4 @@
-var Nuclear = require('nuclear-js');
+var Nuclear = require('nuclear-js')
 var Immutable = Nuclear.Immutable
 var {Set, List} = Immutable
 import reactor from 'state/reactor'
@@ -75,6 +75,11 @@ export default new Nuclear.Store({
   getInitialState() { return Nuclear.toImmutable({}) },
 
   initialize() {
+
+    this.on('setTagImm', (state, tag) => {
+      return state.set(tag.get('id'), tag)
+    })
+
     this.on('setTag', (state, tag) => {
       return state.set(tag.id, Immutable.fromJS(tag))
     })
@@ -115,35 +120,6 @@ export default new Nuclear.Store({
       var newTagRef = tagsRef.push(newTag)
       newTag.id = newTagRef.key()
       setTimeout(() => reactor.dispatch('setTag', newTag), 50)
-      return state
-    })
-
-    this.on('addTagToLayer', (state, {tag, layer, design}) => {
-      console.log('layer: ', layer.toJS())
-      console.log('tag: ', tag.toJS())
-      var tagId = tag.get('id')
-      var layerId = layer.get('id')
-      var layerIds = List(tag.get('layers')).push(layerId)
-      console.log('layersIds: ', layerIds.toJS())
-      var tags = Set(layer.get('tags')).add(tag)
-      console.log('new TAGS: ', tags.toJS())
-      var tagIds = tags.map(t => t.get('id'))
-      var updatedDesign = updateLayerOfDesign(layer, design, l => l.set('tags', tags))
-      console.log('addTagToLayer here1')
-      persistTag(tagId, {layers: idListToFirebaseObj(layerIds)})
-      console.log('addTagToLayer here2')
-      persistLayer(layerId, {tags: idListToFirebaseObj(tagIds)})
-      console.log('addTagToLayer here3')
-      console.log('addDesign: ', updatedDesign.toJS())
-      dispatchHelper('addDesign', updatedDesign.toJS())
-      return state.set(tagId, tag.set('layers', layerIds))
-    })
-
-    this.on('removeTagFromLayer', (state, {tag, layer, design}) => {
-      // remove layer id from tag.layers
-      // persist tag
-      // remove tag id from layer.tags
-      // persist layer
       return state
     })
   }
