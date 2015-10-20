@@ -1,1 +1,5 @@
-.AdminLayerImages {}
+.AdminLayerImages {
+  [type=radio] {
+    -webkit-appearance: radio;
+  }
+}
