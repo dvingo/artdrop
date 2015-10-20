@@ -102,7 +102,10 @@ export default React.createClass({
 
   selectLayer(layer) {
     Store.actions.selectLayerId(layer.get('id'))
-    this.transitionTo('designEdit', {designId: this.state.design.get('id'), layerId: layer.get('id')})
+    this.transitionTo('designEdit', {
+      designId: this.state.design.get('id'),
+      layerId: layer.get('id')
+    })
   },
 
   toggleCurrentLayer(e) {

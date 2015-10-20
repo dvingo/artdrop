@@ -10,6 +10,22 @@
 	@include align-items(center);
 	@include justify-content(center);
 }
+
+.button {
+  @include display(flex);
+  @include align-items(center);
+  @include justify-content(center);
+  background: $button-color;
+  border-radius: 15px 15px;
+  width: 100px;
+  height: 30px;
+  color: white;
+  -webkit-box-shadow: 2px 2px 6px 0px rgba(150, 150, 150, 0.75);
+  -moz-box-shadow: 2px 2px 6px 0px rgba(150, 150, 150, 0.75);
+  box-shadow: 2px 2px 6px 0px rgba(150, 150, 150, 0.75);
+  cursor: pointer;
+  &.off { opacity: 0.5 }
+}
 	.DesignEditDetail-layers {
 		@include display(flex);
 		@include flex(1 0 0);
@@ -28,7 +44,7 @@
 		overflow: hidden;
 		position: relative;
 
-		span {     
+		span {
 			overflow: hidden;
 			position: relative;
 			width: 250px;
@@ -77,21 +93,6 @@
 			width: 50px;
 			height: 50px;
 		}
-		.button {
-			@include display(flex);
-			@include align-items(center);
-			@include justify-content(center);
-			background: $button-color;
-			border-radius: 15px 15px;
-			width: 100px;
-			height: 30px;
-			color: white;
-			-webkit-box-shadow: 2px 2px 6px 0px rgba(150, 150, 150, 0.75);
-			-moz-box-shadow: 2px 2px 6px 0px rgba(150, 150, 150, 0.75);
-			box-shadow: 2px 2px 6px 0px rgba(150, 150, 150, 0.75);
-			cursor: pointer;
-			&.off { opacity: 0.5 }
-		}
 	}
 	.DesignEditDetail-layer-grid {
 		@include display(flex);
@@ -115,7 +116,7 @@
 				width: 700px;
 				max-height: none;
 				max-width: none;
-			} 
+			}
 		}
 }
 
