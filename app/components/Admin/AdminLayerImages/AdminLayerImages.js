@@ -5,8 +5,10 @@ import Store from 'state/main'
 import getters from 'state/getters'
 import Notification from 'components/Notification/Notification'
 import {imageUrlForLayerImage} from 'state/utils'
+import LayerImageDetail from './LayerImageDetail'
 import { Set } from 'Immutable'
 
+console.log('layer image detail: ', LayerImageDetail)
 export default React.createClass({
   mixins: [reactor.ReactMixin],
 
@@ -35,7 +37,7 @@ export default React.createClass({
   selectLayerImage(layerImage) {
     if (this.state.editMode === 'editLayerImage') {
       this.setState({
-        selectedLayerImage:layerImage,
+        selectedLayerImage: layerImage,
         confirmDeleteText: '',
         showDeleteConfirmation: false})
     } else {
@@ -48,17 +50,9 @@ export default React.createClass({
     }
   },
 
-  handleShowDeleteConfirmation(){
-    this.setState({showDeleteConfirmation: true})
-  },
-
-  confirmedDeleteSelectedLayerImage() {
+  deleteSelectedLayerImage() {
     Store.actions.deleteLayerImage(this.state.selectedLayerImage)
     this.setState({selectedLayerImage: null, confirmDeleteText: '', showDeleteConfirmation: false})
-  },
-
-  onConfirmDeleteChange(e) {
-    this.setState({confirmDeleteText: e.target.value})
   },
 
   onFormChange(e) {
@@ -116,48 +110,8 @@ export default React.createClass({
       )
     })
 
-    var labelStyle = { display: 'inline-block', fontWeight: 'bold', marginRight: 20 }
-    var infoStyle = { display: 'inline-block'}
-    var rowStyle = { margin: '10px 0' }
     var selectedLayerImage = this.state.selectedLayerImage
     var showSelectedLayerImage = selectedLayerImage && this.state.editMode === 'editLayerImage'
-    var selectedLayerImageInfo = showSelectedLayerImage ? (
-        <div style={{margin: '20px 0'}}>
-          <img src={imageUrlForLayerImage(selectedLayerImage)} height={200} width={200}/>
-
-          <div style={rowStyle}>
-            <div style={labelStyle}>Created:</div>
-            <div style={infoStyle}>{new Date(selectedLayerImage.get('createdAt')).toString()}</div>
-          </div>
-
-          <div style={rowStyle}>
-            <div style={labelStyle}>Last Updated:</div>
-            <div style={infoStyle}>{new Date(selectedLayerImage.get('updatedAt')).toString()}</div>
-          </div>
-
-          <div style={rowStyle}>
-            <div style={labelStyle}>Image URL:</div>
-            <div style={infoStyle}>
-              {selectedLayerImage.get('imageUrl')}
-            </div>
-          </div>
-
-          <div style={rowStyle}>
-            {!this.state.showDeleteConfirmation ?
-              <button onClick={this.handleShowDeleteConfirmation}>DELETE</button> : null}
-
-            {this.state.showDeleteConfirmation ? (
-              <div>
-                <label>Enter 'yes' to confirm.</label>
-                <input type="text" value={this.state.confirmDeleteText} onChange={this.onConfirmDeleteChange}/>
-                {this.state.confirmDeleteText === 'yes' ?
-                    <button onClick={this.confirmedDeleteSelectedLayerImage}>REALLY DELETE</button> : null}
-              </div>
-              ) : null}
-
-          </div>
-        </div>
-    ) : null
 
     var tagOptions = this.state.tags.map(tag => {
       return (
@@ -195,7 +149,10 @@ export default React.createClass({
           </div>
           : null }
 
-        {selectedLayerImageInfo}
+        {showSelectedLayerImage ?
+          <LayerImageDetail layerImage={selectedLayerImage}
+                            onDelete={this.deleteSelectedLayerImage} /> : null}
+
         {layerImages}
         {this.state.errors.length > 0 ? <div>{errors}</div> : null}
         {this.state.messages.length > 0 ? <div>{messages}</div> : null}
