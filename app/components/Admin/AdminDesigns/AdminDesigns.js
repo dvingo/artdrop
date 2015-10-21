@@ -12,7 +12,7 @@ export default React.createClass({
   getDataBindings() {
     return { designs: Store.getters.adminCreatedDesigns,
              tags: Store.getters.tags,
-             tagsMap: ['tags']}
+             tagsMap: ['tags'] }
   },
 
   getInitialState() {

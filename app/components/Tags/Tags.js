@@ -86,7 +86,7 @@ export default React.createClass({
              {tagOptions}
            </select>,
            <div style={{padding:'10px 0'}}>
-             <button onClick={this.onAddTag}>+</button>
+             <button onClick={this.onAddTag}>Add Tag +</button>
            </div>]
           : null }
       </div>

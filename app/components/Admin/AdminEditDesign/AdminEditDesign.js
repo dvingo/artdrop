@@ -9,6 +9,7 @@ import Tags from 'components/Tags/Tags'
 import Notification from 'components/Notification/Notification'
 import Router from 'react-router'
 import {imageUrlForLayerImage, imageUrlForSurface} from 'state/utils'
+var classNames = require('classnames')
 
 function tagsUpdatedOnExistingDesign(prevState, state) {
   var existingDesign = state.existingDesign
@@ -28,7 +29,6 @@ function updateEditingDesignWithNewTags(state) {
       return layer.set('tags', newTags)
     })
   })
-
 }
 
 export default React.createClass({
@@ -55,6 +55,7 @@ export default React.createClass({
       showDeleteConfirmation: false,
       confirmDeleteText: '',
       selectedTag: null,
+      selectingColors: true
     }
   },
 
@@ -181,6 +182,10 @@ export default React.createClass({
     Store.actions.removeTagFromLayer(tagToRemove, this._selectedLayer(), this.state.existingDesign)
   },
 
+  selectImagesOrColors(imagesOrColors) {
+    this.setState({selectingColors: imagesOrColors === 'colors'})
+  },
+
   render() {
     if (this.designIsNotHydrated()) { return null }
     var surfaces = this.state.surfaces.map(s => {
@@ -229,17 +234,16 @@ export default React.createClass({
 
     var height = this.state.height
     var width = this.state.width
+    var layerDesc = [ 'Background', 'Middleground', 'Foreground' ]
     var selectLayers = [0,1,2].map(i => {
+      var bg = this.state.currentLayer === i ? 'yellow' : '#fff'
       return (
-        <div style={{
-          background:(this.state.currentLayer === i ? 'yellow' : '#fff'),
-          border: '1px solid',
-          display:'inline-block',
-          padding: 10}}
-          onClick={this.selectLayer.bind(null, i)}>Layer {i}</div>
+        <div style={{background:bg}} className="AdminEditDesign-select-layer"
+          onClick={this.selectLayer.bind(null, i)}>Layer {i+1} ({layerDesc[i]})</div>
         )
     })
 
+    var selectingColors = this.state.selectingColors
     return (
       <div className="AdminEditDesign">
         {this.state.errors.length > 0 ? <div>{errors}</div> : null}
@@ -282,16 +286,24 @@ export default React.createClass({
           layer={this.state.editingDesign.getIn(['layers', this.state.currentLayer])}
           onClick={this.handleRotateColorPalette}/>
 
-        <section className='ChoosePalette'>
-          {palettes}
-        </section>
+        <div className="AdminEditDesign-button-container">
+          <span onClick={this.selectImagesOrColors.bind(null, 'images')}
+              className={classNames("button", {off: !selectingColors})}>Art</span>
 
-        <ul className="select-layer-image">
-          {layerImages}
-        </ul>
-
+          <span onClick={this.selectImagesOrColors.bind(null, 'colors')}
+              className={classNames("button", {off: selectingColors})}>Color</span>
+        </div>
+        <div className="DesignEditDetail-layer-grid">
+          { selectingColors
+            ? <section className='ChoosePalette'>
+                {palettes}
+              </section>
+            : <ul className="select-layer-image">
+               {layerImages}
+              </ul>
+          }
+        </div>
         {surfaces}
-
       </div>
     )
   }

@@ -3,13 +3,10 @@ colorPalettesRef, surfacesRef,
 surfaceOptionsRef, tagsRef, ordersRef} from 'state/firebaseRefs'
 import reactor from 'state/reactor'
 import getters from 'state/getters'
-var Immutable = require('nuclear-js').Immutable
-var {Map, List} = Immutable
+import {Map, List} from 'Immutable'
 var RSVP = require('RSVP')
 
-var exports = {}
-
-exports.nonOptionKeys = ['id', 'printingPrice', 'salePrice', 'units',
+var nonOptionKeys = ['id', 'printingPrice', 'salePrice', 'units',
   'vendorId', 'height', 'width', 'depth', 'printingImageWidth', 'printingImageHeight']
 
 function setSizeOnSurfaceOption(option) {
@@ -24,7 +21,7 @@ function setSizeOnSurfaceOption(option) {
   return option.set('size: height, width', `${height} x ${width} ${units}`)
 }
 
-exports.dispatchHelper = function() {
+var dispatchHelper = function() {
   var args = arguments
   var interval = setInterval(() => {
     if (!reactor.__isDispatching) {
@@ -34,7 +31,7 @@ exports.dispatchHelper = function() {
   }, 100)
 }
 
-exports.defaultSurfaceOptionIdForSurface = (surfaceObj) => {
+var defaultSurfaceOptionIdForSurface = (surfaceObj) => {
   if (Array.isArray(surfaceObj.options)) {
     return surfaceObj.options[0].id
   }
@@ -45,16 +42,20 @@ var designPropsToIds = (design) => {
   var layerIds = design.get('layers').map(l => l.get('id'))
   var surfaceId = design.get('surface') ? design.getIn(['surface', 'id']) : null
   var surfaceOptionId = design.get('surfaceOption') ? design.getIn(['surfaceOption', 'id']) : null
-  return surfaceId ? design.withMutations(d => {
-   return d.set('layers', layerIds).set('surface', surfaceId).set('surfaceOption', surfaceOptionId)
-  })
-  : design.set('layers', layerIds)
+  return (surfaceId
+    ? design.withMutations(d => (
+      d.set('layers', layerIds)
+       .set('surface', surfaceId)
+       .set('surfaceOption', surfaceOptionId)))
+    : design.set('layers', layerIds)
+  )
 }
 
 function nestedHydrateLayer(layerId) {
   return hydrateLayer(layerId).then(layer => {
     return hydrateLayerImage(layer.selectedLayerImage).then(layerImage => {
       layerImage.id = layer.selectedLayerImage
+      layerImage.tags = populateTags(layerImage)
       reactor.dispatch('addLayerImage', layerImage)
       layer.selectedLayerImage = layerImage
       layer.id = layerId
@@ -105,14 +106,12 @@ function hydrateTagsIfMissing() {
 function populateTags(obj) {
   if (obj.hasOwnProperty('tags')) {
     var tagsMap = reactor.evaluate(['tags'])
-    return List(Object.keys(obj.tags).map(id => {
-      return tagsMap.get(id)
-    }))
+    return List(Object.keys(obj.tags).map(id => tagsMap.get(id)))
   }
   return List()
 }
 
-exports.hydrateDesign = (design) => {
+var hydrateDesign = (design) => {
   return hydrateTagsIfMissing().then(() => {
     var layers = design.layers.map(nestedHydrateLayer)
     return RSVP.all(layers).then(layers => {
@@ -139,8 +138,6 @@ function hydrateSurfaceOptionsForSurface (surface) {
   return RSVP.all(Object.keys(surface.options).map(hydrateSurfaceOption))
 }
 
-exports.hydrateSurfaceOptionsForSurface = hydrateSurfaceOptionsForSurface
-
 var hydrateObj = (ref, id) => {
   return new RSVP.Promise(resolve => {
     ref.child(id).once('value', o => resolve(o.val()))
@@ -160,6 +157,23 @@ var hydrateLayerImage = hydrateObj.bind(null, layerImagesRef)
 var hydrateColorPalette = hydrateObj.bind(null, colorPalettesRef)
 var hydrateSurface = hydrateObj.bind(null, surfacesRef)
 
+var hydrateAndDispatchLayerImages = hydrateAndDispatchData.bind(null, layerImagesRef, 'addManyLayerImages')
+var hydrateAndDispatchSurfaces = hydrateAndDispatchData.bind(null, surfacesRef, 'addManySurfaces')
+var hydrateAndDispatchTags = hydrateAndDispatchData.bind(null, tagsRef, 'addManyTags')
+var hydrateAndDispatchColorPalettes = hydrateAndDispatchData.bind(null, colorPalettesRef, 'addManyColorPalettes')
+
+var updateLayerOfDesign = (layer, design, updateFn) => {
+  var layers = design.get('layers')
+  var i = layers.findIndex(l => l.get('id') === layer.get('id'))
+  return design.set('layers', layers.update(i, v => updateFn(v)))
+}
+
+var idListToFirebaseObj = (list) => {
+  var retVal = {}
+  list.forEach(i => retVal[i] = true)
+  return retVal
+}
+
 var persistWithRef = (firebaseRef, id, obj) => {
   if (DEBUG) {
     console.log(`Saving to firebase ref ${firebaseRef} at id: ${id}.`)
@@ -174,16 +188,7 @@ var persistNewLayer = (layer) => {
   layersRef.child(l.id).set(l)
 }
 
-exports.hydrateAndDispatchLayerImages = hydrateAndDispatchData.bind(null, layerImagesRef, 'addManyLayerImages')
-exports.hydrateAndDispatchSurfaces = hydrateAndDispatchData.bind(null, surfacesRef, 'addManySurfaces')
-exports.hydrateAndDispatchTags = hydrateAndDispatchData.bind(null, tagsRef, 'addManyTags')
-exports.hydrateAndDispatchColorPalettes = hydrateAndDispatchData.bind(null, colorPalettesRef, 'addManyColorPalettes')
-
-exports.hydrateColorPalette = hydrateColorPalette
-exports.hydrateSurface = hydrateSurface
-exports.hydrateObj = hydrateObj
-
-exports.persistNewDesign = (design) => {
+var persistNewDesign = (design) => {
   design.get('layers').forEach(persistNewLayer)
   var firebaseDesign = designPropsToIds(design)
   return new RSVP.Promise((resolve, reject) => {
@@ -194,19 +199,7 @@ exports.persistNewDesign = (design) => {
   })
 }
 
-exports.updateLayerOfDesign = (layer, design, updateFn) => {
-  var layers = design.get('layers')
-  var i = layers.findIndex(l => l.get('id') === layer.get('id'))
-  return design.set('layers', layers.update(i, v => updateFn(v)))
-}
-
-exports.idListToFirebaseObj = (list) => {
-  var retVal = {}
-  list.forEach(i => retVal[i] = true)
-  return retVal
-}
-
-exports.persistAndCreateNewOrder = (orderData) => {
+var persistAndCreateNewOrder = (orderData) => {
   return new RSVP.Promise((resolve, reject) => {
     var newOrderRef = ordersRef.push(orderData, (err) => {
       if (err) { reject() }
@@ -215,9 +208,27 @@ exports.persistAndCreateNewOrder = (orderData) => {
   })
 }
 
-exports.persistWithRef = persistWithRef
-exports.persistDesign = persistWithRef.bind(null, designsRef)
-exports.persistLayer = persistWithRef.bind(null, layersRef)
-exports.persistSurface = persistWithRef.bind(null, surfacesRef)
-exports.persistTag = persistWithRef.bind(null, tagsRef)
-export default exports
+var persistDesign = persistWithRef.bind(null, designsRef)
+var persistLayer = persistWithRef.bind(null, layersRef)
+var persistSurface = persistWithRef.bind(null, surfacesRef)
+var persistTag = persistWithRef.bind(null, tagsRef)
+
+export default {
+  nonOptionKeys,
+  idListToFirebaseObj,
+  updateLayerOfDesign,
+  dispatchHelper,
+  defaultSurfaceOptionIdForSurface,
+  persistDesign,
+  persistLayer,
+  persistSurface,
+  persistTag,
+  persistAndCreateNewOrder,
+  persistNewDesign,
+  hydrateDesign,
+  hydrateAndDispatchLayerImages,
+  hydrateAndDispatchSurfaces,
+  hydrateAndDispatchTags,
+  hydrateAndDispatchColorPalettes,
+  hydrateSurfaceOptionsForSurface
+}

@@ -37,4 +37,8 @@ export default {
     var updatedTag = tag.set('layers', layerIds)
     reactor.dispatch('setTagImm', updatedTag)
   },
+
+  addLayerImagesToTag(tag, layerImages) {
+
+  }
 }
