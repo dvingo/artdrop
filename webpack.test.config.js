@@ -10,8 +10,12 @@ module.exports = {
     filename: 'tests.js',
     publicPath: '/test/'
   },
-  plugins: [new webpack.DefinePlugin({DEBUG:true,TEST:true,DEV:false})],
+  plugins: [new webpack.DefinePlugin({
+    DEBUG:true,TEST:true,DEV:false,
+    stripePublishableKey: '""'
+  })],
   resolve: {
+    root: __dirname + '/app',
     extensions: ['', '.js', '.jsx']
   },
   module: {

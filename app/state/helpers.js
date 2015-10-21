@@ -213,6 +213,20 @@ var persistLayer = persistWithRef.bind(null, layersRef)
 var persistSurface = persistWithRef.bind(null, surfacesRef)
 var persistTag = persistWithRef.bind(null, tagsRef)
 
+var persistDesignTags = (design) => {
+  if (TEST) { return }
+  var tagsObj = {}
+  design.get('tags').forEach(id => tagsObj[id] = true)
+  persistDesign(design.get('id'), {tags: tagsObj})
+}
+
+var persistTagDesigns = (tag) => {
+  if (TEST) { return }
+  var designIdsObj = {}
+  tag.get('designs').forEach(d => designIdsObj[d] = true)
+  persistTag(tag.get('id'), {designs: designIdsObj})
+}
+
 export default {
   nonOptionKeys,
   idListToFirebaseObj,
@@ -223,8 +237,10 @@ export default {
   persistLayer,
   persistSurface,
   persistTag,
+  persistTagDesigns,
   persistAndCreateNewOrder,
   persistNewDesign,
+  persistDesignTags,
   hydrateDesign,
   hydrateAndDispatchLayerImages,
   hydrateAndDispatchSurfaces,

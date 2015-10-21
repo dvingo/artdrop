@@ -61,8 +61,7 @@ export default React.createClass({
   },
 
   handleAddDesignsToTag() {
-    Store.actions.addDesignsToTag({tag: this.state.selectedTag,
-                                   designs: this.state.selectedDesigns})
+    Store.actions.addDesignsToTag(this.state.selectedTag, this.state.selectedDesigns)
   },
 
   onFormChange(e) {

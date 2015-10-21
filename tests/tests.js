@@ -1,7 +1,9 @@
-var assert = require("assert")
-var reactor = require('../app/state/reactor')
-var Store = require('../app/state/main')
-var Immutable = require('immutable')
+var assert = require('assert')
+var reactor = require('state/reactor')
+var Store = require('state/main')
+var Immutable = require('Immutable')
+require('babel/register')
+var dispatchHelper = require('state/helpers')
 
 describe('TagsStore', function() {
   afterEach(function() {
@@ -60,55 +62,61 @@ describe('TagsStore', function() {
     "tags":[]}
   ]
   var designIds = designs.map(function(d) { return d.id })
+
   it('Should add tags', function(done) {
     Store.actions.addManyTags([tag])
     Store.actions.addManyDesigns(designs)
     var tags = reactor.evaluate(Store.getters.tags)
+    var designsFromReactor = reactor.evaluate(Store.getters.designs)
+    assert.equal(designsFromReactor.count(), 3)
     var firstTag = tags.get(0)
     assert.equal(tags.count(), 1)
     assert.equal(firstTag.get('id'), '-JwZ4CsYpdIQu_pKMXx6')
-    Store.actions.addDesignsToTag({tag:Immutable.fromJS(tag), designs:Immutable.fromJS(designIds)})
     reactor.observe(['designs'], function(updatedDesigns) {
       updatedDesigns.forEach(function(d) {
         assert.equal(d.getIn(['tags', 0]), tagId)
       })
-      firstTag.get('designs').forEach(function(d) {
+      var tagsNew = reactor.evaluate(Store.getters.tags)
+      var firstTagNew = tags.get(0)
+      firstTagNew.get('designs').forEach(function(d) {
         assert(designIds.indexOf(d) !== -1, 'The tag should contain the design: ' + d)
       })
       done()
     })
+    Store.actions.addDesignsToTag(Immutable.fromJS(tag), Immutable.fromJS(designIds))
   })
 
   it('Should remove tags', function(done) {
     Store.actions.addManyTags([tag])
     Store.actions.addManyDesigns(designs)
-    Store.actions.addDesignsToTag({tag:Immutable.fromJS(tag), designs:Immutable.fromJS(designIds)})
-    reactor.observe(['designs'], function() {
+    var tags = reactor.evaluate(Store.getters.tags)
+    var firstTag = tags.get(0)
+    var selectedDesigns = [design2Id, design3Id]
+    Store.actions.addDesignsToTag(firstTag, Immutable.fromJS(selectedDesigns))
+    setTimeout(function() {
+      var updatedDesigns = reactor.evaluate(['designs'])
+      var design1 = updatedDesigns.get(design1Id)
+      var design2 = updatedDesigns.get(design2Id)
+      var design3 = updatedDesigns.get(design3Id)
+      assert(design1.get('tags').count() === 0, 'Design 1 should have no tags')
+      assert(design2.getIn(['tags', 0]) === tagId, 'Design 2 should have the tag')
+      assert(design3.getIn(['tags', 0]) === tagId, 'Design 3 should have the tag')
       var tags = reactor.evaluate(Store.getters.tags)
-      var firstTag = tags.get(0)
-      var selectedDesigns = [design2Id, design3Id]
-      var interval = setInterval(function() {
-        if (!reactor.__isDispatching) {
-          clearInterval(interval)
-          Store.actions.addDesignsToTag({tag:firstTag,
-            designs:Immutable.fromJS(selectedDesigns)})
-        }
-      }, 50)
-      reactor.observe(['designs'], function(updatedDesigns) {
-        var design1 = updatedDesigns.get(design1Id)
-        var design2 = updatedDesigns.get(design2Id)
-        var design3 = updatedDesigns.get(design3Id)
-        assert(design1.get('tags').count() === 0, 'Design 1 should have no tags')
-        assert(design2.getIn(['tags', 0]) === tagId, 'Design 2 should have the tag')
-        assert(design3.getIn(['tags', 0]) === tagId, 'Design 3 should have the tag')
-        var tags = reactor.evaluate(Store.getters.tags)
-        var firstTag = tags.get(0)
-        var designs = Immutable.Set(firstTag.get('designs'))
-        assert(designs.includes(design2Id), 'Design 2 should have the tag')
-        assert(designs.includes(design3Id), 'Design 3 should have the tag')
-        assert(!designs.includes(design1Id), 'Design 1 should not have the tag')
-        done()
-      })
-    })
+      var firstTagNew = tags.get(0)
+      var designs = Immutable.Set(firstTagNew.get('designs'))
+      assert(designs.includes(design2Id), 'Design 2 should have the tag')
+      assert(designs.includes(design3Id), 'Design 3 should have the tag')
+      assert(!designs.includes(design1Id), 'Design 1 should not have the tag')
+        setTimeout(function() {
+          Store.actions.addDesignsToTag(firstTagNew, Immutable.fromJS([]))
+          var tags = reactor.evaluate(['tags'])
+          var designs = reactor.evaluate(['designs'])
+          assert(tags.get(tagId).get('designs').count() === 0, "Tag should have no designs")
+          assert(designs.getIn([design1Id, 'tags']).count() === 0, "Design 1 should have no tags")
+          assert(designs.getIn([design2Id, 'tags']).count() === 0, "Design 2 should have no tags")
+          assert(designs.getIn([design3Id, 'tags']).count() === 0, "Design 3 should have no tags")
+          done()
+        }, 100)
+    }, 100)
   })
 })

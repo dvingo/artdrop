@@ -71,7 +71,7 @@ var actions = {
   saveColorPalette(colorPalette) { dispatchHelper('saveColorPalette', colorPalette) },
   createNewColorPalette(colorPalette) { dispatchHelper('createNewColorPalette', colorPalette) },
   rotateCurrentLayerColorPalette() { dispatchHelper('rotateCurrentLayerColorPalette') },
-  addManyDesigns(designs) { dispatchHelper('addManyDesigns', designs) },
+  addManyDesigns(designs) { reactor.dispatch('addManyDesigns', designs) },
   getShipPrice(shipData) { dispatchHelper('getShipPrice', shipData) },
   createOrder(orderData) { dispatchHelper('createOrder', orderData) },
   createError(message) { dispatchHelper('createError', message) },

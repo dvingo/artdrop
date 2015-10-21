@@ -5,8 +5,14 @@ import {persistAndCreateNewOrder, persistNewDesign} from '../helpers'
 import {makeDesignCopy} from 'state/utils'
 import request from 'superagent'
 import {serverHostname} from 'config'
-var shippingPriceUrl = `${window.location.protocol}//${serverHostname}/shippingPrice`
-var createOrderUrl = `${window.location.protocol}//${serverHostname}/orders`
+var shippingPriceUrl = (
+  typeof window !== 'undefined' ?
+  `${window.location.protocol}//${serverHostname}/shippingPrice` : ''
+)
+var createOrderUrl = (
+  typeof window !== 'undefined' ?
+  `${window.location.protocol}//${serverHostname}/orders` : ''
+)
 
 export default new Nuclear.Store({
 
