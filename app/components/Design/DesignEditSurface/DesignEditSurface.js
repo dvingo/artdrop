@@ -82,6 +82,7 @@ export default React.createClass({
 
             <div className="right">
               <img src={imageUrlForSurface(surface)} height={200}/>
+              <RenderLayers layers={this.state.design.get('layers')}/>
             </div>
           </div>
 

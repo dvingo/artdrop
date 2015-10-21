@@ -127,7 +127,6 @@ export default React.createClass({
 
     return (
       <section className="DesignEdit">
-
         <div className="DesignEdit-canvas-flex-wrapper">
           <Hammer onSwipe={this.handleSwipe} onPan={this.handlePan}>
             <RenderLayers layers={this.state.design.get('layers')}/>

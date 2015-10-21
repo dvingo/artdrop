@@ -69,4 +69,5 @@
 	@include flex-wrap(wrap);
 	@include flex(1 0 0);
 	@include justify-content(center);
+	overflow: scroll;
 }

@@ -33,8 +33,8 @@ export default React.createClass({
     }
     if (this.state.currentUser && this.state.currentUser.get('isAdmin')) {
       return (
-        <div className="admin">
-          <div className="admin-nav-bar" style={navBarStyle}>
+        <div className="Admin">
+          <div className="Admin-nav-bar" style={navBarStyle}>
             {/*<Link to="adminUsers" style={navLinkStyle}>Edit Users</Link>*/}
             <Link to="adminTags" style={navLinkStyle}>Tags</Link>
             <Link to="adminColorPalettes" style={navLinkStyle}>Color Palettes</Link>
@@ -50,8 +50,8 @@ export default React.createClass({
       )
     } else {
       return (
-        <div className="admin">
-          <div className="admin-nav-bar" style={navBarStyle}>
+        <div className="Admin">
+          <div className="Admin-nav-bar" style={navBarStyle}>
             <button onClick={this.authorizeGoogle}>Login with Google</button>
           </div>
           <p>You must be an admin to continue</p>

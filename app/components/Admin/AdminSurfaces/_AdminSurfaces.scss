@@ -1,1 +1,62 @@
-.AdminSurfaces {}
+.AdminSurfaces {
+	color: #5353FF;
+	@include display(flex);
+	@include flex-direction(column);
+	@media (min-width: $media-min-width) {
+	  @include flex-direction(column);
+	}
+	background: pink;
+}
+.AdminSurface-image-container {
+  @include display(flex);
+  @include justify-content(center);
+  img {
+  	width: 300px;
+  	height: auto;
+  }
+  padding: 20px;
+  background: yellow;
+  height: 400px;
+}
+.AdminSurfaces-surfaces-container {
+  @include display(flex);
+  @include flex-wrap(wrap);
+  @include justify-content(center);
+  overflow: scroll;
+}
+.AdminSurfaces-details {
+	position: relative;
+	background: lavender;
+	@include display(flex);
+	@include flex-direction(row);
+	@include justify-content(center);
+
+}
+.AdminSurfaces-text {
+	@include display(flex);
+	@include flex-direction(column);
+	background: purple;
+}
+.AdminSurfaces-surface-text-container {
+  @include display(flex);
+  @include flex-direction(column);
+}
+.AdminSurfaces-surface-images-container {
+	background: magenta;
+	height: 150px;
+	@include display(flex);
+	@include justify-content(center);
+	@include align-items(center);
+}
+.AdminSurfaces-surface-images {
+	background: purple;
+	display: inline-block;
+	overflow: hidden;
+
+	img {
+		position: relative;
+		width: 100px;
+		height: 100px;
+	}
+}
+
