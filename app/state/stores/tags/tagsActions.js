@@ -49,30 +49,7 @@ var updateTagAndObjects = (tag, selectedObjects, type) => {
   return { updatedTag: tag, updatedObjects: updatedObjects }
 }
 
-//var updateTagAndDesigns = (tag, selectedDesigns) => {
-  //var allDesignsMap = reactor.evaluate(['designs'])
-  //var existingsDesigns = Set(tag.get('designs'))
-  //var selectedDesigns = Set(selectedDesigns)
-  //var designsToRemoveTagFrom = (
-    //existingsDesigns.subtract(selectedDesigns)
-      //.map(d => allDesignsMap.get(d))
-      //.map(_removeTagFromDesign.bind(null, tag.get('id'))))
-  //var tag = _removeDesignsFromTag(tag, designsToRemoveTagFrom)
-
-  //var designsToAddTagTo = (
-    //selectedDesigns.subtract(
-      //existingsDesigns.intersect(selectedDesigns)))
-
-  //var updatedDesigns = (
-    //designsToRemoveTagFrom.union(designsToAddTagTo
-     //.map(id => allDesignsMap.get(id))
-     //.map(_addTagToDesign.bind(null, tag.get('id')))))
-  //tag = _addDesignsToTag(tag, designsToAddTagTo)
-  //return { updatedTag: tag, updatedDesigns: updatedDesigns }
-//}
-
 export default {
-  loadAdminTags() { dispatchHelper('loadAdminTags') },
   addManyTags(tags) { reactor.dispatch('addManyTags', tags) },
 
   createTag(newTagName) {
@@ -126,10 +103,7 @@ export default {
   addLayerImagesToTag(tag, layerImages) {
     var { updatedTag, updatedObjects } = updateTagAndObjects(tag, layerImages, 'layerImages')
     updatedObjects.forEach(d => persistLayerImageTags(d))
-    persistTagLayerImages(updatedTag)
-    // TODO
-    //reactor.dispatch('setTagImm', updatedTag)
-    // Need to update the layer and design that use this layerImage....
-    //reactor.dispatch('', updatedDesigns.toJS())
+    persistTagObjects(updatedTag, 'layerImages')
+    reactor.dispatch('setTagImm', updatedTag)
   }
 }
