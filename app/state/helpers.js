@@ -210,6 +210,7 @@ var persistAndCreateNewOrder = (orderData) => {
 
 var persistDesign = persistWithRef.bind(null, designsRef)
 var persistLayer = persistWithRef.bind(null, layersRef)
+var persistLayerImage = persistWithRef.bind(null, layerImagesRef)
 var persistSurface = persistWithRef.bind(null, surfacesRef)
 var persistTag = persistWithRef.bind(null, tagsRef)
 
@@ -220,11 +221,20 @@ var persistDesignTags = (design) => {
   persistDesign(design.get('id'), {tags: tagsObj})
 }
 
-var persistTagDesigns = (tag) => {
+var persistLayerImageTags = (layerImage) => {
   if (TEST) { return }
-  var designIdsObj = {}
-  tag.get('designs').forEach(d => designIdsObj[d] = true)
-  persistTag(tag.get('id'), {designs: designIdsObj})
+  var tagsObj = {}
+  layerImage.get('tags').forEach(id => tagsObj[id] = true)
+  persistLayerImage(layerImage.get('id'), {tags: tagsObj})
+}
+
+var persistTagObjects = (tag, type) => {
+  if (TEST) { return }
+  var idsObj = {}
+  tag.get(type).forEach(d => idsObj[d] = true)
+  var objToUpdate = {}
+  objToUpdate[type] = idsObj
+  persistTag(tag.get('id'), objToUpdate)
 }
 
 export default {
@@ -237,10 +247,11 @@ export default {
   persistLayer,
   persistSurface,
   persistTag,
-  persistTagDesigns,
+  persistTagObjects,
   persistAndCreateNewOrder,
   persistNewDesign,
   persistDesignTags,
+  persistLayerImageTags,
   hydrateDesign,
   hydrateAndDispatchLayerImages,
   hydrateAndDispatchSurfaces,

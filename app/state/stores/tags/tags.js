@@ -37,18 +37,5 @@ export default new Nuclear.Store({
     this.on('loadAdminCreateDesignData', hydrateTags)
     this.on('loadCurrentDesignEditResources', hydrateTags)
     this.on('loadAdminTags', hydrateTags)
-
-    this.on('createTag', (state, newTagName) => {
-      var now = new Date().getTime()
-      var newTag = {
-        name: newTagName,
-        createdAt: now,
-        updatedAt: now
-      }
-      var newTagRef = tagsRef.push(newTag)
-      newTag.id = newTagRef.key()
-      setTimeout(() => reactor.dispatch('setTag', newTag), 50)
-      return state
-    })
   }
 })

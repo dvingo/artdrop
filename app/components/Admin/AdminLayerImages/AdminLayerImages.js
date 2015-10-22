@@ -8,7 +8,6 @@ import {imageUrlForLayerImage} from 'state/utils'
 import LayerImageDetail from './LayerImageDetail'
 import { Set } from 'Immutable'
 
-console.log('layer image detail: ', LayerImageDetail)
 export default React.createClass({
   mixins: [reactor.ReactMixin],
 
