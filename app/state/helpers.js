@@ -144,7 +144,7 @@ var hydrateObj = (ref, id) => {
   })
 }
 
-var hydrateAndDispatchData = (dbRef, dispatchMsg, currentState) => {
+var hydrateAndDispatchData = (dbRef, dispatchMsg, tx) => {
   dbRef.once('value', snapshot => {
     var data = snapshot.val()
     var dataToDispatch = addIdsToData(data)
@@ -157,7 +157,17 @@ var hydrateLayerImage = hydrateObj.bind(null, layerImagesRef)
 var hydrateColorPalette = hydrateObj.bind(null, colorPalettesRef)
 var hydrateSurface = hydrateObj.bind(null, surfacesRef)
 
-var hydrateAndDispatchLayerImages = hydrateAndDispatchData.bind(null, layerImagesRef, 'addManyLayerImages')
+var hydrateAndDispatchLayerImages = () => {
+  hydrateTagsIfMissing().then(() => {
+    layerImagesRef.once('value', snapshot => {
+      var data = snapshot.val()
+      var dataToDispatch = addIdsToData(data)
+      dataToDispatch.forEach(li => li.tags = populateTags(li).toJS())
+      reactor.dispatch('addManyLayerImages', dataToDispatch)
+    })
+  })
+}
+
 var hydrateAndDispatchSurfaces = hydrateAndDispatchData.bind(null, surfacesRef, 'addManySurfaces')
 var hydrateAndDispatchTags = hydrateAndDispatchData.bind(null, tagsRef, 'addManyTags')
 var hydrateAndDispatchColorPalettes = hydrateAndDispatchData.bind(null, colorPalettesRef, 'addManyColorPalettes')
@@ -217,21 +227,27 @@ var persistTag = persistWithRef.bind(null, tagsRef)
 var persistDesignTags = (design) => {
   if (TEST) { return }
   var tagsObj = {}
-  design.get('tags').forEach(id => tagsObj[id] = true)
+  design.get('tags').forEach(o => {
+    var id = typeof o === 'object' ? o.get('id') : o
+    tagsObj[id] = true
+  })
   persistDesign(design.get('id'), {tags: tagsObj})
 }
 
 var persistLayerImageTags = (layerImage) => {
   if (TEST) { return }
   var tagsObj = {}
-  layerImage.get('tags').forEach(id => tagsObj[id] = true)
+  layerImage.get('tags').forEach(o => {
+    var id = typeof o === 'object' ? o.get('id') : o
+    tagsObj[id] = true
+  })
   persistLayerImage(layerImage.get('id'), {tags: tagsObj})
 }
 
 var persistTagObjects = (tag, type) => {
   if (TEST) { return }
   var idsObj = {}
-  tag.get(type).forEach(d => idsObj[d] = true)
+  tag.get(type).forEach(id => idsObj[id] = true)
   var objToUpdate = {}
   objToUpdate[type] = idsObj
   persistTag(tag.get('id'), objToUpdate)

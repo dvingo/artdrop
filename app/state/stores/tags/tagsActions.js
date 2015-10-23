@@ -1,19 +1,20 @@
 import reactor from 'state/reactor'
-import {Set, List} from 'Immutable'
+import {Map, Set, List} from 'Immutable'
 import {updateLayerOfDesign,
   dispatchHelper, idListToFirebaseObj, persistTag,
  persistLayerImageTags, persistTagObjects, persistLayer,
- persistDesignTags} from 'state/helpers'
+ hydrateAndDispatchTags, persistDesignTags} from 'state/helpers'
 
 var _addObjectsToTag = (tag, objs, type) => {
   var currentObjs = Set(tag.get(type))
   return tag.set(type, currentObjs.union(objs))
 }
 
-var _removeTagFromObject = (tagId, obj) => {
-  var objId = obj.get('id')
-  var tagIds = Set(obj.get('tags')).remove(tagId)
-  return obj.set('tags', tagIds.toKeyedSeq())
+// Objects' tags property is hydrated.
+// tags.objects property is just ids.
+var _removeTagFromObject = (tag, obj) => {
+  var tags = Set(obj.get('tags').map(t => t.get('id'))).remove(tag.get('id'))
+  return obj.set('tags', tags.toList())
 }
 
 var _removeObjectsFromTag = (tag, objsToRemove, type) => {
@@ -22,31 +23,43 @@ var _removeObjectsFromTag = (tag, objsToRemove, type) => {
   return tag.set(type, currentObjs.subtract(objsToRemove))
 }
 
-var _addTagToObject = (tagId, obj) => {
-  var updatedTags = Set(obj.get('tags')).add(tagId).toKeyedSeq()
+function tagIdsToObjs(ids) {
+  var tagsMap = reactor.evaluate(['tags'])
+  return ids.map(id => tagsMap.get(id))
+}
+var _addTagToObject = (tag, obj) => {
+  var updatedTags = Set(obj.get('tags').map(t => t.get('id'))).add(tag.get('id'))
+  updatedTags = tagIdsToObjs(updatedTags)
   return obj.set('tags', updatedTags)
 }
 
-var updateTagAndObjects = (tag, selectedObjects, type) => {
+// Objects' tags property is hydrated.
+// tags.objects property is just ids.
+var updateTagAndObjects = (tag, selectedObjectIds, type) => {
   var allObjectsMap = reactor.evaluate([type])
-  var existingObjects = Set(tag.get(type))
-  var selectedObjects = Set(selectedObjects)
+  var existingObjectIds = Set(tag.get(type))
+  var selectedObjectIds = Set(selectedObjectIds)
+
   var objectsToRemoveTagFrom = (
-    existingObjects.subtract(selectedObjects)
+    existingObjectIds.subtract(selectedObjectIds)
       .map(d => allObjectsMap.get(d))
-      .map(_removeTagFromObject.bind(null, tag.get('id'))))
-  var tag = _removeObjectsFromTag(tag, objectsToRemoveTagFrom, type)
+      .map(_removeTagFromObject.bind(null, tag)))
+
+  var updatedTag = _removeObjectsFromTag(tag, objectsToRemoveTagFrom, type)
 
   var objectsToAddTagTo = (
-    selectedObjects.subtract(
-      existingObjects.intersect(selectedObjects)))
+    selectedObjectIds.subtract(
+      existingObjectIds.intersect(selectedObjectIds)))
 
-  var updatedObjects = (
-    objectsToRemoveTagFrom.union(objectsToAddTagTo
-     .map(id => allObjectsMap.get(id))
-     .map(_addTagToObject.bind(null, tag.get('id')))))
-  tag = _addObjectsToTag(tag, objectsToAddTagTo, type)
-  return { updatedTag: tag, updatedObjects: updatedObjects }
+  updatedTag = _addObjectsToTag(updatedTag, objectsToAddTagTo, type)
+
+  var fullObjects = objectsToAddTagTo
+        .map(id => allObjectsMap.get(id))
+  var objsWithTagAdded = fullObjects.map(_addTagToObject.bind(null, updatedTag))
+
+  var updatedObjects = objectsToRemoveTagFrom.union(objsWithTagAdded)
+  updatedObjects = updatedObjects.toList()
+  return { updatedTag: updatedTag, updatedObjects: updatedObjects }
 }
 
 export default {
@@ -64,8 +77,8 @@ export default {
     reactor.dispatch('setTag', newTag)
   },
 
-  addDesignsToTag(tag, selectedDesigns) {
-    var { updatedTag, updatedObjects } = updateTagAndObjects(tag, selectedDesigns, 'designs')
+  addDesignsToTag(tag, selectedDesignIds) {
+    var { updatedTag, updatedObjects } = updateTagAndObjects(tag, selectedDesignIds, 'designs')
     updatedObjects.forEach(d => persistDesignTags(d))
     persistTagObjects(updatedTag, 'designs')
     reactor.dispatch('setTagImm', updatedTag)
@@ -100,10 +113,17 @@ export default {
     reactor.dispatch('setTagImm', updatedTag)
   },
 
-  addLayerImagesToTag(tag, layerImages) {
-    var { updatedTag, updatedObjects } = updateTagAndObjects(tag, layerImages, 'layerImages')
+  addLayerImagesToTag(tag, layerImageIds) {
+    if (DEV && typeof layerImageIds.get(0) !== 'string') {
+      throw new Error('LayerImageIds should be ids')
+    }
+    var { updatedTag, updatedObjects } = updateTagAndObjects(tag, layerImageIds, 'layerImages')
     updatedObjects.forEach(d => persistLayerImageTags(d))
     persistTagObjects(updatedTag, 'layerImages')
     reactor.dispatch('setTagImm', updatedTag)
+  },
+
+  loadAdminTags() {
+    hydrateAndDispatchTags()
   }
 }

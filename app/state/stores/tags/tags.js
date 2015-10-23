@@ -30,12 +30,14 @@ export default new Nuclear.Store({
         if (tag.layers) {
           tag.layers = Object.keys(tag.layers)
         }
+        if (tag.layerImages) {
+          tag.layerImages = Object.keys(tag.layerImages)
+        }
         return retVal.set(tag.id, Immutable.fromJS(tag))
       }, state)
     })
 
     this.on('loadAdminCreateDesignData', hydrateTags)
     this.on('loadCurrentDesignEditResources', hydrateTags)
-    this.on('loadAdminTags', hydrateTags)
   }
 })

@@ -1,9 +1,9 @@
-var Nuclear = require('nuclear-js');
+var Nuclear = require('nuclear-js')
 var Immutable = Nuclear.Immutable
-import reactor from '../reactor'
-import {uploadImgToS3} from '../utils'
-import {layerImagesRef} from '../firebaseRefs'
-import {hydrateAndDispatchLayerImages} from '../helpers'
+import reactor from 'state/reactor'
+import {uploadImgToS3} from 'state/utils'
+import {layerImagesRef} from 'state/firebaseRefs'
+import {hydrateAndDispatchLayerImages} from 'state/helpers'
 
 export default new Nuclear.Store({
   getInitialState() { return Nuclear.toImmutable({}) },

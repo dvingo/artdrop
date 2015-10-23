@@ -23,7 +23,7 @@ export default React.createClass({
             messages: [],
             selectedTag: null,
             editMode: 'editLayerImage',
-            selectedLayerImages: Set(),
+            selectedLayerImageIds: Set(),
             showDeleteConfirmation: false,
             confirmDeleteText: ''}
   },
@@ -33,6 +33,24 @@ export default React.createClass({
     Store.actions.loadAdminLayerImages()
   },
 
+  componentDidUpdate(prevProps, prevState) {
+    if (!this.state.selectedTag && this.state.tags.count() > 0) {
+      var selectedTag = this.state.tags.get(0)
+      var newState = {selectedTag: selectedTag}
+      if (selectedTag.get('layerImages') && selectedTag.get('layerImages').count() > 0) {
+        newState.selectedLayerImageIds = Set(selectedTag.get('layerImages'))
+      }
+      this.setState(newState)
+    }
+    var tagsMap = this.state.tagsMap
+    var selectedTag = this.state.selectedTag
+    if (selectedTag && tagsMap.get(selectedTag.get('id'))
+       && tagsMap.get(selectedTag.get('id')) !== selectedTag) {
+      var updatedTag = tagsMap.get(selectedTag.get('id'))
+      this.setState({selectedTag:updatedTag})
+    }
+  },
+
   selectLayerImage(layerImage) {
     if (this.state.editMode === 'editLayerImage') {
       this.setState({
@@ -40,11 +58,12 @@ export default React.createClass({
         confirmDeleteText: '',
         showDeleteConfirmation: false})
     } else {
-      var selectedLayerImages = this.state.selectedLayerImages
-      if (selectedLayerImages.includes(layerImage)) {
-        this.setState({selectedLayerImages: selectedLayerImages.remove(layerImage)})
+      var selectedLayerImageIds = this.state.selectedLayerImageIds
+      var layerImageId = layerImage.get('id')
+      if (selectedLayerImageIds.includes(layerImageId)) {
+        this.setState({selectedLayerImageIds: selectedLayerImageIds.remove(layerImageId)})
       } else {
-        this.setState({selectedLayerImages: selectedLayerImages.add(layerImage)})
+        this.setState({selectedLayerImageIds: selectedLayerImageIds.add(layerImageId)})
       }
     }
   },
@@ -60,15 +79,15 @@ export default React.createClass({
 
   handleTagChange(e) {
     var tag = this.state.tagsMap.get(e.target.value)
-    var selectedLayerImages = Set(tag.get('layerImages'))
-    this.setState({selectedTag:tag, selectedLayerImages:selectedLayerImages})
+    var selectedLayerImageIds = Set(tag.get('layerImages'))
+    this.setState({selectedTag:tag, selectedLayerImageIds:selectedLayerImageIds})
   },
 
   handleAddLayerImagesToTag() {
-    Store.actions.addLayerImagesToTag({
-      tag: this.state.selectedTag,
-      layerImages: this.state.selectedLayerImages
-    })
+    Store.actions.addLayerImagesToTag(
+      this.state.selectedTag,
+      this.state.selectedLayerImageIds
+    )
   },
 
   render() {
@@ -94,7 +113,7 @@ export default React.createClass({
       var overlayStyles = (
         (() => {
           if (this.state.editMode === 'editLayerImage') { return null }
-          else if (this.state.selectedLayerImages.includes(layerImage)) {
+          else if (this.state.selectedLayerImageIds.includes(layerImage.get('id'))) {
             return selectDivStyles }
           else { return null }
         }()))
