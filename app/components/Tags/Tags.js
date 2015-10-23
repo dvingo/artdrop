@@ -11,7 +11,8 @@ export default React.createClass({
     return {
       selectedTags: List(),
       onRemoveTag: () => null,
-      onAddTag: () => null
+      onAddTag: () => null,
+      label: 'Tags'
     }
   },
 
@@ -61,7 +62,7 @@ export default React.createClass({
     this.setState({selectedTag:tag})
   },
 
-  onAddTag(e) {
+  onAddTag() {
     this.props.onAddTag(this.state.selectedTag)
   },
 
@@ -77,7 +78,7 @@ export default React.createClass({
     })
     return (
       <div className="Tags">
-        <h2>Tags:</h2>
+        <h2>{this.props.label}:</h2>
         <div>
           {tags}
         </div>

@@ -6,6 +6,7 @@ import getters from 'state/getters'
 import Notification from 'components/Notification/Notification'
 import {imageUrlForLayerImage} from 'state/utils'
 import LayerImageDetail from './LayerImageDetail'
+import Tags from 'components/Tags/Tags'
 import { Set } from 'Immutable'
 
 export default React.createClass({
@@ -22,6 +23,7 @@ export default React.createClass({
             errors: [],
             messages: [],
             selectedTag: null,
+            tagsToFilterBy: Set(),
             editMode: 'editLayerImage',
             selectedLayerImageIds: Set(),
             showDeleteConfirmation: false,
@@ -29,7 +31,6 @@ export default React.createClass({
   },
 
   componentWillMount() {
-    Store.actions.loadAdminTags()
     Store.actions.loadAdminLayerImages()
   },
 
@@ -42,6 +43,7 @@ export default React.createClass({
       }
       this.setState(newState)
     }
+
     var tagsMap = this.state.tagsMap
     var selectedTag = this.state.selectedTag
     if (selectedTag && tagsMap.get(selectedTag.get('id'))
@@ -90,6 +92,20 @@ export default React.createClass({
     )
   },
 
+  _filterBySelectedTags(layerImage) {
+    return this.state.tagsToFilterBy.every(tag => {
+      return Set(layerImage.get('tags')).includes(tag)
+    })
+  },
+
+  _addTagToFilterBy(tag) {
+    this.setState({tagsToFilterBy: this.state.tagsToFilterBy.add(tag)})
+  },
+
+  _removeTagToFilterBy(tag) {
+    this.setState({tagsToFilterBy: this.state.tagsToFilterBy.remove(tag)})
+  },
+
   render() {
     var errors = this.state.errors.map(e => {
       return <p style={{background:'#E85672'}}>{e}</p>
@@ -109,7 +125,9 @@ export default React.createClass({
       top: '0',
       left: '0'
     }
-    let layerImages = this.state.layerImages.map(layerImage => {
+    let layerImages = (
+      this.state.layerImages.filter(this._filterBySelectedTags)
+        .map(layerImage => {
       var overlayStyles = (
         (() => {
           if (this.state.editMode === 'editLayerImage') { return null }
@@ -126,7 +144,7 @@ export default React.createClass({
           <div style={overlayStyles} onClick={this.selectLayerImage.bind(null, layerImage)}></div>
         </div>
       )
-    })
+    }))
 
     var selectedLayerImage = this.state.selectedLayerImage
     var showSelectedLayerImage = selectedLayerImage && this.state.editMode === 'editLayerImage'
@@ -142,6 +160,11 @@ export default React.createClass({
     return (
       <div className="AdminLayerImages" style={{padding:10}}>
         <h1>Layer Images</h1>
+
+        <Tags label='Tags to filter by'
+          selectedTags={this.state.tagsToFilterBy.toList()}
+          onRemoveTag={this._removeTagToFilterBy}
+          onAddTag={this._addTagToFilterBy}/>
 
         <form onChange={this.onFormChange}>
           <div>
