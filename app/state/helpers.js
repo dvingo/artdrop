@@ -5,6 +5,7 @@ import reactor from 'state/reactor'
 import getters from 'state/getters'
 import {Map, List} from 'Immutable'
 var RSVP = require('RSVP')
+var Promise = RSVP.Promise
 
 var nonOptionKeys = ['id', 'printingPrice', 'salePrice', 'units',
   'vendorId', 'height', 'width', 'depth', 'printingImageWidth', 'printingImageHeight']
@@ -168,6 +169,19 @@ var hydrateAndDispatchLayerImages = () => {
   })
 }
 
+var hydrateAdminDesignsOnlyTags = () => {
+  return new Promise((resolve, reject) => {
+    hydrateTagsIfMissing().then(() => {
+      var designsQuery = designsRef.orderByChild('adminCreated').equalTo(true)
+      designsQuery.once('value', snapshot => {
+        var designs = addIdsToData(snapshot.val())
+        designs.forEach(d => d.tags = populateTags(d).toJS())
+        resolve(designs)
+      })
+    })
+  })
+}
+
 var hydrateAndDispatchSurfaces = hydrateAndDispatchData.bind(null, surfacesRef, 'addManySurfaces')
 var hydrateAndDispatchTags = hydrateAndDispatchData.bind(null, tagsRef, 'addManyTags')
 var hydrateAndDispatchColorPalettes = hydrateAndDispatchData.bind(null, colorPalettesRef, 'addManyColorPalettes')
@@ -273,5 +287,6 @@ export default {
   hydrateAndDispatchSurfaces,
   hydrateAndDispatchTags,
   hydrateAndDispatchColorPalettes,
-  hydrateSurfaceOptionsForSurface
+  hydrateSurfaceOptionsForSurface,
+  hydrateAdminDesignsOnlyTags
 }

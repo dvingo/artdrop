@@ -2,12 +2,14 @@ var Nuclear = require('nuclear-js');
 var Immutable = Nuclear.Immutable
 import {persistNewDesign,
   defaultSurfaceOptionIdForSurface,
-  hydrateSurfaceOptionsForSurface} from '../helpers'
-import getters from '../getters'
-import reactor from '../reactor'
-import {uploadDesignPreview, newId, rotateColorPalette} from '../utils'
-import {persistDesign, persistLayer, nonOptionKeys} from '../helpers'
-import {designsRef, layersRef} from '../firebaseRefs'
+  hydrateSurfaceOptionsForSurface,
+  persistDesign, persistLayer, nonOptionKeys,
+  hydrateAdminDesignsOnlyTags, dispatchHelper
+} from 'state/helpers'
+import getters from 'state/getters'
+import reactor from 'state/reactor'
+import {uploadDesignPreview, newId, rotateColorPalette} from 'state/utils'
+import {designsRef, layersRef} from 'state/firebaseRefs'
 
 function l() {
   console.log.apply(console, Array.prototype.slice.call(arguments))
@@ -71,21 +73,8 @@ export default new Nuclear.Store({
 
     this.on('loadAdminCreatedDesigns', function(state, design) {
       if (state.count() > 2) { return state }
-
-      var designsQuery = designsRef.orderByChild('adminCreated').equalTo(true)
-      designsQuery.on('value', snapshot => {
-        var data = snapshot.val()
-        var designs = Object.keys(data).map(id => {
-          var obj = data[id]
-          obj.id = id
-          return obj
-        })
-        var interval = setInterval(() => {
-          if (!reactor.__isDispatching) {
-            clearInterval(interval)
-            reactor.dispatch('addManyDesigns', designs)
-          }
-        }, 100)
+      hydrateAdminDesignsOnlyTags().then( designsJs => {
+        dispatchHelper('addManyDesigns', designsJs)
       })
       return state
     })

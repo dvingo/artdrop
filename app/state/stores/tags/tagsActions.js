@@ -78,6 +78,9 @@ export default {
   },
 
   addDesignsToTag(tag, selectedDesignIds) {
+    if (DEV && typeof selectedDesignIds.toList().get(0) !== 'string') {
+      throw new Error('SelectedDesignIds should be ids')
+    }
     var { updatedTag, updatedObjects } = updateTagAndObjects(tag, selectedDesignIds, 'designs')
     updatedObjects.forEach(d => persistDesignTags(d))
     persistTagObjects(updatedTag, 'designs')
@@ -114,7 +117,7 @@ export default {
   },
 
   addLayerImagesToTag(tag, layerImageIds) {
-    if (DEV && typeof layerImageIds.get(0) !== 'string') {
+    if (DEV && typeof layerImageIds.toList().get(0) !== 'string') {
       throw new Error('LayerImageIds should be ids')
     }
     var { updatedTag, updatedObjects } = updateTagAndObjects(tag, layerImageIds, 'layerImages')

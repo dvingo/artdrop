@@ -24,7 +24,6 @@ export default React.createClass({
 
   componentWillMount() {
     Store.actions.loadAdminCreatedDesigns()
-    Store.actions.loadAdminTags()
   },
 
   componentDidUpdate(prevProps, prevState) {
