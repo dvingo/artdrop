@@ -39,6 +39,7 @@
     "webpack-dev-server": "^1.8.2"
   },
   "dependencies": {
+    "async": "^1.4.2",
     "aws-sdk": "^2.2.6",
     "babel": "^5.8.23",
     "body-parser": "^1.14.0",
