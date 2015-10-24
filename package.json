@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Configurable art, to match your couch",
   "scripts": {
-    "start": "NODE_ENV=production pushd server && node server.js",
+    "start": "NODE_ENV=production cd server && node server.js",
     "dev": "NODE_ENV=dev node dev-server.js"
   },
   "repository": {
