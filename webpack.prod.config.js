@@ -30,7 +30,7 @@ module.exports = {
     loaders: [{
       test: /\.jsx?$/,
       loader: 'babel',
-      include: path.join(__dirname, srcDir)
+      exclude: path.join(__dirname, 'node_modules')
     }, {
       test: /\.scss$/,
       loader: "style!css!sass"

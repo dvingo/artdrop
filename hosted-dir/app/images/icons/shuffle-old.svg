@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 18.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve">
+<g>
+	<g id="Layer1">
+		<g>
+			<g>
+				<defs>
+					<rect id="SVGID_1_" x="-483" y="-4.6" width="1959.9" height="1000"/>
+				</defs>
+				<clipPath id="SVGID_2_">
+					<use xlink:href="#SVGID_1_"  overflow="visible"/>
+				</clipPath>
+				<path clip-path="url(#SVGID_2_)" fill="#038EBA" d="M496.9,15.5C229,15.5,12.6,231.9,12.6,499.8c0,0,205.1,205.9,484.3,0
+					C702.9,347.9,496.9,15.5,496.9,15.5"/>
+			</g>
+		</g>
+	</g>
+	<g id="Layer2">
+		<g>
+			<g>
+				<defs>
+					<rect id="SVGID_3_" x="-483" y="-4.6" width="1959.9" height="1000"/>
+				</defs>
+				<clipPath id="SVGID_4_">
+					<use xlink:href="#SVGID_3_"  overflow="visible"/>
+				</clipPath>
+				<path clip-path="url(#SVGID_4_)" fill="#D7E027" d="M981.2,499.8c0-267.9-216.4-484.3-484.3-484.3c0,0-205.9,205.1,0,484.3
+					C647.9,705.7,981.2,499.8,981.2,499.8"/>
+			</g>
+		</g>
+	</g>
+	<g id="Layer4">
+		<g>
+			<g>
+				<defs>
+					<rect id="SVGID_5_" x="-483" y="-4.6" width="1959.9" height="1000"/>
+				</defs>
+				<clipPath id="SVGID_6_">
+					<use xlink:href="#SVGID_5_"  overflow="visible"/>
+				</clipPath>
+				<path clip-path="url(#SVGID_6_)" fill="#FCB917" d="M496.9,984.1c267.9,0,484.3-216.4,484.3-484.3c0,0-205.1-205.9-484.3,0
+					C291,651.6,496.9,984.1,496.9,984.1"/>
+			</g>
+		</g>
+	</g>
+	<g id="Layer3">
+		<g>
+			<g>
+				<defs>
+					<rect id="SVGID_7_" x="-483" y="-4.6" width="1959.9" height="1000"/>
+				</defs>
+				<clipPath id="SVGID_8_">
+					<use xlink:href="#SVGID_7_"  overflow="visible"/>
+				</clipPath>
+				<path clip-path="url(#SVGID_8_)" fill="#EA0E8C" d="M496.9,499.8c-279.2,205.9-484.3,0-484.3,0c0,267.9,216.4,484.3,484.3,484.3
+					C496.9,984.1,702.9,779,496.9,499.8"/>
+			</g>
+		</g>
+	</g>
+</g>
+</svg>
