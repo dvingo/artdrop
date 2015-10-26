@@ -4,8 +4,9 @@ import reactor from 'state/reactor'
 import Store from 'state/main'
 import Immutable from 'Immutable'
 import SurfaceImage from 'components/Design/SurfaceImage/SurfaceImage'
+import SurfaceImageOption from './SurfaceImageOption'
 import {imageUrlForSurface} from 'state/utils'
-import EditableLabel from 'components/EditableLabel/EditableLabel'
+import SurfaceDetail from './SurfaceDetail'
 
 export default React.createClass({
   mixins: [reactor.ReactMixin, Router.Navigation],
@@ -55,6 +56,12 @@ export default React.createClass({
     Store.actions.updateSurface(newSurface)
   },
 
+  selectImageOption (imgUrl) {
+    var newSurface = this.state.selectedSurface.set('imageUrl', imgUrl)
+    this.setState({selectedSurface: newSurface})
+    Store.actions.updateSurface(newSurface)
+  },
+
   render() {
     var surface = this.state.selectedSurface
     if (!surface) { return null }
@@ -65,40 +72,21 @@ export default React.createClass({
                            onClick={this.selectSurface.bind(null, s)}
                            key={s.get('id')}/>
     })
-    var surfaceImagesList = (surface.get('images') ? surface.get('images').map( (s) => {
-      return (
-        <div className="AdminSurfaces-surface-images">
-          <img src={s}/>
-        </div>
-      )
-    }): null)
 
-    var selectedSurfaceDetails = (surface ?
-      <div className="AdminSurfaces-details">
-        <div className="AdminSurfaces-text">
-          <p>Vendor Name: <em>{surface.get('vendorName')}</em></p>
-          <p>Vendor Description: <em>{surface.get('vendorDescription')}</em></p>
-          <div className="AdminSurfaces-surface-text-container">
-            <EditableLabel value={surface.get('name')}
-              labelTag='h1' onChange={this.onSurfaceNameChange}/>
-
-
-            <EditableLabel value={surface.get('description')}
-               editTag='textarea'
-               onChange={this.onSurfaceDescriptionChange}/>
-          </div>
-        </div>
-
-        <div className="AdminSurface-image-container">
-          <img src={imgUrl}/>
-        </div>
-      </div>
-      : null)
     return (
       <div className="AdminSurfaces">
-        {selectedSurfaceDetails}
-        <div className="AdminSurfaces-surface-images-container">
-          {surfaceImagesList}
+        {surface ?
+          <SurfaceDetail surface={surface} 
+            onNameChange={this.onSurfaceNameChange}
+            onDescriptionChange={this.onSurfaceDescriptionChange}/>
+          : null}
+        <div className="AdminSurfaces-surface-images-container"> 
+          {surface.get('images') ? surface.get('images').map( (imgUrl) => {
+            return <SurfaceImageOption imgUrl={imgUrl} 
+                    onClick={this.selectImageOption.bind(null, imgUrl)}
+                    key={imgUrl}
+                    />
+          }): null}
         </div>
         <div className="AdminSurfaces-surfaces-container">
           {surfaces}

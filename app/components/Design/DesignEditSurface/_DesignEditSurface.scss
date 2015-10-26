@@ -61,8 +61,11 @@
 .DesignEditSurface-ui-mid {
 	@include display(flex);
 	@include justify-content(center);
+	@include align-items(center);
 	background: $nav-bar-color;
 	width: 100%;
+
+	button { margin: 20px; }
 }
 .DesignEditSurface-surfaces {
 	@include display(flex);
