@@ -48,9 +48,12 @@ export default React.createClass({
       this.setState(newState)
     }
 
-    if (this.state.totalPages === -1 && this.state.layerImages.count() > 0) {
+    if (this._needToUpdatePageCount(prevState)) {
+      var filteredLayerImages = this.state.layerImages.filter(
+          this._filterBySelectedTags.bind(null, this.state.tagsToFilterBy))
       this.setState({
-        totalPages: Math.floor(this.state.layerImages.count() / numLayerImagesPerPage) + 1
+        currentPage: 0,
+        totalPages: Math.floor(filteredLayerImages.count() / numLayerImagesPerPage) + 1
       })
     }
 
@@ -61,6 +64,17 @@ export default React.createClass({
       var updatedTag = tagsMap.get(selectedTag.get('id'))
       this.setState({selectedTag:updatedTag})
     }
+  },
+
+  _needToUpdatePageCount(prevState) {
+    var currentImagesCount = this.state.layerImages.filter(
+        this._filterBySelectedTags.bind(null, this.state.tagsToFilterBy)).count()
+    var previousImagesCount = prevState.layerImages.filter(
+        this._filterBySelectedTags.bind(null, prevState.tagsToFilterBy)).count()
+    return (
+      (this.state.totalPages === -1 && this.state.layerImages.count() > 0) ||
+      (currentImagesCount !== previousImagesCount)
+    )
   },
 
   selectLayerImage(layerImage) {
@@ -102,10 +116,9 @@ export default React.createClass({
     )
   },
 
-  _filterBySelectedTags(layerImage) {
-    return this.state.tagsToFilterBy.every(tag => {
-      return Set(layerImage.get('tags')).includes(tag)
-    })
+  _filterBySelectedTags(tagsToFilterBy, layerImage) {
+    return tagsToFilterBy.every(tag => (
+      Set(layerImage.get('tags').map(t => t.get('id'))).includes(tag.get('id'))))
   },
 
   _addTagToFilterBy(tag) {
@@ -125,11 +138,9 @@ export default React.createClass({
     var {currentPage} = this.state
     var start = numLayerImagesPerPage * currentPage
     var end = start + numLayerImagesPerPage
-    return (
-      this.state.layerImages
-        .slice(start, end)
-        .filter(this._filterBySelectedTags)
-    )
+    var filteredImages = this.state.layerImages.filter(
+        this._filterBySelectedTags.bind(null, this.state.tagsToFilterBy))
+    return filteredImages.slice(start, end)
   },
 
   onNextPage() {
@@ -141,29 +152,25 @@ export default React.createClass({
   },
 
   render() {
-    var errors = this.state.errors.map(e => {
-      return <p style={{background:'#E85672'}}>{e}</p>
-    })
+    var errors = this.state.errors.map(e => (
+      <p style={{background:'#E85672'}}>{e}</p>))
 
-    var messages = this.state.messages.map(m => {
-      return <Notification message={m}
-                 onClose={() => this.setState({messages:[]})}/>
-    })
+    var messages = this.state.messages.map(m => (
+      <Notification message={m}
+                 onClose={() => this.setState({messages:[]})}/> ))
 
     let layerImages = (
       this._layerImagesForCurrentPage().map(layerImage => (
         <LayerImage layerImage={layerImage}
+          key={layerImage.get('id')}
           isSelected={this._isLayerImageSelected(layerImage)}
           onClick={this.selectLayerImage.bind(null, layerImage)} />)))
 
     var selectedLayerImage = this.state.selectedLayerImage
     var showSelectedLayerImage = selectedLayerImage && this.state.editMode === 'editLayerImage'
 
-    var tagOptions = this.state.tags.map(tag => {
-      return (
-        <option value={tag.get('id')}>{tag.get('name')}</option>
-      )
-    })
+    var tagOptions = this.state.tags.map(tag => (
+      <option value={tag.get('id')}>{tag.get('name')}</option>))
 
     var selectedTag = this.state.selectedTag ? this.state.selectedTag.get('id') : ''
     var { currentPage, totalPages } = this.state
