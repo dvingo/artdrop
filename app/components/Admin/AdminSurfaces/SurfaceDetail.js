@@ -9,11 +9,11 @@ export default React.createClass({
 		var imgUrl = imageUrlForSurface(surface)
 
 		return (
-			<div className="AdminSurfaces-details">
-				<div className="AdminSurfaces-text">
+			<div className="SurfaceDetail">
+				<div className="SurfaceDetail-text">
 					<p>Vendor Name: <em>{surface.get('vendorName')}</em></p>
 					<p>Vendor Description: <em>{surface.get('vendorDescription')}</em></p>
-					<div className="AdminSurfaces-surface-text-container">
+					<div className="SurfaceDetail-text-container">
 						<EditableLabel value={surface.get('name')}
 							labelTag='h1' onChange={this.props.onNameChange}/>
 
@@ -24,7 +24,7 @@ export default React.createClass({
 					</div>
 				</div>
 
-				<div className="AdminSurface-image-container">
+				<div className="SurfaceDetail-image-container">
 					<img src={imgUrl}/>
 				</div>
 			</div>

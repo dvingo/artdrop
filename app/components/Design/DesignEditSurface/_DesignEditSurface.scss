@@ -12,6 +12,7 @@
 	@include align-items(center);
 	@include justify-content(center);
 	@include flex-direction(row);
+	@include flex(1 0 0);
 	// max-width: 500px;
 
 	.left  {
@@ -51,11 +52,19 @@
 		@include align-items(center);
 		@include justify-content(center);
 		position: relative;
+	}
+}
+.DesignEditSurface-product-overlay-container {
+	display: flex;
+	min-width: 250px;
+	min-height: 250px;
+	width: 250px;
+	height: 250px;
 
-		img {
-			width: 100%;
-			height: auto;
-		}
+	img {
+		width: 100%;
+		height: auto;
+		z-index: 50;
 	}
 }
 .DesignEditSurface-ui-mid {
@@ -72,5 +81,6 @@
 	@include flex-wrap(wrap);
 	@include flex(1 0 0);
 	@include justify-content(center);
+	@include align-items(center);
 	overflow: scroll;
 }

@@ -3,9 +3,9 @@ import Router from 'react-router'
 import reactor from 'state/reactor'
 import Store from 'state/main'
 import Immutable from 'Immutable'
+import {imageUrlForSurface} from 'state/utils'
 import SurfaceImage from 'components/Design/SurfaceImage/SurfaceImage'
 import SurfaceImageOption from './SurfaceImageOption'
-import {imageUrlForSurface} from 'state/utils'
 import SurfaceDetail from './SurfaceDetail'
 
 export default React.createClass({
@@ -80,7 +80,7 @@ export default React.createClass({
             onNameChange={this.onSurfaceNameChange}
             onDescriptionChange={this.onSurfaceDescriptionChange}/>
           : null}
-        <div className="AdminSurfaces-surface-images-container"> 
+        <div className="AdminSurfaces-surface-options-container"> 
           {surface.get('images') ? surface.get('images').map( (imgUrl) => {
             return <SurfaceImageOption imgUrl={imgUrl} 
                     onClick={this.selectImageOption.bind(null, imgUrl)}

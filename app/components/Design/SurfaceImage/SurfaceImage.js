@@ -35,7 +35,12 @@ export default React.createClass({
     return (
       <div className="SurfaceImage" onClick={this.props.onClick}>
         <div style={overlayStyle}/>
-        <img src={imageUrlForSurface(this.props.surface)} width={width} height={height}/>
+        <div className="SurfaceImage-image">
+          <img src={imageUrlForSurface(this.props.surface)} width={width} height={height}/>
+        </div>
+        <div className="SurfaceImage-info">
+          <p>{surface.get('vendorName')}</p>
+        </div>
       </div>
     )
   }

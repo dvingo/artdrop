@@ -1,4 +1,4 @@
-.SurfaceImage {
+.SurfaceImageOption {
 	@include display(flex);
 	@include flex-direction(column);
 	min-height: 100px;
@@ -19,10 +19,9 @@
 
 	&:hover {
 		cursor: pointer;
-		@include prefixer(box-shadow, 2px 2px 6px 0px rgba(150,150,150,1), webkit ms moz spec o);
 	}
 }
-.SurfaceImage-image {
+.SurfaceImageOption-image {
 	@include display(flex);
 	@include flex(1 0 0);
 	width: 100%;
@@ -37,15 +36,16 @@
 		position: relative
 	}
 }
-.SurfaceImage-info {
+
+.SurfaceImageOption-info {
 	@include display(flex);
 	@include align-items(center);
 	@include justify-content(center);
-	height: 25px;
-	min-height: 25px;
 	background: lavender;
 	position: relative;
 	bottom: 0;
+	height: 25px;
+	min-height: 25px;
 	margin: 0 auto;
 	left: 0;
 	right: 0;

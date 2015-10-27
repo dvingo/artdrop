@@ -1,0 +1,32 @@
+.SurfaceDetail {
+	@include display(flex);
+	@include flex-direction(row);
+	@include justify-content(center);
+	position: relative;
+	height: 350px;
+	min-height: 350px;
+	max-height: 350px;
+	max-width: 700px;	
+	padding: 20px;
+	overflow: hidden;
+}
+.SurfaceDetail-text {
+	@include display(flex);
+	@include flex-direction(column);
+	@include flex(1 0 0);
+}
+.SurfaceDetail-text-container {
+	@include display(flex);
+	@include flex-direction(column);
+}
+.SurfaceDetail-image-container {
+  @include display(flex);
+  @include justify-content(center);
+  @include flex(1 0 0);
+
+  img {
+  	width: 300px;
+  	height: auto;
+  }
+  padding: 20px;
+}

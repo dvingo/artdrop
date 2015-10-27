@@ -67,11 +67,8 @@ export default React.createClass({
 
     return (
       <section className="main DesignEditSurface design-edit">
-
         <div className="DesignEditSurface-ui edit-ui">
-
           <div className="DesignEditSurface-ui-top">
-
             <div className="left">
               {selectBoxes}
               <div>
@@ -81,8 +78,10 @@ export default React.createClass({
             </div>
 
             <div className="right">
-              <img src={imageUrlForSurface(surface)} height={200}/>
-              <RenderLayers layers={this.state.design.get('layers')}/>
+              <div className="DesignEditSurface-product-overlay-container">
+                <img src={imageUrlForSurface(surface)} height={200}/>
+                <RenderLayers layers={this.state.design.get('layers')}/>
+              </div>
             </div>
           </div>
 
@@ -94,9 +93,7 @@ export default React.createClass({
           <div className="DesignEditSurface-surfaces">
             {surfaces}
           </div>
-
         </div>
-
       </section>
     )
   }

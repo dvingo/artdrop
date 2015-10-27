@@ -25,11 +25,15 @@ export default React.createClass({
 		const {width, height} = this.state
 
 		return (
-			<div className="AdminSurfaces-surface-images" 
+			<div className="SurfaceImageOption" 
 				onClick={this.props.onClick}>
-				<img ref="img" src={this.props.imgUrl}/>
-				<p>{width}</p>
-				<p>{height}</p>
+				<div className="SurfaceImageOption-image">
+					<img ref="img" src={this.props.imgUrl}/>
+				</div>
+				<div className="SurfaceImageOption-info">
+					<p>{width}</p>x
+					<p>{height}</p>
+				</div>
 			</div>
 		)
 	}
