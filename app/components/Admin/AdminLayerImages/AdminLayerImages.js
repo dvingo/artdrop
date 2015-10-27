@@ -223,7 +223,7 @@ export default React.createClass({
           Page {currentPage + 1} of {totalPages}
           { currentPage > 0 ?
             <button onClick={this.onPreviousPage}>Previous Page</button> : null }
-          { currentPage < totalPages ?
+          { (currentPage + 1) < totalPages ?
             <button onClick={this.onNextPage}>Next Page</button> : null }
         </p>
       </div>
