@@ -83,20 +83,17 @@ getters.currentPalette = [
 
 getters.currentLayerImage = [
   getters.currentLayer,
-  (currentLayer) => {
-    return currentLayer ? currentLayer.get('selectedLayerImage') : null
-  }
+  (currentLayer) => (
+    currentLayer ? currentLayer.get('selectedLayerImage') : null)
 ]
 
 getters.layerImages = [
-  ['layerImages'], layerImages => {
-    return (
-      layerImages
-        .toList()
-        .filter(layerImage => layerImage)
-        .sort((imageOne, imageTwo) => imageTwo.get('createdAt') - imageOne.get('createdAt'))
-    )
-  }
+  ['layerImages'], layerImages => (
+    layerImages
+      .toList()
+      .filter(layerImage => layerImage)
+      .sort((imageOne, imageTwo) => imageTwo.get('createdAt') - imageOne.get('createdAt'))
+  )
 ]
 
 getters.layerImageIds = [

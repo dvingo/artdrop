@@ -123,6 +123,7 @@ export default {
     var { updatedTag, updatedObjects } = updateTagAndObjects(tag, layerImageIds, 'layerImages')
     updatedObjects.forEach(d => persistLayerImageTags(d))
     persistTagObjects(updatedTag, 'layerImages')
+    reactor.dispatch('setManyImmLayerImages', updatedObjects)
     reactor.dispatch('setTagImm', updatedTag)
   },
 

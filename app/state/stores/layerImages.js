@@ -24,15 +24,16 @@ export default new Nuclear.Store({
   },
 
   initialize() {
-    this.on('addLayerImage', (state, layerImage) => {
-      return state.set(layerImage.id, Immutable.fromJS(layerImage));
-    })
+    this.on('setLayerImage', (state, layerImage) => (
+      state.set(layerImage.id, Immutable.fromJS(layerImage))))
 
-    this.on('addManyLayerImages', (state, layerImages) => {
-      return layerImages.reduce((retVal, layerImage) => {
-        return retVal.set(layerImage.id, Immutable.fromJS(layerImage))
-      }, state)
-    })
+    this.on('addManyLayerImages', (state, layerImages) => (
+      layerImages.reduce((retVal, layerImage) => (
+        retVal.set(layerImage.id, Immutable.fromJS(layerImage))), state)))
+
+    this.on('setManyImmLayerImages', (state, layerImages) => (
+      layerImages.reduce((retVal, layerImage) => (
+        retVal.set(layerImage.get('id'), layerImage)), state)))
 
     this.on('loadAdminCreateDesignData', state => {
       hydrateAndDispatchLayerImages(state)
@@ -61,7 +62,7 @@ export default new Nuclear.Store({
           var layerImageId = newLayerImageRef.key()
           newLayerImage.id = layerImageId
           var layerImageImm = Immutable.fromJS(newLayerImage)
-          reactor.dispatch('addLayerImage', layerImageImm)
+          reactor.dispatch('setLayerImage', layerImageImm)
           reactor.dispatch('layerImageUploadedSuccessfully', layerImageImm)
         }
       }.bind(this))
@@ -84,7 +85,7 @@ export default new Nuclear.Store({
               var layerImageId = newLayerImageRef.key()
               newLayerImage.id = layerImageId
               var layerImageImm = Immutable.fromJS(newLayerImage)
-              reactor.dispatch('addLayerImage', layerImageImm)
+              reactor.dispatch('setLayerImage', layerImageImm)
               reactor.dispatch('layerImageUploadedSuccessfully', layerImageImm)
             }
           }.bind(this))

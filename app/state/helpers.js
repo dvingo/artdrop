@@ -57,7 +57,7 @@ function nestedHydrateLayer(layerId) {
     return hydrateLayerImage(layer.selectedLayerImage).then(layerImage => {
       layerImage.id = layer.selectedLayerImage
       layerImage.tags = populateTags(layerImage)
-      reactor.dispatch('addLayerImage', layerImage)
+      reactor.dispatch('setLayerImage', layerImage)
       layer.selectedLayerImage = layerImage
       layer.id = layerId
       layer.tags = populateTags(layer)
