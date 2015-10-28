@@ -32,11 +32,8 @@ export default React.createClass({
     var container = React.findDOMNode(this.refs.container)
     var svgEl = container.querySelector('svg')
     if (svgEl) {
-      if (this.props.layer) {
-        setSvgColors(svgEl, this.props.layer)
-      } else {
-        setSvgColors(svgEl, this.state.currentLayer)
-      }
+      var layer = this.props.layer ? this.props.layer : this.state.currentLayer
+      setSvgColors(svgEl, layer)
     }
   },
 

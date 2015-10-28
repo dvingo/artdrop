@@ -7,8 +7,7 @@ var designPreviewSize = config.designPreviewSize
 var designDetailSize = config.designDetailSize
 var s3BucketName = config.s3BucketName
 var hostname = config.hostname
-var window;
-var scheme = window ? window.location.protocol : ''
+var scheme = typeof window !== 'undefined' ? window.location.protocol : ''
 hostname = scheme + '//' + hostname
 /**
  * From: https://gist.github.com/mikelehen/3596a30bd69384624c11

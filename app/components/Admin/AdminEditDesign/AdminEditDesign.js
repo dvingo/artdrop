@@ -7,6 +7,7 @@ import ColorsButtonRotate from 'components/ColorsButtonRotate/ColorsButtonRotate
 import ColorPalette from 'components/ColorPalette/ColorPalette'
 import Tags from 'components/Tags/Tags'
 import Notification from 'components/Notification/Notification'
+import Immutable from 'Immutable'
 import Router from 'react-router'
 import {imageUrlForLayerImage, imageUrlForSurface} from 'state/utils'
 var classNames = require('classnames')
@@ -60,15 +61,20 @@ export default React.createClass({
   },
 
   componentWillMount() {
-    setTimeout(() => {
-      if ((!this.state.editingDesign || this.designIsNotHydrated()) && this.state.existingDesign &&
-          this.getParams().designId === this.state.existingDesign.get('id')) {
-        setTimeout(() => this.setState({editingDesign: this.state.existingDesign}), 200)
-      } else {
-        Store.actions.selectDesignId(this.props.params.designId)
-        Store.actions.loadAdminCreateDesignData()
-      }
-    }, 50)
+    if (this._isCreatingNewDesign()) {
+      this.setState({
+        editingDesign: Immutable.fromJS({
+          layers: [{paletteRotation:0,isEnabled:true},{paletteRotation:0,isEnabled:true},
+                   {paletteRotation:0,isEnabled:true}],
+          adminCreated: true})
+      })
+      Store.actions.loadAdminCreateDesignData()
+    } else if (this._editingDesignNotSet()) {
+      this.setState({editingDesign: this.state.existingDesign})
+    } else {
+      Store.actions.selectDesignId(this.props.params.designId)
+      Store.actions.loadAdminCreateDesignData()
+    }
   },
 
   componentDidUpdate(prevProps, prevState) {
@@ -79,6 +85,20 @@ export default React.createClass({
       var newDesign = updateEditingDesignWithNewTags(this.state)
       setTimeout(() => this.setState({editingDesign: newDesign}), 200)
     }
+  },
+
+  _isCreatingNewDesign() {
+    return !this.getParams().hasOwnProperty('designId')
+  },
+
+  _editingDesignNotSet() {
+    return (this.state.editingDesign == null || this.designIsNotHydrated()) &&
+     this.state.existingDesign &&
+     this.getParams().designId === this.state.existingDesign.get('id')
+  },
+
+  _showDeleteButton() {
+    return !this._isCreatingNewDesign() && !this.state.showDeleteConfirmation
   },
 
   clearMessages() {
@@ -128,8 +148,7 @@ export default React.createClass({
     if (!surface) { errors.push('You must select a surface') }
     var layersValid = (
       this.state.editingDesign.get('layers')
-      .map(l => l.has('colorPalette') && l.has('selectedLayerImage'))
-      .every(v => v)
+      .every(l => l.has('colorPalette') && l.has('selectedLayerImage'))
     )
     if (!layersValid) {
       errors.push('You must select a color palette and image for every layer.')
@@ -137,7 +156,11 @@ export default React.createClass({
 
     if (errors.length === 0) {
       let svgEls = document.querySelectorAll('.canvas .layer svg')
-      Store.actions.updateDesign({design: this.state.editingDesign, svgEls: svgEls})
+      if (this._isCreatingNewDesign()) {
+        Store.actions.createNewDesign({design: this.state.editingDesign, svgEls: svgEls})
+      } else {
+        Store.actions.updateDesign({design: this.state.editingDesign, svgEls: svgEls})
+      }
       messages.push('Design successfully saved.')
     }
     this.setState({errors: errors, messages: messages})
@@ -146,11 +169,7 @@ export default React.createClass({
   designIsNotHydrated() {
     var editingDesign = this.state.editingDesign
     return !(editingDesign &&
-            editingDesign.get('layers').every(l => (
-              typeof l === 'object' &&
-              l.has('colorPalette') &&
-              l.has('selectedLayerImage'))) &&
-            (typeof editingDesign.get('surface') === 'object'))
+            editingDesign.get('layers').every(l => (typeof l === 'object')))
   },
 
   handleShowDeleteConfirmation(){
@@ -189,7 +208,7 @@ export default React.createClass({
   render() {
     if (this.designIsNotHydrated()) { return null }
     var surfaces = this.state.surfaces.map(s => {
-      var border = (this.state.editingDesign.get('surface').get('id') === s.get('id') ? '2px solid' : 'none')
+      var border = (this.state.editingDesign.getIn(['surface', 'id']) === s.get('id') ? '2px solid' : 'none')
       return <img src={imageUrlForSurface(s)}
                   onClick={this.selectSurface.bind(null, s)}
                   width={40} height={40} key={s.get('id')}
@@ -248,9 +267,9 @@ export default React.createClass({
       <div className="AdminEditDesign">
         {this.state.errors.length > 0 ? <div>{errors}</div> : null}
         {this.state.messages.length > 0 ? <div>{messages}</div> : null}
-        <p>Edit Design:</p>
+        <p>{this._isCreatingNewDesign() ? "Create" : "Edit"} Design:</p>
 
-        {!this.state.showDeleteConfirmation ?
+        {this._showDeleteButton() ?
           <div><button onClick={this.handleShowDeleteConfirmation}>DELETE</button></div> : null}
 
         {this.state.showDeleteConfirmation ? (
@@ -281,10 +300,12 @@ export default React.createClass({
           <input type="submit"></input>
         </form>
 
-        <p>Rotate palette</p>
-        <ColorsButtonRotate
-          layer={this.state.editingDesign.getIn(['layers', this.state.currentLayer])}
-          onClick={this.handleRotateColorPalette}/>
+          {this.state.editingDesign.getIn(['layers', this.state.currentLayer, 'colorPalette']) ?
+            [<p>Rotate palette</p>,
+              <ColorsButtonRotate layer={this.state.editingDesign.getIn(['layers', this.state.currentLayer])}
+                onClick={this.handleRotateColorPalette}/>]
+            : null
+          }
 
         <div className="AdminEditDesign-button-container">
           <span onClick={this.selectImagesOrColors.bind(null, 'images')}

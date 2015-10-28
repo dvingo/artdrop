@@ -212,7 +212,7 @@ export default new Nuclear.Store({
         design.smallImageUrl = imgUrls.small
         design.largeImageUrl = imgUrls.large
         design.layers = layerIds
-        design.surfaceOption = defaultSurfaceOptionIdForSurface(surface)
+        design.surfaceOption = defaultSurfaceOptionIdForSurface(design.surface)
         design.surface = design.surface.id
         design.price = 2000
         design.createdAt = now

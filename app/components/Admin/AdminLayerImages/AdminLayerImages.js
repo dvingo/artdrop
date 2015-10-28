@@ -212,11 +212,8 @@ export default React.createClass({
           <LayerImageDetail layerImage={selectedLayerImage}
                             onDelete={this.deleteSelectedLayerImage} /> : null}
 
-        {/*When tags to filter by changes make another DB query
-        for all images with those tags and repaginate,
-        Because tags have layerImages we can just construct queries based on those and
-        only load tags into memory.*/}
         {layerImages}
+
         {this.state.errors.length > 0 ? <div>{errors}</div> : null}
         {this.state.messages.length > 0 ? <div>{messages}</div> : null}
         <p>
