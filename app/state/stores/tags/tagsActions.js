@@ -4,6 +4,7 @@ import {updateLayerOfDesign,
   dispatchHelper, idListToFirebaseObj, persistTag,
  persistLayerImageTags, persistTagObjects, persistLayer,
  hydrateAndDispatchTags, persistDesignTags} from 'state/helpers'
+import {tagsRef} from 'state/firebaseRefs'
 
 var _addObjectsToTag = (tag, objs, type) => {
   var currentObjs = Set(tag.get(type))
