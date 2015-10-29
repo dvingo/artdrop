@@ -7,6 +7,7 @@ import {persistNewDesign,
   hydrateAdminDesignsOnlyTags, dispatchHelper
 } from 'state/helpers'
 import getters from 'state/getters'
+import actions from 'state/actions'
 import reactor from 'state/reactor'
 import {uploadDesignPreview, newId, rotateColorPalette} from 'state/utils'
 import {designsRef, layersRef} from 'state/firebaseRefs'
@@ -189,14 +190,11 @@ export default new Nuclear.Store({
     })
 
     this.on('createNewDesign', (state, newDesignData) => {
-      var newDesign = newDesignData.design
-      var svgEls = newDesignData.svgEls
+      var { design:newDesign, svgEls, layersToTagsMap }  = newDesignData
       var title = newDesign.get('title')
       uploadDesignPreview(title, svgEls, (err, imgUrls) => {
-        if (err) {
-          console.log('got error: ', err)
-          return
-        }
+        if (err) { console.log('got error: ', err); return }
+
         var now = new Date().getTime()
         var design = newDesign.toJS()
         var layerIds = design.layers.map((layer, i) => {
@@ -220,6 +218,13 @@ export default new Nuclear.Store({
         var newDesignRef = designsRef.push(design)
         design.id = newDesignRef.key()
         reactor.dispatch('addDesign', design)
+        var designImm = Immutable.fromJS(design)
+        layersToTagsMap.forEach((tagSet, layerIndex) => {
+          var layers = newDesign.get('layers').map((l, i) => l.set('id', layerIds[i]))
+          var layer = layers.get(layerIndex)
+          var designImm = newDesign.set('layers', layers)
+          tagSet.forEach(tag => actions.addTagToLayer(tag, layer, designImm))
+        })
       }.bind(this))
 
       return state

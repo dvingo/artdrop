@@ -36,6 +36,14 @@ export default React.createClass({
 
   componentWillMount() {
     Store.actions.loadAdminLayerImages()
+    if (this._needToUpdatePageCount(this.state)) {
+      var filteredLayerImages = this.state.layerImages.filter(
+          this._filterBySelectedTags.bind(null, this.state.tagsToFilterBy))
+      this.setState({
+        currentPage: 0,
+        totalPages: Math.floor(filteredLayerImages.count() / numLayerImagesPerPage) + 1
+      })
+    }
   },
 
   componentDidUpdate(prevProps, prevState) {

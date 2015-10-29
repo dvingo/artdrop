@@ -10,6 +10,7 @@ import Notification from 'components/Notification/Notification'
 import Immutable from 'Immutable'
 import Router from 'react-router'
 import {imageUrlForLayerImage, imageUrlForSurface} from 'state/utils'
+var { Map, Set, List } = Immutable
 var classNames = require('classnames')
 
 function tagsUpdatedOnExistingDesign(prevState, state) {
@@ -30,6 +31,12 @@ function updateEditingDesignWithNewTags(state) {
       return layer.set('tags', newTags)
     })
   })
+}
+
+function setTagsOnLayerOfDesign(tags, layerIndex, design) {
+  return design.updateIn(['layers', layerIndex], layer => (
+    layer.set('tags', tags)
+  ))
 }
 
 export default React.createClass({
@@ -56,7 +63,8 @@ export default React.createClass({
       showDeleteConfirmation: false,
       confirmDeleteText: '',
       selectedTag: null,
-      selectingColors: true
+      selectingColors: true,
+      tagsToNewLayersMap: List()
     }
   },
 
@@ -128,8 +136,7 @@ export default React.createClass({
 
   handleRotateColorPalette() {
     var design = this.state.editingDesign
-    var layer = design.getIn(['layers', this.state.currentLayer])
-    this.setState({editingDesign: rotateColorPalette(design, layer)})
+    this.setState({editingDesign: rotateColorPalette(design, null, this.state.currentLayer)})
   },
 
   updateTitle(e) {
@@ -157,7 +164,10 @@ export default React.createClass({
     if (errors.length === 0) {
       let svgEls = document.querySelectorAll('.canvas .layer svg')
       if (this._isCreatingNewDesign()) {
-        Store.actions.createNewDesign({design: this.state.editingDesign, svgEls: svgEls})
+        Store.actions.createNewDesign({
+          design: this.state.editingDesign,
+          svgEls: svgEls,
+          layersToTagsMap: this.state.tagsToNewLayersMap})
       } else {
         Store.actions.updateDesign({design: this.state.editingDesign, svgEls: svgEls})
       }
@@ -194,11 +204,31 @@ export default React.createClass({
   },
 
   onAddTagToSelectedLayer(tagToAdd) {
-    Store.actions.addTagToLayer(tagToAdd, this._selectedLayer(), this.state.existingDesign)
+    if (this._isCreatingNewDesign()) {
+      var {tagsToNewLayersMap} = this.state
+      var tags = tagsToNewLayersMap.get(this.state.currentLayer, Set()).add(tagToAdd)
+      var newDesign = setTagsOnLayerOfDesign(tags, this.state.currentLayer, this.state.editingDesign)
+      this.setState({
+        tagsToNewLayersMap: tagsToNewLayersMap.set(this.state.currentLayer, tags),
+        editingDesign: newDesign
+      })
+    } else {
+      Store.actions.addTagToLayer(tagToAdd, this._selectedLayer(), this.state.existingDesign)
+    }
   },
 
   onRemoveTag(tagToRemove) {
-    Store.actions.removeTagFromLayer(tagToRemove, this._selectedLayer(), this.state.existingDesign)
+    if (this._isCreatingNewDesign()) {
+      var {tagsToNewLayersMap} = this.state
+      var tags = tagsToNewLayersMap.get(this.state.currentLayer, Set()).remove(tagToRemove)
+      var newDesign = setTagsOnLayerOfDesign(tags, this.state.currentLayer, this.state.editingDesign)
+      this.setState({
+        tagsToNewLayersMap: tagsToNewLayersMap.set(this.state.currentLayer, tags),
+        editingDesign: newDesign
+      })
+    } else {
+      Store.actions.removeTagFromLayer(tagToRemove, this._selectedLayer(), this.state.existingDesign)
+    }
   },
 
   selectImagesOrColors(imagesOrColors) {

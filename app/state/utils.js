@@ -242,7 +242,10 @@ export default {
 
   rotateColorPalette(design, layer, layerIndex) {
     var layers = design.get('layers')
-    var index = layerIndex || layers.findIndex(l => l.get('id') === layer.get('id'))
+    layer = layer || layers.get(layerIndex)
+    var index = typeof layerIndex === 'undefined' ?
+      layers.findIndex(l => l.get('id') === layer.get('id'))
+      : layerIndex
     var currentRotation = layer.get('paletteRotation')
     // 0 - 3
     var nextRotation = (currentRotation + 1) % 4
