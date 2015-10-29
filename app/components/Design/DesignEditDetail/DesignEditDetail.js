@@ -11,109 +11,118 @@ import CheckButton from 'components/CheckButton/CheckButton'
 var classNames = require('classnames')
 
 export default React.createClass({
-	mixins: [reactor.ReactMixin, Router.State, Router.Navigation],
+  mixins: [reactor.ReactMixin, Router.State, Router.Navigation],
 
-	getDataBindings() {
-      return {
-		design:           Store.getters.currentDesign,
-		currentLayer:     Store.getters.currentLayer,
-		numEnabledLayers: Store.getters.numEnabledLayers,
-		layerImages:      Store.getters.layerImages
-      }
+  getDataBindings() {
+    return {
+      design:           Store.getters.currentDesign,
+      currentLayer:     Store.getters.currentLayer,
+      numEnabledLayers: Store.getters.numEnabledLayers,
+      layerImages:      Store.getters.layerImages
+    }
   },
 
-	componentWillMount() {
-		Store.actions.selectDesignAndLayerId({
-			designId: this.props.params.designId,
-			layerId: this.props.params.layerId
-		})
-		Store.actions.loadAdminLayerImages()
-	},
+  componentWillMount() {
+    Store.actions.selectDesignAndLayerId({
+        designId: this.props.params.designId,
+        layerId: this.props.params.layerId
+    })
+    Store.actions.loadAdminLayerImages()
+  },
 
-	componentWillUnmount() {
-		clearInterval(this._interval)
-	},
+  componentWillUnmount() {
+    clearInterval(this._interval)
+  },
 
-	shouldComponentUpdate(nextProps, nextState) {
-	  if (nextProps !== this.props || nextState !== this.state) {
-        return true
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextProps !== this.props || nextState !== this.state
+  },
+
+  componentDidMount() {
+    this.attemptLoadResources()
+    window.addEventListener('resize', () => this.forceUpdate())
+  },
+
+  attemptLoadResources() {
+    this._interval = setInterval(() => {
+     var svgs = document.querySelectorAll('.canvas svg')
+      if (svgs.length === this.state.numEnabledLayers) {
+        clearInterval(this._interval)
+        Store.actions.loadCurrentDesignEditResources()
       }
-	  return false
-	},
+    }, 50)
+  },
 
-	componentDidMount() {
-      this.attemptLoadResources()
-      window.addEventListener('resize', () => this.forceUpdate())
-	},
+  returnToDesignEdit() {
+    this.transitionTo('designEdit', {
+      designId: this.state.design.get('id'),
+      layerId: this.state.currentLayer.get('id')
+    })
+  },
 
-	attemptLoadResources() {
-      this._interval = setInterval(() => {
-        var svgs = document.querySelectorAll('.canvas svg')
-        if (svgs.length === this.state.numEnabledLayers) {
-          clearInterval(this._interval)
-          Store.actions.loadCurrentDesignEditResources()
-        }
-      }, 50)
-	},
+  selectImagesOrColors(imagesOrColors) {
+    this.transitionTo('designEditDetail', {
+      designId: this.state.design.get('id'),
+      layerId: this.state.currentLayer.get('id'),
+      imagesOrColors: imagesOrColors
+    })
+  },
 
-	returnToDesignEdit() {
-      this.transitionTo('designEdit', {
-        designId: this.state.design.get('id'),
-        layerId: this.state.currentLayer.get('id')
-      })
-	},
+  onSelectLayer(layerId) {
+    Store.actions.selectDesignAndLayerId({
+      designId: this.state.design.get('id'),
+      layerId: layerId
+    })
+    this.transitionTo('designEditDetail', {
+      designId: this.state.design.get('id'),
+      layerId: layerId,
+      imagesOrColors: this.getParams().imagesOrColors
+    })
+  },
 
-	selectImagesOrColors(imagesOrColors) {
-      this.transitionTo('designEditDetail', {
-        designId: this.state.design.get('id'),
-        layerId: this.state.currentLayer.get('id'),
-        imagesOrColors: imagesOrColors
-      })
-	},
+  render() {
+    if (this.state.design == null || this.state.currentLayer == null
+          || this.state.layerImages == null ) { return null }
 
-	render() {
-      if (this.state.design == null || this.state.currentLayer == null
-            || this.state.layerImages == null ) { return null }
+    var layerImages = this.state.layerImages.slice(0,30).map(layerImage => {
+      return <LayerImage layerImage={layerImage} key={layerImage.get('id')}/>
+    })
 
-		var layerImages = this.state.layerImages.slice(0,30).map(layerImage => {
-			return <LayerImage layerImage={layerImage} key={layerImage.get('id')}/>
-		})
+    var isPortrait = window.innerHeight > window.innerWidth
+    var selectingColors = this.getParams().imagesOrColors === 'colors'
+    var layerSelectorGroup = <LayerSelectorGroup isPortrait={isPortrait}
+                                                 onClick={this.onSelectLayer}/>
 
-		var isPortrait = window.innerHeight > window.innerWidth
-		var selectingColors = this.getParams().imagesOrColors === 'colors'
+    return (
+      <section className="DesignEditDetail main">
+        <div className="DesignEditDetail-wrapper-1">
+          { isPortrait ? layerSelectorGroup : null}
+          <div className="DesignEditDetail-canvas">
+            <span>
+              <RenderLayers layers={this.state.design.get('layers')}/>
+            </span>
+          </div>
+        </div>
 
-		return (
-          <section className="DesignEditDetail main">
+        <div className="DesignEditDetail-wrapper-2">
+          { isPortrait ? null : layerSelectorGroup }
+          <div className="DesignEditDetail-mid">
+            <ColorsButtonRotate className="rotate-colors" isSmall={false}/>
 
-            <div className="DesignEditDetail-wrapper-1">
-                { isPortrait ? <LayerSelectorGroup isPortrait={isPortrait}/> : null}
-                <div className="DesignEditDetail-canvas">
-                  <span>
-                    <RenderLayers layers={this.state.design.get('layers')}/>
-                  </span>
-                </div>
-              </div>
+            <div onClick={this.selectImagesOrColors.bind(null, 'images')}
+                className={classNames("button", {off: !selectingColors})}>Art</div>
 
-              <div className="DesignEditDetail-wrapper-2">
-                { isPortrait ? null : <LayerSelectorGroup isPortrait={isPortrait}/> }
-                <div className="DesignEditDetail-mid">
-                  <ColorsButtonRotate className="rotate-colors" isSmall={false}/>
+            <div onClick={this.selectImagesOrColors.bind(null, 'colors')}
+                className={classNames("button", {off: selectingColors})}>Color</div>
 
-                  <div onClick={this.selectImagesOrColors.bind(null, 'images')}
-                      className={classNames("button", {off: !selectingColors})}>Art</div>
+            <CheckButton onClick={this.returnToDesignEdit} isSmall={false}/>
+          </div>
 
-                  <div onClick={this.selectImagesOrColors.bind(null, 'colors')}
-                      className={classNames("button", {off: selectingColors})}>Color</div>
-
-                  <CheckButton onClick={this.returnToDesignEdit} isSmall={false}/>
-                </div>
-
-                <div className="DesignEditDetail-layer-grid">
-                    { selectingColors ? <ChoosePalette/> : layerImages }
-                </div>
-
-              </div>
-          </section>
-		)
-	}
+          <div className="DesignEditDetail-layer-grid">
+              { selectingColors ? <ChoosePalette/> : layerImages }
+          </div>
+        </div>
+      </section>
+    )
+  }
 })

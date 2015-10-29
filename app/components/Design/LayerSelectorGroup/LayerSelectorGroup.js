@@ -7,11 +7,13 @@ var classNames = require('classnames')
 export default React.createClass({
   mixins: [reactor.ReactMixin],
 
+  getDefaultProps() {
+    return { onClick: () => null }
+  },
+
   getDataBindings() {
-    return {
-      design: getters.currentDesign,
-      currentLayer: getters.currentLayer
-    }
+    return { design: getters.currentDesign,
+             currentLayer: getters.currentLayer }
   },
 
   render() {
@@ -22,7 +24,11 @@ export default React.createClass({
       <article className={classNames("LayerSelectorGroup", {portrait: this.props.isPortrait})}>
           {design.get('layers').reverse().map(layer => {
             return (
-              <LayerSelector design={design} currentLayer={currentLayer} layer={layer}/>
+              <LayerSelector
+                 design={design}
+                 currentLayer={currentLayer}
+                 layer={layer}
+                 onClick={this.props.onClick.bind(null, layer.get('id'))}/>
             )
           })}
       </article>

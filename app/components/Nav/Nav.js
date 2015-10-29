@@ -11,38 +11,35 @@ export default React.createClass({
     window.history.back()
   },
 
+  _onHomePage() {
+    return this.isActive('designs') ||
+           this.isActive('/') ||
+           this.isActive('admin')
+  },
+
   render() {
-    var onDesigns = (this.isActive('designs'))
     return (
       <div className="Nav">
         <div className="Nav-container">
 
           <div className="Nav-left-side">
-            {onDesigns ?
+            {this._onHomePage() ?
               <Link to="designs" className="logo">
                 <img className="Nav-button" src={iconPath('drop.svg')} height={40} width={30}/>
-              </Link>:
-              null
-            }   
-
-            {onDesigns ? null:
-              (<img src={iconPath('cancel-x-white.svg')}
-                   className="cancel-x Nav-button"
-                   height={30} width={30}/>)
-            }
-
-            {onDesigns ? null:
-              (<img src={iconPath('back.svg')}
+              </Link>
+            :
+            [<img src={iconPath('cancel-x-white.svg')}
+                         className="cancel-x Nav-button"
+                         height={30} width={30}/>,
+             <img src={iconPath('back.svg')}
                   className="Nav-button"
                   height={30} width={30}
-                  onClick={this.handleGoBack}/>)
-            }
-            
-            {onDesigns ? null:
-              (<img src={iconPath('refresh.svg')}
+                  onClick={this.handleGoBack}/>,
+
+              <img src={iconPath('refresh.svg')}
                    className="Nav-button"
                    height={30} width={30}
-                   onClick={this.handleReset}/>)
+                   onClick={this.handleReset}/>]
             }
           </div>
 

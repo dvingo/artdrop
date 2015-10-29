@@ -125,6 +125,14 @@ export default React.createClass({
     this.transitionTo('designEditSurface', { designId: this.state.design.get('id') })
   },
 
+  onSelectLayer(layerId) {
+    Store.actions.selectLayerId(layerId)
+    this.transitionTo('designEdit', {
+      designId: this.state.design.get('id'),
+      layerId: layerId
+    })
+  },
+
   render() {
     if (this.state.design == null || this.state.currentLayer == null) { return null }
 
@@ -143,7 +151,7 @@ export default React.createClass({
                 onRightClick={Store.actions.nextDesignColors}/>
               <CheckButton onClick={this.editDesignSurface} isSmall={false}/>
             </div>
-            <LayerSelectorGroup />
+            <LayerSelectorGroup onClick={this.onSelectLayer}/>
         </div>
 
       </section>

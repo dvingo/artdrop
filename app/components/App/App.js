@@ -11,18 +11,22 @@ export default React.createClass({
     document.addEventListener('DOMContentLoaded', () => FastClick.attach(document.body))
   },
 
+  _onRouteWithTopBar() {
+    return this.isActive('designs') ||
+           this.isActive('/') ||
+           this.isActive('admin')
+  },
+
   render() {
-    return (
-      (this.isActive('designs') || this.isActive('/') || this.isActive('admin')) ?
-        (<div className="App">
-           <Nav/>
-           <RouteHandler/>
-         </div>)
-        :
-        (<div className="App">
-           <RouteHandler/>
-           <Nav/>
-         </div>)
-    )
+    return this._onRouteWithTopBar() ?
+      <div className="App">
+         <Nav/>
+         <RouteHandler/>
+       </div>
+      :
+      <div className="App">
+         <RouteHandler/>
+         <Nav/>
+       </div>
   }
 })
