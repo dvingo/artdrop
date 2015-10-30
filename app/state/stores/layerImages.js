@@ -24,8 +24,10 @@ export default new Nuclear.Store({
   },
 
   initialize() {
-    this.on('setLayerImage', (state, layerImage) => (
-      state.set(layerImage.id, Immutable.fromJS(layerImage))))
+    this.on('setLayerImage', (state, layerImage) => {
+      console.log('setting layerimage with id: ', layerImage.id)
+      return state.set(layerImage.id, Immutable.fromJS(layerImage))
+    })
 
     this.on('addManyLayerImages', (state, layerImages) => (
       layerImages.reduce((retVal, layerImage) => (
@@ -62,7 +64,7 @@ export default new Nuclear.Store({
           var layerImageId = newLayerImageRef.key()
           newLayerImage.id = layerImageId
           var layerImageImm = Immutable.fromJS(newLayerImage)
-          reactor.dispatch('setLayerImage', layerImageImm)
+          reactor.dispatch('setLayerImage', newLayerImage)
           reactor.dispatch('layerImageUploadedSuccessfully', layerImageImm)
         }
       }.bind(this))
@@ -84,8 +86,8 @@ export default new Nuclear.Store({
               var newLayerImageRef = layerImagesRef.push(newLayerImage)
               var layerImageId = newLayerImageRef.key()
               newLayerImage.id = layerImageId
+              reactor.dispatch('setLayerImage', newLayerImage)
               var layerImageImm = Immutable.fromJS(newLayerImage)
-              reactor.dispatch('setLayerImage', layerImageImm)
               reactor.dispatch('layerImageUploadedSuccessfully', layerImageImm)
             }
           }.bind(this))

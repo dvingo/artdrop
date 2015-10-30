@@ -10,6 +10,7 @@ import Notification from 'components/Notification/Notification'
 import Immutable from 'Immutable'
 import Router from 'react-router'
 import {imageUrlForLayerImage, imageUrlForSurface} from 'state/utils'
+import {updateLayerOfDesign} from 'state/helpers'
 var { Map, Set, List } = Immutable
 var classNames = require('classnames')
 
@@ -72,8 +73,8 @@ export default React.createClass({
     if (this._isCreatingNewDesign()) {
       this.setState({
         editingDesign: Immutable.fromJS({
-          layers: [{paletteRotation:0,isEnabled:true},{paletteRotation:0,isEnabled:true},
-                   {paletteRotation:0,isEnabled:true}],
+          layers: [{id:0,paletteRotation:0,isEnabled:true},{id:1,paletteRotation:0,isEnabled:true},
+                   {id:2,paletteRotation:0,isEnabled:true}],
           adminCreated: true})
       })
       Store.actions.loadAdminCreateDesignData()
@@ -131,7 +132,18 @@ export default React.createClass({
   },
 
   selectLayer(i) {
-    this.setState({currentLayer: i})
+    console.log('selecting layer: ', i)
+    if (this.state.currentLayer === i) {
+      let layerIndex = this.state.currentLayer
+      let design = this.state.editingDesign
+      let layer = design.getIn(['layers', layerIndex])
+      var newDesign = updateLayerOfDesign(layer, design, l => (
+        l.set('isEnabled', !l.get('isEnabled'))
+      ))
+      this.setState({editingDesign:newDesign})
+    } else {
+      this.setState({currentLayer: i})
+    }
   },
 
   handleRotateColorPalette() {
@@ -217,7 +229,7 @@ export default React.createClass({
     }
   },
 
-  onRemoveTag(tagToRemove) {
+  onRemoveTagFromSelectedLayer(tagToRemove) {
     if (this._isCreatingNewDesign()) {
       var {tagsToNewLayersMap} = this.state
       var tags = tagsToNewLayersMap.get(this.state.currentLayer, Set()).remove(tagToRemove)
@@ -250,8 +262,7 @@ export default React.createClass({
                === p.get('id') ? 'yellow' : '#fff')
      return (
        <div style={{background:bg}}>
-         <ColorPalette onClick={this.selectColorPalette.bind(null, p)}
-                       palette={p}/>
+         <ColorPalette onClick={this.selectColorPalette.bind(null, p)} palette={p}/>
        </div>
        )
     })
@@ -271,7 +282,8 @@ export default React.createClass({
     var layers = (
       this.state.editingDesign.get('layers')
         .filter(l => l.has('colorPalette') &&
-                     l.has('selectedLayerImage')))
+                     l.has('selectedLayerImage') &&
+                     l.get('isEnabled')))
 
     var errors = this.state.errors.map(e => {
       return <p style={{background:'#E85672'}}>{e}</p>
@@ -283,13 +295,15 @@ export default React.createClass({
 
     var height = this.state.height
     var width = this.state.width
-    var layerDesc = [ 'Background', 'Middleground', 'Foreground' ]
+    var layerDesc = ['Background', 'Middleground', 'Foreground']
     var selectLayers = [0,1,2].map(i => {
       var bg = this.state.currentLayer === i ? 'yellow' : '#fff'
+      var layerOff = !this.state.editingDesign.getIn(['layers', i, 'isEnabled'])
       return (
         <div style={{background:bg}} className="AdminEditDesign-select-layer"
-          onClick={this.selectLayer.bind(null, i)}>Layer {i+1} ({layerDesc[i]})</div>
-        )
+          onClick={this.selectLayer.bind(null, i)}>
+          Layer {i+1} ({layerDesc[i]}) {layerOff ? ', off' : ''}
+        </div>)
     })
 
     var selectingColors = this.state.selectingColors
@@ -320,8 +334,9 @@ export default React.createClass({
           {selectLayers}
         </div>
 
-        <Tags selectedTags={this._selectedLayerTags()}
-              onRemoveTag={this.onRemoveTag}
+        <Tags label={"Tags for layer " + (this.state.currentLayer + 1)}
+              selectedTags={this._selectedLayerTags()}
+              onRemoveTag={this.onRemoveTagFromSelectedLayer}
               onAddTag={this.onAddTagToSelectedLayer} />
 
         <form onSubmit={this.saveDesign}>

@@ -140,8 +140,10 @@ function hydrateSurfaceOptionsForSurface (surface) {
 }
 
 var hydrateObj = (ref, id) => {
-  return new RSVP.Promise(resolve => {
-    ref.child(id).once('value', o => resolve(o.val()))
+  return new RSVP.Promise((resolve, reject) => {
+    ref.child(id).once('value',
+      o => resolve(o.val()),
+      e => reject(e))
   })
 }
 

@@ -30,16 +30,16 @@ export default React.createClass({
   },
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (nextProps !== this.props || nextState !== this.state) {
-      return true
-    }
-    return false
+    return nextProps !== this.props || nextState !== this.state
   },
 
   transitionToEdit() {
     var newDesign = makeDesignCopy(this.state.design)
     Store.actions.saveDesign(newDesign)
-    this.transitionTo('designEdit', {designId: newDesign.get('id'), layerId: newDesign.getIn(['layers', 0, 'id'])});
+    this.transitionTo('designEdit', {
+      designId: newDesign.get('id'),
+      layerId: newDesign.getIn(['layers', 0, 'id'])
+    })
   },
 
   transitionToDesigns() {
@@ -52,8 +52,7 @@ export default React.createClass({
 
   render() {
     var design = this.state.design
-    if (design == null ||
-        typeof design.getIn(['layers', 0]) === 'string' ||
+    if (design == null || typeof design.getIn(['layers', 0]) === 'string' ||
         design && this.props.params.designId !== design.get('id')) {
       return null
     }

@@ -45,8 +45,8 @@ export default React.createClass({
   },
 
   clickDesign(design, e) {
-    var designId = design.get('id')
     e.preventDefault()
+    var designId = design.get('id')
     if (this.state.editMode === 'editDesign') {
       this.transitionTo('adminEditDesign', {designId: designId})
     } else {

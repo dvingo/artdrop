@@ -73,7 +73,7 @@ export default new Nuclear.Store({
     })
 
     this.on('loadAdminCreatedDesigns', function(state, design) {
-      if (state.count() > 2) { return state }
+      if (state.count() > 1) { return state }
       hydrateAdminDesignsOnlyTags().then( designsJs => {
         dispatchHelper('addManyDesigns', designsJs)
       })
@@ -99,15 +99,13 @@ export default new Nuclear.Store({
     })
 
     this.on('toggleCurrentLayer', (state) => {
-        var currentDesign = reactor.evaluate(getters.currentDesign)
-        var currentLayerId = reactor.evaluate(['currentLayerId'])
-        var layers = currentDesign.get('layers')
-        var i = layers.findIndex(l => l.get('id') === currentLayerId)
-        var currentLayer = layers.get(i)
-        var newIsEnabled = !currentLayer.get('isEnabled');
-        var newLayers = layers.update(i, v => v.set('isEnabled', newIsEnabled))
-        var newDesign = currentDesign.set('layers', newLayers)
-        persistLayer(currentLayerId, {'isEnabled': newIsEnabled})
+        var design = reactor.evaluate(getters.currentDesign)
+        var layer = reactor.evaluate(getters.currentLayer)
+        var newDesign = updateLayerOfDesign(layer, design, l => {
+          var newIsEnabled = !l.get('isEnabled')
+          persistLayer(l.get('id'), {'isEnabled': newIsEnabled})
+          return l.set('isEnabled', newIsEnabled)
+        })
         return state.set(newDesign.get('id'), newDesign)
     })
 
@@ -190,7 +188,7 @@ export default new Nuclear.Store({
     })
 
     this.on('createNewDesign', (state, newDesignData) => {
-      var { design:newDesign, svgEls, layersToTagsMap }  = newDesignData
+      var { design:newDesign, svgEls, layersToTagsMap } = newDesignData
       var title = newDesign.get('title')
       uploadDesignPreview(title, svgEls, (err, imgUrls) => {
         if (err) { console.log('got error: ', err); return }
@@ -198,6 +196,7 @@ export default new Nuclear.Store({
         var now = new Date().getTime()
         var design = newDesign.toJS()
         var layerIds = design.layers.map((layer, i) => {
+          delete layer.id
           layer.order = i
           layer.colorPalette = layer.colorPalette.id
           layer.selectedLayerImage = layer.selectedLayerImage.id
