@@ -17,6 +17,13 @@ function l() {
   console.log.apply(console, Array.prototype.slice.call(arguments))
 }
 
+function updateCurrentLayerOfDesign(updater) {
+  var currentDesign = reactor.evaluate(getters.currentDesign)
+  var currentLayer = reactor.evaluate(getters.currentLayer)
+  return updateLayerOfDesign(currentLayer, currentDesign, updater)
+}
+
+
 var removeNonOptionProps = (surfaceOption) => {
   return nonOptionKeys.reduce((r, k) => r.remove(k), surfaceOption)
 }
@@ -97,24 +104,21 @@ export default new Nuclear.Store({
     })
 
     this.on('toggleCurrentLayer', (state) => {
-        var design = reactor.evaluate(getters.currentDesign)
-        var layer = reactor.evaluate(getters.currentLayer)
-        var newDesign = updateLayerOfDesign(layer, design, l => {
-          var newIsEnabled = !l.get('isEnabled')
-          persistLayer(l.get('id'), {'isEnabled': newIsEnabled})
-          return l.set('isEnabled', newIsEnabled)
-        })
-        return state.set(newDesign.get('id'), newDesign)
+      var newDesign = updateCurrentLayerOfDesign(l => {
+        var newIsEnabled = !l.get('isEnabled')
+        persistLayer(l.get('id'), {'isEnabled': newIsEnabled})
+        return l.set('isEnabled', newIsEnabled)
+      })
+      return state.set(newDesign.get('id'), newDesign)
     })
 
     this.on('selectColorPalette', (state, colorPalette) => {
-      var currentDesign = reactor.evaluate(getters.currentDesign)
-      var currentLayerId = reactor.evaluate(['currentLayerId'])
-      var layers = currentDesign.get('layers')
-      var i = layers.findIndex(l => l.get('id') === currentLayerId)
-      var newLayers = layers.update(i, v => v.set('colorPalette', colorPalette).set('paletteRotation', 0))
-      var newDesign = currentDesign.set('layers', newLayers)
-      persistLayer(currentLayerId, {'colorPalette': colorPalette.get('id')})
+      var newDesign = updateLayerOfDesign(
+         reactor.evaluate(getters.currentLayer),
+         reactor.evaluate(getters.currentDesign),
+         l => l.set('colorPalette', colorPalette)
+               .set('paletteRotation', 0))
+      persistLayer(currentLayer.get('id'), {'colorPalette': colorPalette.get('id')})
       return state.set(newDesign.get('id'), newDesign)
     })
 

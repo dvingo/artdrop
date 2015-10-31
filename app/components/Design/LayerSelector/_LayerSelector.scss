@@ -1,74 +1,3 @@
-.DesignEdit {
-	.LayerSelectorGroup {
-		.LayerSelector {
-			img { 
-				width: 70px; 
-				height: 70px; 
-				@media (min-width: 1000px) {
-					width: 140px;
-					height: 140px;
-				}
-			}
-			span {
-				border-radius: 40px;
-				@media (min-width: 1000px) {
-					width: 100%;
-					@include flex(1 0 0);
-				}
-				img { 
-					height: 20px; 
-					width: 30px;
-					
-				}
-			}
-			&.selected {
-				width: 80px;
-				height: 150px;
-				@media (min-width: 1000px) {
-					width: 150px;
-					height: 235px;
-				}
-			}
-		}
-	}
-}
-
-.DesignEditDetail {
-	.LayerSelectorGroup {
-		.LayerSelector {
-			img { 
-				width: 40px; 
-				height: 40px; 
-				@media (min-width: 600px) {
-					width: 90px;
-					height: 90px;
-				}
-			}
-			span {
-				@include flex(1 0 0); 
-				border-radius: 25px;
-				height: 30px;
-				img { 
-					height: 25px; 
-					width: 25px;
-					@media (min-width: 600px) {
-						width: 35px;
-						height: 35px;
-					}
-				}
-			}
-			&.selected {
-				width: 100px;
-				height: 50px;
-				@media (min-width: 600px) {
-					width: 180px;
-					height: 100px;
-				}
-			}
-		}
-	}
-}
-
 .LayerSelector {
 	@include display(flex);
 	@include align-items(center);
@@ -79,38 +8,55 @@
 	box-sizing: box;
 	border-radius: 10px;
 	&.selected {
-		background: $button-color;
-		-webkit-box-shadow: 2px 2px 6px 0px rgba(150,150,150,0.75);
-		-moz-box-shadow: 2px 2px 6px 0px rgba(150,150,150,0.75);
-		box-shadow: 2px 2px 6px 0px rgba(150,150,150,0.75);
+      width: 100px;
+      height: 50px;
+      background: $button-color;
+      @include prefixer(box-shadow, 2px 2px 6px 0px rgba(150,150,150,0.75), webkit moz spec);
+      @media (min-width: 1000px) {
+          width: 150px;
+          height: 235px;
+
+          /*width: 150px;*/
+          /*height: 235px;*/
+      }
 	}
-	img {
-		background: white;
-		border-radius: 10px;
-		opacity: 1;
-		-webkit-box-shadow: 2px 2px 6px 0px rgba(150,150,150,0.75);
-		-moz-box-shadow: 2px 2px 6px 0px rgba(150,150,150,0.75);
-		box-shadow: 2px 2px 6px 0px rgba(150,150,150,0.75);
-		cursor: pointer;
-	}
+
+    img {
+      width: 40px;
+      height: 40px;
+      background: white;
+      border-radius: 10px;
+      opacity: 1;
+      @include prefixer(box-shadow, 2px 2px 6px 0px rgba(150,150,150,0.75), moz webkit spec);
+      cursor: pointer;
+      @media (min-width: 920px) {
+          width: 90px;
+          height: 90px;
+      }
+    }
 	span {
 		@include display(flex);
+        @include flex(1 0 0);
 		@include justify-content(center);
 		@include align-items(center);
 		background: white;
 		border-radius: 10px;
 		width: 100%;
+        height: 30px;
 		margin-top: 10px;
 		color: $nav-bar-color;
-		-webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
-		-moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
-		box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+        @include prefixer(box-shadow, 0px 0px 5px 0px rgba(0,0,0,0.75), webkit moz spec)
 		cursor: pointer;
 		img {
-			height: 15px;
-			box-shadow: none;
-			margin: 2px;
+          height: 15px;
+          box-shadow: none;
+          margin: 2px;
+          @media (min-width: 600px) {
+              width: 35px;
+              height: 35px;
+          }
 		}
+
 		&.disabled { opacity: 0.3; }
 	}
 }

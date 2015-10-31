@@ -15,7 +15,7 @@ export default React.createClass({
   },
 
   handleSwipe(e) {
-    if (this.state.isAnimating) { return }
+    if (this.state.isAnimating || !this.props.animate) { return }
     var direction
     if (e.direction === 2) {
       direction = -1
@@ -58,10 +58,11 @@ export default React.createClass({
       console.log("styles are: ", styles)
     return (
       <Hammer onSwipe={this.handleSwipe}>
-        <div className="canvas" style={styles}>
+        <div className="canvas">
           {this.props.layers
               .filter(layer => layer.get('isEnabled'))
-              .map(layer => <SVGInlineLayer layer={layer} key={layer.get('id')}/>)}
+              .map(layer => <SVGInlineLayer layer={layer} key={layer.get('id')}
+                                            style={styles} isAnimating={this.state.isAnimating}/>)}
         </div>
       </Hammer>
     )

@@ -26,82 +26,85 @@
   cursor: pointer;
   &.off { opacity: 0.5 }
 }
-	.DesignEditDetail-layers {
-		@include display(flex);
-		@include flex(1 0 0);
-		@include flex-direction(column);
-		width: 100%;
-		padding: 20px;
-		position: relative;
-	}
-	.DesignEditDetail-canvas {
-		@include display(flex);
-		@include flex(2 0 0);
-		@include align-items(center);
-		@include justify-content(center);
-		height: 100%;
-		width: 100%;
-		overflow: hidden;
-		position: relative;
 
-		span {
-			overflow: hidden;
-			position: relative;
-			width: 250px;
-			height: 250px;
+.DesignEditDetail-layers {
+    @include display(flex);
+    @include flex(1 0 0);
+    @include flex-direction(column);
+    width: 100%;
+    padding: 20px;
+    position: relative;
+}
+.DesignEditDetail-canvas {
+    @include display(flex);
+    @include flex(2 0 0);
+    @include align-items(center);
+    @include justify-content(center);
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
 
-			@media (min-width: 450px) {
-				width: 350px;
-				height: 350px;
-			}
-			@media (min-width: 600px) {
-				max-height: 400px;
-				max-width: 400px;
-			}
-			@media (min-width: 1100px) {
-				max-height: 600px;
-				max-width: 600px;
-			}
-			@media (min-width: 1400px) {
-				max-height: 700px;
-				max-width: 700px;
-			}
-		}
-	}
+    span {
+        overflow: hidden;
+        position: relative;
+        width: 250px;
+        height: 250px;
+
+        @media (min-width: 450px) {
+            width: 350px;
+            height: 350px;
+        }
+        @media (min-width: 600px) {
+            max-height: 400px;
+            max-width: 400px;
+        }
+        @media (min-width: 1100px) {
+            max-height: 600px;
+            max-width: 600px;
+        }
+        @media (min-width: 1400px) {
+            max-height: 700px;
+            max-width: 700px;
+        }
+    }
+}
+
 .DesignEditDetail-wrapper-2 {
 	@include display(flex);
 	@include flex(1 0 0);
 	@include flex-direction(column);
 	@include align-items(center);
 }
-	.DesignEditDetail-mid {
-		@include display(flex);
-		@include align-items(center);
-		@include justify-content(center);
-		background: $nav-bar-color;
-		height: 60px;
-		width: 100%;
-		& > div {
-			margin: 0 10px;
-		}
-		.rotate-colors {
-			width: 50px;
-			cursor: pointer;
-			&:hover { cursor: pointer; }
-		}
-		.check-button {
-			width: 50px;
-			height: 50px;
-		}
-	}
-	.DesignEditDetail-layer-grid {
-		@include display(flex);
-		@include flex(4 0 0);
-		@include flex-wrap(wrap);
-		@include justify-content(center);
-		width: 100%;
-		overflow: scroll;
-	}
+.DesignEditDetail-mid {
+    @include display(flex);
+    @include align-items(center);
+    @include justify-content(center);
+    background: $nav-bar-color;
+    height: 60px;
+    width: 100%;
+    & > div {
+        margin: 0 10px;
+    }
+    .rotate-colors {
+        width: 50px;
+        cursor: pointer;
+        &:hover { cursor: pointer; }
+    }
+    .check-button {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+.DesignEditDetail-layer-grid {
+    @include display(flex);
+    @include flex(4 0 0);
+    @include flex-wrap(wrap);
+    @include justify-content(center);
+    width: 100%;
+    overflow: scroll;
+}
 
 @media (min-width: $media-min-width) {
 	.DesignEditDetail.main {

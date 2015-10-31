@@ -11,7 +11,6 @@
 .DesignEdit { .LayerSelectorGroup { max-width: none; } }
 .DesignEditDetail {
   .LayerSelectorGroup {
-	@include flex-direction(column);
 	@include align-items(center);
 	@include flex(1 0 0);
 	max-width: none;
@@ -21,8 +20,8 @@
 	}
 	.LayerSelector {
 	  @include flex-direction(row);
-	  span { 
-	  	margin: 0 0 0 10px; 
+	  span {
+	  	margin: 0 0 0 10px;
 	  	width: 50px;
 	  	overflow: hidden;
 	  }

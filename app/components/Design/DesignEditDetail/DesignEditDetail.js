@@ -111,9 +111,7 @@ export default React.createClass({
         <div className="DesignEditDetail-wrapper-1">
           { isPortrait ? layerSelectorGroup : null}
           <div className="DesignEditDetail-canvas">
-            <span>
-              <RenderLayers layers={this.state.design.get('layers')}/>
-            </span>
+            <RenderLayers layers={this.state.design.get('layers')} animate={false}/>
           </div>
         </div>
 
