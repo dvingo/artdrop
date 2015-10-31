@@ -8,8 +8,7 @@ import ColorsButton from 'components/ColorsButton/ColorsButton'
 import CheckButton from 'components/CheckButton/CheckButton'
 import {makeDesignCopy, imageUrlForLayer} from 'state/utils'
 import {iconPath} from 'utils'
-var classNames = require('classnames')
-var Hammer = require('react-hammerjs')
+import classNames from 'classnames'
 
 export default React.createClass({
   mixins: [reactor.ReactMixin, Router.State, Router.Navigation],
@@ -87,19 +86,6 @@ export default React.createClass({
     this.attemptLoadResources()
   },
 
-  handleSwipe(e) {
-    var direction = e.direction
-    if (direction === 2) {
-      console.log('SWIPE LEFT')
-    } else if (direction === 4) {
-      console.log('SWIPE RIGHT')
-    }
-  },
-
-  handlePan(e) {
-   console.log('GOT PAN: ', e)
-  },
-
   selectLayer(layer) {
     Store.actions.selectLayerId(layer.get('id'))
     this.transitionTo('designEdit', {
@@ -139,9 +125,8 @@ export default React.createClass({
     return (
       <section className="DesignEdit">
         <div className="DesignEdit-canvas-flex-wrapper">
-          <Hammer onSwipe={this.handleSwipe} onPan={this.handlePan}>
-            <RenderLayers layers={this.state.design.get('layers')}/>
-          </Hammer>
+          {/*Pass through translate and rotate params here*/}
+          <RenderLayers layers={this.state.design.get('layers')} />
         </div>
 
         <div className="DesignEdit-ui">

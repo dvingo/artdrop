@@ -1,7 +1,9 @@
-var firebaseUri = 'https://artrop.firebaseio.com/';
+var firebaseUri = 'https://artrop.firebaseio.com/'
+// TODO cleanup configs, should just use one that's same as server.
 var serverHostname = 'obscure-headland-1710.herokuapp.com'
 if (TEST || DEV) {
-  firebaseUri = 'https://artdrop-testing3.firebaseio.com/'
+  //firebaseUri = 'https://artdrop-testing3.firebaseio.com/'
+  firebaseUri = 'https://artrop.firebaseio.com/'
   var port = process.env.PORT || 8080
   serverHostname = 'localhost:' + port
 }

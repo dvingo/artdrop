@@ -90,12 +90,9 @@ export default new Nuclear.Store({
 
     this.on('selectLayerImage', (state, layerImage) => {
       var currentDesign = reactor.evaluate(getters.currentDesign)
-      var currentLayerId = reactor.evaluate(['currentLayerId'])
-      var layers = currentDesign.get('layers')
-      var i = layers.findIndex(l => l.get('id') === currentLayerId)
-      var newLayers = layers.update(i, v => v.set('selectedLayerImage', layerImage))
-      var newDesign = currentDesign.set('layers', newLayers)
-      persistLayer(currentLayerId, {'selectedLayerImage': layerImage.get('id')})
+      var currentLayer = reactor.evaluate(getters.currentLayer)
+      var newDesign = updateLayerOfDesign(currentLayer, currentDesign, l => l.set('selectedLayerImage', layerImage))
+      persistLayer(currentLayer.get('id'), {'selectedLayerImage': layerImage.get('id')})
       return state.set(newDesign.get('id'), newDesign)
     })
 

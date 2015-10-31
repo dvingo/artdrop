@@ -111,6 +111,16 @@ getters.layerImagesForCurrentLayer = [
   }
 ]
 
+getters.layerImagesCurrentIndex = [
+  getters.currentLayer,
+  getters.layerImagesForCurrentLayer,
+  (layer, images) => {
+    var index = layerImagesForCurrentLayer.findIndex(i.get('id') === currentLayer.getIn(['selectedLayerImage', 'id']))
+    console.log('got index: ', index)
+    return index
+  }
+]
+
 getters.layerImageIds = [
   getters.layerImages, layerImages => layerImages.map(li => li.get('id'))
 ]
