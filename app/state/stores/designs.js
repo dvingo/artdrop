@@ -4,6 +4,7 @@ import {persistNewDesign,
   defaultSurfaceOptionIdForSurface,
   hydrateSurfaceOptionsForSurface,
   persistDesign, persistLayer, nonOptionKeys,
+  idListToFirebaseObj, updateLayerOfDesign,
   hydrateAdminDesignsOnlyTags, dispatchHelper
 } from 'state/helpers'
 import getters from 'state/getters'
@@ -249,6 +250,9 @@ export default new Nuclear.Store({
           layer.colorPalette = layer.colorPalette.id
           layer.selectedLayerImage = layer.selectedLayerImage.id
           layer.updatedAt = now
+          if (layer.hasOwnProperty('tags')) {
+            layer.tags = idListToFirebaseObj(layer.tags.map(t => t.id))
+          }
           persistLayer(id, layer)
           return id
         })
@@ -263,7 +267,7 @@ export default new Nuclear.Store({
         design.updatedAt = now
         persistDesign(id, design)
         design.id = id
-        reactor.dispatch('addDesign', design)
+        reactor.dispatch('addDesign', updatedDesign)
       })
       return state
     })

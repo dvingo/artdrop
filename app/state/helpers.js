@@ -207,10 +207,25 @@ var persistWithRef = (firebaseRef, id, obj) => {
   firebaseRef.child(id).update(obj)
 }
 
+function ensureListIsFirebaseObj(list) {
+  if (list.length === 0) { return list }
+  var f = list[0]
+  if (typeof f === 'string') {
+    return idListToFirebaseObj(list)
+  }
+  if (typeof f === 'object' && f.hasOwnProperty('id')) {
+    return idListToFirebaseObj(list.map(i => i['id']))
+  }
+  return list
+}
+
 var persistNewLayer = (layer) => {
   var l = layer.toJS()
   l.colorPalette = l.colorPalette.id
   l.selectedLayerImage = l.selectedLayerImage.id
+  if (l.hasOwnProperty('tags')) {
+    l.tags = ensureListIsFirebaseObj(l.tags)
+  }
   layersRef.child(l.id).set(l)
 }
 

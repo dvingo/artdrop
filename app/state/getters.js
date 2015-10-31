@@ -1,6 +1,4 @@
-var Set = require('nuclear-js').Immutable.Set
-var Map = require('nuclear-js').Immutable.Map
-var List = require('nuclear-js').Immutable.List
+import { Set, Map, List } from 'Immutable'
 import {nonOptionKeys} from 'state/helpers'
 var getters = {}
 
@@ -94,6 +92,23 @@ getters.layerImages = [
       .filter(layerImage => layerImage)
       .sort((imageOne, imageTwo) => imageTwo.get('createdAt') - imageOne.get('createdAt'))
   )
+]
+
+function numTagsInCommon(obj1, obj2) {
+  var tags1 = Set(obj1.get('tags'))
+  var tags2 = Set(obj2.get('tags'))
+  return tags1.intersect(tags2).count()
+}
+
+getters.layerImagesForCurrentLayer = [
+  getters.currentLayer,
+  getters.layerImages,
+  (layer, layerImages) => {
+    if (layer == null) { return List() }
+    return layerImages.sort((li1, li2) => (
+      numTagsInCommon(layer, li2) - numTagsInCommon(layer, li1)
+    ))
+  }
 ]
 
 getters.layerImageIds = [

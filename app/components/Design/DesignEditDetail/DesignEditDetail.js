@@ -10,6 +10,7 @@ import LayerImage from 'components/Design/LayerImage/LayerImage'
 import CheckButton from 'components/CheckButton/CheckButton'
 var classNames = require('classnames')
 
+var numLayerImagesPerPage = 30
 export default React.createClass({
   mixins: [reactor.ReactMixin, Router.State, Router.Navigation],
 
@@ -17,15 +18,21 @@ export default React.createClass({
     return {
       design:           Store.getters.currentDesign,
       currentLayer:     Store.getters.currentLayer,
+      layerImagesForCurrentLayer: Store.getters.layerImagesForCurrentLayer,
       numEnabledLayers: Store.getters.numEnabledLayers,
       layerImages:      Store.getters.layerImages
     }
   },
 
+  getInitialState() {
+    // TODO put current page in the url as a query param
+    return { currentPage: 0 }
+  },
+
   componentWillMount() {
     Store.actions.selectDesignAndLayerId({
-        designId: this.props.params.designId,
-        layerId: this.props.params.layerId
+      designId: this.props.params.designId,
+      layerId: this.props.params.layerId
     })
     Store.actions.loadAdminLayerImages()
   },
@@ -40,7 +47,6 @@ export default React.createClass({
 
   componentDidMount() {
     this.attemptLoadResources()
-    window.addEventListener('resize', () => this.forceUpdate())
   },
 
   attemptLoadResources() {
@@ -51,6 +57,13 @@ export default React.createClass({
         Store.actions.loadCurrentDesignEditResources()
       }
     }, 50)
+  },
+
+  _layerImagesForCurrentPage() {
+    var {currentPage} = this.state
+    var start = numLayerImagesPerPage * currentPage
+    var end = start + numLayerImagesPerPage
+    return this.state.layerImagesForCurrentLayer.slice(start, end)
   },
 
   returnToDesignEdit() {
@@ -84,9 +97,9 @@ export default React.createClass({
     if (this.state.design == null || this.state.currentLayer == null
           || this.state.layerImages == null ) { return null }
 
-    var layerImages = this.state.layerImages.slice(0,30).map(layerImage => {
-      return <LayerImage layerImage={layerImage} key={layerImage.get('id')}/>
-    })
+    var layerImages = this._layerImagesForCurrentPage().map(layerImage => (
+      <LayerImage layerImage={layerImage} key={layerImage.get('id')}/>
+    ))
 
     var isPortrait = window.innerHeight > window.innerWidth
     var selectingColors = this.getParams().imagesOrColors === 'colors'
