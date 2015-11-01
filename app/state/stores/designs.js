@@ -113,8 +113,8 @@ export default new Nuclear.Store({
     })
 
     this.on('selectColorPalette', (state, colorPalette) => {
-      var newDesign = updateLayerOfDesign(
-         reactor.evaluate(getters.currentLayer),
+      var currentLayer = reactor.evaluate(getters.currentLayer)
+      var newDesign = updateLayerOfDesign(currentLayer,
          reactor.evaluate(getters.currentDesign),
          l => l.set('colorPalette', colorPalette)
                .set('paletteRotation', 0))

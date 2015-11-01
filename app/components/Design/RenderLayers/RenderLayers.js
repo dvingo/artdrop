@@ -5,6 +5,10 @@ import actions from 'state/actions'
 
 export default React.createClass({
 
+  getDefaultProps() {
+    return { animate: true }
+  },
+
   getInitialState() {
     return {
       isAnimating: false,
@@ -16,15 +20,14 @@ export default React.createClass({
 
   handleSwipe(e) {
     if (this.state.isAnimating || !this.props.animate) { return }
+    var left = 2
+    var right = 4
     var direction
-    if (e.direction === 2) {
+    if (e.direction === left) {
       direction = -1
-      console.log('SWIPE LEFT')
-    } else if (e.direction === 4) {
+    } else if (e.direction === right) {
       direction = 1
-      console.log('SWIPE RIGHT')
     }
-    console.log('setting direction to: ', direction)
     this.setState({isAnimating:true, direction:direction})
     requestAnimationFrame(this.updateMovement)
   },
