@@ -33,6 +33,9 @@
 	@include display(flex);
 	@include flex(1 0 0);
 	@include align-items(center);
+    @media (max-width: 650px) {
+      max-height: 140px;
+    }
 }
 .DesignEdit-canvas-flex-wrapper {
 	@include design-render();

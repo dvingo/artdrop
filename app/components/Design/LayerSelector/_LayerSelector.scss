@@ -3,13 +3,13 @@
 	@include align-items(center);
 	@include justify-content(flex-start);
 	@include flex-direction(column);
-	margin: 10px;
+	margin: 0 10px;
 	padding: 5px;
 	box-sizing: box;
 	border-radius: 10px;
 	&.selected {
+      height: 150px;
       width: 100px;
-      height: 50px;
       background: $button-color;
       @include prefixer(box-shadow, 2px 2px 6px 0px rgba(150,150,150,0.75), webkit moz spec);
       @media (min-width: 1000px) {
@@ -22,21 +22,17 @@
 	}
 
     img {
-      width: 40px;
-      height: 40px;
+      width: 90px;
+      height: 90px;
       background: white;
       border-radius: 10px;
       opacity: 1;
       @include prefixer(box-shadow, 2px 2px 6px 0px rgba(150,150,150,0.75), moz webkit spec);
       cursor: pointer;
-      @media (min-width: 920px) {
-          width: 90px;
-          height: 90px;
-      }
     }
 	span {
 		@include display(flex);
-        @include flex(1 0 0);
+        @include flex(1 0 30px);
 		@include justify-content(center);
 		@include align-items(center);
 		background: white;

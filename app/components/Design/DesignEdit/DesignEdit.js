@@ -130,15 +130,14 @@ export default React.createClass({
         </div>
 
         <div className="DesignEdit-ui">
-            <div className="DesignEdit-ui-top">
-              <ColorsButton isSmall={false}
-                onLeftClick={Store.actions.previousDesignColors}
-                onRightClick={Store.actions.nextDesignColors}/>
-              <CheckButton onClick={this.editDesignSurface} isSmall={false}/>
-            </div>
-            <LayerSelectorGroup onClick={this.onSelectLayer}/>
+          <div className="DesignEdit-ui-top">
+            <ColorsButton isSmall={false}
+               onLeftClick={Store.actions.previousDesignColors}
+               onRightClick={Store.actions.nextDesignColors}/>
+            <CheckButton onClick={this.editDesignSurface} isSmall={false}/>
+          </div>
+          <LayerSelectorGroup onClick={this.onSelectLayer}/>
         </div>
-
       </section>
     )
   }
