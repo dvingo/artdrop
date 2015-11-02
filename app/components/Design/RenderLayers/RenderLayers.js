@@ -16,8 +16,42 @@ export default React.createClass({
       isAnimating: false,
       delta: 10,
       x: 0,
-      direction: 1
+      direction: 1,
+      containerWidth: -1,
+      containerHeight: -1
     }
+  },
+
+  _onResize() {
+    this._attemptSetContainerSize()
+  },
+
+  _attemptSetContainerSize() {
+    var container = React.findDOMNode(this.refs.container)
+    var width = container.clientWidth
+    var height = container.clientHeight
+    if (width != null && height != null) {
+      console.log('got width: ', width)
+      console.log('got height: ', height)
+      this.setState({containerWidth: width, containerHeight: height})
+      return true
+    }
+    return false
+  },
+
+  componentDidMount() {
+    window.addEventListener('resize', this._onResize)
+    if (this.state.containerWidth > -1) { return }
+    this._interval = setInterval(() => {
+      if (this._attemptSetContainerSize()) {
+        clearInterval(this._interval)
+      }
+    }, 100)
+  },
+
+  componentWillUnmount() {
+    clearInterval(this._interval)
+    window.removeEventListener('resize', this._onResize)
   },
 
   handleSwipe(e) {
@@ -33,8 +67,10 @@ export default React.createClass({
   },
 
   updateMovement() {
-    var max = 200
+    var max = this.state.containerWidth
+      console.log('max is : ', max)
     var {delta, x, direction} = this.state
+    console.log('x is : ', x)
     if (Math.abs(x) > max) {
       this.onAnimationEnd(); return
     }
@@ -48,7 +84,7 @@ export default React.createClass({
   render() {
     return (
       <Hammer onSwipe={this.handleSwipe}>
-        <div className="canvas">
+        <div className="canvas" ref="container">
           {this.props.layers
               .filter(layer => layer.get('isEnabled'))
               .map((layer) => {
