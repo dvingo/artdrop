@@ -52,6 +52,7 @@ export default React.createClass({
         designId: this.props.params.designId,
         layerId: this.props.params.layerId
       })
+      Store.actions.loadAdminLayerImages()
     }
   },
 
@@ -66,10 +67,7 @@ export default React.createClass({
   },
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (nextProps !== this.props || nextState !== this.state) {
-      return true
-    }
-    return false
+    return nextProps !== this.props || nextState !== this.state
   },
 
   attemptLoadResources() {

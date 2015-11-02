@@ -2,6 +2,8 @@ import React from 'react'
 import SVGInlineLayer  from 'components/SVGInlineLayer/SVGInlineLayer'
 import Hammer from 'react-hammerjs'
 import actions from 'state/actions'
+import LayerImageInline from './LayerImageInline'
+var eventToDirectionMap = { '2': -1, '4': 1 }
 
 export default React.createClass({
 
@@ -20,27 +22,20 @@ export default React.createClass({
 
   handleSwipe(e) {
     if (this.state.isAnimating || !this.props.animate) { return }
-    var left = 2
-    var right = 4
-    var direction
-    if (e.direction === left) {
-      direction = -1
-    } else if (e.direction === right) {
-      direction = 1
-    }
+    var direction = eventToDirectionMap[e.direction] || -1
     this.setState({isAnimating:true, direction:direction})
     requestAnimationFrame(this.updateMovement)
   },
 
   onAnimationEnd() {
     this.setState({isAnimating:false, x:0})
-    actions.nextLayerImage(this.state.direction)
+    actions.nextLayerImage(this.state.direction * -1)
   },
 
   updateMovement() {
-    var max = 800
+    var max = 200
     var {delta, x, direction} = this.state
-    if (x < -max || x > max) {
+    if (Math.abs(x) > max) {
       this.onAnimationEnd(); return
     }
     // TODO Use time as well
@@ -50,22 +45,21 @@ export default React.createClass({
     this.setState({x: newX})
   },
 
-  _computeStyles() {
-    return {
-      transform: `translate3d(${this.state.x}px,0,0)`
-    }
-  },
-
   render() {
-    var styles = this._computeStyles()
-      console.log("styles are: ", styles)
     return (
       <Hammer onSwipe={this.handleSwipe}>
         <div className="canvas">
           {this.props.layers
               .filter(layer => layer.get('isEnabled'))
-              .map(layer => <SVGInlineLayer layer={layer} key={layer.get('id')}
-                                            style={styles} isAnimating={this.state.isAnimating}/>)}
+              .map((layer) => {
+                return (
+                  <LayerImageInline layer={layer}
+                      key={layer.get('id')}
+                      xOffset={this.state.x}
+                      isAnimating={this.state.isAnimating}/>
+                )
+              })
+          }
         </div>
       </Hammer>
     )

@@ -1,6 +1,5 @@
 import React from 'react'
 import reactor from 'state/reactor'
-import {imageUrlForLayer} from 'state/utils'
 import {setSvgColors, replaceSvgImageWithText} from 'utils'
 
 export default React.createClass({
@@ -21,17 +20,13 @@ export default React.createClass({
   },
 
   shouldComponentUpdate(nextProps) {
-    if (this.props.isAnimating) {
-      let currentLayerId = reactor.evaluate(['currentLayerId'])
-      return currentLayerId === this.props.layer.get('id') && this.props !== nextProps
-    }
     return this.props !== nextProps
   },
 
   render() {
     return (
-      <div ref="container" className="layer" style={this.props.style}>
-        <img src={imageUrlForLayer(this.props.layer)}
+      <div ref="container" className="SVGInlineLayer" style={this.props.style}>
+        <img src={this.props.imageUrl}
              style={{display:'none'}}
              ref="imgRef"/>
       </div>

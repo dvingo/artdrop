@@ -2,6 +2,7 @@ import {credsRef} from 'state/firebaseRefs'
 var config = require('config')
 var pako = require('pako')
 var srcDir = config.srcDir
+import {Set} from 'Immutable'
 var s3Endpoint = config.s3Endpoint
 var designPreviewSize = config.designPreviewSize
 var designDetailSize = config.designDetailSize
@@ -184,6 +185,12 @@ var uploadImgToS3 = (file, filename, imgType, onComplete) => {
 }
 
 export default {
+  numTagsInCommon(obj1, obj2) {
+    var tags1 = Set(obj1.get('tags'))
+    var tags2 = Set(obj2.get('tags'))
+    return tags1.intersect(tags2).count()
+  },
+
   imageUrlForDesign(design, size) {
     if (size === 'small') {
       return design.get('smallImageUrl')

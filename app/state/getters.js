@@ -1,5 +1,6 @@
 import { Set, Map, List } from 'Immutable'
 import {nonOptionKeys} from 'state/helpers'
+import {numTagsInCommon} from 'state/utils'
 var getters = {}
 
 getters.designs = [['designs'], designsMap => designsMap.toList()]
@@ -93,12 +94,6 @@ getters.layerImages = [
       .sort((imageOne, imageTwo) => imageTwo.get('createdAt') - imageOne.get('createdAt'))
   )
 ]
-
-function numTagsInCommon(obj1, obj2) {
-  var tags1 = Set(obj1.get('tags'))
-  var tags2 = Set(obj2.get('tags'))
-  return tags1.intersect(tags2).count()
-}
 
 getters.layerImagesForCurrentLayer = [
   getters.currentLayer,

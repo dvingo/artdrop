@@ -1,4 +1,20 @@
-.RenderLayers {}
+.RenderLayers {
+
+}
+
+.LayerImageContainer {
+  outline: 1px solid;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+.LayerImageMover {
+  position: absolute;
+  height: 100%;
+  width: 325%;
+  left: -103%;
+}
 
 
 //

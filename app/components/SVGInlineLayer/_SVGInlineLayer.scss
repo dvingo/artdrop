@@ -1,1 +1,20 @@
-.SVGInlineLayer {}
+.SVGInlineLayer {
+  float: left;
+  height: 100%;
+  width: 30%;
+  margin: 0 20px 0 0;
+
+  img {
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    visibility: hidden;
+    display: none;
+  }
+
+  .off {
+    visibility: hidden;
+    opacity: 0;
+    display: none;
+  }
+}
