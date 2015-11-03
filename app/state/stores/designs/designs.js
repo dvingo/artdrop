@@ -1,5 +1,5 @@
-var Nuclear = require('nuclear-js');
-var Immutable = Nuclear.Immutable
+import Nuclear from 'nuclear-js'
+import Immutable from 'Immutable'
 import {persistNewDesign,
   defaultSurfaceOptionIdForSurface,
   hydrateSurfaceOptionsForSurface,
@@ -7,13 +7,14 @@ import {persistNewDesign,
   idListToFirebaseObj,
   updateLayerOfDesign,
   updateCurrentLayerOfDesign,
-  hydrateAdminDesignsOnlyTags, dispatchHelper
+  hydrateAdminDesignsOnlyTags, dispatchHelper,
+  persistNewLayerJS
 } from 'state/helpers'
 import getters from 'state/getters'
 import actions from 'state/actions'
 import reactor from 'state/reactor'
 import {uploadDesignPreview, newId, rotateColorPalette} from 'state/utils'
-import {designsRef, layersRef} from 'state/firebaseRefs'
+import {designsRef} from 'state/firebaseRefs'
 
 function l() {
   console.log.apply(console, Array.prototype.slice.call(arguments))
@@ -165,8 +166,7 @@ export default new Nuclear.Store({
           layer.createdAt = now
           layer.updatedAt = now
           layer.layerImages = reactor.evaluate(getters.layerImageIds).toJS()
-          var newLayerRef = layersRef.push(layer)
-          return newLayerRef.key()
+          return persistNewLayerJs(layer)
         })
         design.smallImageUrl = imgUrls.small
         design.largeImageUrl = imgUrls.large

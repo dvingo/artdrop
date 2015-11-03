@@ -246,6 +246,20 @@ var persistNewDesign = (design) => {
   })
 }
 
+var persistNewLayerImage = (layerImage) => {
+  var newLayerImageRef = layerImagesRef.push(layerImage)
+  return newLayerImageRef.key()
+}
+
+var persistNewLayerJs = (layer) => {
+  var newLayerRef = layersRef.push(layer)
+  return newLayerRef.key()
+}
+
+var persistDeleteLayerImage = (layerImageId) => {
+  layerImagesRef.child(layerImageId).remove()
+}
+
 var persistAndCreateNewOrder = (orderData) => {
   return new RSVP.Promise((resolve, reject) => {
     var newOrderRef = ordersRef.push(orderData, (err) => {
@@ -308,6 +322,9 @@ export default {
   persistTagObjects,
   persistAndCreateNewOrder,
   persistNewDesign,
+  persistNewLayerJs,
+  persistNewLayerImage,
+  persistDeleteLayerImage,
   persistDesignTags,
   persistLayerImageTags,
   hydrateDesign,

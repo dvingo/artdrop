@@ -67,12 +67,6 @@ export default React.createClass({
     requestAnimationFrame(this.updateMovement)
   },
 
-  onAnimationEnd() {
-    console.log('animation is done, x is: ', this.state.x)
-    this.setState({isAnimating:false, x:0})
-    actions.nextLayerImage(this.state.direction * -1)
-  },
-
   updateMovement() {
     var max = this.state.containerWidth
     var {delta, x, direction, currentTime, animDuration} = this.state
@@ -87,6 +81,12 @@ export default React.createClass({
     // TODO Use time as well
     // these should be lin interp'd over a distance
     requestAnimationFrame(this.updateMovement)
+  },
+
+  onAnimationEnd() {
+    console.log('animation is done, x is: ', this.state.x)
+    this.setState({isAnimating:false, x:0})
+    actions.nextLayerImage(this.state.direction * -1)
   },
 
   render() {

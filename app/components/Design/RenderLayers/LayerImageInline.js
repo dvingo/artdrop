@@ -13,7 +13,7 @@ export default React.createClass({
   getDataBindings() {
     return {
       currentLayersMap: getters.currentLayersMap,
-      layerImages: getters.layerImages
+      layerImages: getters.layerImagesUnsorted
     }
   },
 
@@ -31,6 +31,7 @@ export default React.createClass({
     var orderedLayerImages = this.state.layerImages.sort((li1, li2) => (
       numTagsInCommon(layer, li2) - numTagsInCommon(layer, li1)
     ))
+    console.log('Num layer images in get layer images for layer: ', orderedLayerImages.count())
     var index = layer.get('selectedLayerImageIndex')
     if (index == null) {
       let selectedLayerImageId = this.props.layer.getIn(['selectedLayerImage', 'id'])

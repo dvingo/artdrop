@@ -2,6 +2,7 @@ import reactor from 'state/reactor'
 import getters from 'state/getters'
 import tagActions from 'state/stores/tags/tagsActions'
 import designActions from 'state/stores/designs/designActions'
+import layerImagesActions from 'state/stores/layerImages/layerImagesActions'
 
 var dispatchHelper = function() {
   var args = arguments
@@ -76,5 +77,5 @@ var actions = {
   removeError(error) { dispatchHelper('removeError', error) }
 }
 
-merge(actions, tagActions, designActions)
+merge(actions, tagActions, designActions, layerImagesActions)
 export default actions

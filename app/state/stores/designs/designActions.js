@@ -9,22 +9,19 @@ export default {
   nextLayerImage(direction) {
     var currentDesign = reactor.evaluate(getters.currentDesign)
     var currentLayer = reactor.evaluate(getters.currentLayer)
-    var images = currentLayer.get('orderedLayerImages')
-    if (images == null) {
-      images = reactor.evaluate(getters.layerImagesForCurrentLayer)
-    }
-    var currentIndex = currentLayer.get('selectedLayerImageIndex')
-    if (currentIndex == null) {
-      currentIndex = images.findIndex(i => i.get('id') === currentLayer.getIn(['selectedLayerImage', 'id']))
-    }
+    var images = (currentLayer.get('orderedLayerImages') != null
+        ? currentLayer.get('orderedLayerImages')
+        : reactor.evaluate(getters.layerImagesForCurrentLayer))
+    var currentIndex = (currentLayer.get('selectedLayerImageIndex') != null
+        ? currentLayer.get('selectedLayerImageIndex')
+        : images.findIndex(i => i.get('id') === currentLayer.getIn(['selectedLayerImage', 'id'])))
     var nextIndex = (currentIndex + direction < 0
         ? images.count() - 1
         : (currentIndex + direction) % images.count())
     var layerImage = images.get(nextIndex)
     var newDesign = updateCurrentLayerOfDesign(l => (
       l.set('selectedLayerImage', layerImage)
-       .set('selectedLayerImageIndex', nextIndex)
-    ))
+       .set('selectedLayerImageIndex', nextIndex)))
     persistLayer(currentLayer.get('id'), {'selectedLayerImage': layerImage.get('id')})
     reactor.dispatch('setDesignImm', newDesign)
   },

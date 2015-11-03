@@ -94,6 +94,10 @@ getters.currentLayerImage = [
     currentLayer ? currentLayer.get('selectedLayerImage') : null)
 ]
 
+getters.layerImagesUnsorted = [
+  ['layerImages'], layerImages => layerImages.toList()
+]
+
 getters.layerImages = [
   ['layerImages'], layerImages => (
     layerImages
