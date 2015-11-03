@@ -2,7 +2,6 @@ import React from 'react'
 import SVGInlineLayer from 'components/SVGInlineLayer/SVGInlineLayer'
 import {imageUrlForLayerImage, imageUrlForLayer} from 'state/utils'
 import reactor from 'state/reactor'
-import actions from 'state/actions'
 import getters from 'state/getters'
 import {numTagsInCommon} from 'state/utils'
 import {Map} from 'Immutable'
@@ -12,7 +11,6 @@ export default React.createClass({
 
   getDataBindings() {
     return {
-      currentLayersMap: getters.currentLayersMap,
       layerImages: getters.layerImagesUnsorted
     }
   },
@@ -20,7 +18,8 @@ export default React.createClass({
   shouldComponentUpdate(nextProps, nextState) {
     return (
       this.props.layer.get('id') === reactor.evaluate(['currentLayerId']) ||
-      this.props.layer.get('colorPalette') !== nextProps.layer.get('colorPalette')
+      this.props.layer.get('colorPalette') !== nextProps.layer.get('colorPalette') ||
+      (this.props.xOffset === nextProps.xOffset && this.props.layer !== nextProps.layer)
     )
   },
 
@@ -28,19 +27,9 @@ export default React.createClass({
     if (layer.has('orderedLayerImages')) {
       return layer.get('orderedLayerImages')
     }
-    var orderedLayerImages = this.state.layerImages.sort((li1, li2) => (
+    return orderedLayerImages = this.state.layerImages.sort((li1, li2) => (
       numTagsInCommon(layer, li2) - numTagsInCommon(layer, li1)
     ))
-    console.log('Num layer images in get layer images for layer: ', orderedLayerImages.count())
-    var index = layer.get('selectedLayerImageIndex')
-    if (index == null) {
-      let selectedLayerImageId = this.props.layer.getIn(['selectedLayerImage', 'id'])
-      index = orderedLayerImages.findIndex(li => li.get('id') === selectedLayerImageId)
-    }
-    var newLayer = layer.set('orderedLayerImages', orderedLayerImages)
-                        .set('selectedLayerImageIndex', index)
-    actions.setLayerOfCurrentDesign(newLayer)
-    return orderedLayerImages
   },
 
   _getPreviousLayerImage() {

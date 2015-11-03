@@ -8,17 +8,23 @@ import {hydrateAndDispatchLayerImages} from 'state/helpers'
 
 var recomputeLayersLayerImages = () => {
   var currentDesign = reactor.evaluate(getters.currentDesign)
-  if (currentDesign == null) { return }
+  if (currentDesign == null) {
+    setTimeout(() => recomputeLayersLayerImages(), 50)
+    return
+  }
   var allLayerImages = reactor.evaluate(getters.layerImagesUnsorted)
+  if (allLayerImages.count() === 3) {
+    setTimeout(() => recomputeLayersLayerImages(), 50)
+    return
+  }
   var updatedLayers = currentDesign.get('layers').map(layer => {
     var orderedLayerImages = allLayerImages.sort((li1, li2) => (
       numTagsInCommon(layer, li2) - numTagsInCommon(layer, li1)
     ))
-    console.log('Num layer images in get layer images for layer: ', orderedLayerImages.count())
     var selectedLayerImageId = layer.getIn(['selectedLayerImage', 'id'])
     var index = orderedLayerImages.findIndex(li => li.get('id') === selectedLayerImageId)
     return (layer.set('orderedLayerImages', orderedLayerImages)
-                .set('selectedLayerImageIndex', index))
+                 .set('selectedLayerImageIndex', index))
   })
   reactor.dispatch('setDesignImm', currentDesign.set('layers', updatedLayers))
 }
@@ -43,7 +49,6 @@ export default new Nuclear.Store({
 
   initialize() {
     this.on('setLayerImage', (state, layerImage) => {
-      console.log('setting layerimage with id: ', layerImage.id)
       return state.set(layerImage.id, Immutable.fromJS(layerImage))
     })
 
