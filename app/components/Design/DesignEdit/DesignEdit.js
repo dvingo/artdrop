@@ -53,6 +53,7 @@ export default React.createClass({
         layerId: this.props.params.layerId
       })
       Store.actions.loadAdminLayerImages()
+      Store.actions.loadAdminColorPalettes()
     }
   },
 
@@ -123,7 +124,6 @@ export default React.createClass({
     return (
       <section className="DesignEdit">
         <div className="DesignEdit-canvas-flex-wrapper">
-          {/*Pass through translate and rotate params here*/}
           <RenderLayers layers={this.state.design.get('layers')} />
         </div>
 

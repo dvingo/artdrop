@@ -18,7 +18,9 @@ export default React.createClass({
       x: 0,
       direction: 1,
       containerWidth: -1,
-      containerHeight: -1
+      containerHeight: -1,
+      currentTime: -1,
+      animDuration: 300
     }
   },
 
@@ -27,13 +29,11 @@ export default React.createClass({
   },
 
   _attemptSetContainerSize() {
-    var container = React.findDOMNode(this.refs.container)
-    var width = container.clientWidth
-    var height = container.clientHeight
+    var {clientWidth:width, clientHeight:height} = React.findDOMNode(this.refs.container)
     if (width != null && height != null) {
       console.log('got width: ', width)
       console.log('got height: ', height)
-      this.setState({containerWidth: width, containerHeight: height})
+      this.setState({containerWidth: Number(width), containerHeight: Number(height)})
       return true
     }
     return false
@@ -41,6 +41,7 @@ export default React.createClass({
 
   componentDidMount() {
     window.addEventListener('resize', this._onResize)
+
     if (this.state.containerWidth > -1) { return }
     this._interval = setInterval(() => {
       if (this._attemptSetContainerSize()) {
@@ -56,29 +57,36 @@ export default React.createClass({
 
   handleSwipe(e) {
     if (this.state.isAnimating || !this.props.animate) { return }
+
     var direction = eventToDirectionMap[e.direction] || -1
-    this.setState({isAnimating:true, direction:direction})
+    this.setState({
+      isAnimating: true,
+      direction: direction,
+      currentTime: Date.now()
+    })
     requestAnimationFrame(this.updateMovement)
   },
 
   onAnimationEnd() {
+    console.log('animation is done, x is: ', this.state.x)
     this.setState({isAnimating:false, x:0})
     actions.nextLayerImage(this.state.direction * -1)
   },
 
   updateMovement() {
     var max = this.state.containerWidth
-      console.log('max is : ', max)
-    var {delta, x, direction} = this.state
-    console.log('x is : ', x)
-    if (Math.abs(x) > max) {
+    var {delta, x, direction, currentTime, animDuration} = this.state
+    var now = Date.now()
+    delta = now - currentTime
+    var fract = delta / animDuration
+    var newX = (max * fract) * direction
+    this.setState({x: newX})
+    if (Math.abs(newX) > max) {
       this.onAnimationEnd(); return
     }
     // TODO Use time as well
     // these should be lin interp'd over a distance
-    var newX = (Math.abs(x) + delta) * direction
     requestAnimationFrame(this.updateMovement)
-    this.setState({x: newX})
   },
 
   render() {
@@ -87,12 +95,11 @@ export default React.createClass({
         <div className="canvas" ref="container">
           {this.props.layers
               .filter(layer => layer.get('isEnabled'))
-              .map((layer) => {
+              .map(layer => {
                 return (
                   <LayerImageInline layer={layer}
                       key={layer.get('id')}
-                      xOffset={this.state.x}
-                      isAnimating={this.state.isAnimating}/>
+                      xOffset={this.state.x} />
                 )
               })
           }

@@ -4,7 +4,6 @@
 	@include justify-content(center);
 	@include align-items(flex-start);
 	max-width: 150px;
-	overflow: hidden;
 	margin: 0;
 	width: 100%;
 }
@@ -17,9 +16,25 @@
 
 	&.portrait {
 	  @include flex-direction(column);
+      @include align-items(flex-start);
 	}
 	.LayerSelector {
 	  @include flex-direction(row);
+      &.selected {
+        height: 100px;
+        width: 140px;
+        @media (max-width: 320px) {
+          height: 70px;
+          width: 110px;
+        }
+        > img {
+          height: 90px;
+          @media (max-width: 320px) {
+            width: 60px;
+            height: 60px;
+          }
+        }
+      }
 	  span {
 	  	margin: 0 0 0 10px;
 	  	width: 50px;

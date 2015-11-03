@@ -35,9 +35,13 @@ export default React.createClass({
       layerId: this.props.params.layerId
     })
     Store.actions.loadAdminLayerImages()
+    Store.actions.loadAdminColorPalettes()
   },
 
+  _onResize() { this.forceUpdate() },
+
   componentWillUnmount() {
+    window.removeEventListener('resize', this._onResize)
     clearInterval(this._interval)
   },
 
@@ -46,6 +50,7 @@ export default React.createClass({
   },
 
   componentDidMount() {
+    window.addEventListener('resize', this._onResize)
     this.attemptLoadResources()
   },
 

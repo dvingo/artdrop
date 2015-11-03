@@ -1,14 +1,16 @@
 .DesignEditDetail.main {
-	@include display(flex);
-	@include flex-direction(column);
-	@include flex(1 0 0);
+  @include display(flex);
+  @include flex-direction(column);
+  @include flex(1 0 0);
 }
+
 .DesignEditDetail-wrapper-1 {
-	@include display(flex);
-	@include flex-direction(row);
-	@include flex(1 0 0);
-	@include align-items(center);
-	@include justify-content(center);
+  @include display(flex);
+  @include flex-direction(row);
+  @include flex(1 0 0);
+  @include align-items(center);
+  @include justify-content(center);
+  overflow: hidden
 }
 
 .button {
@@ -20,9 +22,7 @@
   width: 100px;
   height: 30px;
   color: white;
-  -webkit-box-shadow: 2px 2px 6px 0px rgba(150, 150, 150, 0.75);
-  -moz-box-shadow: 2px 2px 6px 0px rgba(150, 150, 150, 0.75);
-  box-shadow: 2px 2px 6px 0px rgba(150, 150, 150, 0.75);
+  @include prefixer(box-shadow, 2px 2px 6px 0px rgba(150, 150, 150, 0.75), webkit moz spec);
   cursor: pointer;
   &.off { opacity: 0.5 }
 }
@@ -35,6 +35,7 @@
     padding: 20px;
     position: relative;
 }
+
 .DesignEditDetail-canvas {
     @include display(flex);
     @include flex(2 0 0);
@@ -71,11 +72,12 @@
 }
 
 .DesignEditDetail-wrapper-2 {
-	@include display(flex);
-	@include flex(1 0 0);
-	@include flex-direction(column);
-	@include align-items(center);
+  @include display(flex);
+  @include flex(1 0 0);
+  @include flex-direction(column);
+  @include align-items(center);
 }
+
 .DesignEditDetail-mid {
     @include display(flex);
     @include align-items(center);
@@ -98,36 +100,27 @@
 }
 
 .DesignEditDetail-layer-grid {
-    @include display(flex);
-    @include flex(4 0 0);
-    @include flex-wrap(wrap);
-    @include justify-content(center);
-    width: 100%;
-    overflow: scroll;
+  @include display(flex);
+  @include flex(4 0 0);
+  @include flex-wrap(wrap);
+  @include justify-content(center);
+  width: 100%;
+  overflow: scroll;
 }
 
 @media (min-width: $media-min-width) {
-	.DesignEditDetail.main {
-		@include flex-direction(row);
-	}
-	.DesignEditDetail-wrapper-1 {
-		@include flex-direction(row);
-	}
-		.DesignEditDetail-canvas {
-			span {
-				height: 700px;
-				width: 700px;
-				max-height: none;
-				max-width: none;
-			}
-		}
+  .DesignEditDetail.main {
+    @include flex-direction(row);
+  }
+  .DesignEditDetail-wrapper-1 {
+    @include flex-direction(row);
+  }
+  .DesignEditDetail-canvas {
+    span {
+      height: 700px;
+      width: 700px;
+      max-height: none;
+      max-width: none;
+    }
+  }
 }
-
-// @media (min-width: $media-min-width), (orientation: landscape) {
-// }
-// @media (width: 768) and (height: 1024) and (orientation: portrait) {
-// }
-// @media (min-width: 650px) {
-// }
-// @media (width: 768) and (height: 1024) and (orientation: portrait) {
-// }

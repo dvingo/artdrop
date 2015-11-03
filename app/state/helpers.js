@@ -194,6 +194,12 @@ var updateLayerOfDesign = (layer, design, updateFn) => {
   return design.set('layers', layers.update(i, v => updateFn(v)))
 }
 
+var updateCurrentLayerOfDesign = (updater) => {
+  var currentDesign = reactor.evaluate(getters.currentDesign)
+  var currentLayer = reactor.evaluate(getters.currentLayer)
+  return updateLayerOfDesign(currentLayer, currentDesign, updater)
+}
+
 var idListToFirebaseObj = (list) => {
   var retVal = {}
   list.forEach(i => retVal[i] = true)
@@ -250,7 +256,11 @@ var persistAndCreateNewOrder = (orderData) => {
 }
 
 var persistDesign = persistWithRef.bind(null, designsRef)
-var persistLayer = persistWithRef.bind(null, layersRef)
+var persistLayer = (id, propsObj) => {
+  delete propsObj.selectedLayerImageIndex
+  delete propsObj.orderedLayerImages
+  persistWithRef(layersRef, id, propsObj)
+}
 var persistLayerImage = persistWithRef.bind(null, layerImagesRef)
 var persistSurface = persistWithRef.bind(null, surfacesRef)
 var persistTag = persistWithRef.bind(null, tagsRef)
@@ -288,6 +298,7 @@ export default {
   nonOptionKeys,
   idListToFirebaseObj,
   updateLayerOfDesign,
+  updateCurrentLayerOfDesign,
   dispatchHelper,
   defaultSurfaceOptionIdForSurface,
   persistDesign,

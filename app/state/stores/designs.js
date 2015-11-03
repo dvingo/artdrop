@@ -4,7 +4,9 @@ import {persistNewDesign,
   defaultSurfaceOptionIdForSurface,
   hydrateSurfaceOptionsForSurface,
   persistDesign, persistLayer, nonOptionKeys,
-  idListToFirebaseObj, updateLayerOfDesign,
+  idListToFirebaseObj,
+  updateLayerOfDesign,
+  updateCurrentLayerOfDesign,
   hydrateAdminDesignsOnlyTags, dispatchHelper
 } from 'state/helpers'
 import getters from 'state/getters'
@@ -16,13 +18,6 @@ import {designsRef, layersRef} from 'state/firebaseRefs'
 function l() {
   console.log.apply(console, Array.prototype.slice.call(arguments))
 }
-
-function updateCurrentLayerOfDesign(updater) {
-  var currentDesign = reactor.evaluate(getters.currentDesign)
-  var currentLayer = reactor.evaluate(getters.currentLayer)
-  return updateLayerOfDesign(currentLayer, currentDesign, updater)
-}
-
 
 var removeNonOptionProps = (surfaceOption) => {
   return nonOptionKeys.reduce((r, k) => r.remove(k), surfaceOption)
@@ -57,6 +52,10 @@ export default new Nuclear.Store({
       design.tags = design.tags ? Object.keys(design.tags) : []
       return state.set(design.id, Immutable.fromJS(design))
     })
+
+    this.on('setDesignImm', (state, design) => (
+      state.set(design.get('id'), design)
+    ))
 
     this.on('addManyDesigns', (state, designs) => {
       return designs.reduce((retVal, design) => {
@@ -93,33 +92,6 @@ export default new Nuclear.Store({
     })
     this.on('previousDesignColors', (state) => {
       return transitionDesignColors('backward', state)
-    })
-
-    this.on('selectLayerImage', (state, layerImage) => {
-      var currentDesign = reactor.evaluate(getters.currentDesign)
-      var currentLayer = reactor.evaluate(getters.currentLayer)
-      var newDesign = updateLayerOfDesign(currentLayer, currentDesign, l => l.set('selectedLayerImage', layerImage))
-      persistLayer(currentLayer.get('id'), {'selectedLayerImage': layerImage.get('id')})
-      return state.set(newDesign.get('id'), newDesign)
-    })
-
-    this.on('toggleCurrentLayer', (state) => {
-      var newDesign = updateCurrentLayerOfDesign(l => {
-        var newIsEnabled = !l.get('isEnabled')
-        persistLayer(l.get('id'), {'isEnabled': newIsEnabled})
-        return l.set('isEnabled', newIsEnabled)
-      })
-      return state.set(newDesign.get('id'), newDesign)
-    })
-
-    this.on('selectColorPalette', (state, colorPalette) => {
-      var currentLayer = reactor.evaluate(getters.currentLayer)
-      var newDesign = updateLayerOfDesign(currentLayer,
-         reactor.evaluate(getters.currentDesign),
-         l => l.set('colorPalette', colorPalette)
-               .set('paletteRotation', 0))
-      persistLayer(currentLayer.get('id'), {'colorPalette': colorPalette.get('id')})
-      return state.set(newDesign.get('id'), newDesign)
     })
 
     this.on('selectSurface', (state, surface) => {
@@ -170,18 +142,6 @@ export default new Nuclear.Store({
         return toFind.every((val, key) => o.get(key) === val)
       })
       return state.set(currentDesign.get('id'), currentDesign.set('surfaceOption', found))
-    })
-
-    this.on('rotateCurrentLayerColorPalette', (state) => {
-      var currentDesign = reactor.evaluate(getters.currentDesign)
-      var currentLayerId = reactor.evaluate(['currentLayerId'])
-      var layers = currentDesign.get('layers')
-      var i = layers.findIndex(l => l.get('id') === currentLayerId)
-      var currentLayer = layers.get(i)
-      var newDesign = rotateColorPalette(currentDesign, currentLayer)
-      var newRotation = newDesign.getIn(['layers', i, 'paletteRotation'])
-      persistLayer(currentLayerId, {'paletteRotation': newRotation})
-      return state.set(newDesign.get('id'), newDesign)
     })
 
     this.on('saveDesign', (state, design) => {

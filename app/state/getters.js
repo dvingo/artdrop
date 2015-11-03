@@ -75,6 +75,14 @@ getters.currentLayer = [
   (layerId, design) => design ? design.get('layers').find(v => v.get('id') === layerId) : null
 ]
 
+getters.currentLayersMap = [
+  getters.currentDesign,
+  design => (
+    design.get('layers').reduce((retVal, layer) => (
+      retVal.set(layer.get('id'), layer)
+    ), Map()))
+]
+
 getters.currentPalette = [
   getters.currentLayer,
   (currentLayer) => currentLayer ? currentLayer.get('colorPalette') : null
@@ -100,6 +108,9 @@ getters.layerImagesForCurrentLayer = [
   getters.layerImages,
   (layer, layerImages) => {
     if (layer == null) { return List() }
+    if (layer.has('orderedLayerImages')) {
+      return layer.get('orderedLayerImages')
+    }
     return layerImages.sort((li1, li2) => (
       numTagsInCommon(layer, li2) - numTagsInCommon(layer, li1)
     ))
