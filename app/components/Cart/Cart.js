@@ -45,12 +45,7 @@ export default React.createClass({
     return (
       <div className="Cart cart">
         <div className="Cart-left">
-
-          <div className="Cart-canvas-flex-wrapper">
-            <span>
-              <RenderLayers layers={design.get('layers')}/>
-            </span>
-          </div>
+          <RenderLayers layers={design.get('layers')}/>
 
           <div className="Cart-surface-info">
             <h2>Printed on: <span className="val">{design.getIn(['surface', 'name'])}</span></h2>

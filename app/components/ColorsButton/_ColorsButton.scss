@@ -8,6 +8,10 @@
   width: 60%;
   max-width: 210px;
 
+  @media (max-width: 630px) {
+    width: 40%;
+  }
+
   &.off { display: none; }
 
   .container {
@@ -63,7 +67,7 @@
       -moz-box-shadow: 1px 2px 6px 0px rgba(150,150,150,0.75);
       box-shadow: 1px 2px 6px 0px rgba(150,150,150,0.75);
     }
-    svg { 
+    svg {
       background: plum;
       border-radius: 50%;
       -webkit-box-shadow: 1px 2px 6px 0px rgba(150,150,150,0.75);

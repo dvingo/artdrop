@@ -20,18 +20,6 @@ var newLayerImageObj = (filename, baseImageUrl, compositeImageUrl, compositeFile
 
 export default {
 
-  loadAdminCreateDesignData() {
-    hydrateAndDispatchLayerImages()
-  },
-
-  loadAdminLayerImages() {
-    hydrateAndDispatchLayerImages()
-  },
-
-  loadCurrentDesignEditResources() {
-    hydrateAndDispatchLayerImages()
-  },
-
   uploadLayerImageToS3(fileData) {
     var file = fileData.file
     var svgText = fileData.svgText

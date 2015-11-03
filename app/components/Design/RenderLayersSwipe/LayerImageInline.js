@@ -1,5 +1,5 @@
 import React from 'react'
-import SVGInlineLayer from 'components/SVGInlineLayer/SVGInlineLayer'
+import SVGInlineMultiLayer from 'components/SVGInlineMultiLayer/SVGInlineMultiLayer'
 import {imageUrlForLayerImage, imageUrlForLayer} from 'state/utils'
 import reactor from 'state/reactor'
 import getters from 'state/getters'
@@ -27,7 +27,7 @@ export default React.createClass({
     if (layer.has('orderedLayerImages')) {
       return layer.get('orderedLayerImages')
     }
-    return orderedLayerImages = this.state.layerImages.sort((li1, li2) => (
+    return this.state.layerImages.sort((li1, li2) => (
       numTagsInCommon(layer, li2) - numTagsInCommon(layer, li1)
     ))
   },
@@ -66,13 +66,13 @@ export default React.createClass({
     return (
       <div className="LayerImageContainer">
         <div className="LayerImageMover" style={style}>
-          <SVGInlineLayer imageUrl={imageUrlForLayerImage(previousLayerImage)}
+          <SVGInlineMultiLayer imageUrl={imageUrlForLayerImage(previousLayerImage)}
                           layer={layer}
                           key={previousLayerImage.get('id') + '0'} />
-          <SVGInlineLayer imageUrl={imageUrlForLayer(layer)}
+          <SVGInlineMultiLayer imageUrl={imageUrlForLayer(layer)}
                           layer={layer}
                           key={layer.get('id') + '1'} />
-          <SVGInlineLayer imageUrl={imageUrlForLayerImage(nextLayerImage)}
+          <SVGInlineMultiLayer imageUrl={imageUrlForLayerImage(nextLayerImage)}
                           layer={layer}
                           key={layer.get('id') + '2'} />
         </div>

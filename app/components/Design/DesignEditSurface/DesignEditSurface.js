@@ -5,8 +5,7 @@ import Store from 'state/main'
 import SurfaceImage from 'components/Design/SurfaceImage/SurfaceImage'
 import RenderLayers from 'components/Design/RenderLayers/RenderLayers'
 import {imageUrlForSurface} from 'state/utils'
-var Set = require('nuclear-js').Immutable.Set
-var Map = require('nuclear-js').Immutable.Map
+import {Map, Set} from 'Immutable'
 var classNames = require('classnames')
 
 export default React.createClass({
@@ -21,8 +20,8 @@ export default React.createClass({
   },
 
   componentWillMount() {
-    Store.actions.selectDesignId(this.props.params.designId)
     Store.actions.loadCurrentDesignEditResources()
+    Store.actions.selectDesignId(this.props.params.designId)
   },
 
   transitionToBuyPage() {

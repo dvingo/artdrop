@@ -174,7 +174,7 @@ export default React.createClass({
     }
 
     if (errors.length === 0) {
-      let svgEls = document.querySelectorAll('.canvas .layer svg')
+      let svgEls = document.querySelectorAll('.canvas .SVGInlineLayer svg')
       if (this._isCreatingNewDesign()) {
         Store.actions.createNewDesign({
           design: this.state.editingDesign,

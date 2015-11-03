@@ -1,27 +1,30 @@
 .CheckButton {}
 
 .check-button {
-	background: $button-color;
-	border-radius: 50% 50%;
-	width: 100px;
-	height: 100px;
-	@include display(flex);
-	@include align-items(center);
-	@include justify-content(center);
-	-webkit-box-shadow: 2px 2px 6px 0px rgba(150,150,150,0.75);
-	-moz-box-shadow: 2px 2px 6px 0px rgba(150,150,150,0.75);
-	box-shadow: 2px 2px 6px 0px rgba(150,150,150,0.75);
-	cursor: pointer;
+  background: $button-color;
+  border-radius: 50% 50%;
+  width: 100px;
+  height: 100px;
+  @include display(flex);
+  @include align-items(center);
+  @include justify-content(center);
+  @include prefixer(box-shadow, 2px 2px 6px 0px rgba(150,150,150,0.75), moz webkit spec);
+  cursor: pointer;
 
-	img {
-		width: 70%;
-		height: auto;
-	}
+  @media (max-width: 630px) {
+    width: 60px;
+    height: 60px;
+  }
+
+  img {
+    width: 70%;
+    height: auto;
+  }
 }
 
 .design-edit-detail {
-	.check-button {
-		height: 30px;
-		width: 30px;
-	}
+  .check-button {
+    height: 30px;
+    width: 30px;
+  }
 }

@@ -65,6 +65,21 @@ export default new Nuclear.Store({
     this.on('removeLayerImage', (state, layerImageId) => (
       state.delete(layerImageId)))
 
+    this.on('loadCurrentDesignEditResources', state => {
+      hydrateAndDispatchLayerImages()
+      return state
+    }),
+
+    this.on('loadAdminLayerImages', state => {
+      hydrateAndDispatchLayerImages()
+      return state
+    })
+
+    this.on('loadAdminCreateDesignData', state => {
+      hydrateAndDispatchLayerImages()
+      return state
+    })
+
     this.on('uploadLayerImageWithCompositeToS3', (state, files) => {
       var baseFile = files.base
       var topFile = files.top

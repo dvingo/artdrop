@@ -5,10 +5,8 @@ import {persistNewDesign,
   hydrateSurfaceOptionsForSurface,
   persistDesign, persistLayer, nonOptionKeys,
   idListToFirebaseObj,
-  updateLayerOfDesign,
-  updateCurrentLayerOfDesign,
   hydrateAdminDesignsOnlyTags, dispatchHelper,
-  persistNewLayerJS
+  persistNewLayerJs
 } from 'state/helpers'
 import getters from 'state/getters'
 import actions from 'state/actions'

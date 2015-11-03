@@ -35,7 +35,7 @@
   @include flex(1 0 0);
   @include align-items(center);
     @media (max-width: 629px) {
-      max-height: 130px;
+      max-height: 90px;
     }
 }
 

@@ -1,10 +1,8 @@
-.SVGInlineLayer {
-  position: absolute;
+.SVGInlineMultiLayer {
+  float: left;
   height: 100%;
-  width: 100%;
-  top: 0;
-  left: 0;
-  overflow: hidden;
+  width: 30%;
+  margin: 0 20px 0 0;
 
   img {
     height: 100%;
