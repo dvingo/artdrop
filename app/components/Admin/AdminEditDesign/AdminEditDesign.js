@@ -48,8 +48,7 @@ export default React.createClass({
             layerImages: Store.getters.layerImages,
             colorPalettes: Store.getters.colorPalettes,
             surfaces: Store.getters.surfaces,
-            tags: Store.getters.tags,
-    }
+            tags: Store.getters.tags}
   },
 
   getInitialState() {
@@ -169,12 +168,13 @@ export default React.createClass({
       this.state.editingDesign.get('layers')
       .every(l => l.has('colorPalette') && l.has('selectedLayerImage'))
     )
+
     if (!layersValid) {
       errors.push('You must select a color palette and image for every layer.')
     }
 
     if (errors.length === 0) {
-      let svgEls = document.querySelectorAll('.canvas .SVGInlineLayer svg')
+      let svgEls = document.querySelectorAll('.canvas .layer svg')
       if (this._isCreatingNewDesign()) {
         Store.actions.createNewDesign({
           design: this.state.editingDesign,

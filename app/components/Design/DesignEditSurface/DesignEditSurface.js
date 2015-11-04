@@ -78,7 +78,8 @@ export default React.createClass({
 
             <div className="right">
               <div className="DesignEditSurface-product-overlay-container">
-                <img src={imageUrlForSurface(surface)} height={200}/>
+                <img src={imageUrlForSurface(surface)} height={200}
+                     className="selected-surface-img"/>
                 <RenderLayers layers={this.state.design.get('layers')}/>
               </div>
             </div>

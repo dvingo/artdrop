@@ -55,25 +55,22 @@
 	}
 }
 .DesignEditSurface-product-overlay-container {
-	display: flex;
-	min-width: 250px;
-	min-height: 250px;
-	width: 250px;
-	height: 250px;
-
-	img {
-		width: 100%;
-		height: auto;
-		z-index: 50;
-	}
+  position: relative;
+  width: 250px;
+  height: 250px;
+  .selected-surface-img {
+    position: absolute;
+    width: 100%;
+    height: auto;
+  }
 }
+
 .DesignEditSurface-ui-mid {
 	@include display(flex);
 	@include justify-content(center);
 	@include align-items(center);
 	background: $nav-bar-color;
 	width: 100%;
-
 	button { margin: 20px; }
 }
 .DesignEditSurface-surfaces {

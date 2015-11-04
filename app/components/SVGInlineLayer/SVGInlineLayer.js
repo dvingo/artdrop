@@ -25,7 +25,7 @@ export default React.createClass({
 
   render() {
     return (
-      <div ref="container" className="SVGInlineLayer" style={this.props.style}>
+      <div ref="container" className="layer" style={this.props.style}>
         <img src={this.props.imageUrl}
              style={{display:'none'}}
              ref="imgRef"/>
