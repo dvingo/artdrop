@@ -68,14 +68,23 @@ export default React.createClass({
     }
   },
 
+  _getInitialDesignData() {
+    var layers = [
+      {id:0,paletteRotation:0,isEnabled:true},
+      {id:1,paletteRotation:0,isEnabled:true},
+      {id:2,paletteRotation:0,isEnabled:true}]
+    if (this.state.colorPalettes && this.state.colorPalettes.count() > 0) {
+      var cp = this.state.colorPalettes.get(0).toJS()
+      layers.forEach(layer => layer.colorPalette = cp)
+    }
+    return Immutable.fromJS({
+      layers:layers,
+      adminCreated: true})
+  },
+
   componentWillMount() {
     if (this._isCreatingNewDesign()) {
-      this.setState({
-        editingDesign: Immutable.fromJS({
-          layers: [{id:0,paletteRotation:0,isEnabled:true},{id:1,paletteRotation:0,isEnabled:true},
-                   {id:2,paletteRotation:0,isEnabled:true}],
-          adminCreated: true})
-      })
+      this.setState({editingDesign: this._getInitialDesignData()})
       Store.actions.loadAdminCreateDesignData()
     } else if (this._editingDesignNotSet()) {
       this.setState({editingDesign: this.state.existingDesign})
@@ -92,6 +101,9 @@ export default React.createClass({
     else if (tagsUpdatedOnExistingDesign(prevState, this.state)) {
       var newDesign = updateEditingDesignWithNewTags(this.state)
       setTimeout(() => this.setState({editingDesign: newDesign}), 200)
+    }
+    else if (!this.state.editingDesign.getIn(['layers', 0]).has('colorPalette')) {
+      setTimeout(() => this.setState({editingDesign: this._getInitialDesignData()}), 100)
     }
   },
 
@@ -130,16 +142,19 @@ export default React.createClass({
     this.setState({editingDesign:editingDesign})
   },
 
+  _toggleCurrentLayer() {
+    var layerIndex = this.state.currentLayer
+    var design = this.state.editingDesign
+    var layer = design.getIn(['layers', layerIndex])
+    var newDesign = updateLayerOfDesign(layer, design, l => (
+      l.set('isEnabled', !l.get('isEnabled'))
+    ))
+    this.setState({editingDesign:newDesign})
+  },
+
   selectLayer(i) {
-    console.log('selecting layer: ', i)
     if (this.state.currentLayer === i) {
-      let layerIndex = this.state.currentLayer
-      let design = this.state.editingDesign
-      let layer = design.getIn(['layers', layerIndex])
-      var newDesign = updateLayerOfDesign(layer, design, l => (
-        l.set('isEnabled', !l.get('isEnabled'))
-      ))
-      this.setState({editingDesign:newDesign})
+      this._toggleCurrentLayer()
     } else {
       this.setState({currentLayer: i})
     }
