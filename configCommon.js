@@ -8,5 +8,6 @@ module.exports = {
   fireBaseUri: 'https://artrop.firebaseio.com/',
   fireBaseTestingUri: 'https://artdrop-testing3.firebaseio.com/',
   makeableApiUri: 'https://api.print.io/api/v/3/source/api/',
-  serverHostname: 'artdropapp.herokuapp.com'
+  serverHostname: 'artdropapp.herokuapp.com',
+  devServerHostname: 'artdropapp.herokuapp.com'
 }
