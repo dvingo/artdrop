@@ -7,7 +7,7 @@ var bodyParser = require('body-parser')
 var request = require('request')
 var cors = require('cors')
 var compression = require('compression')
-var config = require('./server-config')
+var serverDevPort = require('../configCommon').serverDevPort
 var hydrateDesignId = require('./hydrate_utils').hydrateDesignId
 var PrintioService = require('../print-io-api/print-io-api')
 var shippingPriceRoute = require('./routes/shippingPrice')
@@ -69,7 +69,7 @@ firebaseRef.authWithPassword({
         res.sendFile('index.html', {root: __dirname + '/../hosted-dir/'})
       })
 
-      var port = process.env.PORT || config.devPort
+      var port = process.env.PORT || serverDevPort
       var server = app.listen(port, function() {
         var host = server.address().address;
         port = server.address().port;

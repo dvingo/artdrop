@@ -3,7 +3,7 @@ var querystring = require('querystring')
 var fs = require('fs')
 var RSVP = require('rsvp')
 var AWS = require('aws-sdk')
-var config = require('./server-config')
+var config = require('../configCommon')
 var s3BucketName = config.s3BucketName
 var ordersRef = require('./firebase_refs').ordersRef
 var stripeSecretKey = require('./configWrapper').stripeSecretKey
@@ -167,5 +167,6 @@ module.exports = {
   updateOrderWithPrintInfo: updateOrderWithPrintInfo,
   updateOrderWithChargeInfo: updateOrderWithChargeInfo,
   imageUrlForLayer: imageUrlForLayer,
-  chargeCreditCard: chargeCreditCard
+  chargeCreditCard: chargeCreditCard,
+  s3Url:s3Url
 }
