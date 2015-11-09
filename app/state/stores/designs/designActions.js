@@ -64,6 +64,10 @@ export default {
   },
 
   toggleCurrentLayer() {
+    var numEnabledLayers = reactor.evaluate(getters.numEnabledLayers)
+    var currentLayer = reactor.evaluate(getters.currentLayer)
+    // Don't allow disabling all layers.
+    if (numEnabledLayers === 1 && currentLayer.get('isEnabled')) { return }
     var newDesign = updateCurrentLayerOfDesign(l => {
       var newIsEnabled = !l.get('isEnabled')
       persistLayer(l.get('id'), {'isEnabled': newIsEnabled})
