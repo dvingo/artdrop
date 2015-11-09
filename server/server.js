@@ -74,10 +74,11 @@ firebaseRef.authWithPassword({
       var port = process.env.PORT || serverDevPort
       var server = app.listen(port, function() {
         var host = server.address().address;
+        host = config.serverHostname
         port = server.address().port;
         app.set('host', host)
         app.set('port', port)
-        console.log('Application listening at http://%s:%s', host, port);
+        console.log('Application listening at http://%s', host);
       })
     }, function(err) {
       console.log('Got creds error: ', err)

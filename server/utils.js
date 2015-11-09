@@ -24,7 +24,7 @@ function renderDesignImageToFile(host, port, design) {
   return new RSVP.Promise(function(resolve, reject) {
     phantom.create(function(ph) {
       ph.createPage(function(page) {
-        var url = 'http://' + host + ':' + port + '/designImageView'
+        var url = 'http://' + config.serverHostname + '/designImageView'
         var width = design.surfaceOption.printingImageWidth
         var height = design.surfaceOption.printingImageHeight
         var qs = querystring.stringify({
@@ -65,7 +65,7 @@ function renderDesignImageToFile(host, port, design) {
 
 function imageUrlForLayer(layer) {
   var filename = layer.selectedLayerImage.imageUrl.split('/').pop()
-  return 'https://' + config.serverHostname + '/images/' + filename
+  return 'http://' + config.serverHostname + '/images/' + filename
 }
 
 function s3Url(filename) {

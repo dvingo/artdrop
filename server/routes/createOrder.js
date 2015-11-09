@@ -40,7 +40,7 @@ module.exports = function(app, s3Creds, printioService, req, res) {
     })
     .then(updateOrderWithPrintInfo.bind(null, orderId))
     .catch(function(err) {
-      console.log('Got error when creating order')
+      console.log('Got error when creating order: ', err)
       var msg = err.message || 'Error creating order'
       res.json({error: msg})
     })
