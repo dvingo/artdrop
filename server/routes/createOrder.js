@@ -9,7 +9,7 @@ var createPrintOrder = utils.createPrintOrder
 
 module.exports = function(app, s3Creds, printioService, req, res) {
   console.log('')
-  console.log('Got order data: ', req.body)
+  console.log('Got order data: ', req.body.orderId)
   var designId = req.body.designId
   var orderId = req.body.orderId
   var ccToken = req.body.ccToken
@@ -31,7 +31,7 @@ module.exports = function(app, s3Creds, printioService, req, res) {
       return design
     })
     .then(updateOrderWithChargeInfo.bind(null, orderId))
-    .then(renderDesignImageToFile.bind(null, app.get('host'), app.get('port')))
+    .then(renderDesignImageToFile)
     .then(uploadDesignImageToS3.bind(null, s3Creds, designId, orderId))
     .then(function() {
       var orderParams = req.body

@@ -59,9 +59,23 @@
         }
         SVGInjector(imgEl, opts)
       }
-      replaceSvgImageWithText(one, layers[0], {{height}}, {{width}})
-      replaceSvgImageWithText(two, layers[1], {{height}}, {{width}})
-      replaceSvgImageWithText(three, layers[2], {{height}}, {{width}})
+
+      window.numEnabledLayers = layers.reduce(function(retVal, layer) {
+        return retVal + (layer.isEnabled ? 1 : 0)
+      }, 0)
+
+      var imgNodes = [one, two, three]
+
+      layers.filter(function(layer) { return !layer.isEnabled })
+            .forEach(function(layer) {
+              var imgNode = imgNodes[layer.order]
+              imgNode.parentNode.removeChild(imgNode)
+            })
+
+      layers.filter(function(layer) { return layer.isEnabled })
+            .forEach(function(layer) {
+              replaceSvgImageWithText(imgNodes[layer.order], layer, {{height}}, {{width}})
+            })
     </script>
   </body>
 </html>

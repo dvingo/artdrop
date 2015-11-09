@@ -114,9 +114,12 @@ PrintioService.prototype.getProduct = function(name, countryCode, languageCode, 
 
 PrintioService.prototype.createOrder = function(orderParams, cb) {
   orderParams.IsPreSubmit = false
-  return this._post('orders', orderParams, function(vendorOrderId) {
-    if(err) { return cb(err) }
-    return cb(null, vendorOrderId)
+  return this._post('orders', orderParams, function(err, res, body) {
+    if(err || !body.hasOwnProperty('Id')) {
+      console.log('Got printio err from createOrder: ', err)
+      return cb(err)
+    }
+    return cb(null, body.Id)
   })
 }
 

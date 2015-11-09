@@ -20,7 +20,7 @@ function imgUrlForOrderId(orderId) {
   return s3Url(orderImageName(orderId))
 }
 
-function renderDesignImageToFile(host, port, design) {
+function renderDesignImageToFile(design) {
   return new RSVP.Promise(function(resolve, reject) {
     phantom.create(function(ph) {
       ph.createPage(function(page) {
@@ -39,11 +39,10 @@ function renderDesignImageToFile(host, port, design) {
           if (status === 'success') {
             var interval = setInterval(function() {
               page.evaluate(function() {
-                return document.querySelectorAll('svg').length === 3
+                return document.querySelectorAll('svg').length === window.numEnabledLayers
               }, function(done) {
                 if (done) {
                   clearInterval(interval)
-                  console.log('got 3 svgs')
                   var outputFilename = filenameForDesignId(design.id)
                   page.render(outputFilename, function() {
                     console.log('done rendering')
@@ -132,10 +131,11 @@ function updateOrderWithChargeInfo(orderId, design) {
   })
 }
 
-function updateOrderWithPrintInfo(orderId, printerOrderId) {
+function updateOrderWithPrintInfo(orderId, vendorOrderId) {
   return new RSVP.Promise(function(resolve, reject) {
     ordersRef.child(orderId).update({
       printImageUrl: s3Url(orderImageName(orderId)),
+      vendorOrderId: vendorOrderId,
       state: 'sentToPrinter'
     }, function(err) {
       if (err) {
@@ -184,7 +184,7 @@ function createPrintOrder(printService, orderParams) {
   }
 
   var vendorParams = {
-    ShippingAddress: shippingAddress,
+    ShipToAddress: shippingAddress,
     BillingAddress: shippingAddress,
     Items: [{
       Quantity: 1,
@@ -211,5 +211,6 @@ module.exports = {
   updateOrderWithChargeInfo: updateOrderWithChargeInfo,
   imageUrlForLayer: imageUrlForLayer,
   chargeCreditCard: chargeCreditCard,
-  s3Url:s3Url
+  s3Url:s3Url,
+  createPrintOrder: createPrintOrder
 }

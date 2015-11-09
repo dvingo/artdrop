@@ -60,8 +60,12 @@ firebaseRef.authWithPassword({
 
       app.post('/renderDesign/:designId', cors(), function(req, res) {
         hydrateDesignId(req.params.designId).then(function(design) {
-          renderDesignImageToFile(design)
-          res.json('success')
+          if (!design) {
+             res.json({error: 'Design does not exist with that ID.'})
+          } else {
+            renderDesignImageToFile(design)
+            res.json('success')
+          }
         })
       })
 
