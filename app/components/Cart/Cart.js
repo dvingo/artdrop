@@ -37,14 +37,14 @@ export default React.createClass({
     var design = this.state.design
     if (design == null) { return null }
 
-    var hasShippingPrice = this.state.shippingPrice != null
     var shippingPrice = (this.state.shippingPrice
       ? '$' + this.state.shippingPrice
       : 'Shipping will be calculated after you enter an address.')
-    var total = this.state.cartTotalPrice
+
     return (
       <div className="Cart cart">
         <div className="Cart-left">
+
           <RenderLayers layers={design.get('layers')}/>
 
           <div className="Cart-surface-info">
@@ -55,7 +55,7 @@ export default React.createClass({
           <div className="Cart-price-info">
             <h2>Shipping Price: <span className="val">{shippingPrice}</span></h2>
             <h2>Item Price: <span className="val">${this.state.designPrice}</span></h2>
-            <h2>Total: <span className="val">${total}</span></h2>
+            <h2>Total: <span className="val">${this.state.cartTotalPrice}</span></h2>
           </div>
 
         </div>

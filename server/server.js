@@ -7,7 +7,9 @@ var bodyParser = require('body-parser')
 var request = require('request')
 var cors = require('cors')
 var compression = require('compression')
-var serverDevPort = require('../configCommon').serverDevPort
+var config = require('../configCommon')
+var serverDevPort = config.serverDevPort
+var makeableApiUri = config.makeableApiUri
 var hydrateDesignId = require('./hydrate_utils').hydrateDesignId
 var PrintioService = require('../print-io-api/print-io-api')
 var shippingPriceRoute = require('./routes/shippingPrice')
@@ -44,13 +46,13 @@ firebaseRef.authWithPassword({
       var s3Creds = snapshot.val()
       var printioService = new PrintioService({
         recipeId: recipeId,
-        url: 'https://api.print.io/api/v/1/source/api/'
+        url: makeableApiUri
       })
 
       app.get('/shippingPrice', cors(), shippingPriceRoute.bind(null, printioService))
 
       app.options('/orders', cors(), function(req, res) { res.json('hello') })
-      app.post('/orders', cors(), createOrderRoute.bind(null, app, s3Creds))
+      app.post('/orders', cors(), createOrderRoute.bind(null, app, s3Creds, printioService))
 
       app.get('/images/:imageName', cors(), function(req, res) {
         request(s3Url(req.params.imageName)).pipe(res)

@@ -6,12 +6,18 @@ var AWS = require('aws-sdk')
 var config = require('../configCommon')
 var s3BucketName = config.s3BucketName
 var ordersRef = require('./firebase_refs').ordersRef
-var stripeSecretKey = require('./configWrapper').stripeSecretKey
+var configVars = require('./configWrapper')
+var printerBillingKey = configVars.printerBillingKey
+var stripeSecretKey = configVars.stripeSecretKey
 var stripe = require('stripe')(stripeSecretKey)
 
 function imgUrl(awsFilename) {
   var filename = awsFilename.split('/').pop()
-  return 'https://' + config.hostname + '/images/' + filename
+  return 'https://' + config.serverHostname + '/images/' + filename
+}
+
+function imgUrlForOrderId(orderId) {
+  return s3Url(orderImageName(orderId))
 }
 
 function renderDesignImageToFile(host, port, design) {
@@ -59,7 +65,7 @@ function renderDesignImageToFile(host, port, design) {
 
 function imageUrlForLayer(layer) {
   var filename = layer.selectedLayerImage.imageUrl.split('/').pop()
-  return 'https://' + config.hostname + '/images/' + filename
+  return 'https://' + config.serverHostname + '/images/' + filename
 }
 
 function s3Url(filename) {
@@ -126,7 +132,7 @@ function updateOrderWithChargeInfo(orderId, design) {
   })
 }
 
-function updateOrderWithPrintInfo(orderId, printerId) {
+function updateOrderWithPrintInfo(orderId, printerOrderId) {
   return new RSVP.Promise(function(resolve, reject) {
     ordersRef.child(orderId).update({
       printImageUrl: s3Url(orderImageName(orderId)),
@@ -157,6 +163,43 @@ function chargeCreditCard(ccToken, amountInCents, design) {
       } else {
         resolve(design)
       }
+    })
+  })
+}
+
+function createPrintOrder(printService, orderParams) {
+  var artdropOrderId = orderParams.orderId
+  var shippingAddress = {
+    FirstName: orderParams.shippingFirstName,
+    LastName: orderParams.shippingLastName,
+    Line1: orderParams.shippingAddress,
+    Line2: '',
+    City: orderParams.shippingCity,
+    State: orderParams.shippingState,
+    CountryCode: 'US',
+    PostalCode: orderParams.shippingZipcode,
+    IsBusinessAddress: false,
+    Phone: orderParams.shippingPhoneNumber,
+    Email: orderParams.email
+  }
+
+  var vendorParams = {
+    ShippingAddress: shippingAddress,
+    BillingAddress: shippingAddress,
+    Items: [{
+      Quantity: 1,
+      SKU: orderParams.vendorProductId,
+      ShipCarrierMethod: orderParams.shippingMethodId,
+      Images: [{ Url: imgUrlForOrderId(orderParams.orderId) }],
+      SourceId: artdropOrderId
+    }],
+    Payment: { PartnerBillingKey: printerBillingKey }
+  }
+
+  return new RSVP.Promise((resolve, reject) => {
+    printService.createOrder(vendorParams, function(err, vendorOrderId) {
+      if (err) { reject(err) }
+      else     { resolve(vendorOrderId) }
     })
   })
 }

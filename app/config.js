@@ -4,8 +4,7 @@ var fireBaseUri = config.fireBaseUri
 
 if (TEST || DEV) {
   fireBaseUri = config.fireBaseTestingUri
-  var port = process.env.PORT || 8080
-  serverHostname = 'localhost:' + port
+  serverHostname = 'localhost:' + config.serverDevPort
 }
 
 // stripePublishableKey from webpack global.

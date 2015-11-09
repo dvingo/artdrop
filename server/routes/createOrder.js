@@ -5,14 +5,21 @@ var uploadDesignImageToS3 = utils.uploadDesignImageToS3
 var updateOrderWithPrintInfo = utils.updateOrderWithPrintInfo
 var updateOrderWithChargeInfo = utils.updateOrderWithChargeInfo
 var chargeCreditCard = utils.chargeCreditCard
+var createPrintOrder = utils.createPrintOrder
 
-module.exports = function(app, s3Creds, req, res) {
-  console.log('got order data: ', req.body)
+module.exports = function(app, s3Creds, printioService, req, res) {
+  console.log('')
+  console.log('Got order data: ', req.body)
   var designId = req.body.designId
   var orderId = req.body.orderId
   var ccToken = req.body.ccToken
   var orderTotalInCents = req.body.totalPrice
+  var hydratedDesign
   hydrateDesignId(designId)
+    .then(function(design) {
+      hydratedDesign = design
+      return design
+    })
     .then(chargeCreditCard.bind(null, ccToken, orderTotalInCents))
     .catch(function(err) {
       console.log("Failed to charge credit card for order: " + orderId)
@@ -26,7 +33,11 @@ module.exports = function(app, s3Creds, req, res) {
     .then(updateOrderWithChargeInfo.bind(null, orderId))
     .then(renderDesignImageToFile.bind(null, app.get('host'), app.get('port')))
     .then(uploadDesignImageToS3.bind(null, s3Creds, designId, orderId))
-    //.then(createPrintOrder)
+    .then(function() {
+      var orderParams = req.body
+      orderParams.vendorProductId = hydratedDesign.surfaceOption.vendorId
+      return createPrintOrder(printioService, orderParams)
+    })
     .then(updateOrderWithPrintInfo.bind(null, orderId))
     .catch(function(err) {
       console.log('Got error when creating order')

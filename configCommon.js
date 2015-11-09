@@ -1,4 +1,3 @@
-var serverHostname = 'artdropapp.herokuapp.com'
 module.exports = {
   srcDir: 'app',
   serverDevPort: 3002,
@@ -8,6 +7,6 @@ module.exports = {
   s3BucketName: 'com.artdrop.images2',
   fireBaseUri: 'https://artrop.firebaseio.com/',
   fireBaseTestingUri: 'https://artdrop-testing3.firebaseio.com/',
-  hostname: serverHostname,
-  serverHostname: serverHostname
+  makeableApiUri: 'https://api.print.io/api/v/3/source/api/',
+  serverHostname: 'artdropapp.herokuapp.com'
 }

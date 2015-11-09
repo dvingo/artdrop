@@ -308,9 +308,7 @@ export default React.createClass({
               {disabled: isPayButtonDisabled(this.state)})}
               onClick={this.onPayButtonClick}>Pay</button>
           </p>
-          { areShippingFieldsValid(this.state) ?
-            <p><button className="pay-button" onClick={this.getShipPrice}>Update Shipping Price</button></p>
-            : null }
+
         </form>
       </div>
     )

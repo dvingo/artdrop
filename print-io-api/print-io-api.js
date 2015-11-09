@@ -8,12 +8,12 @@ var PrintioService = function(config) {
 
 PrintioService.prototype._get = function(endpoint, obj, cb) {
   var url = this._config.url
-  var final = '';
-  obj = obj || {};
-  obj.recipeId = this._config.recipeId;
-  final = url + endpoint;
+  var final = ''
+  obj = obj || {}
+  obj.recipeId = this._config.recipeId
+  final = url + endpoint
   console.log('Making get req to: ', final)
-  return req.get(final, {qs:obj, json:true}, cb);
+  return req.get(final, {qs:obj, json:true}, cb)
 }
 
 PrintioService.prototype._post = function(endpoint, obj, cb) {
@@ -31,27 +31,27 @@ PrintioService.prototype.getUserInfo = function(ip,cb){
     "CurrencyFormat": "${1}",
     "CurrencyCode": "USD",
     "CurrencyName": "United States dollar"
-  };
-  return this._get("userinfo",{ip:ip},function(err,res,body){
-    if(err){
-      return cb(defaults);
+  }
+  return this._get("userinfo", {ip: ip}, function(err,res,body) {
+    if(err) {
+      return cb(defaults)
     }
-    return cb(body);
-  });
-};
+    return cb(body)
+  })
+}
 
-PrintioService.prototype.getProducts = function(countryCode, languageCode, currencyCode, cb){
+PrintioService.prototype.getProducts = function(countryCode, languageCode, currencyCode, cb) {
   return this._get("products", {
     countryCode:countryCode,
     languageCode:languageCode,
     currencyCode:currencyCode
   },function(err,res,body){
-    if(err) throw err;
-    return cb(body);
-  });
-};
+    if(err) throw err
+    return cb(body)
+  })
+}
 
-PrintioService.prototype.getProductVariants = function(countryCode, productId, cb){
+PrintioService.prototype.getProductVariants = function(countryCode, productId, cb) {
   return this._get('productvariants', {
     countryCode: countryCode,
     productId: productId,
@@ -62,16 +62,16 @@ PrintioService.prototype.getProductVariants = function(countryCode, productId, c
   })
 }
 
-PrintioService.prototype.getShipEstimate = function(productId, countryCode, currencyCode, cb){
+PrintioService.prototype.getShipEstimate = function(productId, countryCode, currencyCode, cb) {
   return this._get("shippriceestimate", {
     countryCode:countryCode,
     productId:productId,
     currencyCode:currencyCode
   },function(err,res,body){
-    if(err) throw err;
-    return cb(body);
-  });
-};
+    if(err) throw err
+    return cb(body)
+  })
+}
 
 PrintioService.prototype.getShipPrice = function(sku, zip, state, cb) {
   return this._post('shippingprices', {
@@ -91,7 +91,7 @@ PrintioService.prototype.getShipPrice = function(sku, zip, state, cb) {
   })
 }
 
-PrintioService.prototype.getProductTemplate = function(sku, cb){
+PrintioService.prototype.getProductTemplate = function(sku, cb) {
   return this._get('producttemplates', {
     countryCode:'US',
     languageCode:'en',
@@ -102,13 +102,22 @@ PrintioService.prototype.getProductTemplate = function(sku, cb){
   })
 }
 
-PrintioService.prototype.getProduct = function(name,countryCode,languageCode,currencyCode,cb){
-  return this.getProducts(countryCode,languageCode,currencyCode,function(prods){
+PrintioService.prototype.getProduct = function(name, countryCode, languageCode, currencyCode, cb) {
+  return this.getProducts(countryCode, languageCode, currencyCode, function(prods) {
     return cb(prods.Products.filter(function(p){
       var n1 = name.toLowerCase(),
-        n2 = p.Name.toLowerCase();
-      return n1===n2 || n1 === n2.replace(/\s/g,"-");
-    })[0]);
-  });
-};
-module.exports = PrintioService;
+        n2 = p.Name.toLowerCase()
+      return n1===n2 || n1 === n2.replace(/\s/g,"-")
+    })[0])
+  })
+}
+
+PrintioService.prototype.createOrder = function(orderParams, cb) {
+  orderParams.IsPreSubmit = false
+  return this._post('orders', orderParams, function(vendorOrderId) {
+    if(err) { return cb(err) }
+    return cb(null, vendorOrderId)
+  })
+}
+
+module.exports = PrintioService

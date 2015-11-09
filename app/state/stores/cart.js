@@ -35,8 +35,8 @@ export default new Nuclear.Store({
 
     this.on('getShipPrice', (storeState, shipData) => {
       var { zipcode, state } = shipData
-      var sku = reactor.evaluate(getters.currentDesign)
-                       .getIn(['surfaceOption', 'vendorId'])
+      var sku = (reactor.evaluate(getters.currentDesign)
+                       .getIn(['surfaceOption', 'vendorId']))
       request.get(shippingPriceUrl)
         .query({ zipcode, state, sku })
         .end((err, res) => {
@@ -46,17 +46,13 @@ export default new Nuclear.Store({
       return storeState
     })
 
-    this.on('orderCreatedSuccessfully', (state, orderId) => {
-      return (state.set('orderWasCreatedSuccessfully', true)
-                   .set('orderIsBeingCreated', false)
-                   .set('orderId', orderId))
-    })
+    this.on('orderCreatedSuccessfully', (state, orderId) => (
+      state.set('orderWasCreatedSuccessfully', true)
+           .set('orderIsBeingCreated', false)
+           .set('orderId', orderId)
+    ))
 
     this.on('createOrder', (state, orderData) => {
-      // Need to create a copy of the design that is forever
-      // immutable so we can always reference it from the order
-      // need to create an order object in firebase.
-
       var design = makeDesignCopy(reactor.evaluate(getters.currentDesign)).set('isImmutable', true)
       persistNewDesign(design).then(() => {
         var orderTotal = reactor.evaluate(getters.cartTotalPriceInCents)
@@ -86,8 +82,8 @@ export default new Nuclear.Store({
       return state.set('orderIsBeingCreated', true)
     })
 
-    this.on('setOrderIsBeingCreatedFalse', state => {
-      return state.set('orderIsBeingCreated', false)
-    })
+    this.on('setOrderIsBeingCreatedFalse', state => (
+      state.set('orderIsBeingCreated', false)
+    ))
   }
 })

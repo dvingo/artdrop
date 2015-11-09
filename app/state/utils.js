@@ -7,7 +7,7 @@ var s3Endpoint = config.s3Endpoint
 var designPreviewSize = config.designPreviewSize
 var designDetailSize = config.designDetailSize
 var s3BucketName = config.s3BucketName
-var hostname = config.hostname
+var hostname = config.serverHostname
 var scheme = typeof window !== 'undefined' ? window.location.protocol : ''
 hostname = scheme + '//' + hostname
 /**

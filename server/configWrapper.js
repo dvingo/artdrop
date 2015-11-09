@@ -4,6 +4,7 @@ try {
 
 configVars = configVars || {}
 var recipeId = configVars.recipeId || process.env['ARTDROP_RECIPE_ID']
+var printerBillingKey = configVars.printerBillingKey || process.env['ARTDROP_PRINTER_BILLING_KEY']
 var firebaseUrl = configVars.firebaseUrl || process.env['ARTDROP_FIREBASE_URL']
 var firebaseUsername = configVars.firebaseUsername || process.env['ARTDROP_FIREBASE_USERNAME']
 var firebasePassword = configVars.firebasePassword || process.env['ARTDROP_FIREBASE_PASSWORD']
@@ -17,6 +18,7 @@ function exitIfValMissing(val, name) {
 }
 
 exitIfValMissing(recipeId, 'Printio recipe Id')
+exitIfValMissing(printerBillingKey, 'Printio billing key')
 exitIfValMissing(firebaseUrl, 'Firebase URL')
 exitIfValMissing(firebaseUsername, 'Firebase username')
 exitIfValMissing(firebasePassword, 'Firebase password')
@@ -27,5 +29,6 @@ module.exports = {
   firebaseUsername: firebaseUsername,
   firebasePassword: firebasePassword,
   recipeId: recipeId,
+  printerBillingKey: printerBillingKey,
   stripeSecretKey: stripeSecretKey
 }
