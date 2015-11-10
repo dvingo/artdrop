@@ -1,9 +1,10 @@
 import reactor from 'state/reactor'
 import {Map, Set, List} from 'Immutable'
 import {updateLayerOfDesign,
-  dispatchHelper, idListToFirebaseObj, persistTag,
- persistLayerImageTags, persistTagObjects, persistLayer,
- hydrateAndDispatchTags, persistDesignTags} from 'state/helpers'
+ dispatchHelper, idListToFirebaseObj,
+ hydrateAndDispatchTags} from 'state/helpers'
+import {persistTag, persistLayerImageTags, persistTagObjects, persistLayer,
+ persistDesignTags} from 'state/persistence'
 import {tagsRef} from 'state/firebaseRefs'
 
 var _addObjectsToTag = (tag, objs, type) => {

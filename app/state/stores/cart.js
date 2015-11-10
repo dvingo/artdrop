@@ -1,7 +1,7 @@
 var Nuclear = require('nuclear-js');
 import reactor from 'state/reactor'
 import getters from 'state/getters'
-import {persistAndCreateNewOrder, persistNewDesign} from '../helpers'
+import {persistAndCreateNewOrder, persistNewDesign} from 'state/persistence'
 import {makeDesignCopy} from 'state/utils'
 import request from 'superagent'
 import {serverHostname} from 'config'

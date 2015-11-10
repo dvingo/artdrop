@@ -1,16 +1,12 @@
 import Nuclear from 'nuclear-js'
 import Immutable from 'Immutable'
-import {persistNewDesign,
-  defaultSurfaceOptionIdForSurface,
-  hydrateSurfaceOptionsForSurface,
-  persistDesign, persistLayer, nonOptionKeys,
-  idListToFirebaseObj,
-  hydrateAdminDesignsOnlyTags, dispatchHelper,
+import {hydrateSurfaceOptionsForSurface,
+  nonOptionKeys, hydrateAdminDesignsOnlyTags, dispatchHelper
 } from 'state/helpers'
+
+import {persistNewDesign, persistDesign, persistLayer} from 'state/persistence'
 import getters from 'state/getters'
-import actions from 'state/actions'
 import reactor from 'state/reactor'
-import {uploadDesignPreview, newId, rotateColorPalette} from 'state/utils'
 import {designsRef} from 'state/firebaseRefs'
 
 function l() {

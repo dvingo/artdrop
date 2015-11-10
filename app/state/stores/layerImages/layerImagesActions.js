@@ -1,8 +1,8 @@
 import reactor from 'state/reactor'
 import Immutable from 'Immutable'
 import {uploadImgToS3} from 'state/utils'
-import {persistDeleteLayerImage,
-  persistNewLayerImage, hydrateAndDispatchLayerImages} from 'state/helpers'
+import {hydrateAndDispatchLayerImages} from 'state/helpers'
+import {persistDeleteLayerImage, persistNewLayerImage} from 'state/persistence'
 
 var newLayerImageObj = (filename, baseImageUrl, compositeImageUrl, compositeFilename) => {
   var now = new Date().getTime()

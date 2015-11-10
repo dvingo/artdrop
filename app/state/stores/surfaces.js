@@ -1,8 +1,7 @@
-var Nuclear = require('nuclear-js');
-var Immutable = Nuclear.Immutable
-import {persistSurface, hydrateAndDispatchSurfaces} from '../helpers'
-import {surfacesRef, designsRef, surfaceOptionsRef} from '../firebaseRefs'
-import surfaceFixtures from '../../fixtures/surfaces'
+import Nuclear from 'nuclear-js'
+import Immutable from 'Immutable'
+import {hydrateAndDispatchSurfaces} from 'state/helpers'
+import {persistSurface} from 'state/persistence'
 
 function loadSurfaces(state) {
   hydrateAndDispatchSurfaces(state)

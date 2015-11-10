@@ -1,6 +1,6 @@
 import {designsRef, layersRef, layerImagesRef,
 colorPalettesRef, surfacesRef,
-surfaceOptionsRef, tagsRef, ordersRef} from 'state/firebaseRefs'
+surfaceOptionsRef, tagsRef} from 'state/firebaseRefs'
 import reactor from 'state/reactor'
 import getters from 'state/getters'
 import {Map, List} from 'Immutable'
@@ -37,19 +37,6 @@ var defaultSurfaceOptionIdForSurface = (surfaceObj) => {
     return surfaceObj.options[0].id
   }
   return Object.keys(surfaceObj.options)[0]
-}
-
-var designPropsToIds = (design) => {
-  var layerIds = design.get('layers').map(l => l.get('id'))
-  var surfaceId = design.get('surface') ? design.getIn(['surface', 'id']) : null
-  var surfaceOptionId = design.get('surfaceOption') ? design.getIn(['surfaceOption', 'id']) : null
-  return (surfaceId
-    ? design.withMutations(d => (
-      d.set('layers', layerIds)
-       .set('surface', surfaceId)
-       .set('surfaceOption', surfaceOptionId)))
-    : design.set('layers', layerIds)
-  )
 }
 
 function nestedHydrateLayer(layerId) {
@@ -206,108 +193,6 @@ var idListToFirebaseObj = (list) => {
   return retVal
 }
 
-var persistWithRef = (firebaseRef, id, obj) => {
-  if (DEBUG) {
-    console.log(`Saving to firebase ref ${firebaseRef} at id: ${id}.`)
-  }
-  firebaseRef.child(id).update(obj)
-}
-
-function ensureListIsFirebaseObj(list) {
-  if (list.length === 0) { return list }
-  var f = list[0]
-  if (typeof f === 'string') {
-    return idListToFirebaseObj(list)
-  }
-  if (typeof f === 'object' && f.hasOwnProperty('id')) {
-    return idListToFirebaseObj(list.map(i => i['id']))
-  }
-  return list
-}
-
-var persistNewLayer = (layer) => {
-  var l = layer.toJS()
-  l.colorPalette = l.colorPalette.id
-  l.selectedLayerImage = l.selectedLayerImage.id
-  if (l.hasOwnProperty('tags')) {
-    l.tags = ensureListIsFirebaseObj(l.tags)
-  }
-  layersRef.child(l.id).set(l)
-}
-
-var persistNewDesign = (design) => {
-  design.get('layers').forEach(persistNewLayer)
-  var firebaseDesign = designPropsToIds(design)
-  return new RSVP.Promise((resolve, reject) => {
-    designsRef.child(design.get('id')).set(firebaseDesign.toJS(), (err) => {
-      if (err) { reject() }
-      else     { resolve() }
-    })
-  })
-}
-
-var persistNewLayerImage = (layerImage) => {
-  var newLayerImageRef = layerImagesRef.push(layerImage)
-  return newLayerImageRef.key()
-}
-
-var persistNewLayerJs = (layer) => {
-  var newLayerRef = layersRef.push(layer)
-  return newLayerRef.key()
-}
-
-var persistDeleteLayerImage = (layerImageId) => {
-  layerImagesRef.child(layerImageId).remove()
-}
-
-var persistAndCreateNewOrder = (orderData) => {
-  return new RSVP.Promise((resolve, reject) => {
-    var newOrderRef = ordersRef.push(orderData, (err) => {
-      if (err) { reject() }
-      else     { resolve(newOrderRef.key()) }
-    })
-  })
-}
-
-var persistDesign = persistWithRef.bind(null, designsRef)
-var persistLayer = (id, propsObj) => {
-  delete propsObj.selectedLayerImageIndex
-  delete propsObj.orderedLayerImages
-  persistWithRef(layersRef, id, propsObj)
-}
-var persistLayerImage = persistWithRef.bind(null, layerImagesRef)
-var persistSurface = persistWithRef.bind(null, surfacesRef)
-var persistTag = persistWithRef.bind(null, tagsRef)
-
-var persistDesignTags = (design) => {
-  if (TEST) { return }
-  var tagsObj = {}
-  design.get('tags').forEach(o => {
-    var id = typeof o === 'object' ? o.get('id') : o
-    tagsObj[id] = true
-  })
-  persistDesign(design.get('id'), {tags: tagsObj})
-}
-
-var persistLayerImageTags = (layerImage) => {
-  if (TEST) { return }
-  var tagsObj = {}
-  layerImage.get('tags').forEach(o => {
-    var id = typeof o === 'object' ? o.get('id') : o
-    tagsObj[id] = true
-  })
-  persistLayerImage(layerImage.get('id'), {tags: tagsObj})
-}
-
-var persistTagObjects = (tag, type) => {
-  if (TEST) { return }
-  var idsObj = {}
-  tag.get(type).forEach(id => idsObj[id] = true)
-  var objToUpdate = {}
-  objToUpdate[type] = idsObj
-  persistTag(tag.get('id'), objToUpdate)
-}
-
 export default {
   nonOptionKeys,
   idListToFirebaseObj,
@@ -315,18 +200,6 @@ export default {
   updateCurrentLayerOfDesign,
   dispatchHelper,
   defaultSurfaceOptionIdForSurface,
-  persistDesign,
-  persistLayer,
-  persistSurface,
-  persistTag,
-  persistTagObjects,
-  persistAndCreateNewOrder,
-  persistNewDesign,
-  persistNewLayerJs,
-  persistNewLayerImage,
-  persistDeleteLayerImage,
-  persistDesignTags,
-  persistLayerImageTags,
   hydrateDesign,
   hydrateAndDispatchLayerImages,
   hydrateAndDispatchSurfaces,

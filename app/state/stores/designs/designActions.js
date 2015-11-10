@@ -2,12 +2,11 @@ import reactor from 'state/reactor'
 import getters from 'state/getters'
 import actions from 'state/actions'
 import Immutable from 'Immutable'
-import {persistLayer, updateLayerOfDesign,
-  dispatchHelper, updateCurrentLayerOfDesign,
-  defaultSurfaceOptionIdForSurface,
-  idListToFirebaseObj,
-  persistNewLayerJs, persistDesign
-} from 'state/helpers'
+import {updateLayerOfDesign, dispatchHelper,
+  updateCurrentLayerOfDesign, defaultSurfaceOptionIdForSurface,
+  idListToFirebaseObj} from 'state/helpers'
+import {persistDesignLayers, persistLayer,
+  persistNewLayerJs, persistDesign} from 'state/persistence'
 import {designsRef} from 'state/firebaseRefs'
 import {uploadDesignPreview, rotateColorPalette} from 'state/utils'
 
@@ -21,16 +20,7 @@ export default {
 
       var now = new Date().getTime()
       var design = newDesign.toJS()
-      var layerIds = design.layers.map((layer, i) => {
-        delete layer.id
-        layer.order = i
-        layer.colorPalette = layer.colorPalette.id
-        layer.selectedLayerImage = layer.selectedLayerImage.id
-        layer.createdAt = now
-        layer.updatedAt = now
-        layer.layerImages = reactor.evaluate(getters.layerImageIds).toJS()
-        return persistNewLayerJs(layer)
-      })
+      var layerIds = persistDesignLayers(design.layers, now, {isNew:true})
 
       design.smallImageUrl = imgUrls.small
       design.largeImageUrl = imgUrls.large
@@ -67,19 +57,8 @@ export default {
       }
       var now = new Date().getTime()
       var design = updatedDesign.toJS()
-      var layerIds = design.layers.map((layer, i) => {
-        var id = layer.id
-        delete layer.id
-        layer.order = i
-        layer.colorPalette = layer.colorPalette.id
-        layer.selectedLayerImage = layer.selectedLayerImage.id
-        layer.updatedAt = now
-        if (layer.hasOwnProperty('tags')) {
-          layer.tags = idListToFirebaseObj(layer.tags.map(t => t.id))
-        }
-        persistLayer(id, layer)
-        return id
-      })
+      var layerIds = persistDesignLayers(design.layers, now, {isNew:false})
+
       var id = design.id
       delete design.id
       design.smallImageUrl = imgUrls.small

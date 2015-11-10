@@ -52,8 +52,6 @@ export default new Nuclear.Store({
       return state.set(layerImage.id, Immutable.fromJS(layerImage))
     })
 
-    this.on('recomputeLayerImages', state => recomputeLayersLayerImages())
-
     this.on('addManyLayerImages', (state, layerImages) => {
       setTimeout(() => recomputeLayersLayerImages(), 50)
       return layerImages.reduce((retVal, layerImage) => (
