@@ -9,7 +9,8 @@ import Tags from 'components/Tags/Tags'
 import Notification from 'components/Notification/Notification'
 import Immutable from 'Immutable'
 import Router from 'react-router'
-import {imageUrlForLayerImage, imageUrlForSurface} from 'state/utils'
+import AdminChooseLayerImages from 'components/Admin/AdminChooseLayerImages/AdminChooseLayerImages'
+import {imageUrlForSurface} from 'state/utils'
 import {updateLayerOfDesign} from 'state/helpers'
 var { Map, Set, List } = Immutable
 var classNames = require('classnames')
@@ -230,17 +231,8 @@ export default React.createClass({
        )
     })
 
-    var layerImages = this.state.layerImages.map(layerImage => {
-      var bg = (this.state.editingDesign.getIn(['layers',this.state.currentLayer,
-                  'selectedLayerImage', 'id']) === layerImage.get('id') ? 'yellow' : '#fff')
-      return (
-        <li onClick={this.selectLayerImage.bind(null, layerImage)}
-            className="LayerImage"
-            style={{background:bg, float:"left"}}>
-          <img src={imageUrlForLayerImage(layerImage)}/>
-        </li>
-      )
-    })
+    var selectedLayerImageId = this.state.editingDesign.getIn(
+      ['layers',this.state.currentLayer, 'selectedLayerImage', 'id'])
 
     var layers = (
       this.state.editingDesign.get('layers')
@@ -327,9 +319,10 @@ export default React.createClass({
             ? <section className='ChoosePalette'>
                 {palettes}
               </section>
-            : <ul className="select-layer-image">
-               {layerImages}
-              </ul>
+            : <AdminChooseLayerImages
+                layerImages={this.state.layerImages}
+                selectedLayerImageId={selectedLayerImageId}
+                onClick={this.selectLayerImage}/>
           }
         </div>
         {surfaces}
