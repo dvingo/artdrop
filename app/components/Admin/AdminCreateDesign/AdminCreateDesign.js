@@ -14,26 +14,6 @@ import {updateLayerOfDesign} from 'state/helpers'
 var { Map, Set, List } = Immutable
 var classNames = require('classnames')
 
-function tagsUpdatedOnExistingDesign(prevState, state) {
-  var existingDesign = state.existingDesign
-  if (existingDesign == null || prevState.existingDesign == null) { return false }
-  var layers = existingDesign.get('layers')
-  var prevLayers = prevState.existingDesign.get('layers')
-  return layers.some((layer, i) => {
-    if (!layer) { return true }
-    return layers.get(i).get('tags') !== prevLayers.get(i).get('tags')
-  })
-}
-
-function updateEditingDesignWithNewTags(state) {
-  return state.editingDesign.updateIn(['layers'], layers => {
-    return layers.map((layer, i) => {
-      var newTags = state.existingDesign.getIn(['layers', i, 'tags'])
-      return layer.set('tags', newTags)
-    })
-  })
-}
-
 function setTagsOnLayerOfDesign(tags, layerIndex, design) {
   return design.updateIn(['layers', layerIndex], layer => (
     layer.set('tags', tags)
@@ -44,8 +24,7 @@ export default React.createClass({
   mixins: [reactor.ReactMixin, Router.State, Router.Navigation],
 
   getDataBindings() {
-    return {existingDesign: Store.getters.currentDesign,
-            layerImages: Store.getters.layerImages,
+    return {layerImages: Store.getters.layerImages,
             colorPalettes: Store.getters.colorPalettes,
             surfaces: Store.getters.surfaces,
             tags: Store.getters.tags}
@@ -60,40 +39,35 @@ export default React.createClass({
       width: 400,
       height: 400,
       designJpgUrl: null,
-      showDeleteConfirmation: false,
-      confirmDeleteText: '',
       selectedTag: null,
-      selectingColors: true
+      selectingColors: true,
+      tagsToNewLayersMap: List()
     }
+  },
+
+  _getInitialDesignData() {
+    var layers = [
+      {id:0,paletteRotation:0,isEnabled:true},
+      {id:1,paletteRotation:0,isEnabled:true},
+      {id:2,paletteRotation:0,isEnabled:true}]
+    if (this.state.colorPalettes && this.state.colorPalettes.count() > 0) {
+      var palette = this.state.colorPalettes.get(0).toJS()
+      layers.forEach(layer => layer.colorPalette = palette)
+    }
+    return Immutable.fromJS({
+      layers:layers,
+      adminCreated: true})
   },
 
   componentWillMount() {
-    if (this._editingDesignNotSet()) {
-      this.setState({editingDesign: this.state.existingDesign})
-    } else {
-      Store.actions.selectDesignId(this.props.params.designId)
-      Store.actions.loadAdminCreateDesignData()
-    }
+    this.setState({editingDesign: this._getInitialDesignData()})
+    Store.actions.loadAdminCreateDesignData()
   },
 
   componentDidUpdate(prevProps, prevState) {
-    if ((!this.state.editingDesign || this.designIsNotHydrated()) && this.state.existingDesign) {
-      setTimeout(() => this.setState({editingDesign: this.state.existingDesign}), 200)
+    if (!this.state.editingDesign.getIn(['layers', 0]).has('colorPalette')) {
+      setTimeout(() => this.setState({editingDesign: this._getInitialDesignData()}), 100)
     }
-    else if (tagsUpdatedOnExistingDesign(prevState, this.state)) {
-      var newDesign = updateEditingDesignWithNewTags(this.state)
-      setTimeout(() => this.setState({editingDesign: newDesign}), 200)
-    }
-  },
-
-  _editingDesignNotSet() {
-    return (this.state.editingDesign == null || this.designIsNotHydrated()) &&
-       this.state.existingDesign &&
-       this.getParams().designId === this.state.existingDesign.get('id')
-  },
-
-  _showDeleteButton() {
-    return !this.state.showDeleteConfirmation
   },
 
   clearMessages() {
@@ -165,29 +139,13 @@ export default React.createClass({
 
     if (errors.length === 0) {
       let svgEls = document.querySelectorAll('.canvas .layer svg')
-      Store.actions.updateDesign({design: this.state.editingDesign, svgEls: svgEls})
+      Store.actions.createNewDesign({
+        design: this.state.editingDesign,
+        svgEls: svgEls,
+        layersToTagsMap: this.state.tagsToNewLayersMap})
       messages.push('Design successfully saved.')
     }
     this.setState({errors: errors, messages: messages})
-  },
-
-  designIsNotHydrated() {
-    var editingDesign = this.state.editingDesign
-    return !(editingDesign &&
-            editingDesign.get('layers').every(l => (typeof l === 'object')))
-  },
-
-  handleShowDeleteConfirmation(){
-    this.setState({showDeleteConfirmation: true})
-  },
-
-  onConfirmDeleteChange(e) {
-    this.setState({confirmDeleteText: e.target.value})
-  },
-
-  confirmedDeleteDesign() {
-    Store.actions.deleteDesign(this.state.existingDesign)
-    this.transitionTo('adminDesigns')
   },
 
   _selectedLayer() {
@@ -199,11 +157,23 @@ export default React.createClass({
   },
 
   onAddTagToSelectedLayer(tagToAdd) {
-    Store.actions.addTagToLayer(tagToAdd, this._selectedLayer(), this.state.existingDesign)
+    var {tagsToNewLayersMap} = this.state
+    var tags = tagsToNewLayersMap.get(this.state.currentLayer, Set()).add(tagToAdd)
+    var newDesign = setTagsOnLayerOfDesign(tags, this.state.currentLayer, this.state.editingDesign)
+    this.setState({
+      tagsToNewLayersMap: tagsToNewLayersMap.set(this.state.currentLayer, tags),
+      editingDesign: newDesign
+    })
   },
 
   onRemoveTagFromSelectedLayer(tagToRemove) {
-    Store.actions.removeTagFromLayer(tagToRemove, this._selectedLayer(), this.state.existingDesign)
+    var {tagsToNewLayersMap} = this.state
+    var tags = tagsToNewLayersMap.get(this.state.currentLayer, Set()).remove(tagToRemove)
+    var newDesign = setTagsOnLayerOfDesign(tags, this.state.currentLayer, this.state.editingDesign)
+    this.setState({
+      tagsToNewLayersMap: tagsToNewLayersMap.set(this.state.currentLayer, tags),
+      editingDesign: newDesign
+    })
   },
 
   selectImagesOrColors(imagesOrColors) {
@@ -211,7 +181,6 @@ export default React.createClass({
   },
 
   render() {
-    if (this.designIsNotHydrated()) { return null }
     var surfaces = this.state.surfaces.map(s => {
       var border = (this.state.editingDesign.getIn(['surface', 'id']) === s.get('id') ? '2px solid' : 'none')
       return <img src={imageUrlForSurface(s)}
@@ -263,7 +232,7 @@ export default React.createClass({
       var bg = this.state.currentLayer === i ? 'yellow' : '#fff'
       var layerOff = !this.state.editingDesign.getIn(['layers', i, 'isEnabled'])
       return (
-        <div style={{background:bg}} className="AdminEditDesign-select-layer"
+        <div style={{background:bg}} className="AdminCreateDesign-select-layer"
           onClick={this.selectLayer.bind(null, i)}>
           Layer {i+1} ({layerDesc[i]}) {layerOff ? ', off' : ''}
         </div>)
@@ -271,22 +240,10 @@ export default React.createClass({
 
     var selectingColors = this.state.selectingColors
     return (
-      <div className="AdminEditDesign">
+      <div className="AdminCreateDesign">
         {this.state.errors.length > 0 ? <div>{errors}</div> : null}
         {this.state.messages.length > 0 ? <div>{messages}</div> : null}
-        <p>Edit Design:</p>
-
-        {this._showDeleteButton() ?
-          <div><button onClick={this.handleShowDeleteConfirmation}>DELETE</button></div> : null}
-
-        {this.state.showDeleteConfirmation ? (
-          <div>
-            <label>Enter 'yes' to confirm.</label>
-            <input type="text" value={this.state.confirmDeleteText} onChange={this.onConfirmDeleteChange}/>
-            {this.state.confirmDeleteText === 'yes' ?
-                <button onClick={this.confirmedDeleteDesign}>REALLY DELETE</button> : null}
-          </div>
-          ) : null}
+        <p>Create Design:</p>
 
         <div style={{height:height, width:width, position:'relative', border: '1px solid'}}>
           <RenderLayers layers={layers} width={width} height={height} />
@@ -315,7 +272,7 @@ export default React.createClass({
             : null
           }
 
-        <div className="AdminEditDesign-button-container">
+        <div className="AdminCreateDesign-button-container">
           <span onClick={this.selectImagesOrColors.bind(null, 'images')}
               className={classNames("button", {off: !selectingColors})}>Art</span>
 

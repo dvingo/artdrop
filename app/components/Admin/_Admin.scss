@@ -1,3 +1,14 @@
+@import "./AdminColorPalettes/AdminColorPalettes";
+@import "./AdminCreateLayerImage/AdminCreateLayerImage";
+@import "./AdminDesigns/AdminDesigns";
+@import "./AdminEditDesign/AdminEditDesign";
+@import "./AdminCreateDesign/AdminCreateDesign";
+@import "./AdminLayerImages/AdminLayerImages";
+@import "./AdminSurfaces/AdminSurfaces";
+@import "./AdminSurfaces/SurfaceImageOption";
+@import "./AdminSurfaces/SurfaceDetail";
+@import "./AdminTags/AdminTags";
+@import "./AdminUsers/AdminUsers";
 .Admin {
 	position: relative;
 	display: block;

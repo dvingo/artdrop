@@ -6,7 +6,6 @@ import {persistNewDesign,
   persistDesign, persistLayer, nonOptionKeys,
   idListToFirebaseObj,
   hydrateAdminDesignsOnlyTags, dispatchHelper,
-  persistNewLayerJs
 } from 'state/helpers'
 import getters from 'state/getters'
 import actions from 'state/actions'
@@ -147,89 +146,5 @@ export default new Nuclear.Store({
       persistNewDesign(design)
       return state.set(design.get('id'), design)
     })
-
-    this.on('createNewDesign', (state, newDesignData) => {
-      var { design:newDesign, svgEls, layersToTagsMap } = newDesignData
-      var title = newDesign.get('title')
-      uploadDesignPreview(title, svgEls, (err, imgUrls) => {
-        if (err) { console.log('got error: ', err); return }
-
-        var now = new Date().getTime()
-        var design = newDesign.toJS()
-        var layerIds = design.layers.map((layer, i) => {
-          delete layer.id
-          layer.order = i
-          layer.colorPalette = layer.colorPalette.id
-          layer.selectedLayerImage = layer.selectedLayerImage.id
-          layer.createdAt = now
-          layer.updatedAt = now
-          layer.layerImages = reactor.evaluate(getters.layerImageIds).toJS()
-          return persistNewLayerJs(layer)
-        })
-        design.smallImageUrl = imgUrls.small
-        design.largeImageUrl = imgUrls.large
-        design.layers = layerIds
-        design.surfaceOption = defaultSurfaceOptionIdForSurface(design.surface)
-        design.surface = design.surface.id
-        design.price = 2000
-        design.createdAt = now
-        design.updatedAt = now
-        var newDesignRef = designsRef.push(design)
-        design.id = newDesignRef.key()
-        reactor.dispatch('addDesign', design)
-        var designImm = Immutable.fromJS(design)
-        layersToTagsMap.forEach((tagSet, layerIndex) => {
-          var layers = newDesign.get('layers').map((l, i) => l.set('id', layerIds[i]))
-          var layer = layers.get(layerIndex)
-          var designImm = newDesign.set('layers', layers)
-          tagSet.forEach(tag => actions.addTagToLayer(tag, layer, designImm))
-        })
-      }.bind(this))
-
-      return state
-    })
-
-    this.on('updateDesign', (state, designData) => {
-      var updatedDesign = designData.design
-      var svgEls = designData.svgEls
-      var title = updatedDesign.get('title')
-      // TODO should only upload the design image
-      // if the color palettes or layerImages have changed for any layer.
-      uploadDesignPreview(title, svgEls, (err, imgUrls) => {
-        if (err) {
-          console.log('got error: ', err)
-          return
-        }
-        var now = new Date().getTime()
-        var design = updatedDesign.toJS()
-        var layerIds = design.layers.map((layer, i) => {
-          var id = layer.id
-          delete layer.id
-          layer.order = i
-          layer.colorPalette = layer.colorPalette.id
-          layer.selectedLayerImage = layer.selectedLayerImage.id
-          layer.updatedAt = now
-          if (layer.hasOwnProperty('tags')) {
-            layer.tags = idListToFirebaseObj(layer.tags.map(t => t.id))
-          }
-          persistLayer(id, layer)
-          return id
-        })
-        var id = design.id
-        delete design.id
-        design.smallImageUrl = imgUrls.small
-        design.largeImageUrl = imgUrls.large
-        design.layers = layerIds
-        design.surface = design.surface.id
-        design.surfaceOption = design.surfaceOption.id
-        design.price = 2000
-        design.updatedAt = now
-        persistDesign(id, design)
-        design.id = id
-        reactor.dispatch('addDesign', updatedDesign)
-      })
-      return state
-    })
-
   }
 })

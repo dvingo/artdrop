@@ -8,7 +8,7 @@ import {hydrateAndDispatchLayerImages} from 'state/helpers'
 
 var recomputeLayersLayerImages = () => {
   var currentDesign = reactor.evaluate(getters.currentDesign)
-  if (currentDesign == null) {
+  if (currentDesign == null || (typeof currentDesign.getIn(['layers', 0]) === 'string')) {
     setTimeout(() => recomputeLayersLayerImages(), 50)
     return
   }
@@ -18,9 +18,9 @@ var recomputeLayersLayerImages = () => {
     return
   }
   var updatedLayers = currentDesign.get('layers').map(layer => {
-    var orderedLayerImages = allLayerImages.sort((li1, li2) => (
-      numTagsInCommon(layer, li2) - numTagsInCommon(layer, li1)
-    ))
+    var orderedLayerImages = allLayerImages.sort((li1, li2) => {
+      return numTagsInCommon(layer, li2) - numTagsInCommon(layer, li1)
+    })
     var selectedLayerImageId = layer.getIn(['selectedLayerImage', 'id'])
     var index = orderedLayerImages.findIndex(li => li.get('id') === selectedLayerImageId)
     return (layer.set('orderedLayerImages', orderedLayerImages)
@@ -51,6 +51,8 @@ export default new Nuclear.Store({
     this.on('setLayerImage', (state, layerImage) => {
       return state.set(layerImage.id, Immutable.fromJS(layerImage))
     })
+
+    this.on('recomputeLayerImages', state => recomputeLayersLayerImages())
 
     this.on('addManyLayerImages', (state, layerImages) => {
       setTimeout(() => recomputeLayersLayerImages(), 50)
