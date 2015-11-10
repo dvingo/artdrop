@@ -1,4 +1,8 @@
 .AdminEditDesign {
+  @include display(flex);
+  @media (max-width: 700px) {
+    @include flex-direction(column);
+  }
   .select-layer-image:after {
     display: table;
     content: '';

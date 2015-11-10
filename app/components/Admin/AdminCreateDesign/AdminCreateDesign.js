@@ -224,7 +224,7 @@ export default React.createClass({
       var bg = this.state.currentLayer === i ? 'yellow' : '#fff'
       var layerOff = !this.state.editingDesign.getIn(['layers', i, 'isEnabled'])
       return (
-        <div style={{background:bg}} className="AdminCreateDesign-select-layer"
+        <div style={{background:bg}} className="AdminEditDesign-select-layer"
           onClick={this.selectLayer.bind(null, i)}>
           Layer {i+1} ({layerDesc[i]}) {layerOff ? ', off' : ''}
         </div>)
@@ -232,57 +232,63 @@ export default React.createClass({
 
     var selectingColors = this.state.selectingColors
     return (
-      <div className="AdminCreateDesign">
+      <div className="AdminEditDesign">
         {this.state.errors.length > 0 ? <div>{errors}</div> : null}
         {this.state.messages.length > 0 ? <div>{messages}</div> : null}
-        <p>Create Design:</p>
+        <div className="admin-edit-design-section-one">
+          <p>Create Design:</p>
 
-        <div style={{height:height, width:width, position:'relative', border: '1px solid'}}>
-          <RenderLayers layers={layers} width={width} height={height} />
+          <div style={{height:height, width:width, position:'relative', border: '1px solid'}}>
+            <RenderLayers layers={layers} width={width} height={height} />
+          </div>
+
+          <label>Select layer to edit</label>
+          <div style={{padding:20}}>
+            {selectLayers}
+          </div>
+
+          <Tags label={"Tags for layer " + (this.state.currentLayer + 1)}
+                selectedTags={this._selectedLayerTags()}
+                onRemoveTag={this.onRemoveTagFromSelectedLayer}
+                onAddTag={this.onAddTagToSelectedLayer} />
+
+          <form onSubmit={this.saveDesign}>
+            <label>Title</label>
+            <input type="text" value={this.state.editingDesign.get('title')} onChange={this.updateTitle}></input>
+            <input type="submit"></input>
+          </form>
+
+            {this.state.editingDesign.getIn(['layers', this.state.currentLayer, 'colorPalette']) ?
+              [<p>Rotate palette</p>,
+                <ColorsButtonRotate layer={this.state.editingDesign.getIn(['layers', this.state.currentLayer])}
+                  onClick={this.handleRotateColorPalette}/>]
+              : null
+            }
         </div>
 
-        <label>Select layer to edit</label>
-        <div style={{padding:20}}>
-          {selectLayers}
+        <div className="admin-edit-design-section-two">
+
+          <div className="AdminEditDesign-button-container">
+            <span onClick={this.selectImagesOrColors.bind(null, 'images')}
+                className={classNames("button", {off: !selectingColors})}>Art</span>
+
+            <span onClick={this.selectImagesOrColors.bind(null, 'colors')}
+                className={classNames("button", {off: selectingColors})}>Color</span>
+          </div>
+
+          <div className="DesignEditDetail-layer-grid">
+            { selectingColors
+              ? <section className='ChoosePalette'>
+                  {palettes}
+                </section>
+              : <AdminChooseLayerImages
+                  layerImages={this.state.layerImages}
+                  selectedLayerImageId={selectedLayerImageId}
+                  onClick={this.selectLayerImage}/>
+            }
+          </div>
+          {surfaces}
         </div>
-
-        <Tags label={"Tags for layer " + (this.state.currentLayer + 1)}
-              selectedTags={this._selectedLayerTags()}
-              onRemoveTag={this.onRemoveTagFromSelectedLayer}
-              onAddTag={this.onAddTagToSelectedLayer} />
-
-        <form onSubmit={this.saveDesign}>
-          <label>Title</label>
-          <input type="text" value={this.state.editingDesign.get('title')} onChange={this.updateTitle}></input>
-          <input type="submit"></input>
-        </form>
-
-          {this.state.editingDesign.getIn(['layers', this.state.currentLayer, 'colorPalette']) ?
-            [<p>Rotate palette</p>,
-              <ColorsButtonRotate layer={this.state.editingDesign.getIn(['layers', this.state.currentLayer])}
-                onClick={this.handleRotateColorPalette}/>]
-            : null
-          }
-
-        <div className="AdminCreateDesign-button-container">
-          <span onClick={this.selectImagesOrColors.bind(null, 'images')}
-              className={classNames("button", {off: !selectingColors})}>Art</span>
-
-          <span onClick={this.selectImagesOrColors.bind(null, 'colors')}
-              className={classNames("button", {off: selectingColors})}>Color</span>
-        </div>
-        <div className="DesignEditDetail-layer-grid">
-          { selectingColors
-            ? <section className='ChoosePalette'>
-                {palettes}
-              </section>
-            : <AdminChooseLayerImages
-                layerImages={this.state.layerImages}
-                selectedLayerImageId={selectedLayerImageId}
-                onClick={this.selectLayerImage}/>
-          }
-        </div>
-        {surfaces}
       </div>
     )
   }

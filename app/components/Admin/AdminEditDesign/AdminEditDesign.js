@@ -269,41 +269,43 @@ export default React.createClass({
       <div className="AdminEditDesign">
         {this.state.errors.length > 0 ? <div>{errors}</div> : null}
         {this.state.messages.length > 0 ? <div>{messages}</div> : null}
-        <p>Edit Design:</p>
 
-        {this._showDeleteButton() ?
-          <div><button onClick={this.handleShowDeleteConfirmation}>DELETE</button></div> : null}
+        <div className="admin-edit-design-section-one">
+          <p>Edit Design:</p>
 
-        {this.state.showDeleteConfirmation ? (
-          <div>
-            <form onSubmit={this.confirmedDeleteDesign}>
-              <label>Enter 'yes' to confirm.</label>
-              <input type="text" value={this.state.confirmDeleteText} onChange={this.onConfirmDeleteChange}/>
-              {this.state.confirmDeleteText === 'yes' ?
-                  <button onClick={this.confirmedDeleteDesign}>REALLY DELETE</button> : null}
-            </form>
+          {this._showDeleteButton() ?
+            <div><button onClick={this.handleShowDeleteConfirmation}>DELETE</button></div> : null}
+
+          {this.state.showDeleteConfirmation ? (
+            <div>
+              <form onSubmit={this.confirmedDeleteDesign}>
+                <label>Enter 'yes' to confirm.</label>
+                <input type="text" value={this.state.confirmDeleteText} onChange={this.onConfirmDeleteChange}/>
+                {this.state.confirmDeleteText === 'yes' ?
+                    <button onClick={this.confirmedDeleteDesign}>REALLY DELETE</button> : null}
+              </form>
+            </div>
+            ) : null}
+
+          <div style={{height:height, width:width, position:'relative', border: '1px solid'}}>
+            <RenderLayers layers={layers} width={width} height={height} />
           </div>
-          ) : null}
 
-        <div style={{height:height, width:width, position:'relative', border: '1px solid'}}>
-          <RenderLayers layers={layers} width={width} height={height} />
-        </div>
+          <label>Select layer to edit</label>
+          <div style={{padding:20}}>
+            {selectLayers}
+          </div>
 
-        <label>Select layer to edit</label>
-        <div style={{padding:20}}>
-          {selectLayers}
-        </div>
+          <Tags label={"Tags for layer " + (this.state.currentLayer + 1)}
+                selectedTags={this._selectedLayerTags()}
+                onRemoveTag={this.onRemoveTagFromSelectedLayer}
+                onAddTag={this.onAddTagToSelectedLayer} />
 
-        <Tags label={"Tags for layer " + (this.state.currentLayer + 1)}
-              selectedTags={this._selectedLayerTags()}
-              onRemoveTag={this.onRemoveTagFromSelectedLayer}
-              onAddTag={this.onAddTagToSelectedLayer} />
-
-        <form onSubmit={this.saveDesign}>
-          <label>Title</label>
-          <input type="text" value={this.state.editingDesign.get('title')} onChange={this.updateTitle}></input>
-          <input type="submit"></input>
-        </form>
+          <form onSubmit={this.saveDesign}>
+            <label>Title</label>
+            <input type="text" value={this.state.editingDesign.get('title')} onChange={this.updateTitle}></input>
+            <input type="submit"></input>
+          </form>
 
           {this.state.editingDesign.getIn(['layers', this.state.currentLayer, 'colorPalette']) ?
             [<p>Rotate palette</p>,
@@ -312,25 +314,30 @@ export default React.createClass({
             : null
           }
 
-        <div className="AdminEditDesign-button-container">
-          <span onClick={this.selectImagesOrColors.bind(null, 'images')}
-              className={classNames("button", {off: !selectingColors})}>Art</span>
+        </div>
 
-          <span onClick={this.selectImagesOrColors.bind(null, 'colors')}
-              className={classNames("button", {off: selectingColors})}>Color</span>
+        <div className="admin-edit-design-section-two">
+          <div className="AdminEditDesign-button-container">
+            <span onClick={this.selectImagesOrColors.bind(null, 'images')}
+                className={classNames("button", {off: !selectingColors})}>Art</span>
+
+            <span onClick={this.selectImagesOrColors.bind(null, 'colors')}
+                className={classNames("button", {off: selectingColors})}>Color</span>
+          </div>
+
+          <div className="DesignEditDetail-layer-grid">
+            { selectingColors
+              ? <section className='ChoosePalette'>
+                  {palettes}
+                </section>
+              : <AdminChooseLayerImages
+                  layerImages={this.state.layerImages}
+                  selectedLayerImageId={selectedLayerImageId}
+                  onClick={this.selectLayerImage}/>
+            }
+          </div>
+          {surfaces}
         </div>
-        <div className="DesignEditDetail-layer-grid">
-          { selectingColors
-            ? <section className='ChoosePalette'>
-                {palettes}
-              </section>
-            : <AdminChooseLayerImages
-                layerImages={this.state.layerImages}
-                selectedLayerImageId={selectedLayerImageId}
-                onClick={this.selectLayerImage}/>
-          }
-        </div>
-        {surfaces}
       </div>
     )
   }
