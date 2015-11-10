@@ -15,6 +15,11 @@ export default React.createClass({
     this.setState({showDeleteConfirmation: true})
   },
 
+  confirmedDelete(e) {
+    e.preventDefault()
+    this.props.onDelete()
+  },
+
   render() {
     var {layerImage} = this.props
     var labelStyle = { display: 'inline-block', fontWeight: 'bold', marginRight: 20 }
@@ -47,10 +52,12 @@ export default React.createClass({
 
           {this.state.showDeleteConfirmation ? (
             <div>
-              <label>Enter 'yes' to confirm.</label>
-              <input type="text" value={this.state.confirmDeleteText} onChange={this.onConfirmDeleteChange}/>
-              {this.state.confirmDeleteText === 'yes' ?
-                  <button onClick={this.props.onDelete}>REALLY DELETE</button> : null}
+              <form onSubmit={this.confirmedDelete}>
+                <label>Enter 'yes' to confirm.</label>
+                <input type="text" value={this.state.confirmDeleteText} onChange={this.onConfirmDeleteChange}/>
+                {this.state.confirmDeleteText === 'yes' ?
+                    <button onClick={this.confirmedDelete}>REALLY DELETE</button> : null}
+              </form>
             </div>
             ) : null}
 

@@ -186,9 +186,12 @@ export default React.createClass({
     this.setState({confirmDeleteText: e.target.value})
   },
 
-  confirmedDeleteDesign() {
-    Store.actions.deleteDesign(this.state.existingDesign)
-    this.transitionTo('adminDesigns')
+  confirmedDeleteDesign(e) {
+    e.preventDefault()
+    if (this.state.confirmDeleteText === 'yes') {
+      Store.actions.deleteDesign(this.state.existingDesign)
+      this.transitionTo('adminDesigns')
+    }
   },
 
   _selectedLayer() {
@@ -273,10 +276,12 @@ export default React.createClass({
 
         {this.state.showDeleteConfirmation ? (
           <div>
-            <label>Enter 'yes' to confirm.</label>
-            <input type="text" value={this.state.confirmDeleteText} onChange={this.onConfirmDeleteChange}/>
-            {this.state.confirmDeleteText === 'yes' ?
-                <button onClick={this.confirmedDeleteDesign}>REALLY DELETE</button> : null}
+            <form onSubmit={this.confirmedDeleteDesign}>
+              <label>Enter 'yes' to confirm.</label>
+              <input type="text" value={this.state.confirmDeleteText} onChange={this.onConfirmDeleteChange}/>
+              {this.state.confirmDeleteText === 'yes' ?
+                  <button onClick={this.confirmedDeleteDesign}>REALLY DELETE</button> : null}
+            </form>
           </div>
           ) : null}
 
