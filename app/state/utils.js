@@ -228,8 +228,8 @@ export default {
   uploadDesignPreview(title, svgEls, onComplete) {
     var designJpgBlobSmall = renderDesignToJpegBlob(designPreviewSize, svgEls)
     var designJpgBlobLarge = renderDesignToJpegBlob(designDetailSize, svgEls)
-    var smallImageFilename = title + '-small' + '.jpg'
-    var largeImageFilename = title + '-large' + '.jpg'
+    var smallImageFilename = title + '-small.jpg'
+    var largeImageFilename = title + '-large.jpg'
     uploadImgToS3(designJpgBlobSmall, smallImageFilename, 'image/jpeg', (err, smallImgUrl) => {
       if (err) {
         console.log('got error: ',err)
