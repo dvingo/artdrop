@@ -33,7 +33,7 @@
         height: 30px;
 		margin-top: 10px;
 		color: $nav-bar-color;
-        @include prefixer(box-shadow, 0px 0px 5px 0px rgba(0,0,0,0.75), webkit moz spec)
+        @include prefixer(box-shadow, 0px 0px 5px 0px rgba(0,0,0,0.75), webkit moz spec);
 		cursor: pointer;
 		img {
           height: 15px;
