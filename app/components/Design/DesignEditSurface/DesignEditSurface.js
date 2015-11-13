@@ -38,6 +38,7 @@ export default React.createClass({
   },
 
   render() {
+    console.log("--RENDER--")
     var design = this.state.design
     if (!(design && this.state.surfaces && typeof design.get('surfaceOption') === 'object'
         && this.state.currentSurfaceOptionsMap)) { return null }
@@ -80,6 +81,7 @@ export default React.createClass({
               <div className="DesignEditSurface-product-overlay-container">
                 <img src={imageUrlForSurface(surface)} height={200}
                      className="selected-surface-img"/>
+                <RenderLayers layers={design.get('layers')}/>
               </div>
             </div>
           </div>
