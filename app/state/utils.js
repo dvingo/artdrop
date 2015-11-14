@@ -134,21 +134,13 @@ var renderDesignToJpegBlob = (size, svgEls, compositeSvg) => {
   return dataUriToBlob(canvas.toDataURL('image/jpeg', 1.0))
 }
 
-var urlForImage = (title, type) => {
-  var retVal = hostname + '/images/' + title
-  if (type) { retVal += '.' + type }
-  return retVal
-}
-
 var s3UrlForImage = (filename) => {
   return `${s3Endpoint}/${s3BucketName}/${filename}`
 }
 
 var imageUrlForLayerImage = (layerImage) => {
-  var filename = (layerImage.has('filename')
-      ? layerImage.get('filename')
-      : layerImage.get('imageUrl').split('/').pop())
-  return urlForImage(filename)
+  var filename = layerImage.get('imageUrl').split('/').pop()
+  return s3UrlForImage(filename)
 }
 
 var uploadImgToS3 = (file, filename, imgType, onComplete) => {
@@ -202,7 +194,7 @@ export default {
     var filename = (design.has('title')
         ? design.get('title')
         : design.get('imageUrl').split('/').pop())
-    return urlForImage(filename + '-' + size, 'jpg')
+    return s3UrlForImage(filename + '-' + size, 'jpg')
   },
 
   imageUrlForLayer(layer) {
