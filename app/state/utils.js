@@ -3,6 +3,7 @@ var config = require('config')
 var pako = require('pako')
 var srcDir = config.srcDir
 import {Set} from 'Immutable'
+import RSVP, {Promise} from 'RSVP'
 var s3Endpoint = config.s3Endpoint
 var designPreviewSize = config.designPreviewSize
 var designDetailSize = config.designDetailSize
@@ -89,49 +90,51 @@ var dataUriToBlob = (dataUri) => {
   return new Blob([ia], {type:mimeString});
 }
 
-var svgTextToImage = (svgEl) => {
+var svgTextToImage = (height, width, svgEl) => {
   var svgString = (new window.XMLSerializer()).serializeToString(svgEl)
   var imageString = 'data:image/svg+xml;base64,' + window.btoa(svgString)
-  var img = new Image()
-  img.height = 400
-  img.width = 400
-  img.src = imageString
-  return img
+  var img = new Image(width, height)
+  return new Promise((resolve, reject) => {
+    img.addEventListener('load', () => resolve(img))
+    img.src = imageString
+  })
 }
 
-var renderDesignToJpegBlob = (size, svgEls, compositeSvg) => {
+var renderDesignToJpegBlob = (size, svgEls) => {
   var w = size, h = size
   var canvas = document.createElement('canvas')
   canvas.height = h
   canvas.width = w
+  var ctx = canvas.getContext('2d')
+  ctx.clearRect(0, 0, w, h)
+  var bgColor = '#fff'
+
   var svgs = (
     toA(svgEls).map(svg => {
       svg.setAttribute('height', String(h))
       svg.setAttribute('width', String(w))
       return svg
     })
-    .map(svgTextToImage)
-  )
+    .map(svgTextToImage.bind(null, h, w)))
 
-  var ctx = canvas.getContext('2d')
-  ctx.clearRect(0, 0, w, h)
-  var bgColor = '#fff'
-  svgs.forEach(svg => {
-    ctx.drawImage(svg, 0, 0, w, h)
+  return RSVP.all(svgs).then(svgImgs => {
+    svgImgs.forEach(svg => { ctx.drawImage(svg, 0, 0, w, h) })
+    ctx.globalCompositeOperation = "destination-over"
+    ctx.fillStyle = bgColor
+    ctx.fillRect(0, 0, w, h)
+    console.log('returning canvas')
+    return canvas
   })
 
-  if (compositeSvg) {
-    ctx.globalCompositeOperation = 'multiply'
-    compositeSvg.setAttribute('height', String(h))
-    compositeSvg.setAttribute('width', String(w))
-    let compositeSvg = svgTextToImage(compositeSvg)
-    ctx.drawImage(compositeSvg, 0, 0, w, h)
-  }
+  //if (compositeSvg) {
+    //ctx.globalCompositeOperation = 'multiply'
+    //compositeSvg.setAttribute('height', String(h))
+    //compositeSvg.setAttribute('width', String(w))
+    //let compositeSvg = svgTextToImage(compositeSvg)
+    //ctx.drawImage(compositeSvg, 0, 0, w, h)
+  //}
   //Draw a white background.
-  ctx.globalCompositeOperation = "destination-over"
-  ctx.fillStyle = bgColor
-  ctx.fillRect(0, 0, w, h)
-  return dataUriToBlob(canvas.toDataURL('image/jpeg', 1.0))
+  //return dataUriToBlob(canvas.toDataURL('image/jpeg', 1.0))
 }
 
 var urlForImage = (title, type) => {
@@ -145,10 +148,8 @@ var s3UrlForImage = (filename) => {
 }
 
 var imageUrlForLayerImage = (layerImage) => {
-  var filename = (layerImage.has('filename')
-      ? layerImage.get('filename')
-      : layerImage.get('imageUrl').split('/').pop())
-  return urlForImage(filename)
+  var filename = layerImage.get('imageUrl').split('/').pop()
+  return s3UrlForImage(filename)
 }
 
 var uploadImgToS3 = (file, filename, imgType, onComplete) => {
@@ -185,6 +186,7 @@ var uploadImgToS3 = (file, filename, imgType, onComplete) => {
 }
 
 export default {
+  renderDesignToJpegBlob:renderDesignToJpegBlob,
   numTagsInCommon(obj1, obj2) {
     var tags1 = Set(obj1.get('tags'))
     var tags2 = Set(obj2.get('tags'))
@@ -202,7 +204,7 @@ export default {
     var filename = (design.has('title')
         ? design.get('title')
         : design.get('imageUrl').split('/').pop())
-    return urlForImage(filename + '-' + size, 'jpg')
+    return s3UrlForImage(filename + '-' + size, 'jpg')
   },
 
   imageUrlForLayer(layer) {

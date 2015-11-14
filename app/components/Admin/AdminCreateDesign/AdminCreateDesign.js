@@ -10,8 +10,9 @@ import Notification from 'components/Notification/Notification'
 import AdminChooseLayerImages from 'components/Admin/AdminChooseLayerImages/AdminChooseLayerImages'
 import Immutable from 'Immutable'
 import Router from 'react-router'
-import {imageUrlForLayerImage, imageUrlForSurface} from 'state/utils'
+import {renderDesignToJpegBlob, imageUrlForLayerImage, imageUrlForSurface} from 'state/utils'
 import {updateLayerOfDesign} from 'state/helpers'
+import {toA} from 'utils'
 var { Map, Set, List } = Immutable
 var classNames = require('classnames')
 
@@ -140,11 +141,27 @@ export default React.createClass({
 
     if (errors.length === 0) {
       let svgEls = document.querySelectorAll('.canvas .layer svg')
-      Store.actions.createNewDesign({
-        design: this.state.editingDesign,
-        svgEls: svgEls,
-        layersToTagsMap: this.state.tagsToNewLayersMap})
-      messages.push('Design successfully saved.')
+        var ids = toA(svgEls).map(e => e.parentNode.attributes['data-reactid'].nodeValue)
+        console.log("SVGELEMENTs: ", ids)
+        if (svgEls.length > 3) {
+          console.log("")
+          console.log("MORE THAN 3 SVGS!")
+          console.log("")
+        }
+        //IN SOME CASES The SVG replacement doesn't remove the last svg and there are 4 dom nodes
+        // also need TO FIX off by one error when clicking layer images where the update
+        // corresponds to the previously clicked image.
+      renderDesignToJpegBlob(130, svgEls).then((designJpgBlobSmall) => {
+        console.log('in THEN')
+        designJpgBlobSmall.style.border = '2px solid black'
+        console.log('appending: ', designJpgBlobSmall)
+        document.body.appendChild(designJpgBlobSmall)
+      })
+      //Store.actions.createNewDesign({
+        //design: this.state.editingDesign,
+        //svgEls: svgEls,
+        //layersToTagsMap: this.state.tagsToNewLayersMap})
+      //messages.push('Design successfully saved.')
     }
     this.setState({errors: errors, messages: messages})
   },
