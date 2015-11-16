@@ -151,17 +151,12 @@ export default React.createClass({
         //IN SOME CASES The SVG replacement doesn't remove the last svg and there are 4 dom nodes
         // also need TO FIX off by one error when clicking layer images where the update
         // corresponds to the previously clicked image.
-      renderDesignToJpegBlob(130, svgEls).then((designJpgBlobSmall) => {
-        console.log('in THEN')
-        designJpgBlobSmall.style.border = '2px solid black'
-        console.log('appending: ', designJpgBlobSmall)
-        document.body.appendChild(designJpgBlobSmall)
+      Store.actions.createNewDesign({
+        design: this.state.editingDesign,
+        svgEls: svgEls,
+        layersToTagsMap: this.state.tagsToNewLayersMap
       })
-      //Store.actions.createNewDesign({
-        //design: this.state.editingDesign,
-        //svgEls: svgEls,
-        //layersToTagsMap: this.state.tagsToNewLayersMap})
-      //messages.push('Design successfully saved.')
+      messages.push('Design successfully saved.')
     }
     this.setState({errors: errors, messages: messages})
   },
