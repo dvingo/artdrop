@@ -15,19 +15,16 @@ export default {
   createNewDesign(newDesignData) {
     var { design:newDesign, svgEls, layersToTagsMap } = newDesignData
     var title = newDesign.get('title')
-    uploadDesignPreview(title, svgEls, (err, imgUrls) => {
-      if (err) { console.log('got error: ', err); return }
-
+    uploadDesignPreview(title, svgEls).then(([smallImgUrl, largeImgUrl]) => {
       var now = new Date().getTime()
       var design = newDesign.toJS()
       var layerIds = persistDesignLayers(design.layers, now, {isNew:true})
 
-      design.smallImageUrl = imgUrls.small
-      design.largeImageUrl = imgUrls.large
+      design.smallImageUrl = smallImgUrl
+      design.largeImageUrl = largeImgUrl
       design.layers = layerIds
       design.surfaceOption = defaultSurfaceOptionIdForSurface(design.surface)
       design.surface = design.surface.id
-      design.price = 2000
       design.createdAt = now
       design.updatedAt = now
       var newDesignRef = designsRef.push(design)
@@ -42,36 +39,29 @@ export default {
         tagSet.forEach(tag => actions.addTagToLayer(tag, layer, designImm))
       })
     })
+    .catch(err => console.log('got error: ', err))
   },
 
-  updateDesign(designData) {
-    var updatedDesign = designData.design
-    var svgEls = designData.svgEls
+  updateDesign({design:updatedDesign, svgEls}) {
     var title = updatedDesign.get('title')
-    // TODO should only upload the design image
-    // if the color palettes or layerImages have changed for any layer.
-    uploadDesignPreview(title, svgEls, (err, imgUrls) => {
-      if (err) {
-        console.log('got error: ', err)
-        return
-      }
+    uploadDesignPreview(title, svgEls).then(([smallImgUrl, largeImgUrl]) => {
       var now = new Date().getTime()
       var design = updatedDesign.toJS()
       var layerIds = persistDesignLayers(design.layers, now, {isNew:false})
 
       var id = design.id
       delete design.id
-      design.smallImageUrl = imgUrls.small
-      design.largeImageUrl = imgUrls.large
+      design.smallImageUrl = smallImgUrl
+      design.largeImageUrl = largeImgUrl
       design.layers = layerIds
       design.surface = design.surface.id
       design.surfaceOption = design.surfaceOption.id
-      design.price = 2000
       design.updatedAt = now
       persistDesign(id, design)
       design.id = id
       reactor.dispatch('setDesignImm', updatedDesign)
     })
+    .catch(err => console.log('got error: ', err))
   },
 
   nextLayerImage(direction) {

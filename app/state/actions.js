@@ -44,7 +44,6 @@ var actions = {
   selectLayerId(id)  { dispatchHelper('selectLayerId', id) },
   layerReplacementStarted() { dispatchHelper('layerReplacementStarted') },
   layerReplacementComplete() { dispatchHelper('layerReplacementComplete') },
-  uploadLayerImageWithCompositeToS3(files) { dispatchHelper('uploadLayerImageWithCompositeToS3', files) },
   deleteColorPalette(colorPalette) { dispatchHelper('deleteColorPalette', colorPalette) },
   selectSurface(surface) { dispatchHelper('selectSurface', surface) },
   selectSurfaceOptionFromKeyValue(key, value) {
