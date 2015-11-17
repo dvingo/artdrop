@@ -8,9 +8,6 @@ var s3Endpoint = config.s3Endpoint
 var designPreviewSize = config.designPreviewSize
 var designDetailSize = config.designDetailSize
 var s3BucketName = config.s3BucketName
-var hostname = config.serverHostname
-var scheme = typeof window !== 'undefined' ? window.location.protocol : ''
-hostname = scheme + '//' + hostname
 /**
  * From: https://gist.github.com/mikelehen/3596a30bd69384624c11
  * Fancy ID generator that creates 20-character string identifiers with the following properties:
@@ -127,7 +124,7 @@ var renderDesignToJpegBlob = (size, svgEls) => {
 }
 
 var s3UrlForImage = (filename) => {
-  return `${s3Endpoint}/${s3BucketName}/${filename}`
+  return `//images.artdrop.it/${filename}`
 }
 
 var imageUrlForLayerImage = (layerImage) => {
@@ -179,17 +176,17 @@ export default {
   },
 
   imageUrlForDesign(design, size) {
+    var filename;
     if (size === 'small') {
-      return design.get('smallImageUrl')
+      filename = design.get('smallImageUrl').split('/').pop()
+    } else if (size === 'large') {
+      filename = design.get('largeImageUrl').split('/').pop()
+    } else {
+      filename = (design.has('title')
+          ? design.get('title')
+          : design.get('imageUrl').split('/').pop())
     }
-    if (size === 'large') {
-      return design.get('largeImageUrl')
-    }
-
-    var filename = (design.has('title')
-        ? design.get('title')
-        : design.get('imageUrl').split('/').pop())
-    return s3UrlForImage(filename + '-' + size, 'jpg')
+    return s3UrlForImage(filename, 'jpg')
   },
 
   imageUrlForLayer(layer) {
