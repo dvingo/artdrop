@@ -44,12 +44,14 @@ export default React.createClass({
     return (
       <div className="Cart cart">
         <div className="Cart-left">
-
-          <RenderLayers layers={design.get('layers')}/>
+          
+          <div className="Cart-design-container">
+            <img className="Cart-surface-overlay" src={imageUrlForSurface(design.get('surface'))}/>
+            <RenderLayers layers={design.get('layers')}/>
+          </div>
 
           <div className="Cart-surface-info">
             <h2>Printed on: <span className="val">{design.getIn(['surface', 'name'])}</span></h2>
-            <img src={imageUrlForSurface(design.get('surface'))}/>
           </div>
 
           <div className="Cart-price-info">

@@ -41,6 +41,10 @@
 
 .Nav-button {
   margin-right: 20px;
+
+  &:hover {
+    cursor: pointer;
+  }
   @media (max-width: 360px) {
     margin-right: 10px;
   }

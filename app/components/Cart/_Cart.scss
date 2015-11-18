@@ -24,14 +24,33 @@
 .Cart-surface-info {
   margin: 0 auto;
   max-width: 400px;
-  img { width: 100%; }
 }
+.Cart-left {
+  position: relative;
+}
+.Cart-design-container {
+  position: relative;
+  width: 100%;
+  height: 500px;
+}
+.Cart-surface-overlay {
+   position: absolute;
+   left: 0;
+   right: 0;
+   margin: 0 auto;
+   max-width: 475px;
+   max-height: 475px;
+   z-index: 100;
+}
+.Cart-design-container .canvas-flex-wrapper {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  max-height: 475px;
 
-.Cart-canvas-flex-wrapper {
-  @include design-render();
-  @include display(flex);
-  @include align-items(center);
-  @include justify-content(center);
-  flex: none;
-  max-width: none;
+  span {
+    width: 100%;
+    height: 100%;
+  }
 }
