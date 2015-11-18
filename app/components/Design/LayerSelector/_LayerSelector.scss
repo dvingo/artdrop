@@ -8,20 +8,6 @@
 	box-sizing: box;
 	border-radius: 10px;
 
-    img {
-      width: 90px;
-      height: 90px;
-      background: white;
-      border-radius: 10px;
-      opacity: 1;
-      @include prefixer(box-shadow, 2px 2px 6px 0px rgba(150,150,150,0.75), moz webkit spec);
-      cursor: pointer;
-      @media (max-width: 320px) {
-        width: 60px;
-        height: 60px;
-      }
-    }
-
 	span {
 		@include display(flex);
         @include flex(1 0 30px);
@@ -48,8 +34,32 @@
 		&.disabled { opacity: 0.3; }
 	}
 
+  .LayerSelector-image-container {
+    width: 90px;
+    height: 90px;
+
+    @media (min-width: 1000px) {
+      width: 130px;
+      height: 130px;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      background: white;
+      border-radius: 10px;
+      opacity: 1;
+      @include prefixer(box-shadow, 2px 2px 6px 0px rgba(150,150,150,0.75), moz webkit spec);
+      cursor: pointer;
+      @media (max-width: 320px) {
+        width: 60px;
+        height: 60px;
+      }
+    }
+  }
+
 	&.selected {
-      height: 160px;
+      height: 180px;
       width: 100px;
       background: $button-color;
       @include prefixer(box-shadow, 2px 2px 6px 0px rgba(150,150,150,0.75), webkit moz spec);

@@ -18,15 +18,11 @@ export default React.createClass({
   },
 
   render() {
-    return this._onRouteWithTopBar() ?
+    return (
       <div className="App">
-         <Nav/>
-         <RouteHandler/>
+          <Nav/>
+          <RouteHandler/>
        </div>
-      :
-      <div className="App">
-         <RouteHandler/>
-         <Nav/>
-       </div>
+    )
   }
 })
