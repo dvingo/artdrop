@@ -214,7 +214,7 @@ export default {
 
   uploadImgToS3: uploadImgToS3,
 
-  uploadDesignPreview(title, svgEls, onComplete) {
+  uploadDesignPreview(title, svgEls) {
     return RSVP.all([
       renderDesignToJpegBlob(designPreviewSize, svgEls),
       renderDesignToJpegBlob(designDetailSize, svgEls)

@@ -13,7 +13,10 @@ getters.designsGroupedByTag = [
   getters.adminCreatedDesigns,
   designs => {
     if (!designs) { return List() }
-    return designs.groupBy(d => d.get('tags')).flatten(1)
+    return (
+      designs
+        .groupBy(d => d.getIn(['tags', 0, 'id']))
+        .toList().reduce((retVal, cur) => retVal.concat(cur), List()))
   }
 ]
 

@@ -4,6 +4,7 @@ var Store = require('state/main')
 var Immutable = require('Immutable')
 require('babel/register')
 var dispatchHelper = require('state/helpers')
+require('./test_group_designs')
 
 describe('TagsStore', function() {
   afterEach(function() {
@@ -15,7 +16,8 @@ describe('TagsStore', function() {
     name: 'tes tag',
     designs: [],
     createdAt: new Date().getTime(),
-    updatedAt: new Date().getTime()}
+    updatedAt: new Date().getTime()
+  }
 
   var design1Id = "-JuwNGKBIuLpQLTcMnSN"
   var design2Id = "-JuwTLo8mMamQgZSeBF3"
