@@ -25,6 +25,7 @@ export default {
 
   uploadLayerImageToS3({file, svgText}) {
     uploadImgToS3(svgText, file.name, 'image/svg+xml').then(imageUrl => {
+      var newLayerImage = newLayerImageObj(file.name, imageUrl)
       newLayerImage.id = persistNewLayerImage(newLayerImage)
       var layerImageImm = Immutable.fromJS(newLayerImage)
       reactor.dispatch('setLayerImage', newLayerImage)
