@@ -18,16 +18,18 @@ export default React.createClass({
 
   render() {
     var {design, currentLayer} = this.state
+    var layerIndex = ['Foreground', 'Middleground',  'Background']
     if (design == null || currentLayer == null ) { return null }
 
     return (
       <article className={classNames("LayerSelectorGroup", {portrait: this.props.isPortrait})}>
-          {design.get('layers').reverse().map(layer => {
+          {design.get('layers').reverse().map((layer, i) => {
             return (
               <LayerSelector
                  design={design}
                  currentLayer={currentLayer}
                  layer={layer}
+                 layerIndexName={layerIndex[i]}
                  onClick={this.props.onClick.bind(null, layer.get('id'))}/>
             )
           })}

@@ -1,3 +1,19 @@
+.LayerSelector-container {
+  position: relative;
+  @include display(flex);
+  @include flex-direction(column);
+  @include justify-content(center);
+  @include align-items(center);
+}
+.LayerSelector-name {
+  position: relative;
+  padding-bottom: 5px;
+
+  @media (max-width: 400px) {
+    display: none;
+  }
+}
+
 .LayerSelector {
 	@include display(flex);
 	@include align-items(center);
