@@ -30,7 +30,7 @@ function tagIdsToObjs(ids) {
   return ids.map(id => tagsMap.get(id))
 }
 var _addTagToObject = (tag, obj) => {
-  var updatedTags = Set(obj.get('tags').map(t => t.get('id'))).add(tag.get('id'))
+  var updatedTags = Set(obj.get('tags').filter(t => t).map(t => t.get('id'))).add(tag.get('id'))
   updatedTags = tagIdsToObjs(updatedTags)
   return obj.set('tags', updatedTags)
 }

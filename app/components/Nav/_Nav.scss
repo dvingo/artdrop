@@ -93,20 +93,23 @@
   }
 }
 .Nav-modal {
-  width: 300px;
-  height: 150px;
+  width: 330px;
+  height: 170px;
   background: white;
-  border-radius: 5px;
+  border-radius:25px;
   z-index: 100;
   @include display(flex);
   @include align-items(center);
   @include justify-content(center);
   @include flex-direction(column);
+  overflow: hidden;
 
   span {
-    padding: 10px;
-    background: #27002b;
-    color: white;
+    padding: 15px 15px 0 15px;
+    // background: lavender;
+    color: $nav-bar-color;
+    text-align: center;
+    font-size: 1.7em;
   }
   ul {
     @include display(flex);
@@ -114,6 +117,7 @@
     @include justify-content(center);
     @include align-items(center);
     width: 100%;
+    padding: 20px 0;
     // background: yellow;
     -webkit-margin-before: 0;
     -webkit-margin-after: 0;
@@ -125,17 +129,14 @@
       @include flex(1 0 0);
       @include justify-content(center);
       @include align-items(center);
-      margin: 10px;
+      margin: 20px 15px;
       height: 40px;
       border-radius: 5px;
-      background: white;
-      border: 1px solid #27002b;
-
-
-      &:hover {
-        background: #27002b;
-        color: white;
-      }
+      background: #6A8CC4;
+      border-radius: 25px;
+      color: white;
+      -webkit-box-shadow: 2px 2px 6px 0px rgba(150, 150, 150, 0.75);
+      box-shadow: 2px 2px 6px 0px rgba(150, 150, 150, 0.75);
     }
   }
 }

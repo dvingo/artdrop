@@ -9,6 +9,17 @@ getters.adminCreatedDesigns = [
   designs => designs.filter(d => d.get('adminCreated'))
 ]
 
+getters.designsGroupedByTag = [
+  getters.adminCreatedDesigns,
+  designs => {
+    if (!designs) { return List() }
+    return (
+      designs
+        .groupBy(d => d.getIn(['tags', 0, 'id']))
+        .toList().reduce((retVal, cur) => retVal.concat(cur), List()))
+  }
+]
+
 getters.currentDesign = [
   ['currentDesignId'],
   ['designs'],

@@ -30,6 +30,10 @@
 	position: relative;
 	min-height: 75px;
 	height: 75px;
+}
+.SurfaceImage-preview {
+	width: 100%;
+	height: 100%;
 
 	img {
 		width: 65px;
@@ -39,6 +43,20 @@
 		left: 0;
 		right: 0;
 		z-index: 999;
+	}
+}
+.SurfaceImage-overlay-container {
+	display: none;
+
+	img {
+		width: 65px;
+		height: 65px;
+		position: absolute;
+		margin: 5px auto;
+		left: 0;
+		right: 0;
+		z-index: 999;
+		display: none;
 	}
 }
 .SurfaceImage-image .canvas-flex-wrapper {

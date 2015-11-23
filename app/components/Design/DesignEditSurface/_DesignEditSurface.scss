@@ -5,6 +5,7 @@
 	@include flex-direction(column);
 	@include align-items(center);
 	@include flex(1 0 0);
+	width: 100%;
 }
 .DesignEditSurface-ui-top {
 	padding: 20px;
@@ -68,7 +69,8 @@
     width: 100%;
     height: auto;
     opacity: 1;
-    z-index: 99999;
+    z-index: 50;
+    display: none;
   }
 
   .canvas-flex-wrapper {

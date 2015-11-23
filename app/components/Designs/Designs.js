@@ -9,7 +9,7 @@ export default React.createClass({
   mixins: [reactor.ReactMixin, Router.Navigation],
 
   getDataBindings() {
-    return { designs: Store.getters.adminCreatedDesigns }
+    return { designs: Store.getters.designsGroupedByTag }
   },
 
   componentWillMount() {

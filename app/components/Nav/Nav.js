@@ -99,7 +99,7 @@ export default React.createClass({
         </div>
         <div className={NavModalContainer_classes} onClick={this.handleLeaveModal}>
             <span className="Nav-modal">
-              <span>ARE YOU SURE YOU WANT TO QUIT THIS DESIGN?</span>
+              <span>Are you sure you want to quit this design?</span>
               <ul>
                 <li onClick={this.handleModal.bind(null, true)}>YES</li>
                 <li onClick={this.handleModal.bind(null, false)}>NO</li>
