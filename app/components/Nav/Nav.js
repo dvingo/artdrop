@@ -9,7 +9,10 @@ export default React.createClass({
 
   getInitialState () {
     return {
-      active: false
+      modalActive: false,
+      deleteActive: false,
+      resetActive: false,
+      shareActive: false
     }
   },
 
@@ -24,21 +27,6 @@ export default React.createClass({
            this.isActive('admin')
   },
 
-  handleDelete() {
-    console.log("-- HANDLE.DELETE --")
-    this.setState({
-      active: true
-    })
-  },
-
-  handleLeaveModal (e) {
-    e.preventDefault()
-    console.log("-- HANDLE.LEAVE.MODAL --")
-    this.setState({
-      active: false
-    })
-  },
-
   handleModal (state, e) {
     e.preventDefault()
     console.log("-- HANDLE.MODAL --")
@@ -51,17 +39,49 @@ export default React.createClass({
     }
   },
 
+  handleLeaveModal (e) {
+    e.preventDefault()
+    console.log("-- HANDLE.LEAVE.MODAL --")
+    this.setState({
+      modalActive: false,
+      deleteActive: false,
+      resetActive: false,
+      shareActive: false
+    })
+  },
+
+  handleDelete() {
+    console.log("-- HANDLE.DELETE --")
+    this.setState({
+      modalActive: true,
+      deleteActive: true
+    })
+  },
+
   handleReset (e) {
     e.preventDefault()
     console.log("-- HANDLE.RESET --")
-    // this.handleModal()
+    this.setState({
+      modalActive: true,
+      resetActive: true
+    })
+  },
+
+  handleShare (e) {
+    e.preventDefault()
+    console.log("-- HANDLE.SHARE --")
+    this.setState({
+      modalActive: true,
+      shareActive: true
+    })
   },
 
   render() {
+    let {modalActive, deleteActive, resetActive, shareActive} = this.state
 
     const NavModalContainer_classes = cn (
       'Nav-modal-container', {
-        '--active': this.state.active
+        '--active': modalActive
       }
     )
 
@@ -76,35 +96,52 @@ export default React.createClass({
             :
             [<img src={iconPath('cancel-x-white.svg')}
                          className="cancel-x Nav-button"
-                         height={30} width={30}
                          onClick={this.handleDelete}/>,
              <img src={iconPath('back.svg')}
                   className="Nav-button"
-                  height={30} width={30}
                   onClick={this.handleGoBack}/>,
 
               <img src={iconPath('refresh.svg')}
                    className="Nav-button"
-                   height={30} width={30}
                    onClick={this.handleReset}/>]
             }
           </div>
 
           <div className="Nav-right-side">
             <div className="Nav-button">
-              <img src={iconPath('share-icon.svg')} height={25} width={25}
-                   style={{marginTop:4}}/>
+              <img src={iconPath('share-icon.svg')}
+                   style={{marginTop:4}}
+                   onClick={this.handleShare}/>
             </div>
           </div>
         </div>
         <div className={NavModalContainer_classes} onClick={this.handleLeaveModal}>
-            <span className="Nav-modal">
-              <span>Are you sure you want to quit this design?</span>
-              <ul>
-                <li onClick={this.handleModal.bind(null, true)}>YES</li>
-                <li onClick={this.handleModal.bind(null, false)}>NO</li>
-              </ul>
-            </span>
+            { this.state.deleteActive ?
+              <span className="Nav-modal-delete">
+                <span>Are you sure you want to delete this design?</span>
+                <ul>
+                  <li onClick={this.handleModal.bind(null, true)}>YES</li>
+                  <li onClick={this.handleModal.bind(null, false)}>NO</li>
+                </ul>
+              </span>: null}
+
+            { this.state.resetActive ?
+              <span className="Nav-modal-reset">
+                <span>Are you sure you want to reset this design?</span>
+                <ul>
+                  <li onClick={this.handleModal.bind(null, true)}>YES</li>
+                  <li onClick={this.handleModal.bind(null, false)}>NO</li>
+                </ul>
+              </span>: null}
+
+            { this.state.shareActive ?
+              <span className="Nav-modal-share">
+                <span>Share Artdrop with your network</span>
+                <ul>
+                  <li onClick={this.handleModal.bind(null, true)}>YES</li>
+                  <li onClick={this.handleModal.bind(null, false)}>NO</li>
+                </ul>
+              </span>: null}
         </div>
       </div>
     )
