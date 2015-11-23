@@ -3,6 +3,7 @@ import {Link} from 'react-router'
 import {iconPath} from 'utils'
 import Router from 'react-router'
 import cn from 'classnames'
+import { FacebookButton, TwitterButton, PinterestButton } from 'react-social'
 
 export default React.createClass({
   mixins: [Router.State, Router.Navigation],
@@ -78,6 +79,7 @@ export default React.createClass({
 
   render() {
     let {modalActive, deleteActive, resetActive, shareActive} = this.state
+    const url = "https://www.artdrop.it"
 
     const NavModalContainer_classes = cn (
       'Nav-modal-container', {
@@ -108,9 +110,8 @@ export default React.createClass({
           </div>
 
           <div className="Nav-right-side">
-            <div className="Nav-button">
+            <div className="Nav-button share">
               <img src={iconPath('share-icon.svg')}
-                   style={{marginTop:4}}
                    onClick={this.handleShare}/>
             </div>
           </div>
@@ -138,8 +139,9 @@ export default React.createClass({
               <span className="Nav-modal-share">
                 <span>Share Artdrop with your network</span>
                 <ul>
-                  <li onClick={this.handleModal.bind(null, true)}>YES</li>
-                  <li onClick={this.handleModal.bind(null, false)}>NO</li>
+                  <FacebookButton url={url}>Facebook</FacebookButton>
+                  <TwitterButton url={url}>Twitter</TwitterButton>
+                  <PinterestButton url={url}>Pinterest</PinterestButton>
                 </ul>
               </span>: null}
         </div>

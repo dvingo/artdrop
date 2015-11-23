@@ -43,6 +43,14 @@
   margin-right: 20px;
   min-width: 30px;
   min-height: 30px;
+  &.share {
+    margin-top: 10px;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
 
   &:hover {
     cursor: pointer;
@@ -198,6 +206,7 @@
   background: white;
   border-radius:25px;
   z-index: 100;
+  padding: 10px;
   @include display(flex);
   @include align-items(center);
   @include justify-content(center);
@@ -217,21 +226,19 @@
     @include justify-content(center);
     @include align-items(center);
     width: 100%;
-    padding: 20px 0;
     // background: yellow;
     -webkit-margin-before: 0;
     -webkit-margin-after: 0;
     -webkit-padding-start: 0;
 
-
-    li {
+    * {
       @include display(flex);
       @include flex(1 0 0);
       @include justify-content(center);
       @include align-items(center);
-      margin: 20px 15px;
+      margin: 20px 5px;
+      padding: 10px;
       height: 40px;
-      border-radius: 5px;
       background: #6A8CC4;
       border-radius: 25px;
       color: white;

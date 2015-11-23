@@ -60,6 +60,7 @@
     "react-hammerjs": "^0.2.2",
     "react-keypress": "^0.1.5",
     "react-router": "^0.13.3",
+    "react-social": "^0.1.9",
     "request": "^2.60.0",
     "rsvp": "^3.0.18",
     "sass-loader": "^1.0.2",
