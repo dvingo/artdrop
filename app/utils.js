@@ -28,6 +28,7 @@ var svgTextToImage = (svgEl) => {
 
 export default {
 
+  imagePath: (name) => `/${srcDir}/images/${name}`,
   iconPath: (name) => `/${srcDir}/images/icons/${name}`,
   surfacePath: (name) => `/${srcDir}/images/surfaces/${name}`,
   toA: toA,

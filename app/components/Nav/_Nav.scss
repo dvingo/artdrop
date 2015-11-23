@@ -1,7 +1,7 @@
 .Nav {
   @include display(flex);
   @include align-items(center);
-	background: $nav-bar-color;
+  background: $nav-bar-color;
   background: #27002b;
   height: 7%;
 }
@@ -50,6 +50,20 @@
   }
 }
 
+.Nav-logo {
+  height: 60px;
+  width: 150px;
+  overflow: hidden;
+  @include display(flex);
+  @include align-items(center);
+  @include justify-content(center);
+
+  img {
+    width: 90%;
+    height: auto;
+  }
+}
+
 .Nav-button-buy {
   @include flex-shrink(0);
 }
@@ -57,4 +71,71 @@
 .Nav-price {
   color: $color5;
   font-size: 32px;
+}
+.Nav-modal-container {
+  display: none;
+
+  &.--active {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: rgba(50, 50, 50, .5);
+    z-index: 100;
+    @include display(flex);
+    @include align-items(center);
+    @include justify-content(center);
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+.Nav-modal {
+  width: 300px;
+  height: 150px;
+  background: white;
+  border-radius: 5px;
+  z-index: 100;
+  @include display(flex);
+  @include align-items(center);
+  @include justify-content(center);
+  @include flex-direction(column);
+
+  span {
+    padding: 10px;
+    background: #27002b;
+    color: white;
+  }
+  ul {
+    @include display(flex);
+    @include flex(1 0 0);
+    @include justify-content(center);
+    @include align-items(center);
+    width: 100%;
+    // background: yellow;
+    -webkit-margin-before: 0;
+    -webkit-margin-after: 0;
+    -webkit-padding-start: 0;
+
+
+    li {
+      @include display(flex);
+      @include flex(1 0 0);
+      @include justify-content(center);
+      @include align-items(center);
+      margin: 10px;
+      height: 40px;
+      border-radius: 5px;
+      background: white;
+      border: 1px solid #27002b;
+
+
+      &:hover {
+        background: #27002b;
+        color: white;
+      }
+    }
+  }
 }

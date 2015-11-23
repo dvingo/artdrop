@@ -3,6 +3,7 @@ import Router from 'react-router'
 import Design from 'components/Design/Design'
 import reactor from 'state/reactor'
 import Store from 'state/main'
+import {imagePath} from 'utils'
 
 export default React.createClass({
   mixins: [reactor.ReactMixin, Router.Navigation],
@@ -30,6 +31,19 @@ export default React.createClass({
 
     return (
       <div className="main">
+        <section className="video-splash">
+            <ul id="center-header">
+                <li>THE ART YOU LOVE</li>
+                <li>IN YOU COLOR</li>
+            </ul>
+            <div id="video">
+                <video autoPlay muted loop>
+                  <source src={imagePath("artdrop_splash.mp4")} type="video/mp4">
+                    Your browser does not support the video tag.
+                  </source>
+                </video>
+            </div>
+        </section>
         <ul className="Designs">
           {designs}
         </ul>

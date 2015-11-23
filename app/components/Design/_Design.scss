@@ -1,27 +1,32 @@
 .Design-li {
   position: relative;
-  height: $design-small-size;
-  width: $design-small-size;
   margin: 2px;
   padding: 0;
+  height: $design-large-size;
+  width: $design-large-size;
   display: inline-block;
   &:hover {
     outline: 2px solid;
     cursor: pointer;
   }
-  @media (min-width: 650px) {
-    height: $design-medium-size;
-    width: $design-medium-size;
-  }
-  @media (min-width: 900px) {
+  @media (max-width: 1400px) {
     height: $design-large-size;
     width: $design-large-size;
   }
+  @media (max-width: 900px) {
+    height: $design-medium-size;
+    width: $design-medium-size;
+  }
+  @media (max-width: 600px) {
+    height: $design-small-size;
+    width: $design-small-size;
+  }
+  
 }
 .Design {
   position: relative;
-  height: $design-small-size;
-  width: $design-small-size;
+  height: 100%;
+  width: 100%;
   padding: 0;
   display: inline-block;
 }
@@ -37,4 +42,9 @@
   position: absolute;
   width: 100%;
   height: 100%;
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
 }
