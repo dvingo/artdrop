@@ -88,7 +88,7 @@
 	@include align-items(center);
 	background: $nav-bar-color;
 	width: 100%;
-	button { margin: 20px; }
+	button { margin: 20px; opacity: 1; }
 }
 .DesignEditSurface-surfaces {
 	@include display(flex);
