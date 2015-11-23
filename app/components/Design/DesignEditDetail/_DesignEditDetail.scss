@@ -10,6 +10,7 @@
   @include flex(1 0 0);
   @include align-items(center);
   @include justify-content(center);
+  width: 100%;
   overflow: hidden
 }
 
@@ -76,6 +77,7 @@
   @include flex(1 0 0);
   @include flex-direction(column);
   @include align-items(center);
+  height: 100%;
 }
 
 .DesignEditDetail-mid {

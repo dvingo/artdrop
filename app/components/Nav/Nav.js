@@ -51,8 +51,8 @@ export default React.createClass({
     }
   },
 
-  handleReset () {
-    e.prevenDefault()
+  handleReset (e) {
+    e.preventDefault()
     console.log("-- HANDLE.RESET --")
     // this.handleModal()
   },
