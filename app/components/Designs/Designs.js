@@ -41,7 +41,7 @@ export default React.createClass({
             </div>
             <ul id="center-header">
                 <li>The art you love.</li>
-                <li>in the color you need.</li>
+                <li>In the color you need.</li>
             </ul>
         </section>
         <ul className="Designs">
