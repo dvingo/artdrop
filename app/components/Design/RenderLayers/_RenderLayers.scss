@@ -3,7 +3,6 @@
 }
 
 .LayerImageContainer {
-  outline: 1px solid;
   position: absolute;
   height: 100%;
   width: 100%;
@@ -12,7 +11,7 @@
 .LayerImageMover {
   position: absolute;
   height: 100%;
-  width: 325%;
+  width: 334%;
   left: -103%;
 }
 
@@ -30,6 +29,7 @@
   width: 100%;
   height: 100%;
   max-width: 475px;
+  max-height: 475px;
   overflow: hidden;
   span {
     width: 75%;
@@ -78,8 +78,17 @@
 @media (min-width: 650px) {
   .canvas-flex-wrapper {
     span {
-      width: 90%;
-      padding-bottom: 90%;
+      width: 70%;
+      padding-bottom: 70%;
+    }
+  }
+}
+
+@media (min-width: 1000px) {
+  .canvas-flex-wrapper {
+    span {
+      width: 100%;
+      padding-bottom: 100%;
     }
   }
 }

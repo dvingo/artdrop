@@ -1,3 +1,19 @@
+.LayerSelector-container {
+  position: relative;
+  @include display(flex);
+  @include flex-direction(column);
+  @include justify-content(center);
+  @include align-items(center);
+}
+.LayerSelector-name {
+  position: relative;
+  padding-bottom: 5px;
+
+  @media (max-width: 400px) {
+    display: none;
+  }
+}
+
 .LayerSelector {
 	@include display(flex);
 	@include align-items(center);
@@ -8,9 +24,39 @@
 	box-sizing: box;
 	border-radius: 10px;
 
+	span {
+		@include display(flex);
+    @include flex(1 0 30px);
+		@include justify-content(center);
+		@include align-items(center);
+		background: white;
+		border-radius: 10px;
+		width: 100%;
+    height: 30px;
+		margin-top: 10px;
+		color: $nav-bar-color;
+        @include prefixer(box-shadow, 0px 0px 5px 0px rgba(0,0,0,0.75), webkit moz spec);
+		cursor: pointer;
+		img {
+          height: 15px;
+          box-shadow: none;
+          margin: 2px;
+          @media (min-width: 600px) {
+            width: 25px;
+            height: 25px;
+          }
+		}
+
+		&.disabled { opacity: 0.3; }
+	}
+
+  .LayerSelector-image-container {
+    width: 90px;
+    height: 90px;
+
     img {
-      width: 90px;
-      height: 90px;
+      width: 100%;
+      height: 100%;
       background: white;
       border-radius: 10px;
       opacity: 1;
@@ -21,35 +67,10 @@
         height: 60px;
       }
     }
-
-	span {
-		@include display(flex);
-        @include flex(1 0 30px);
-		@include justify-content(center);
-		@include align-items(center);
-		background: white;
-		border-radius: 10px;
-		width: 100%;
-        height: 30px;
-		margin-top: 10px;
-		color: $nav-bar-color;
-        @include prefixer(box-shadow, 0px 0px 5px 0px rgba(0,0,0,0.75), webkit moz spec);
-		cursor: pointer;
-		img {
-          height: 15px;
-          box-shadow: none;
-          margin: 2px;
-          @media (min-width: 600px) {
-            width: 35px;
-            height: 35px;
-          }
-		}
-
-		&.disabled { opacity: 0.3; }
-	}
+  }
 
 	&.selected {
-      height: 160px;
+      height: 180px;
       width: 100px;
       background: $button-color;
       @include prefixer(box-shadow, 2px 2px 6px 0px rgba(150,150,150,0.75), webkit moz spec);
@@ -63,6 +84,12 @@
       @media (min-width: 1000px) {
         width: 150px;
         height: 235px;
+      }
+      .LayerSelector-image-container {
+          @media (min-width: 1000px) {
+            width: 130px;
+            height: 130px;
+          }
       }
 	}
 }

@@ -44,7 +44,7 @@
 	  .price {
 	    @include display(flex);
 	    @include flex(2 0 0);
-	    font-size: 2.5em;
+	    font-size: 3.5em;
 	  }
 
 	  .exit {
@@ -73,18 +73,21 @@
 	  .bottom-ui {
 	    @include display(flex);
 	    @include flex(1 0 0);
-	    @include align-items(center);
+	    @include align-items(flex-end);
 	    @include justify-content(center);
 	  }
 
 	  .image-with-label {
-	    padding: 10px 4px;
 	    @include display(flex);
 	    @include flex(1 0 0);
 	    @include flex-direction(column);
 	    @include justify-content(center);
 	    @include align-items(center);
 	    &:hover { cursor: pointer; }
+
+	    span:nth-child(1) {
+	    	// margin-top: 10px;
+	    }
 	  }
 
 	  .canvas-container {
@@ -92,5 +95,9 @@
 	    width: 100%;
 	    padding-bottom: 100%;
 	    position: relative;
+
+	    &:hover {
+	    	cursor: pointer;
+	    }
 	  }
 	}

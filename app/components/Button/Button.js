@@ -38,7 +38,7 @@ export default React.createClass({
          onTouchEnd={this.onTouchEnd}
          onClick={this.props.onClick}>
         <span><img src={this.props.imgSrc} height={size} width={size}/></span>
-        <span style={{marginTop:5}}>{this.props.label}</span>
+        <span>{this.props.label}</span>
       </span>
     )
   }

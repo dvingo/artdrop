@@ -32,6 +32,7 @@ ul, ol {
   @include display(flex);
   @include flex(1 0 0);
   @include flex-direction(column);
+  @include align-items(center);
 }
 #app {
   height: 100%;

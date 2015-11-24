@@ -10,6 +10,7 @@
   @include flex(1 0 0);
   @include align-items(center);
   @include justify-content(center);
+  width: 100%;
   overflow: hidden
 }
 
@@ -24,7 +25,8 @@
   color: white;
   @include prefixer(box-shadow, 2px 2px 6px 0px rgba(150, 150, 150, 0.75), webkit moz spec);
   cursor: pointer;
-  &.off { opacity: 0.5 }
+  opacity: 0.5;
+  &.off { opacity: 1 }
 }
 
 .DesignEditDetail-layers {
@@ -76,6 +78,7 @@
   @include flex(1 0 0);
   @include flex-direction(column);
   @include align-items(center);
+  height: 100%;
 }
 
 .DesignEditDetail-mid {

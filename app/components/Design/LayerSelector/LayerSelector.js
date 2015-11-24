@@ -31,19 +31,22 @@ export default React.createClass({
 
 
     return (
-      <div className={classNames({selected: isSelected}, 'LayerSelector')}>
+      <div className="LayerSelector-container">
+        <span className="LayerSelector-name">{this.props.layerIndexName}</span>
+        <div className={classNames({selected: isSelected}, 'LayerSelector')}>
+          <div className='LayerSelector-image-container'>
+            <img src={imageUrlForLayer(layer)} onClick={this.props.onClick}/>
+          </div>
 
-        <img src={imageUrlForLayer(layer)} onClick={this.props.onClick}/>
+          {isSelected ?
+            <span className={isEnabled ? '' : 'disabled'} onClick={this.toggleCurrentLayer}>
+              <img src={iconPath("eyeball.svg")}/></span>
+          : null}
 
-        {isSelected ?
-          <span className={isEnabled ? '' : 'disabled'} onClick={this.toggleCurrentLayer}>
-            <img src={iconPath("eyeball.svg")}/></span>
-        : null}
-
-        {showMoreButton ?
-          <span onClick={this.editLayerDetail}>more</span>
-        : null}
-
+          {showMoreButton ?
+            <span onClick={this.editLayerDetail}>more</span>
+          : null}
+        </div>
       </div>
     )
   }
