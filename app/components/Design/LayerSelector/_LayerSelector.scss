@@ -86,6 +86,12 @@
         height: 235px;
       }
       .LayerSelector-image-container {
+        
+          // @media (max-height: 800px) {
+            max-height: 90px;
+            max-width: 90px;
+          // }
+
           @media (min-width: 1000px) {
             width: 130px;
             height: 130px;
