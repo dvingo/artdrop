@@ -32,10 +32,6 @@ export default React.createClass({
     return (
       <div className="main">
         <section className="video-splash">
-            <ul id="center-header">
-                <li>THE ART YOU LOVE</li>
-                <li>IN YOU COLOR</li>
-            </ul>
             <div id="video">
                 <video autoPlay muted loop>
                   <source src={imagePath("artdrop_splash.mp4")} type="video/mp4">
@@ -43,6 +39,10 @@ export default React.createClass({
                   </source>
                 </video>
             </div>
+            <ul id="center-header">
+                <li>The art you love.</li>
+                <li>in the color you need.</li>
+            </ul>
         </section>
         <ul className="Designs">
           {designs}

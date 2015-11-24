@@ -119,7 +119,7 @@ export default React.createClass({
         <div className={NavModalContainer_classes} onClick={this.handleLeaveModal}>
             { this.state.deleteActive ?
               <span className="Nav-modal-delete">
-                <span>Are you sure you want to delete this design?</span>
+                <span>Are you sure you want to abandon your art?</span>
                 <ul>
                   <li onClick={this.handleModal.bind(null, true)}>YES</li>
                   <li onClick={this.handleModal.bind(null, false)}>NO</li>
