@@ -129,7 +129,7 @@ var s3UrlForImage = (filename) => {
 }
 
 var urlForImage = (filename) => {
-  return imgHostname + '/' + filename
+  return imgHostname + '/images/' + filename
 }
 
 var imageUrlForLayerImage = (layerImage) => {
