@@ -5,7 +5,7 @@ module.exports = {
   designDetailSize: 334,
   s3Endpoint: 'https://s3.amazonaws.com',
   s3BucketName: 'images.artdrop.it',
-  imgHostname: 'http://162.243.236.132',
+  imgHostname: 'https://artdrop.it',
   fireBaseUri: 'https://artrop.firebaseio.com/',
   fireBaseTestingUri: 'https://artdrop-testing3.firebaseio.com/',
   makeableApiUri: 'https://api.print.io/api/v/3/source/api/',
