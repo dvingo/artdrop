@@ -18,7 +18,7 @@ export default React.createClass({
 
   render() {
     var {design, currentLayer} = this.state
-    var layerIndex = ['Foreground', 'Middleground',  'Background']
+    var layerIndex = ['Foreground', 'Middleground', 'Background']
     if (design == null || currentLayer == null ) { return null }
 
     return (

@@ -5,7 +5,7 @@ export default React.createClass({
 		var palette = this.props.palette
 		var currentPalette = this.props.currentPalette
 		var style = {}
-		
+
 		if ((currentPalette && palette) && currentPalette.get('id') === palette.get('id')) {
 			style = {border: '4px solid black'}
 		}

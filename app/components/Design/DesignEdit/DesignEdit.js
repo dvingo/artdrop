@@ -2,7 +2,7 @@ import React from 'react'
 import reactor from 'state/reactor'
 import Router from 'react-router'
 import Store from 'state/main'
-import RenderLayersSwipe from 'components/Design/RenderLayersSwipe/RenderLayersSwipe'
+import RenderLayers from 'components/Design/RenderLayers/RenderLayers'
 import LayerSelectorGroup from 'components/Design/LayerSelectorGroup/LayerSelectorGroup'
 import ColorsButton from 'components/ColorsButton/ColorsButton'
 import CheckButton from 'components/CheckButton/CheckButton'
@@ -124,7 +124,7 @@ export default React.createClass({
     return (
       <section className="DesignEdit">
         <div className="DesignEdit-canvas-flex-wrapper">
-          <RenderLayersSwipe layers={this.state.design.get('layers')} />
+          <RenderLayers layers={this.state.design.get('layers')} />
         </div>
 
         <div className="DesignEdit-ui">

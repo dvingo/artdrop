@@ -1,13 +1,10 @@
-.RenderLayers {
-
-}
-
 .LayerImageContainer {
   position: absolute;
   height: 100%;
   width: 100%;
   overflow: hidden;
 }
+
 .LayerImageMover {
   position: absolute;
   height: 100%;
@@ -20,8 +17,7 @@
 // Displays the layers of the image to show what the final result will
 // look like.
 //
-
-.canvas-flex-wrapper {
+.canvas-flex-wrapper, .RenderLayers {
   @include display(flex);
   @include flex(1 0 0);
   @include align-items(center);
@@ -36,6 +32,16 @@
     padding-bottom: 75%;
     position: relative;
     height: auto;
+
+    @media (min-width: 650px) {
+      width: 70%;
+      padding-bottom: 70%;
+    }
+
+    @media (min-width: 1000px) {
+      width: 100%;
+      padding-bottom: 100%;
+    }
   }
 }
 
@@ -67,23 +73,5 @@
     visibility: hidden;
     opacity: 0;
     display: none;
-  }
-}
-
-@media (min-width: 650px) {
-  .canvas-flex-wrapper {
-    span {
-      width: 70%;
-      padding-bottom: 70%;
-    }
-  }
-}
-
-@media (min-width: 1000px) {
-  .canvas-flex-wrapper {
-    span {
-      width: 100%;
-      padding-bottom: 100%;
-    }
   }
 }
